@@ -3,6 +3,8 @@ GAFFER_VERSION=0.3.9
 
 JACKSON=com/fasterxml/jackson
 
+REPOSITORY=docker.io/cybermaggedon/gaffer
+
 WAR_FILES=\
 	gaffer/example-rest/${GAFFER_VERSION}/example-rest-${GAFFER_VERSION}.war
 
@@ -20,6 +22,8 @@ JAR_FILES=\
 	${JACKSON}/module/jackson-module-jsonSchema/2.1.0/jackson-module-jsonSchema-2.1.0.jar \
 	${JACKSON}/module/jackson-module-scala_2.10/2.1.5/jackson-module-scala_2.10-2.1.5.jar
 
+SUDO=
+
 SCHEMA_FILES=\
 	example-rest/target/classes/schema/dataSchema.json \
 	example-rest/target/classes/schema/dataTypes.json \
@@ -29,27 +33,36 @@ SCHEMA_FILES=\
 PROP_FILES= \
 	example-rest/target/classes/mockaccumulostore.properties
 
-all: build gaffer
+all: build container
 
 product:
 	mkdir product
 
 build: product
-	sudo docker build ${BUILD_ARGS} -t gaffer-dev -f Dockerfile.dev .
-	sudo docker build ${BUILD_ARGS} -t gaffer-build -f Dockerfile.build .
-	id=$$(sudo docker run -d gaffer-build sleep 3600); \
+	${SUDO} docker build ${BUILD_ARGS} -t gaffer-dev -f Dockerfile.dev .
+	${SUDO} docker build ${BUILD_ARGS} -t gaffer-build -f Dockerfile.build .
+	id=$$(${SUDO} docker run -d gaffer-build sleep 3600); \
 	dir=/root/.m2/repository; \
 	for file in ${WAR_FILES} ${JAR_FILES}; do \
 		bn=$$(basename $$file); \
-		sudo docker cp $${id}:$${dir}/$${file} product/$${bn}; \
+		${SUDO} docker cp $${id}:$${dir}/$${file} product/$${bn}; \
 	done; \
 	dir=/usr/local/src/gaffer; \
 	for file in ${SCHEMA_FILES} ${PROP_FILES}; do \
 		bn=$$(basename $$file); \
-		sudo docker cp $${id}:$${dir}/$${file} product/$${bn}; \
+		${SUDO} docker cp $${id}:$${dir}/$${file} product/$${bn}; \
 	done; \
-	sudo docker rm -f $${id}
+	${SUDO} docker rm -f $${id}
 
-gaffer:
-	sudo docker build ${BUILD_ARGS} -t gaffer -f Dockerfile.deploy .
+VERSION=${GAFFER_VERSION}
+
+container: wildfly-10.1.0.CR1.zip
+	${SUDO} docker build ${BUILD_ARGS} -t gaffer -f Dockerfile.deploy .
+	${SUDO} docker tag cyberprobe ${REPOSITORY}:${VERSION}
+
+wildfly-10.1.0-CR1.zip:
+	wget download.jboss.org/wildfly/10.1.0.CR1/wildfly-10.1.0.CR1.zip
+
+push:
+	sudo docker push ${REPOSITORY}:${VERSION}
 
