@@ -64,5 +64,5 @@ wildfly-10.1.0-CR1.zip:
 	wget download.jboss.org/wildfly/10.1.0.CR1/wildfly-10.1.0.CR1.zip
 
 push:
-	sudo docker push ${REPOSITORY}:${VERSION}
+	${SUDO} docker push ${REPOSITORY}:${VERSION}
 
