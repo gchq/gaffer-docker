@@ -58,7 +58,7 @@ VERSION=${GAFFER_VERSION}
 
 container: wildfly-10.1.0.CR1.zip
 	${SUDO} docker build ${BUILD_ARGS} -t gaffer -f Dockerfile.deploy .
-	${SUDO} docker tag cyberprobe ${REPOSITORY}:${VERSION}
+	${SUDO} docker tag gaffer ${REPOSITORY}:${VERSION}
 
 wildfly-10.1.0-CR1.zip:
 	wget download.jboss.org/wildfly/10.1.0.CR1/wildfly-10.1.0.CR1.zip
