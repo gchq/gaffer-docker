@@ -17,7 +17,7 @@ RUN mkdir schema
 COPY product/*.json schema/
 COPY product/mockaccumulostore.properties store.properties
 
-CMD cd /; /start-accumulo; cd /usr/local/wildfly; bin/standalone.sh -Dgaffer.rest-api.basePath=/example-rest/v1 -Dgaffer.schemas=/usr/local/wildfly/schemas -Dgaffer.storeProperties=/usr/local/wildfly/store.properties
+CMD cd /; /start-accumulo; cd /usr/local/wildfly; bin/standalone.sh -Dgaffer.rest-api.basePath=/example-rest/v1 -Dgaffer.schemas=/usr/local/wildfly/schema -Dgaffer.storeProperties=/usr/local/wildfly/store.properties
 
 EXPOSE 8080
 
