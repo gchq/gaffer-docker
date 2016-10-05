@@ -3,7 +3,7 @@ GAFFER_VERSION=0.3.9
 
 JACKSON=com/fasterxml/jackson
 
-REPOSITORY=docker.io/cybermaggedon/gaffer
+REPOSITORY=docker.io/gchq/gaffer
 
 WAR_FILES=\
 	gaffer/example-rest/${GAFFER_VERSION}/example-rest-${GAFFER_VERSION}.war
@@ -60,7 +60,7 @@ container: wildfly-10.1.0.CR1.zip
 	${SUDO} docker build ${BUILD_ARGS} -t gaffer -f Dockerfile.deploy .
 	${SUDO} docker tag gaffer ${REPOSITORY}:${VERSION}
 
-wildfly-10.1.0-CR1.zip:
+wildfly-10.1.0.CR1.zip:
 	wget download.jboss.org/wildfly/10.1.0.CR1/wildfly-10.1.0.CR1.zip
 
 push:
