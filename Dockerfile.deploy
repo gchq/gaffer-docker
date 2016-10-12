@@ -1,0 +1,23 @@
+
+FROM cybermaggedon/accumulo
+
+RUN dnf install -y unzip
+
+WORKDIR /usr/local
+COPY wildfly-10.1.0.CR1.zip /usr/local/
+RUN unzip wildfly-10.1.0.CR1.zip
+RUN ln -s wildfly-10.1.0.CR1 wildfly
+
+WORKDIR /usr/local/wildfly
+
+COPY product/example-rest-*.war standalone/deployments/example-rest.war
+COPY product/*.jar /usr/local/accumulo/lib/ext/
+COPY standalone.xml standalone/configuration/
+RUN mkdir schema
+COPY product/*.json schema/
+COPY product/mockaccumulostore.properties store.properties
+
+CMD cd /; /start-accumulo; cd /usr/local/wildfly; bin/standalone.sh -Dgaffer.rest-api.basePath=/example-rest/v1 -Dgaffer.schemas=/usr/local/wildfly/schema -Dgaffer.storeProperties=/usr/local/wildfly/store.properties
+
+EXPOSE 8080
+
