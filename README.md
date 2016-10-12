@@ -35,7 +35,7 @@ http://HOSTNAME:8080/example-rest/v1/status
 When the container dies, the data is lost.  If you want data to persist,
 mount a volume on /data e.g.
 
-  docker run -p 8080:8080 -v /data/gaffer:/data cybermaggedon/gaffer:0.3.9
+  docker run -p 8080:8080 -v /data/gaffer:/data gchq/gaffer:0.3.9
 
 The default schema deployed is usable.  If you want to set your own schema
 then you need to change /usr/local/wildfly/schema/* by e.g. mounting
