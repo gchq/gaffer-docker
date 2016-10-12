@@ -1,5 +1,5 @@
 ##########################################################
-# Copyright 2016 cybermaggedon
+# Copyright 2016 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,19 +14,17 @@
 # limitations under the License.
 ##########################################################
 
-FROM gaffer-dev
-
-RUN dnf install -y patch
-
-RUN mkdir -p /usr/local/src/gaffer
-WORKDIR /usr/local/src/gaffer
-RUN git clone http://github.com/gchq/Gaffer.git .
-RUN git checkout gaffer2-0.3.9
-ADD PATCH PATCH
-ADD PATCH2 PATCH2
-RUN patch -p1 < PATCH
-RUN patch -p1 < PATCH2
-
-RUN mvn install
-
-
+*/target/
+target/
+*/*.iml
+*.iml
+*/.settings
+*/.project
+*/bin
+*/*.class
+*/atlassian-ide*
+*/.idea
+.idea/*
+*/.classpath
+__pycache__
+*.pem
