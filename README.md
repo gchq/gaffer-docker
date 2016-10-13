@@ -27,7 +27,7 @@ for anything with some load.
 
 To run:
 
-  docker run -it -p 8080:8080 gchq/gaffer:0.4.3
+  docker run -it -p 8080:8080 gchq/gaffer:0.4.4
 
 You can then access the Gaffer API at port 8080, e.g. try accessing URL
 http://HOSTNAME:8080/rest/v1/status
@@ -35,7 +35,7 @@ http://HOSTNAME:8080/rest/v1/status
 When the container dies, the data is lost.  If you want data to persist,
 mount a volume on /data e.g.
 
-  docker run -it -p 8080:8080 -v /data/gaffer:/data gchq/gaffer:0.4.3
+  docker run -it -p 8080:8080 -v /data/gaffer:/data gchq/gaffer:0.4.4
 
 The default schema deployed is usable.  If you want to set your own schema
 then you need to change /usr/local/wildfly/schema/* by e.g. mounting
