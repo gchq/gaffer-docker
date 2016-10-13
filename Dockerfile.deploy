@@ -1,5 +1,5 @@
 ##########################################################
-# Copyright 2016 cybermaggedon
+# Copyright 2016 Crown Copyright, cybermaggedon
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,14 +25,12 @@ RUN ln -s wildfly-10.1.0.CR1 wildfly
 
 WORKDIR /usr/local/wildfly
 
-COPY product/example-rest-*.war standalone/deployments/example-rest.war
+COPY product/*.war standalone/deployments/
 COPY product/*.jar /usr/local/accumulo/lib/ext/
-COPY standalone.xml standalone/configuration/
-RUN mkdir schema
-COPY product/*.json schema/
-COPY product/mockaccumulostore.properties store.properties
+COPY resources/standalone.xml standalone/configuration/
+COPY resources/schema schema
+COPY resources/store.properties store.properties
 
-CMD cd /; /start-accumulo; cd /usr/local/wildfly; bin/standalone.sh -Dgaffer.rest-api.basePath=/example-rest/v1 -Dgaffer.schemas=/usr/local/wildfly/schema -Dgaffer.storeProperties=/usr/local/wildfly/store.properties
+CMD cd /; /start-accumulo; cd /usr/local/wildfly; bin/standalone.sh -Dgaffer.rest-api.basePath=/rest/v1 -Dgaffer.schemas=/usr/local/wildfly/schema -Dgaffer.storeProperties=/usr/local/wildfly/store.properties; /bin/bash
 
 EXPOSE 8080
-

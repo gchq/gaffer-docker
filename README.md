@@ -1,4 +1,4 @@
-Copyright 2016 cybermaggedon
+Copyright 2016 Crown Copyright, cybermaggedon
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,15 +27,15 @@ for anything with some load.
 
 To run:
 
-  docker run -p 8080:8080 gchq/gaffer:0.3.9
+  docker run -it -p 8080:8080 gchq/gaffer:0.4.3
 
 You can then access the Gaffer API at port 8080, e.g. try accessing URL
-http://HOSTNAME:8080/example-rest/v1/status
+http://HOSTNAME:8080/rest/v1/status
 
 When the container dies, the data is lost.  If you want data to persist,
 mount a volume on /data e.g.
 
-  docker run -p 8080:8080 -v /data/gaffer:/data gchq/gaffer:0.3.9
+  docker run -it -p 8080:8080 -v /data/gaffer:/data gchq/gaffer:0.4.3
 
 The default schema deployed is usable.  If you want to set your own schema
 then you need to change /usr/local/wildfly/schema/* by e.g. mounting

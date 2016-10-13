@@ -1,5 +1,5 @@
 ##########################################################
-# Copyright 2016 cybermaggedon
+# Copyright 2016 Crown Copyright, cybermaggedon
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,13 +20,16 @@ RUN dnf install -y patch
 
 RUN mkdir -p /usr/local/src/gaffer
 WORKDIR /usr/local/src/gaffer
+
+ARG GAFFER_VERSION
 RUN git clone http://github.com/gchq/Gaffer.git .
-RUN git checkout gaffer2-0.3.9
-ADD PATCH PATCH
-ADD PATCH2 PATCH2
-RUN patch -p1 < PATCH
-RUN patch -p1 < PATCH2
+RUN git checkout gaffer2-$GAFFER_VERSION
 
-RUN mvn install
-
-
+RUN export MAVEN_ARGS=; \
+    if [[ $http_proxy ]]; then \
+        export proxy_length=$((${#http_proxy})); \
+        export http_proxy_host=`echo $http_proxy | cut -c 8-$(($proxy_length -5))`; \
+        export http_proxy_port=`echo $http_proxy | cut -c $(($proxy_length -3))-$proxy_length`; \
+        export MAVEN_ARGS="-DproxySet=true -DproxyHost=$http_proxy_host -DproxyPort=$http_proxy_port"; \
+    fi; \
+    mvn $MAVEN_ARGS clean install -Pquick
