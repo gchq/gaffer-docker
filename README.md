@@ -29,8 +29,16 @@ To run:
 
   docker run -it -p 8080:8080 gchq/gaffer:0.4.4
 
-You can then access the Gaffer API at port 8080, e.g. try accessing URL
-http://HOSTNAME:8080/rest/v1/status
+You can then access the Gaffer API at port 8080:
+```
+http://localhost:8080/rest
+```
+
+and the prototype Gaffer UI at:
+```
+http://localhost:8080/ui
+```
+
 
 When the container dies, the data is lost.  If you want data to persist,
 mount a volume on /data e.g.

@@ -32,7 +32,7 @@ VERSION=${GAFFER_VERSION}
 
 SUDO=
 
-PROXY_ARGS=--build-arg HTTP_PROXY=${http_proxy} --build-arg http_proxy=${http_proxy} --build-arg HTTPS_PROXY=${https_proxy} --build-arg https_proxy=${https_proxy} --build-arg proxy_host=${proxy_host}
+PROXY_ARGS=--build-arg HTTP_PROXY=${http_proxy} --build-arg http_proxy=${http_proxy} --build-arg HTTPS_PROXY=${https_proxy} --build-arg https_proxy=${https_proxy}
 
 PROXY_HOST_PORT_ARGS=--build-arg proxy_host=${proxy_host} --build-arg proxy_host=${proxy_host} --build-arg proxy_port=${proxy_port}
 
