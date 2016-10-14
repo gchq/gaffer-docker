@@ -14,22 +14,24 @@
 # limitations under the License.
 ##########################################################
 
-FROM gaffer-dev
+FROM fedora:24
 
-RUN dnf install -y patch
+RUN dnf install -y java-1.8.0-openjdk maven
+RUN dnf install -y git
 
 RUN mkdir -p /usr/local/src/gaffer
 WORKDIR /usr/local/src/gaffer
 
-ARG GAFFER_VERSION
 RUN git clone http://github.com/gchq/Gaffer.git .
-RUN git checkout gaffer2-$GAFFER_VERSION
 
+ARG GAFFER_VERSION
+RUN git pull; \
+    git checkout gaffer2-$GAFFER_VERSION
+
+ARG proxy_host
+ARG proxy_port
 RUN export MAVEN_ARGS=; \
-    if [[ $http_proxy ]]; then \
-        export proxy_length=$((${#http_proxy})); \
-        export http_proxy_host=`echo $http_proxy | cut -c 8-$(($proxy_length -5))`; \
-        export http_proxy_port=`echo $http_proxy | cut -c $(($proxy_length -3))-$proxy_length`; \
-        export MAVEN_ARGS="-DproxySet=true -DproxyHost=$http_proxy_host -DproxyPort=$http_proxy_port"; \
+    if [[ $proxy_host ]]; then \
+        export MAVEN_ARGS="-DproxySet=true -DproxyHost=$proxy_host -DproxyPort=$proxy_port"; \
     fi; \
     mvn $MAVEN_ARGS clean install -Pquick

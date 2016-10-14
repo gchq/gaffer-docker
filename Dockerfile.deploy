@@ -24,13 +24,14 @@ RUN unzip wildfly-10.1.0.CR1.zip
 RUN ln -s wildfly-10.1.0.CR1 wildfly
 
 WORKDIR /usr/local/wildfly
-
 COPY product/*.war standalone/deployments/
 COPY product/*.jar /usr/local/accumulo/lib/ext/
 COPY resources/standalone.xml standalone/configuration/
 COPY resources/schema schema
 COPY resources/store.properties store.properties
 
-CMD cd /; /start-accumulo; cd /usr/local/wildfly; bin/standalone.sh -Dgaffer.rest-api.basePath=/rest/v1 -Dgaffer.schemas=/usr/local/wildfly/schema -Dgaffer.storeProperties=/usr/local/wildfly/store.properties; /bin/bash
+CMD cd /; /start-accumulo; \
+    cd /usr/local/wildfly; bin/standalone.sh -Dgaffer.schemas=/usr/local/wildfly/schema -Dgaffer.storeProperties=/usr/local/wildfly/store.properties; \
+    /bin/bash
 
 EXPOSE 8080
