@@ -1,4 +1,4 @@
-What you have here, is a Docker container for Gaffer.  This is a small
+What you have here, is Docker containers for Gaffer.  This is a small
 instance and is really only useful only development / trial
 purposes.  But containerising allows a quick way to find out what Gaffer is
 like and develop against the interfaces.  To run Gaffer, you need:
@@ -14,8 +14,10 @@ The code here:
 - Creates a container integrating Accumulo (cybermaggedon/accumulo) and
   Gaffer.
 
+For Hadoop and Zookeeper, I have containers ready to use.
+
 The memory settings of Accumulo are low to ensure Accumulo runs in a
-small footprint.
+small footprint.  Don't expect performance.
 
 To run:
 
@@ -39,17 +41,20 @@ You can then access the Gaffer API at port 8080, e.g. try accessing URL
 http://HOSTNAME:8080/rest.  The UI is available at http://HOSTNAME:8080/ui.
 
 When the container dies, the data is lost.  If you want data to persist,
-put volumes on /data for Hadoop and Zookeeper.
+put volumes on /data for Hadoop and Zookeeper, and /accumulo for Accumulo.
+Wildfly needs no persistent state.
 
 ```
   # Run Hadoop
   docker run --rm --name hadoop -v /data/hadoop:/data cybermaggedon/hadoop:2.7.3
 
   # Run Zookeeper
-  docker run --rm --name zookeeper /data/zk:/data cybermaggedon/zookeeper:3.4.9
+  docker run --rm --name zookeeper -v /data/zookeeper:/data \
+        cybermaggedon/zookeeper:3.4.9
 
   # Run Accumulo
-  docker run --rm --name accumulo --link zookeeper:zookeeper \
+  docker run --rm --name accumulo -v /data/accumulo:/accumulo \
+        --link zookeeper:zookeeper \
         --link hadoop:hadoop cybermaggedon/accumulo-gaffer:0.4.4
 
   # Run Wildfly, exposing port 8080.
@@ -67,5 +72,7 @@ input load, Zookeeper seems to continually grow until it exhausts the
 container memory footprint.  Workaround: run containers in a container engine
 like Kubernetes, so that everything restarts.
 
+If volumes don't mount because of selinux, this command may be your friend:
 
+  chcon -Rt svirt_sandbox_file_t /path/of/volume
 
