@@ -1,3 +1,20 @@
+
+Copyright 2016 Crown Copyright, cybermaggedon
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-------
+
 What you have here, is Docker containers for Gaffer.  This is a small
 instance and is really only useful only development / trial
 purposes.  But containerising allows a quick way to find out what Gaffer is
@@ -83,4 +100,3 @@ like Kubernetes, so that everything restarts.
 If volumes don't mount because of selinux, this command may be your friend:
 
   ```chcon -Rt svirt_sandbox_file_t /path/of/volume```
-
