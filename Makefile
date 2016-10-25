@@ -1,5 +1,7 @@
 
 GAFFER_VERSION=0.4.4
+ACCUMULO_REPOSITORY=cybermaggedon/accumulo-gaffer
+WILDFLY_REPOSITORY=cybermaggedon/wildfly-gaffer
 
 JACKSON=com/fasterxml/jackson
 
@@ -39,8 +41,8 @@ build: product
 VERSION=${GAFFER_VERSION}
 
 container: wildfly-10.1.0.CR1.zip
-	${SUDO} docker build ${BUILD_ARGS} -t gaffer -f Dockerfile.deploy .
-	${SUDO} docker tag gaffer ${REPOSITORY}:${VERSION}
+	${SUDO} docker build ${BUILD_ARGS} -t ${ACCUMULO_REPOSITORY}:${VERSION} -f Dockerfile.accumulo .
+	${SUDO} docker build ${BUILD_ARGS} -t ${WILDFLY_REPOSITORY}:${VERSION} -f Dockerfile.wildfly .
 
 wildfly-10.1.0.CR1.zip:
 	wget download.jboss.org/wildfly/10.1.0.CR1/wildfly-10.1.0.CR1.zip

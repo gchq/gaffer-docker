@@ -1,0 +1,5 @@
+
+FROM cybermaggedon/accumulo:1.8.0
+
+COPY product/*.jar /usr/local/accumulo/lib/ext/
+
