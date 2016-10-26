@@ -5,8 +5,7 @@ RUN dnf install -y patch
 
 RUN mkdir -p /usr/local/src/gaffer
 WORKDIR /usr/local/src/gaffer
-RUN git clone http://github.com/gchq/Gaffer.git .
-RUN git checkout gaffer2-0.4.4
+RUN git clone http://github.com/gchq/Gaffer.git .; git checkout gaffer2-0.4.4
 
 RUN mvn install
 

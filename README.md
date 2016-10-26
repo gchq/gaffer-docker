@@ -10,7 +10,13 @@ for anything with some load.
 
 To run:
 
-  docker run -p 8080:8080 gchq/gaffer:0.3.9
+  docker run --name hadoop cybermaggedon/hadoop:2.7.3
+  docker run --name zookeeper cybermaggedon/zookeeper:3.4.9
+  docker run --name accumulo --link zookeeper:zookeeper \
+  	cybermaggedon/accumulo-gaffer:0.4.4
+  docker run --name wildfly --link zookeeper:zookeeper \
+    --link hadoop:hadoop --link accumulo:accumulo \
+    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4
 
 You can then access the Gaffer API at port 8080, e.g. try accessing URL
 http://HOSTNAME:8080/example-rest/v1/status
