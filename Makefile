@@ -5,8 +5,6 @@ WILDFLY_REPOSITORY=cybermaggedon/wildfly-gaffer
 
 JACKSON=com/fasterxml/jackson
 
-REPOSITORY=docker.io/gchq/gaffer
-
 WAR_FILES=\
 	gaffer/example-rest/${GAFFER_VERSION}/example-rest-${GAFFER_VERSION}.war \
         gaffer/ui/${GAFFER_VERSION}/ui-${GAFFER_VERSION}.war
@@ -48,5 +46,5 @@ wildfly-10.1.0.CR1.zip:
 	wget download.jboss.org/wildfly/10.1.0.CR1/wildfly-10.1.0.CR1.zip
 
 push:
-	${SUDO} docker push ${REPOSITORY}:${VERSION}
-
+	${SUDO} docker push ${ACCUMULO_REPOSITORY}:${VERSION}
+	${SUDO} docker push ${WILDFLY_REPOSITORY}:${VERSION}
