@@ -1,11 +1,18 @@
 What you have here, is Docker containers for Gaffer.  This is a small
 instance and is really only useful only development / trial
 purposes.  But containerising allows a quick way to find out what Gaffer is
-like and develop against the interfaces.  To run Gaffer, you need:
+like and develop against the interfaces.  To run Gaffer, you need four
+components:
 - Wildfly, hosting the Gaffer REST API and UI.
 - Accumulo, hosting the Gaffer extensions.
 - Zookeeper, which is used by Accumulo.
 - Hadoop, which is used by Accumulo.
+
+I have these components available as the four containers:
+- cybermaggedon/wildfly-gaffer
+- cybermaggedon/accumulo-gaffer
+- cybermaggedon/zookeeper
+- cybermaggedon/hadoop
 
 The code here:
 - Compiles Gaffer from source in a build container, and extracts a set of
@@ -36,6 +43,7 @@ To run:
   docker run --rm --name wildfly --link zookeeper:zookeeper \
     --link hadoop:hadoop --link accumulo:accumulo \
     -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4
+```
 
 You can then access the Gaffer API at port 8080, e.g. try accessing URL
 http://HOSTNAME:8080/rest.  The UI is available at http://HOSTNAME:8080/ui.
@@ -74,5 +82,5 @@ like Kubernetes, so that everything restarts.
 
 If volumes don't mount because of selinux, this command may be your friend:
 
-  chcon -Rt svirt_sandbox_file_t /path/of/volume
+  ```chcon -Rt svirt_sandbox_file_t /path/of/volume```
 
