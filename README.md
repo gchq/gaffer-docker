@@ -60,6 +60,7 @@ To run:
   docker run --rm --name wildfly --link zookeeper:zookeeper \
     --link hadoop:hadoop --link accumulo:accumulo \
     -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4
+
 ```
 
 You can then access the Gaffer API at port 8080, e.g. try accessing URL
@@ -86,6 +87,7 @@ Wildfly needs no persistent state.
   docker run --rm --name wildfly --link zookeeper:zookeeper \
     --link hadoop:hadoop --link accumulo:accumulo \
     -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4
+
 ```
 
 The default schema deployed is usable.  If you want to set your own schema
