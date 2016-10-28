@@ -1,5 +1,5 @@
 ##########################################################
-# Copyright 2016 Crown Copyright, cybermaggedon
+# Copyright 2016 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,23 +14,19 @@
 # limitations under the License.
 ##########################################################
 
-FROM fedora:24
-
-RUN dnf install -y java-1.8.0-openjdk maven
-RUN dnf install -y git
-
-ARG GAFFER_VERSION=0.4.4
-RUN mkdir -p /usr/local/src/gaffer
-WORKDIR /usr/local/src/gaffer
-
-RUN git clone http://github.com/gchq/Gaffer.git .; \
-  git checkout gaffer2-$GAFFER_VERSION
-
-ARG proxy_host
-ARG proxy_port
-RUN export MAVEN_ARGS=; \
-    if [[ $proxy_host ]]; then \
-        export MAVEN_ARGS="-DproxySet=true -DproxyHost=$proxy_host -DproxyPort=$proxy_port"; \
-    fi; \
-    mvn $MAVEN_ARGS clean install -Pquick
-
+*/target/
+target/
+*/*.iml
+*.iml
+*/.settings
+*/.project
+*/bin
+*/*.class
+*/atlassian-ide*
+*/.idea
+.idea/*
+*/.classpath
+__pycache__
+*.pem
+wildfly*.zip
+product

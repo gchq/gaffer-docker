@@ -13,9 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
--------
+=======
 
-What you have here, is Docker containers for Gaffer.  This is a small
+# Gaffer Docker
+
+What you have here, is a Docker container for Gaffer.  This is a small
 instance and is really only useful only development / trial
 purposes.  But containerising allows a quick way to find out what Gaffer is
 like and develop against the interfaces.  To run Gaffer, you need four

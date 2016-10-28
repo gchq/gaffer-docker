@@ -28,22 +28,27 @@ JAR_FILES=\
         gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-iterators.jar \
         gaffer/common-util/${GAFFER_VERSION}/common-util-${GAFFER_VERSION}.jar \
         gaffer/simple-function-library/${GAFFER_VERSION}/simple-function-library-${GAFFER_VERSION}-shaded.jar \
-        gaffer/simple-serialisation-library/${GAFFER_VERSION}/simple-serialisation-library-${GAFFER_VERSION}-shaded.jar \
+        gaffer/simple-serialisation-library/${GAFFER_VERSION}/simple-serialisation-library-${GAFFER_VERSION}-shaded.jar
 
 SUDO=
 BUILD_ARGS=
 
-PROP_FILES= \
-	example-rest/target/classes/mockaccumulostore.properties
+PROXY_ARGS=--build-arg HTTP_PROXY=${http_proxy}
+PROXY_ARGS += --build-arg http_proxy=${http_proxy}
+PROXY_ARGS += --build-arg HTTPS_PROXY=${https_proxy}
+PROXY_ARGS += --build-arg https_proxy=${https_proxy}
+
+PROXY_HOST_PORT_ARGS=--build-arg proxy_host=${proxy_host}
+PROXY_HOST_PORT_ARGS += --build-arg proxy_port=${proxy_port}
 
 all: build container
 
 product:
 	mkdir product
 
+# In the future this could be removed when the Gaffer binaries are published to Maven Central.
 build: product
-	${SUDO} docker build ${BUILD_ARGS} -t gaffer-dev -f Dockerfile.dev .
-	${SUDO} docker build ${BUILD_ARGS} -t gaffer-build -f Dockerfile.build .
+	${SUDO} docker build ${PROXY_ARGS} ${PROXY_HOST_PORT_ARGS} ${BUILD_ARGS} --build-arg GAFFER_VERSION=${GAFFER_VERSION} -t gaffer-build -f Dockerfile.build .
 	id=$$(${SUDO} docker run -d gaffer-build sleep 3600); \
 	dir=/root/.m2/repository; \
 	for file in ${WAR_FILES} ${JAR_FILES}; do \
@@ -51,8 +56,6 @@ build: product
 		${SUDO} docker cp $${id}:$${dir}/$${file} product/$${bn}; \
 	done; \
 	${SUDO} docker rm -f $${id}
-
-VERSION=${GAFFER_VERSION}
 
 container: wildfly-10.1.0.CR1.zip
 	${SUDO} docker build ${BUILD_ARGS} -t ${ACCUMULO_REPOSITORY}:${VERSION} -f Dockerfile.accumulo .
