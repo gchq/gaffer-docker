@@ -56,12 +56,12 @@ To run:
 
   # Run Accumulo
   docker run --rm --name accumulo --link zookeeper:zookeeper \
-        --link hadoop:hadoop cybermaggedon/accumulo-gaffer:0.4.4
+        --link hadoop:hadoop cybermaggedon/accumulo-gaffer:0.4.4c
 
   # Run Wildfly, exposing port 8080.
   docker run --rm --name wildfly --link zookeeper:zookeeper \
     --link hadoop:hadoop --link accumulo:accumulo \
-    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4
+    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4c
 
 ```
 
@@ -88,7 +88,7 @@ Wildfly needs no persistent state.
   # Run Wildfly, exposing port 8080.
   docker run --rm --name wildfly --link zookeeper:zookeeper \
     --link hadoop:hadoop --link accumulo:accumulo \
-    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4
+    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4c
 
 ```
 
