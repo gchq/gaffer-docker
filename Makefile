@@ -15,6 +15,7 @@
 ##########################################################
 
 GAFFER_VERSION=0.4.4
+VERSION=0.4.4c
 ACCUMULO_REPOSITORY=cybermaggedon/accumulo-gaffer
 WILDFLY_REPOSITORY=cybermaggedon/wildfly-gaffer
 
@@ -58,8 +59,8 @@ build: product
 	${SUDO} docker rm -f $${id}
 
 container: wildfly-10.1.0.CR1.zip
-	${SUDO} docker build ${BUILD_ARGS} -t ${ACCUMULO_REPOSITORY}:${VERSION} -f Dockerfile.accumulo .
-	${SUDO} docker build ${BUILD_ARGS} -t ${WILDFLY_REPOSITORY}:${VERSION} -f Dockerfile.wildfly .
+	${SUDO} docker build ${PROXY_ARGS} ${BUILD_ARGS} -t ${ACCUMULO_REPOSITORY}:${VERSION} -f Dockerfile.accumulo .
+	${SUDO} docker build ${PROXY_ARGS} ${BUILD_ARGS} -t ${WILDFLY_REPOSITORY}:${VERSION} -f Dockerfile.wildfly .
 
 wildfly-10.1.0.CR1.zip:
 	wget download.jboss.org/wildfly/10.1.0.CR1/wildfly-10.1.0.CR1.zip
