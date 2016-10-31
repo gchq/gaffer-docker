@@ -19,7 +19,7 @@ FROM fedora:24
 RUN dnf install -y java-1.8.0-openjdk maven
 RUN dnf install -y git
 
-ARG GAFFER_VERSION=0.4.4
+ARG GAFFER_VERSION
 RUN mkdir -p /usr/local/src/gaffer
 WORKDIR /usr/local/src/gaffer
 

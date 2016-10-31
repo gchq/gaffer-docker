@@ -19,8 +19,6 @@ VERSION=0.4.4c
 ACCUMULO_REPOSITORY=cybermaggedon/accumulo-gaffer
 WILDFLY_REPOSITORY=cybermaggedon/wildfly-gaffer
 
-JACKSON=com/fasterxml/jackson
-
 WAR_FILES=\
 	gaffer/example-rest/${GAFFER_VERSION}/example-rest-${GAFFER_VERSION}.war \
         gaffer/ui/${GAFFER_VERSION}/ui-${GAFFER_VERSION}.war
