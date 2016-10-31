@@ -16,21 +16,24 @@
 
 FROM fedora:24
 
+RUN dnf install -y unzip
 RUN dnf install -y java-1.8.0-openjdk maven
-RUN dnf install -y git
 
-ARG GAFFER_VERSION
-RUN mkdir -p /usr/local/src/gaffer
-WORKDIR /usr/local/src/gaffer
+WORKDIR /usr/local
+COPY wildfly-10.1.0.CR1.zip /usr/local/
+RUN unzip wildfly-10.1.0.CR1.zip
+RUN ln -s wildfly-10.1.0.CR1 wildfly
 
-RUN git clone http://github.com/gchq/Gaffer.git .; \
-  git checkout gaffer2-$GAFFER_VERSION
+WORKDIR /usr/local/wildfly
+COPY product/*.war standalone/deployments/
+COPY resources/standalone.xml standalone/configuration/
+COPY resources/schema schema
+COPY resources/store.properties store.properties
 
-ARG proxy_host
-ARG proxy_port
-RUN export MAVEN_ARGS=; \
-    if [[ $proxy_host ]]; then \
-        export MAVEN_ARGS="-DproxySet=true -DproxyHost=$proxy_host -DproxyPort=$proxy_port"; \
-    fi; \
-    mvn $MAVEN_ARGS clean install -Pquick
+CMD cd /usr/local/wildfly; \
+  bin/standalone.sh -Dgaffer.schemas=/usr/local/wildfly/schema \
+      -Dgaffer.storeProperties=/usr/local/wildfly/store.properties
+
+EXPOSE 8080
+
 
