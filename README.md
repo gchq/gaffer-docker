@@ -104,3 +104,7 @@ like Kubernetes, so that everything restarts.
 If volumes don't mount because of selinux, this command may be your friend:
 
   ```chcon -Rt svirt_sandbox_file_t /path/of/volume```
+
+Take a look at run_gaffer, a script which starts the four containers.
+Also, kubernetes/README.kubernetes.md if you want to run Gaffer in Kubernetes.
+

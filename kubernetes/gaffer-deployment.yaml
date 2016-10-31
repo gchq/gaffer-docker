@@ -1,0 +1,72 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gaffer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gaffer
+    spec:
+      containers:
+      - name: hadoop
+        image: cybermaggedon/hadoop:2.7.3
+        resources:
+          requests:
+            memory: "512M"
+            cpu: "0.5"
+          limits:
+            memory: "1024M"
+            cpu: "1.0"
+        volumeMounts:
+          - mountPath: /data
+            name: hadoop
+      - name: zookeeper
+        image: cybermaggedon/zookeeper:3.4.9
+        resources:
+          requests:
+            memory: "512M"
+            cpu: "0.1"
+          limits:
+            memory: "1024M"
+            cpu: "0.1"
+        volumeMounts:
+          - mountPath: /data
+            name: zookeeper
+      - name: accumulo
+        image: cybermaggedon/accumulo-gaffer:0.4.4c
+        resources:
+          requests:
+            memory: "2048M"
+            cpu: "1.0"
+          limits:
+            memory: "2048M"
+            cpu: "1.0"
+        volumeMounts:
+          - mountPath: /accumulo
+            name: accumulo
+      - name: gaffer
+        image: cybermaggedon/wildfly-gaffer:0.4.4c
+        resources:
+          requests:
+            memory: "700M"
+            cpu: "0.1"
+          limits:
+            memory: "700M"
+            cpu: "0.1"
+        ports:
+        - containerPort: 8080
+      volumes:
+      - name: hadoop
+        gcePersistentDisk:
+          pdName: hadoop-0000
+          fsType: ext4
+      - name: zookeeper
+        gcePersistentDisk:
+          pdName: zookeeper-0000
+          fsType: ext4
+      - name: accumulo
+        gcePersistentDisk:
+          pdName: accumulo-0000
+          fsType: ext4
