@@ -21,6 +21,7 @@ RUN dnf install -y java-1.8.0-openjdk maven
 
 WORKDIR /usr/local
 ADD wildfly-10.1.0.CR1.zip /usr/local/
+RUN unzip wildfly-10.1.0.CR1.zip; rm -f wildfly-10.1.0.CR1.zip
 RUN ln -s wildfly-10.1.0.CR1 wildfly
 
 WORKDIR /usr/local/wildfly
@@ -34,5 +35,4 @@ CMD cd /usr/local/wildfly; \
       -Dgaffer.storeProperties=/usr/local/wildfly/store.properties
 
 EXPOSE 8080
-
 
