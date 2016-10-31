@@ -20,8 +20,7 @@ RUN dnf install -y unzip
 RUN dnf install -y java-1.8.0-openjdk maven
 
 WORKDIR /usr/local
-COPY wildfly-10.1.0.CR1.zip /usr/local/
-RUN unzip wildfly-10.1.0.CR1.zip
+ADD wildfly-10.1.0.CR1.zip /usr/local/
 RUN ln -s wildfly-10.1.0.CR1 wildfly
 
 WORKDIR /usr/local/wildfly
