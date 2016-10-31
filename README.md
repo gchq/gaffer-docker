@@ -28,8 +28,8 @@ components:
 - Hadoop, which is used by Accumulo.
 
 I have these components available as the four containers:
-- cybermaggedon/wildfly-gaffer
-- cybermaggedon/accumulo-gaffer
+- gchq/wildfly-gaffer
+- gchq/accumulo-gaffer
 - cybermaggedon/zookeeper
 - cybermaggedon/hadoop
 
@@ -56,12 +56,12 @@ To run:
 
   # Run Accumulo
   docker run --rm --name accumulo --link zookeeper:zookeeper \
-        --link hadoop:hadoop cybermaggedon/accumulo-gaffer:0.4.4c
+        --link hadoop:hadoop gchq/accumulo-gaffer:0.4.4c
 
   # Run Wildfly, exposing port 8080.
   docker run --rm --name wildfly --link zookeeper:zookeeper \
     --link hadoop:hadoop --link accumulo:accumulo \
-    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4c
+    -p 8080:8080 gchq/wildfly-gaffer:0.4.4c
 
 ```
 
@@ -83,12 +83,12 @@ Wildfly needs no persistent state.
   # Run Accumulo
   docker run --rm --name accumulo -v /data/accumulo:/accumulo \
         --link zookeeper:zookeeper \
-        --link hadoop:hadoop cybermaggedon/accumulo-gaffer:0.4.4c
+        --link hadoop:hadoop gchq/accumulo-gaffer:0.4.4c
 
   # Run Wildfly, exposing port 8080.
   docker run --rm --name wildfly --link zookeeper:zookeeper \
     --link hadoop:hadoop --link accumulo:accumulo \
-    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4c
+    -p 8080:8080 gchq/wildfly-gaffer:0.4.4c
 
 ```
 
