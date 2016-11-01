@@ -15,26 +15,30 @@
 ##########################################################
 
 GAFFER_VERSION=0.4.4
-
-REPOSITORY=docker.io/gchq/gaffer
+VERSION=0.4.4d
+ACCUMULO_REPOSITORY=gchq/accumulo-gaffer
+WILDFLY_REPOSITORY=gchq/wildfly-gaffer
 
 WAR_FILES=\
 	gaffer/example-rest/${GAFFER_VERSION}/example-rest-${GAFFER_VERSION}.war \
-	gaffer/ui/${GAFFER_VERSION}/ui-${GAFFER_VERSION}.war
+        gaffer/ui/${GAFFER_VERSION}/ui-${GAFFER_VERSION}.war
 
 JAR_FILES=\
-	gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-iterators.jar \
-	gaffer/common-util/${GAFFER_VERSION}/common-util-${GAFFER_VERSION}.jar \
-	gaffer/simple-function-library/${GAFFER_VERSION}/simple-function-library-${GAFFER_VERSION}-shaded.jar \
-	gaffer/simple-serialisation-library/${GAFFER_VERSION}/simple-serialisation-library-${GAFFER_VERSION}-shaded.jar \
-
-VERSION=${GAFFER_VERSION}
+        gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-iterators.jar \
+        gaffer/common-util/${GAFFER_VERSION}/common-util-${GAFFER_VERSION}.jar \
+        gaffer/simple-function-library/${GAFFER_VERSION}/simple-function-library-${GAFFER_VERSION}-shaded.jar \
+        gaffer/simple-serialisation-library/${GAFFER_VERSION}/simple-serialisation-library-${GAFFER_VERSION}-shaded.jar
 
 SUDO=
+BUILD_ARGS=
 
-PROXY_ARGS=--build-arg HTTP_PROXY=${http_proxy} --build-arg http_proxy=${http_proxy} --build-arg HTTPS_PROXY=${https_proxy} --build-arg https_proxy=${https_proxy}
+PROXY_ARGS=--build-arg HTTP_PROXY=${http_proxy}
+PROXY_ARGS += --build-arg http_proxy=${http_proxy}
+PROXY_ARGS += --build-arg HTTPS_PROXY=${https_proxy}
+PROXY_ARGS += --build-arg https_proxy=${https_proxy}
 
-PROXY_HOST_PORT_ARGS=--build-arg proxy_host=${proxy_host} --build-arg proxy_port=${proxy_port}
+PROXY_HOST_PORT_ARGS=--build-arg proxy_host=${proxy_host}
+PROXY_HOST_PORT_ARGS += --build-arg proxy_port=${proxy_port}
 
 all: build container
 
@@ -53,12 +57,12 @@ build: product
 	${SUDO} docker rm -f $${id}
 
 container: wildfly-10.1.0.CR1.zip
-	${SUDO} docker build ${PROXY_ARGS} ${BUILD_ARGS} -t gaffer -f Dockerfile.deploy .
-	${SUDO} docker tag gaffer ${REPOSITORY}:${VERSION}
+	${SUDO} docker build ${PROXY_ARGS} ${BUILD_ARGS} -t ${ACCUMULO_REPOSITORY}:${VERSION} -f Dockerfile.accumulo .
+	${SUDO} docker build ${PROXY_ARGS} ${BUILD_ARGS} -t ${WILDFLY_REPOSITORY}:${VERSION} -f Dockerfile.wildfly .
 
 wildfly-10.1.0.CR1.zip:
 	wget download.jboss.org/wildfly/10.1.0.CR1/wildfly-10.1.0.CR1.zip
 
 push:
-	${SUDO} docker push ${REPOSITORY}:${VERSION}
-
+	${SUDO} docker push ${ACCUMULO_REPOSITORY}:${VERSION}
+	${SUDO} docker push ${WILDFLY_REPOSITORY}:${VERSION}

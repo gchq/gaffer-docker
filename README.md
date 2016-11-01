@@ -1,10 +1,11 @@
+
 Copyright 2016 Crown Copyright, cybermaggedon
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,46 +13,98 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+=======
 
 # Gaffer Docker
 
 What you have here, is a Docker container for Gaffer.  This is a small
 instance and is really only useful only development / trial
 purposes.  But containerising allows a quick way to find out what Gaffer is
-like and develop against the interfaces.  The container deploys: Hadoop,
-Accumulo, Zookeeper, and launches Gaffer using Wildfly.
+like and develop against the interfaces.  To run Gaffer, you need four
+components:
+- Wildfly, hosting the Gaffer REST API and UI.
+- Accumulo, hosting the Gaffer extensions.
+- Zookeeper, which is used by Accumulo.
+- Hadoop, which is used by Accumulo.
+
+I have these components available as the four containers:
+- gchq/wildfly-gaffer
+- gchq/accumulo-gaffer
+- cybermaggedon/zookeeper
+- cybermaggedon/hadoop
+
+The code here:
+- Compiles Gaffer from source in a build container, and extracts a set of
+  things to be loaded into the deployable containers.
+- Downloads Wildfly, and creates a container integrating Wildfly and Gaffer.
+- Creates a container integrating Accumulo (cybermaggedon/accumulo) and
+  Gaffer.
+
+For Hadoop and Zookeeper, I have containers ready to use.
 
 The memory settings of Accumulo are low to ensure Accumulo runs in a
-small footprint.  Budget for around 2GB for trivial amounts of data, 6GB
-for anything with some load.
+small footprint.  Don't expect performance.
 
 To run:
 
-  docker run -it -p 8080:8080 gchq/gaffer:0.4.4
+```
+  # Run Hadoop
+  docker run --rm --name hadoop cybermaggedon/hadoop:2.7.3
 
-You can then access the Gaffer API at port 8080:
-```
-http://localhost:8080/rest
+  # Run Zookeeper
+  docker run --rm --name zookeeper cybermaggedon/zookeeper:3.4.9
+
+  # Run Accumulo
+  docker run --rm --name accumulo --link zookeeper:zookeeper \
+        --link hadoop:hadoop gchq/accumulo-gaffer:0.4.4d
+
+  # Run Wildfly, exposing port 8080.
+  docker run --rm --name wildfly --link zookeeper:zookeeper \
+    --link hadoop:hadoop --link accumulo:accumulo \
+    -p 8080:8080 gchq/wildfly-gaffer:0.4.4d
+
 ```
 
-and the prototype Gaffer UI at:
-```
-http://localhost:8080/ui
-```
-
+You can then access the Gaffer API at port 8080, e.g. try accessing URL
+http://HOSTNAME:8080/rest.  The UI is available at http://HOSTNAME:8080/ui.
 
 When the container dies, the data is lost.  If you want data to persist,
-mount a volume on /data e.g.
+put volumes on /data for Hadoop and Zookeeper, and /accumulo for Accumulo.
+Wildfly needs no persistent state.
 
-  docker run -it -p 8080:8080 -v /data/gaffer:/data gchq/gaffer:0.4.4
+```
+  # Run Hadoop
+  docker run --rm --name hadoop -v /data/hadoop:/data cybermaggedon/hadoop:2.7.3
+
+  # Run Zookeeper
+  docker run --rm --name zookeeper -v /data/zookeeper:/data \
+        cybermaggedon/zookeeper:3.4.9
+
+  # Run Accumulo
+  docker run --rm --name accumulo -v /data/accumulo:/accumulo \
+        --link zookeeper:zookeeper \
+        --link hadoop:hadoop gchq/accumulo-gaffer:0.4.4d
+
+  # Run Wildfly, exposing port 8080.
+  docker run --rm --name wildfly --link zookeeper:zookeeper \
+    --link hadoop:hadoop --link accumulo:accumulo \
+    -p 8080:8080 gchq/wildfly-gaffer:0.4.4d
+
+```
 
 The default schema deployed is usable.  If you want to set your own schema
 then you need to change /usr/local/wildfly/schema/* by e.g. mounting
 replacement volumes.
 
-At high input load, Zookeeper seems to continually grow until it exhausts the
-container memory footprint.
+Accumulo makes considerable use of Zookeeper, to the point that, at high
+input load, Zookeeper seems to continually grow until it exhausts the
+container memory footprint.  Workaround: run containers in a container engine
+like Kubernetes, so that everything restarts.
 
-In future, I will probably detangle Hadoop, Accumulo, Zookeeper and Gaffer
-into separate containers to run linked.
+If volumes don't mount because of selinux, this command may be your friend:
+
+  ```chcon -Rt svirt_sandbox_file_t /path/of/volume```
+
+Take a look at run_gaffer, a script which starts the four containers.
+Also, kubernetes/README.kubernetes.md if you want to run Gaffer in Kubernetes.
 
