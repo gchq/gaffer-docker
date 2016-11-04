@@ -15,7 +15,7 @@
 ##########################################################
 
 GAFFER_VERSION=0.4.4
-VERSION=0.4.4c
+VERSION=0.4.4d
 ACCUMULO_REPOSITORY=cybermaggedon/accumulo-gaffer
 WILDFLY_REPOSITORY=cybermaggedon/wildfly-gaffer
 

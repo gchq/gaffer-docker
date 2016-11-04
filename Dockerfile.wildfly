@@ -30,10 +30,14 @@ COPY resources/standalone.xml standalone/configuration/
 COPY resources/schema schema
 COPY resources/store.properties store.properties
 
-CMD cd /usr/local/wildfly; \
+CMD ( \
+  echo "accumulo.instance=${ACCUMULO_INSTANCE:-accumulo}"; \
+  echo "accumulo.user=${ACCUMULO_USER:-root}"; \
+  echo "accumulo.password=${ACCUMULO_SECRET:-accumulo}"; \
+  echo "accumulo.zookeepers=${ZOOKEEPERS:-zookeeper:2181}" \
+  ) >> store.properties; \
   bin/standalone.sh -Dgaffer.schemas=/usr/local/wildfly/schema \
       -Dgaffer.storeProperties=/usr/local/wildfly/store.properties
 
 EXPOSE 8080
-
 
