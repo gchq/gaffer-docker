@@ -261,7 +261,7 @@ spec:
     spec:
       containers:
       - name: accumulo
-        image: cybermaggedon/accumulo-gaffer:0.4.4e
+        image: cybermaggedon/accumulo-gaffer:0.4.4g
         resources:
           requests:
             memory: "2G"
@@ -305,6 +305,16 @@ spec:
           value: MY_IP
         - name: HDFS_VOLUMES
           value: hdfs://hadoop0000:9000/accumulo
+        - name: MEMORY_MAPS_MAX
+          value: 300M
+        - name: CACHE_DATA_SIZE
+          value: 30M
+        - name: CACHE_INDEX_SIZE
+          value: 40M
+        - name: SORT_BUFFER_SIZE
+          value: 50M
+        - name: WALOG_MAX_SIZE
+          value: 512M
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -319,7 +329,7 @@ spec:
     spec:
       containers:
       - name: accumulo
-        image: cybermaggedon/accumulo-gaffer:0.4.4e
+        image: cybermaggedon/accumulo-gaffer:0.4.4g
         resources:
           requests:
             memory: "2G"
@@ -363,6 +373,16 @@ spec:
           value: accumulo0000
         - name: HDFS_VOLUMES
           value: hdfs://hadoop0000:9000/accumulo
+        - name: MEMORY_MAPS_MAX
+          value: 300M
+        - name: CACHE_DATA_SIZE
+          value: 30M
+        - name: CACHE_INDEX_SIZE
+          value: 40M
+        - name: SORT_BUFFER_SIZE
+          value: 50M
+        - name: WALOG_MAX_SIZE
+          value: 512M
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -377,7 +397,7 @@ spec:
     spec:
       containers:
       - name: accumulo
-        image: cybermaggedon/accumulo-gaffer:0.4.4e
+        image: cybermaggedon/accumulo-gaffer:0.4.4g
         resources:
           requests:
             memory: "2G"
@@ -421,6 +441,16 @@ spec:
           value: accumulo0000
         - name: HDFS_VOLUMES
           value: hdfs://hadoop0000:9000/accumulo
+        - name: MEMORY_MAPS_MAX
+          value: 300M
+        - name: CACHE_DATA_SIZE
+          value: 30M
+        - name: CACHE_INDEX_SIZE
+          value: 40M
+        - name: SORT_BUFFER_SIZE
+          value: 50M
+        - name: WALOG_MAX_SIZE
+          value: 512M
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -435,7 +465,7 @@ spec:
     spec:
       containers:
       - name: accumulo
-        image: cybermaggedon/wildfly-gaffer:0.4.4e
+        image: cybermaggedon/wildfly-gaffer:0.4.4g
         resources:
           requests:
             memory: "1G"

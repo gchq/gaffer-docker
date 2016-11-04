@@ -41,6 +41,15 @@ configuration on AWS is slightly different.
 
 ```
 
+The order in which things start is going to be fairly random.  One thing to
+note is that it is possible that all the Accumulo nodes may race ahead and
+start before Hadoop is ready.  Hadoop containers will only start once their
+volumes have been formatted, whereas Accumulo containers have no volumes.
+If this happens, the Accumulo initialisation will fail, and the Accumulos will
+sit there waiting for the intiailisation to complete.  If this happens,
+delete all of the Accumulo PODs so that they restart, and it will trigger the
+initialisation.
+
 Note!  This creates Gaffer as an insecure public service on the internet.
 Get to work on the firewall settings.
 
