@@ -12,21 +12,24 @@ configuration on AWS is slightly different.
   gcloud container --project ${proj} clusters create gaffer-cluster \
     --zone "us-east1-b" --machine-type "n1-standard-4" \
     --scopes "${a}/compute","${a}/devstorage.read_only","${a}/logging.write","${a}/monitoring","${a}/servicecontrol","${a}/service.management.readonly" \
-    --num-nodes 3 --network "default" --enable-cloud-logging \
+    --num-nodes 4 --network "default" --enable-cloud-logging \
     --enable-cloud-monitoring
 
-
-  # 25 GB disk for Gaffer Hadoop
+  # Three times 250 GB disk for Gaffer Hadoop
   gcloud compute --project ${proj} disks create "hadoop-0000" \
-  --size "25" --zone "us-east1-b" --type "pd-standard"
+  --size "250" --zone "us-east1-b" --type "pd-standard"
+  gcloud compute --project ${proj} disks create "hadoop-0001" \
+  --size "250" --zone "us-east1-b" --type "pd-standard"
+  gcloud compute --project ${proj} disks create "hadoop-0002" \
+  --size "250" --zone "us-east1-b" --type "pd-standard"
 
-  # 10 GB disk for Gaffer Zookeeper
-  gcloud compute --project ${proj} disks create "zookeeper-0000" \
+  # Three times 10 GB disk for Gaffer Zookeeper
+  gcloud compute --project ${proj} disks create "zookeeper-1" \
   --size "10" --zone "us-east1-b" --type "pd-standard"
-
-  # 1 GB disk for Gaffer Accumulo
-  gcloud compute --project ${proj} disks create "accumulo-0000" \
-      --size "1" --zone "us-east1-b" --type "pd-standard"
+  gcloud compute --project ${proj} disks create "zookeeper-2" \
+  --size "10" --zone "us-east1-b" --type "pd-standard"
+  gcloud compute --project ${proj} disks create "zookeeper-3" \
+  --size "10" --zone "us-east1-b" --type "pd-standard"
 
   # Get Kubernetes creds
   gcloud container clusters get-credentials gaffer-cluster \

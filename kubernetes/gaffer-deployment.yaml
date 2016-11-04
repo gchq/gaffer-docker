@@ -1,72 +1,249 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: gaffer
+  name: hadoop0000
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: gaffer
+        app: hadoop
     spec:
       containers:
       - name: hadoop
         image: cybermaggedon/hadoop:2.7.3
         resources:
           requests:
-            memory: "512M"
-            cpu: "0.5"
+            memory: "1024M"
+            cpu: "1.0"
           limits:
             memory: "1024M"
             cpu: "1.0"
+        ports:
+        - containerPort: 50070
+          name: namenode-http
+        - containerPort: 50075
+          name: datanode
+        - containerPort: 9000
+          name: namenode-rpc
         volumeMounts:
           - mountPath: /data
             name: hadoop
-      - name: zookeeper
-        image: cybermaggedon/zookeeper:3.4.9
-        resources:
-          requests:
-            memory: "512M"
-            cpu: "0.1"
-          limits:
-            memory: "1024M"
-            cpu: "0.1"
-        volumeMounts:
-          - mountPath: /data
-            name: zookeeper
-      - name: accumulo
-        image: cybermaggedon/accumulo-gaffer:0.4.4c
-        resources:
-          requests:
-            memory: "2048M"
-            cpu: "1.0"
-          limits:
-            memory: "2048M"
-            cpu: "1.0"
-        volumeMounts:
-          - mountPath: /accumulo
-            name: accumulo
-      - name: gaffer
-        image: cybermaggedon/wildfly-gaffer:0.4.4c
-        resources:
-          requests:
-            memory: "700M"
-            cpu: "0.1"
-          limits:
-            memory: "700M"
-            cpu: "0.1"
-        ports:
-        - containerPort: 8080
+        env:
+        - name: DAEMONS
+          value: namenode,secondarynamenode,datanode
       volumes:
       - name: hadoop
         gcePersistentDisk:
           pdName: hadoop-0000
           fsType: ext4
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hadoop0001
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hadoop
+    spec:
+      containers:
+      - name: hadoop
+        image: cybermaggedon/hadoop:2.7.3
+        resources:
+          requests:
+            memory: "1024M"
+            cpu: "1.0"
+          limits:
+            memory: "1024M"
+            cpu: "1.0"
+        ports:
+        - containerPort: 50070
+          name: namenode-http
+        - containerPort: 50075
+          name: datanode
+        - containerPort: 9000
+          name: namenode-rpc
+        volumeMounts:
+          - mountPath: /data
+            name: hadoop
+        env:
+        - name: DAEMONS
+          value: datanode
+        - name: NAMENODE_URI
+          value: hdfs://hadoop0000:9000
+      volumes:
+      - name: hadoop
+        gcePersistentDisk:
+          pdName: hadoop-0001
+          fsType: ext4
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hadoop0002
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hadoop
+    spec:
+      containers:
+      - name: hadoop
+        image: cybermaggedon/hadoop:2.7.3
+        resources:
+          requests:
+            memory: "1024M"
+            cpu: "1.0"
+          limits:
+            memory: "1024M"
+            cpu: "1.0"
+        ports:
+        - containerPort: 50070
+          name: namenode-http
+        - containerPort: 50075
+          name: datanode
+        - containerPort: 9000
+          name: namenode-rpc
+        volumeMounts:
+          - mountPath: /data
+            name: hadoop
+        env:
+        - name: DAEMONS
+          value: datanode
+        - name: NAMENODE_URI
+          value: hdfs://hadoop0000:9000
+      volumes:
+      - name: hadoop
+        gcePersistentDisk:
+          pdName: hadoop-0002
+          fsType: ext4
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zk1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+      - name: hadoop
+        image: cybermaggedon/zookeeper:3.4.9
+        resources:
+          requests:
+            memory: "512M"
+            cpu: "0.3"
+          limits:
+            memory: "512M"
+            cpu: "0.3"
+        ports:
+        - containerPort: 2888
+          name: internal1
+        - containerPort: 3888
+          name: internal2
+        - containerPort: 2181
+          name: service
+        volumeMounts:
+          - mountPath: /data
+            name: zookeeper
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: ZOOKEEPER_MYID
+          value: "1"
+      volumes:
       - name: zookeeper
         gcePersistentDisk:
-          pdName: zookeeper-0000
+          pdName: zookeeper-1
           fsType: ext4
-      - name: accumulo
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zk2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+      - name: hadoop
+        image: cybermaggedon/zookeeper:3.4.9
+        resources:
+          requests:
+            memory: "512M"
+            cpu: "0.3"
+          limits:
+            memory: "512M"
+            cpu: "0.3"
+        ports:
+        - containerPort: 2888
+          name: internal1
+        - containerPort: 3888
+          name: internal2
+        - containerPort: 2181
+          name: service
+        volumeMounts:
+          - mountPath: /data
+            name: zookeeper
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: ZOOKEEPER_MYID
+          value: "2"
+      volumes:
+      - name: zookeeper
         gcePersistentDisk:
-          pdName: accumulo-0000
+          pdName: zookeeper-1
+          fsType: ext4
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zk3
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+      - name: hadoop
+        image: cybermaggedon/zookeeper:3.4.9
+        resources:
+          requests:
+            memory: "512M"
+            cpu: "0.3"
+          limits:
+            memory: "512M"
+            cpu: "0.3"
+        ports:
+        - containerPort: 2888
+          name: internal1
+        - containerPort: 3888
+          name: internal2
+        - containerPort: 2181
+          name: service
+        volumeMounts:
+          - mountPath: /data
+            name: zookeeper
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: ZOOKEEPER_MYID
+          value: "3"
+      volumes:
+      - name: zookeeper
+        gcePersistentDisk:
+          pdName: zookeeper-1
           fsType: ext4
