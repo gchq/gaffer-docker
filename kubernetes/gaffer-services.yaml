@@ -10,7 +10,7 @@ spec:
     targetPort: 8080
     protocol: TCP
   selector:
-    app: gaffer
+    app: wildfly
   type: LoadBalancer
 ---
 apiVersion: v1
@@ -134,3 +134,81 @@ spec:
     name: replication
   selector:
     app: accumulo0000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: accumulo0001
+  labels:
+    app: accumulo0001
+spec:
+  ports:
+  - port: 9999
+    targetPort: 9999
+    protocol: TCP
+    name: master
+  - port: 50091
+    targetPort: 50091
+    protocol: TCP
+    name: gc
+  - port: 9995
+    targetPort: 9995
+    protocol: TCP
+    name: monitor
+  - port: 12234
+    targetPort: 12234
+    protocol: TCP
+    name: tracer
+  - port: 42424
+    targetPort: 42424
+    protocol: TCP
+    name: proxy
+  - port: 10002
+    targetPort: 10002
+    protocol: TCP
+    name: slave
+  - port: 10001
+    targetPort: 10001
+    protocol: TCP
+    name: replication
+  selector:
+    app: accumulo0001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: accumulo0002
+  labels:
+    app: accumulo0002
+spec:
+  ports:
+  - port: 9999
+    targetPort: 9999
+    protocol: TCP
+    name: master
+  - port: 50091
+    targetPort: 50091
+    protocol: TCP
+    name: gc
+  - port: 9995
+    targetPort: 9995
+    protocol: TCP
+    name: monitor
+  - port: 12234
+    targetPort: 12234
+    protocol: TCP
+    name: tracer
+  - port: 42424
+    targetPort: 42424
+    protocol: TCP
+    name: proxy
+  - port: 10002
+    targetPort: 10002
+    protocol: TCP
+    name: slave
+  - port: 10001
+    targetPort: 10001
+    protocol: TCP
+    name: replication
+  selector:
+    app: accumulo0002

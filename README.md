@@ -54,16 +54,16 @@ To run:
   docker run -d --name hadoop cybermaggedon/hadoop:2.7.3
 
   # Run Zookeeper
-  docker run -d --name zookeeper cybermaggedon/zookeeper:3.4.9
+  docker run -d --name zookeeper cybermaggedon/zookeeper:3.4.9b
 
   # Run Accumulo
   docker run -d --name accumulo --link zookeeper:zookeeper \
-        --link hadoop:hadoop cybermaggedon/accumulo-gaffer:0.4.4d
+        --link hadoop:hadoop cybermaggedon/accumulo-gaffer:0.4.4e
 
   # Run Wildfly, exposing port 8080.
   docker run -d --name wildfly --link zookeeper:zookeeper \
     --link hadoop:hadoop --link accumulo:accumulo \
-    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4d
+    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4e
 
 ```
 
@@ -80,17 +80,17 @@ Wildfly needs no persistent state.
 
   # Run Zookeeper
   docker run -d --name zookeeper -v /data/zookeeper:/data \
-        cybermaggedon/zookeeper:3.4.9
+        cybermaggedon/zookeeper:3.4.9b
 
   # Run Accumulo
   docker run -d --name accumulo \
         --link zookeeper:zookeeper \
-        --link hadoop:hadoop cybermaggedon/accumulo-gaffer:0.4.4d
+        --link hadoop:hadoop cybermaggedon/accumulo-gaffer:0.4.4e
 
   # Run Wildfly, exposing port 8080.
   docker run -d --name wildfly --link zookeeper:zookeeper \
     --link hadoop:hadoop --link accumulo:accumulo \
-    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4d
+    -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4e
 
 ```
 
@@ -108,7 +108,7 @@ If volumes don't mount because of selinux, this command may be your friend:
   ```chcon -Rt svirt_sandbox_file_t /path/of/volume```
 
 Take a look at run_gaffer, a script which starts the four containers.
-Also, kubernetes/README.kubernetes.md if you want to run Gaffer in Kubernetes.
+Also, <kubernetes/README.kubernetes.md> if you want to run Gaffer in Kubernetes.
 
 To set up a cluster, you need to take control of address allocation.
 
@@ -146,17 +146,17 @@ To set up a cluster, you need to take control of address allocation.
   docker run -d --ip=10.10.5.10 --net my_network \
       -e ZOOKEEPERS=10.10.5.10,10.10.5.11,10.10.5.12 \
       -e ZOOKEEPER_MYID=1 \
-      --name zk1 -p 2181:2181 cybermaggedon/zookeeper:3.4.9
+      --name zk1 -p 2181:2181 cybermaggedon/zookeeper:3.4.9b
       
   docker run -d --ip=10.10.5.11 --net my_network \
       -e ZOOKEEPERS=10.10.5.10,10.10.5.11,10.10.5.12 \
       -e ZOOKEEPER_MYID=2 --name zk2 --link zk1:zk1 \
-      cybermaggedon/zookeeper:3.4.9
+      cybermaggedon/zookeeper:3.4.9b
       
   docker run -d --ip=10.10.5.12 --net my_network \
       -e ZOOKEEPERS=10.10.5.10,10.10.5.11,10.10.5.12 \
       -e ZOOKEEPER_MYID=3 --name zk3 --link zk1:zk1 \
-      cybermaggedon/zookeeper:3.4.9
+      cybermaggedon/zookeeper:3.4.9b
 
   ############################################################################
   # Accumulo, 3 nodes
@@ -173,7 +173,7 @@ To set up a cluster, you need to take control of address allocation.
       -e MONITOR_HOSTS=10.10.10.10 \
       -e TRACER_HOSTS=10.10.10.10 \
       --link hadoop01:hadoop01 \
-      --name acc01 cybermaggedon/accumulo-gaffer:0.4.4d
+      --name acc01 cybermaggedon/accumulo-gaffer:0.4.4e
 
   docker run -d --ip=10.10.10.11 --net my_network \
       -e ZOOKEEPERS=10.10.5.10,10.10.5.11,10.10.5.12 \
@@ -186,7 +186,7 @@ To set up a cluster, you need to take control of address allocation.
       -e MONITOR_HOSTS=10.10.10.10 \
       -e TRACER_HOSTS=10.10.10.10 \
       --link hadoop01:hadoop01 \
-      --name acc02 cybermaggedon/accumulo-gaffer:0.4.4d
+      --name acc02 cybermaggedon/accumulo-gaffer:0.4.4e
 
   docker run -d --ip=10.10.10.12 --net my_network \
       -e ZOOKEEPERS=10.10.5.10,10.10.5.11,10.10.5.12 \
@@ -199,7 +199,7 @@ To set up a cluster, you need to take control of address allocation.
       -e MONITOR_HOSTS=10.10.10.10 \
       -e TRACER_HOSTS=10.10.10.10 \
       --link hadoop01:hadoop01 \
-      --name acc03 cybermaggedon/accumulo-gaffer:0.4.4d
+      --name acc03 cybermaggedon/accumulo-gaffer:0.4.4e
 
   ############################################################################
   # Wildfly, 3 nodes
@@ -208,13 +208,13 @@ To set up a cluster, you need to take control of address allocation.
   # Run Wildfly, on ports 8080-8082.
   docker run -d --name wildfly1 --ip=10.10.11.10 --net my_network \
       -e ZOOKEEPERS=10.10.5.10,10.10.5.11,10.10.5.12 \
-      -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4d
+      -p 8080:8080 cybermaggedon/wildfly-gaffer:0.4.4e
   docker run -d --name wildfly2 --ip=10.10.11.11 --net my_network \
       -e ZOOKEEPERS=10.10.5.10,10.10.5.11,10.10.5.12 \
-      -p 8081:8080 cybermaggedon/wildfly-gaffer:0.4.4d
+      -p 8081:8080 cybermaggedon/wildfly-gaffer:0.4.4e
   docker run -d --name wildfly3 --ip=10.10.11.12 --net my_network \
       -e ZOOKEEPERS=10.10.5.10,10.10.5.11,10.10.5.12 \
-      -p 8082:8080 cybermaggedon/wildfly-gaffer:0.4.4d
+      -p 8082:8080 cybermaggedon/wildfly-gaffer:0.4.4e
 
 
 ```
@@ -233,4 +233,6 @@ variables:
 - ```ACCUMULO_USER``` and ```ACCUMULO_SECRET```: Username and password.
 
 Source is at <https://github.com/cybermaggedon/gaffer-docker>.
+
+
 

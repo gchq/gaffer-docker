@@ -41,4 +41,6 @@ configuration on AWS is slightly different.
 
 ```
 
+Note!  This creates Gaffer as an insecure public service on the internet.
+Get to work on the firewall settings.
 

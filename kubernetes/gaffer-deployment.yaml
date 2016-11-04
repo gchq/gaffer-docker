@@ -135,7 +135,7 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: cybermaggedon/zookeeper:3.4.9a
+        image: cybermaggedon/zookeeper:3.4.9b
         resources:
           requests:
             memory: "512M"
@@ -177,7 +177,7 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: cybermaggedon/zookeeper:3.4.9a
+        image: cybermaggedon/zookeeper:3.4.9b
         resources:
           requests:
             memory: "512M"
@@ -219,7 +219,7 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: cybermaggedon/zookeeper:3.4.9a
+        image: cybermaggedon/zookeeper:3.4.9b
         resources:
           requests:
             memory: "512M"
@@ -261,7 +261,7 @@ spec:
     spec:
       containers:
       - name: accumulo
-        image: cybermaggedon/accumulo-gaffer:0.4.4d
+        image: cybermaggedon/accumulo-gaffer:0.4.4e
         resources:
           requests:
             memory: "2G"
@@ -292,17 +292,17 @@ spec:
         - name: ZOOKEEPERS
           value: zk1,zk2,zk3
         - name: MY_HOSTNAME
-          value: accumulo0000
+          value: MY_IP
         - name: GC_HOSTS
-          value: accumulo0000
+          value: MY_IP
         - name: MASTER_HOSTS
-          value: accumulo0000
+          value: MY_IP
         - name: SLAVE_HOSTS
-          value: accumulo0000,accumulo0001,accumulo0002
+          value: MY_IP,accumulo0001,accumulo0002
         - name: MONITOR_HOSTS
-          value: accumulo0000
+          value: MY_IP
         - name: TRACER_HOSTS
-          value: accumulo0000
+          value: MY_IP
         - name: HDFS_VOLUMES
           value: hdfs://hadoop0000:9000/accumulo
 ---
@@ -319,7 +319,7 @@ spec:
     spec:
       containers:
       - name: accumulo
-        image: cybermaggedon/accumulo-gaffer:0.4.4d
+        image: cybermaggedon/accumulo-gaffer:0.4.4e
         resources:
           requests:
             memory: "2G"
@@ -356,7 +356,7 @@ spec:
         - name: MASTER_HOSTS
           value: accumulo0000
         - name: SLAVE_HOSTS
-          value: accumulo0000,accumulo0001,accumulo0002
+          value: accumulo0000,MY_IP,accumulo0002
         - name: MONITOR_HOSTS
           value: accumulo0000
         - name: TRACER_HOSTS
@@ -377,7 +377,7 @@ spec:
     spec:
       containers:
       - name: accumulo
-        image: cybermaggedon/accumulo-gaffer:0.4.4d
+        image: cybermaggedon/accumulo-gaffer:0.4.4e
         resources:
           requests:
             memory: "2G"
@@ -414,7 +414,7 @@ spec:
         - name: MASTER_HOSTS
           value: accumulo0000
         - name: SLAVE_HOSTS
-          value: accumulo0000,accumulo0001,accumulo0002
+          value: accumulo0000,accumulo0001,MY_IP
         - name: MONITOR_HOSTS
           value: accumulo0000
         - name: TRACER_HOSTS
@@ -435,7 +435,7 @@ spec:
     spec:
       containers:
       - name: accumulo
-        image: cybermaggedon/wildfly-gaffer:0.4.4d
+        image: cybermaggedon/wildfly-gaffer:0.4.4e
         resources:
           requests:
             memory: "1G"
