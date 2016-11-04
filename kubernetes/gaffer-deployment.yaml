@@ -7,7 +7,7 @@ spec:
   template:
     metadata:
       labels:
-        app: hadoop
+        app: hadoop0000
     spec:
       containers:
       - name: hadoop
@@ -47,7 +47,7 @@ spec:
   template:
     metadata:
       labels:
-        app: hadoop
+        app: hadoop0001
     spec:
       containers:
       - name: hadoop
@@ -89,7 +89,7 @@ spec:
   template:
     metadata:
       labels:
-        app: hadoop
+        app: hadoop0002
     spec:
       containers:
       - name: hadoop
@@ -131,11 +131,11 @@ spec:
   template:
     metadata:
       labels:
-        app: zookeeper
+        app: zk1
     spec:
       containers:
-      - name: hadoop
-        image: cybermaggedon/zookeeper:3.4.9
+      - name: zookeeper
+        image: cybermaggedon/zookeeper:3.4.9a
         resources:
           requests:
             memory: "512M"
@@ -173,11 +173,11 @@ spec:
   template:
     metadata:
       labels:
-        app: zookeeper
+        app: zk2
     spec:
       containers:
-      - name: hadoop
-        image: cybermaggedon/zookeeper:3.4.9
+      - name: zookeeper
+        image: cybermaggedon/zookeeper:3.4.9a
         resources:
           requests:
             memory: "512M"
@@ -203,7 +203,7 @@ spec:
       volumes:
       - name: zookeeper
         gcePersistentDisk:
-          pdName: zookeeper-1
+          pdName: zookeeper-2
           fsType: ext4
 ---
 apiVersion: extensions/v1beta1
@@ -215,11 +215,11 @@ spec:
   template:
     metadata:
       labels:
-        app: zookeeper
+        app: zk3
     spec:
       containers:
-      - name: hadoop
-        image: cybermaggedon/zookeeper:3.4.9
+      - name: zookeeper
+        image: cybermaggedon/zookeeper:3.4.9a
         resources:
           requests:
             memory: "512M"
@@ -245,5 +245,207 @@ spec:
       volumes:
       - name: zookeeper
         gcePersistentDisk:
-          pdName: zookeeper-1
+          pdName: zookeeper-3
           fsType: ext4
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: accumulo0000
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: accumulo0000
+    spec:
+      containers:
+      - name: accumulo
+        image: cybermaggedon/accumulo-gaffer:0.4.4d
+        resources:
+          requests:
+            memory: "2G"
+            cpu: "1.0"
+          limits:
+            memory: "2G"
+            cpu: "1.0"
+        ports:
+        - containerPort: 9999
+          name: master
+        - containerPort: 9997
+          name: tablet-server
+        - containerPort: 50091
+          name: gc
+        - containerPort: 9995
+          name: monitor
+        - containerPort: 4560
+          name: monitor-log
+        - containerPort: 12234
+          name: tracer
+        - containerPort: 42424
+          name: proxy
+        - containerPort: 10002
+          name: slave
+        - containerPort: 10001
+          name: replication
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: MY_HOSTNAME
+          value: accumulo0000
+        - name: GC_HOSTS
+          value: accumulo0000
+        - name: MASTER_HOSTS
+          value: accumulo0000
+        - name: SLAVE_HOSTS
+          value: accumulo0000,accumulo0001,accumulo0002
+        - name: MONITOR_HOSTS
+          value: accumulo0000
+        - name: TRACER_HOSTS
+          value: accumulo0000
+        - name: HDFS_VOLUMES
+          value: hdfs://hadoop0000:9000/accumulo
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: accumulo0001
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: accumulo0001
+    spec:
+      containers:
+      - name: accumulo
+        image: cybermaggedon/accumulo-gaffer:0.4.4d
+        resources:
+          requests:
+            memory: "2G"
+            cpu: "1.0"
+          limits:
+            memory: "2G"
+            cpu: "1.0"
+        ports:
+        - containerPort: 9999
+          name: master
+        - containerPort: 9997
+          name: tablet-server
+        - containerPort: 50091
+          name: gc
+        - containerPort: 9995
+          name: monitor
+        - containerPort: 4560
+          name: monitor-log
+        - containerPort: 12234
+          name: tracer
+        - containerPort: 42424
+          name: proxy
+        - containerPort: 10002
+          name: slave
+        - containerPort: 10001
+          name: replication
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: MY_HOSTNAME
+          value: accumulo0000
+        - name: GC_HOSTS
+          value: accumulo0000
+        - name: MASTER_HOSTS
+          value: accumulo0000
+        - name: SLAVE_HOSTS
+          value: accumulo0000,accumulo0001,accumulo0002
+        - name: MONITOR_HOSTS
+          value: accumulo0000
+        - name: TRACER_HOSTS
+          value: accumulo0000
+        - name: HDFS_VOLUMES
+          value: hdfs://hadoop0000:9000/accumulo
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: accumulo0002
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: accumulo0002
+    spec:
+      containers:
+      - name: accumulo
+        image: cybermaggedon/accumulo-gaffer:0.4.4d
+        resources:
+          requests:
+            memory: "2G"
+            cpu: "1.0"
+          limits:
+            memory: "2G"
+            cpu: "1.0"
+        ports:
+        - containerPort: 9999
+          name: master
+        - containerPort: 9997
+          name: tablet-server
+        - containerPort: 50091
+          name: gc
+        - containerPort: 9995
+          name: monitor
+        - containerPort: 4560
+          name: monitor-log
+        - containerPort: 12234
+          name: tracer
+        - containerPort: 42424
+          name: proxy
+        - containerPort: 10002
+          name: slave
+        - containerPort: 10001
+          name: replication
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: MY_HOSTNAME
+          value: accumulo0000
+        - name: GC_HOSTS
+          value: accumulo0000
+        - name: MASTER_HOSTS
+          value: accumulo0000
+        - name: SLAVE_HOSTS
+          value: accumulo0000,accumulo0001,accumulo0002
+        - name: MONITOR_HOSTS
+          value: accumulo0000
+        - name: TRACER_HOSTS
+          value: accumulo0000
+        - name: HDFS_VOLUMES
+          value: hdfs://hadoop0000:9000/accumulo
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wildfly
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: wildfly
+    spec:
+      containers:
+      - name: accumulo
+        image: cybermaggedon/wildfly-gaffer:0.4.4d
+        resources:
+          requests:
+            memory: "1G"
+            cpu: "0.5"
+          limits:
+            memory: "1G"
+            cpu: "0.5"
+        ports:
+        - containerPort: 8080
+          name: rest
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3

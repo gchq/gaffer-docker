@@ -15,21 +15,21 @@ configuration on AWS is slightly different.
     --num-nodes 4 --network "default" --enable-cloud-logging \
     --enable-cloud-monitoring
 
-  # Three times 250 GB disk for Gaffer Hadoop
+  # Three times 250 GB SSD disks for Gaffer Hadoop
   gcloud compute --project ${proj} disks create "hadoop-0000" \
-  --size "250" --zone "us-east1-b" --type "pd-standard"
+  --size "250" --zone "us-east1-b" --type "pd-ssd"
   gcloud compute --project ${proj} disks create "hadoop-0001" \
-  --size "250" --zone "us-east1-b" --type "pd-standard"
+  --size "250" --zone "us-east1-b" --type "pd-ssd"
   gcloud compute --project ${proj} disks create "hadoop-0002" \
-  --size "250" --zone "us-east1-b" --type "pd-standard"
+  --size "250" --zone "us-east1-b" --type "pd-ssd"
 
   # Three times 10 GB disk for Gaffer Zookeeper
   gcloud compute --project ${proj} disks create "zookeeper-1" \
-  --size "10" --zone "us-east1-b" --type "pd-standard"
+  --size "10" --zone "us-east1-b" --type "pd-ssd"
   gcloud compute --project ${proj} disks create "zookeeper-2" \
-  --size "10" --zone "us-east1-b" --type "pd-standard"
+  --size "10" --zone "us-east1-b" --type "pd-ssd"
   gcloud compute --project ${proj} disks create "zookeeper-3" \
-  --size "10" --zone "us-east1-b" --type "pd-standard"
+  --size "10" --zone "us-east1-b" --type "pd-ssd"
 
   # Get Kubernetes creds
   gcloud container clusters get-credentials gaffer-cluster \
@@ -40,4 +40,5 @@ configuration on AWS is slightly different.
   kubectl apply -f gaffer-services.yaml
 
 ```
+
 
