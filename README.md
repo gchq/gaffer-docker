@@ -202,7 +202,7 @@ To set up a cluster, you need to take control of address allocation.
       --name acc03 cybermaggedon/accumulo-gaffer:0.4.4d
 
   ############################################################################
-  # Wildfly, 2 nodes
+  # Wildfly, 3 nodes
   ############################################################################
 
   # Run Wildfly, on ports 8080-8082.
@@ -231,3 +231,6 @@ variables:
 - ```ACCUMULO_INSTANCE```: Accumulo instance name.  If you've used the default
   you should have no reason to change this from the default ```accumulo```.
 - ```ACCUMULO_USER``` and ```ACCUMULO_SECRET```: Username and password.
+
+Source is at <https://github.com/cybermaggedon/gaffer-docker>.
+
