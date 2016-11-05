@@ -34,7 +34,7 @@ docker run -d --name hadoop -v ${data_dir}/hadoop:/data \
 
 # Run Zookeeper
 docker run -d --name zookeeper -v ${data_dir}/zookeeper:/data \
-       cybermaggedon/zookeeper:3.4.9
+       cybermaggedon/zookeeper:3.4.9b
 
 # Run Accumulo
 docker run -d --name accumulo -v ${data_dir}/accumulo:/accumulo \
