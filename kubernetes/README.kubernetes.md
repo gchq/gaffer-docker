@@ -27,21 +27,24 @@ configuration on AWS is slightly different.
   gcloud container --project ${proj} clusters create gaffer-cluster \
     --zone "us-east1-b" --machine-type "n1-standard-4" \
     --scopes "${a}/compute","${a}/devstorage.read_only","${a}/logging.write","${a}/monitoring","${a}/servicecontrol","${a}/service.management.readonly" \
-    --num-nodes 3 --network "default" --enable-cloud-logging \
+    --num-nodes 4 --network "default" --enable-cloud-logging \
     --enable-cloud-monitoring
 
-
-  # 25 GB disk for Gaffer Hadoop
+  # Three times 250 GB SSD disks for Gaffer Hadoop
   gcloud compute --project ${proj} disks create "hadoop-0000" \
-  --size "25" --zone "us-east1-b" --type "pd-standard"
+  --size "250" --zone "us-east1-b" --type "pd-ssd"
+  gcloud compute --project ${proj} disks create "hadoop-0001" \
+  --size "250" --zone "us-east1-b" --type "pd-ssd"
+  gcloud compute --project ${proj} disks create "hadoop-0002" \
+  --size "250" --zone "us-east1-b" --type "pd-ssd"
 
-  # 10 GB disk for Gaffer Zookeeper
-  gcloud compute --project ${proj} disks create "zookeeper-0000" \
-  --size "10" --zone "us-east1-b" --type "pd-standard"
-
-  # 1 GB disk for Gaffer Accumulo
-  gcloud compute --project ${proj} disks create "accumulo-0000" \
-      --size "1" --zone "us-east1-b" --type "pd-standard"
+  # Three times 10 GB disk for Gaffer Zookeeper
+  gcloud compute --project ${proj} disks create "zookeeper-1" \
+  --size "10" --zone "us-east1-b" --type "pd-ssd"
+  gcloud compute --project ${proj} disks create "zookeeper-2" \
+  --size "10" --zone "us-east1-b" --type "pd-ssd"
+  gcloud compute --project ${proj} disks create "zookeeper-3" \
+  --size "10" --zone "us-east1-b" --type "pd-ssd"
 
   # Get Kubernetes creds
   gcloud container clusters get-credentials gaffer-cluster \
@@ -52,4 +55,16 @@ configuration on AWS is slightly different.
   kubectl apply -f gaffer-services.yaml
 
 ```
+
+The order in which things start is going to be fairly random.  One thing to
+note is that it is possible that all the Accumulo nodes may race ahead and
+start before Hadoop is ready.  Hadoop containers will only start once their
+volumes have been formatted, whereas Accumulo containers have no volumes.
+If this happens, the Accumulo initialisation will fail, and the Accumulos will
+sit there waiting for the intiailisation to complete.  If this happens,
+delete all of the Accumulo PODs so that they restart, and it will trigger the
+initialisation.
+
+Note!  This creates Gaffer as an insecure public service on the internet.
+Get to work on the firewall settings.
 

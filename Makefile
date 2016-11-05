@@ -15,7 +15,7 @@
 ##########################################################
 
 GAFFER_VERSION=0.4.4
-VERSION=0.4.4d
+VERSION=0.4.4g
 ACCUMULO_REPOSITORY=gchq/accumulo-gaffer
 WILDFLY_REPOSITORY=gchq/wildfly-gaffer
 
