@@ -14,72 +14,481 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: gaffer
+  name: hadoop0000
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: gaffer
+        app: hadoop0000
     spec:
       containers:
       - name: hadoop
         image: cybermaggedon/hadoop:2.7.3
         resources:
           requests:
-            memory: "512M"
-            cpu: "0.5"
+            memory: "1024M"
+            cpu: "1.0"
           limits:
             memory: "1024M"
             cpu: "1.0"
+        ports:
+        - containerPort: 50070
+          name: namenode-http
+        - containerPort: 50075
+          name: datanode
+        - containerPort: 9000
+          name: namenode-rpc
         volumeMounts:
           - mountPath: /data
             name: hadoop
-      - name: zookeeper
-        image: cybermaggedon/zookeeper:3.4.9
-        resources:
-          requests:
-            memory: "512M"
-            cpu: "0.1"
-          limits:
-            memory: "1024M"
-            cpu: "0.1"
-        volumeMounts:
-          - mountPath: /data
-            name: zookeeper
-      - name: accumulo
-        image: gchq/accumulo-gaffer:0.4.4d
-        resources:
-          requests:
-            memory: "2048M"
-            cpu: "1.0"
-          limits:
-            memory: "2048M"
-            cpu: "1.0"
-        volumeMounts:
-          - mountPath: /accumulo
-            name: accumulo
-      - name: gaffer
-        image: gchq/wildfly-gaffer:0.4.4d
-        resources:
-          requests:
-            memory: "700M"
-            cpu: "0.1"
-          limits:
-            memory: "700M"
-            cpu: "0.1"
-        ports:
-        - containerPort: 8080
+        env:
+        - name: DAEMONS
+          value: namenode,secondarynamenode,datanode
       volumes:
       - name: hadoop
         gcePersistentDisk:
           pdName: hadoop-0000
           fsType: ext4
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hadoop0001
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hadoop0001
+    spec:
+      containers:
+      - name: hadoop
+        image: cybermaggedon/hadoop:2.7.3
+        resources:
+          requests:
+            memory: "1024M"
+            cpu: "1.0"
+          limits:
+            memory: "1024M"
+            cpu: "1.0"
+        ports:
+        - containerPort: 50070
+          name: namenode-http
+        - containerPort: 50075
+          name: datanode
+        - containerPort: 9000
+          name: namenode-rpc
+        volumeMounts:
+          - mountPath: /data
+            name: hadoop
+        env:
+        - name: DAEMONS
+          value: datanode
+        - name: NAMENODE_URI
+          value: hdfs://hadoop0000:9000
+      volumes:
+      - name: hadoop
+        gcePersistentDisk:
+          pdName: hadoop-0001
+          fsType: ext4
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hadoop0002
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hadoop0002
+    spec:
+      containers:
+      - name: hadoop
+        image: cybermaggedon/hadoop:2.7.3
+        resources:
+          requests:
+            memory: "1024M"
+            cpu: "1.0"
+          limits:
+            memory: "1024M"
+            cpu: "1.0"
+        ports:
+        - containerPort: 50070
+          name: namenode-http
+        - containerPort: 50075
+          name: datanode
+        - containerPort: 9000
+          name: namenode-rpc
+        volumeMounts:
+          - mountPath: /data
+            name: hadoop
+        env:
+        - name: DAEMONS
+          value: datanode
+        - name: NAMENODE_URI
+          value: hdfs://hadoop0000:9000
+      volumes:
+      - name: hadoop
+        gcePersistentDisk:
+          pdName: hadoop-0002
+          fsType: ext4
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zk1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zk1
+    spec:
+      containers:
+      - name: zookeeper
+        image: cybermaggedon/zookeeper:3.4.9b
+        resources:
+          requests:
+            memory: "512M"
+            cpu: "0.3"
+          limits:
+            memory: "512M"
+            cpu: "0.3"
+        ports:
+        - containerPort: 2888
+          name: internal1
+        - containerPort: 3888
+          name: internal2
+        - containerPort: 2181
+          name: service
+        volumeMounts:
+          - mountPath: /data
+            name: zookeeper
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: ZOOKEEPER_MYID
+          value: "1"
+      volumes:
       - name: zookeeper
         gcePersistentDisk:
-          pdName: zookeeper-0000
+          pdName: zookeeper-1
           fsType: ext4
-      - name: accumulo
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zk2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zk2
+    spec:
+      containers:
+      - name: zookeeper
+        image: cybermaggedon/zookeeper:3.4.9b
+        resources:
+          requests:
+            memory: "512M"
+            cpu: "0.3"
+          limits:
+            memory: "512M"
+            cpu: "0.3"
+        ports:
+        - containerPort: 2888
+          name: internal1
+        - containerPort: 3888
+          name: internal2
+        - containerPort: 2181
+          name: service
+        volumeMounts:
+          - mountPath: /data
+            name: zookeeper
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: ZOOKEEPER_MYID
+          value: "2"
+      volumes:
+      - name: zookeeper
         gcePersistentDisk:
-          pdName: accumulo-0000
+          pdName: zookeeper-2
           fsType: ext4
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zk3
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zk3
+    spec:
+      containers:
+      - name: zookeeper
+        image: cybermaggedon/zookeeper:3.4.9b
+        resources:
+          requests:
+            memory: "512M"
+            cpu: "0.3"
+          limits:
+            memory: "512M"
+            cpu: "0.3"
+        ports:
+        - containerPort: 2888
+          name: internal1
+        - containerPort: 3888
+          name: internal2
+        - containerPort: 2181
+          name: service
+        volumeMounts:
+          - mountPath: /data
+            name: zookeeper
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: ZOOKEEPER_MYID
+          value: "3"
+      volumes:
+      - name: zookeeper
+        gcePersistentDisk:
+          pdName: zookeeper-3
+          fsType: ext4
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: accumulo0000
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: accumulo0000
+    spec:
+      containers:
+      - name: accumulo
+        image: gchq/accumulo-gaffer:0.4.4g
+        resources:
+          requests:
+            memory: "2G"
+            cpu: "1.0"
+          limits:
+            memory: "2G"
+            cpu: "1.0"
+        ports:
+        - containerPort: 9999
+          name: master
+        - containerPort: 9997
+          name: tablet-server
+        - containerPort: 50091
+          name: gc
+        - containerPort: 9995
+          name: monitor
+        - containerPort: 4560
+          name: monitor-log
+        - containerPort: 12234
+          name: tracer
+        - containerPort: 42424
+          name: proxy
+        - containerPort: 10002
+          name: slave
+        - containerPort: 10001
+          name: replication
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: MY_HOSTNAME
+          value: MY_IP
+        - name: GC_HOSTS
+          value: MY_IP
+        - name: MASTER_HOSTS
+          value: MY_IP
+        - name: SLAVE_HOSTS
+          value: MY_IP,accumulo0001,accumulo0002
+        - name: MONITOR_HOSTS
+          value: MY_IP
+        - name: TRACER_HOSTS
+          value: MY_IP
+        - name: HDFS_VOLUMES
+          value: hdfs://hadoop0000:9000/accumulo
+        - name: MEMORY_MAPS_MAX
+          value: 300M
+        - name: CACHE_DATA_SIZE
+          value: 30M
+        - name: CACHE_INDEX_SIZE
+          value: 40M
+        - name: SORT_BUFFER_SIZE
+          value: 50M
+        - name: WALOG_MAX_SIZE
+          value: 512M
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: accumulo0001
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: accumulo0001
+    spec:
+      containers:
+      - name: accumulo
+        image: gchq/accumulo-gaffer:0.4.4g
+        resources:
+          requests:
+            memory: "2G"
+            cpu: "1.0"
+          limits:
+            memory: "2G"
+            cpu: "1.0"
+        ports:
+        - containerPort: 9999
+          name: master
+        - containerPort: 9997
+          name: tablet-server
+        - containerPort: 50091
+          name: gc
+        - containerPort: 9995
+          name: monitor
+        - containerPort: 4560
+          name: monitor-log
+        - containerPort: 12234
+          name: tracer
+        - containerPort: 42424
+          name: proxy
+        - containerPort: 10002
+          name: slave
+        - containerPort: 10001
+          name: replication
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: MY_HOSTNAME
+          value: accumulo0000
+        - name: GC_HOSTS
+          value: accumulo0000
+        - name: MASTER_HOSTS
+          value: accumulo0000
+        - name: SLAVE_HOSTS
+          value: accumulo0000,MY_IP,accumulo0002
+        - name: MONITOR_HOSTS
+          value: accumulo0000
+        - name: TRACER_HOSTS
+          value: accumulo0000
+        - name: HDFS_VOLUMES
+          value: hdfs://hadoop0000:9000/accumulo
+        - name: MEMORY_MAPS_MAX
+          value: 300M
+        - name: CACHE_DATA_SIZE
+          value: 30M
+        - name: CACHE_INDEX_SIZE
+          value: 40M
+        - name: SORT_BUFFER_SIZE
+          value: 50M
+        - name: WALOG_MAX_SIZE
+          value: 512M
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: accumulo0002
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: accumulo0002
+    spec:
+      containers:
+      - name: accumulo
+        image: gchq/accumulo-gaffer:0.4.4g
+        resources:
+          requests:
+            memory: "2G"
+            cpu: "1.0"
+          limits:
+            memory: "2G"
+            cpu: "1.0"
+        ports:
+        - containerPort: 9999
+          name: master
+        - containerPort: 9997
+          name: tablet-server
+        - containerPort: 50091
+          name: gc
+        - containerPort: 9995
+          name: monitor
+        - containerPort: 4560
+          name: monitor-log
+        - containerPort: 12234
+          name: tracer
+        - containerPort: 42424
+          name: proxy
+        - containerPort: 10002
+          name: slave
+        - containerPort: 10001
+          name: replication
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3
+        - name: MY_HOSTNAME
+          value: accumulo0000
+        - name: GC_HOSTS
+          value: accumulo0000
+        - name: MASTER_HOSTS
+          value: accumulo0000
+        - name: SLAVE_HOSTS
+          value: accumulo0000,accumulo0001,MY_IP
+        - name: MONITOR_HOSTS
+          value: accumulo0000
+        - name: TRACER_HOSTS
+          value: accumulo0000
+        - name: HDFS_VOLUMES
+          value: hdfs://hadoop0000:9000/accumulo
+        - name: MEMORY_MAPS_MAX
+          value: 300M
+        - name: CACHE_DATA_SIZE
+          value: 30M
+        - name: CACHE_INDEX_SIZE
+          value: 40M
+        - name: SORT_BUFFER_SIZE
+          value: 50M
+        - name: WALOG_MAX_SIZE
+          value: 512M
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wildfly
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: wildfly
+    spec:
+      containers:
+      - name: accumulo
+        image: gchq/wildfly-gaffer:0.4.4g
+        resources:
+          requests:
+            memory: "1G"
+            cpu: "0.5"
+          limits:
+            memory: "1G"
+            cpu: "0.5"
+        ports:
+        - containerPort: 8080
+          name: rest
+        env:
+        - name: ZOOKEEPERS
+          value: zk1,zk2,zk3

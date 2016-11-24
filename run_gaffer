@@ -34,15 +34,15 @@ docker run -d --name hadoop -v ${data_dir}/hadoop:/data \
 
 # Run Zookeeper
 docker run -d --name zookeeper -v ${data_dir}/zookeeper:/data \
-       cybermaggedon/zookeeper:3.4.9
+       cybermaggedon/zookeeper:3.4.9b
 
 # Run Accumulo
 docker run -d --name accumulo -v ${data_dir}/accumulo:/accumulo \
        --link zookeeper:zookeeper \
-       --link hadoop:hadoop gchq/accumulo-gaffer:0.4.4d
+       --link hadoop:hadoop gchq/accumulo-gaffer:0.4.4g
 
 # Run Wildfly, exposing port 8080.
 docker run -d --name wildfly --link zookeeper:zookeeper \
        --link hadoop:hadoop --link accumulo:accumulo \
-       -p 8080:8080 gchq/wildfly-gaffer:0.4.4d
+       -p 8080:8080 gchq/wildfly-gaffer:0.4.4g
 
