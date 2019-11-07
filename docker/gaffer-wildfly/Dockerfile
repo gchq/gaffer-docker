@@ -17,4 +17,6 @@ RUN mkdir /schema && chown jboss /schema
 
 USER jboss
 
+ADD example/schema /schema
+
 CMD [ "/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-Dgaffer.schemas=/schema", "-Dgaffer.storeProperties=/opt/jboss/wildfly/standalone/configuration/store.properties", "-Dgaffer.graph.config=/opt/jboss/wildfly/standalone/configuration/graphConfig.json" ]
