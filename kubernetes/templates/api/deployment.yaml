@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gaffer.fullname" . }}-api
+  labels:
+    {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "gaffer.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        {{- include "gaffer.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: api
+      annotations:
+        checksum/graph-config: {{ include (print $.Template.BasePath "/graph-config.yaml") . | sha256sum }}
+        checksum/schema: {{ include (print $.Template.BasePath "/schema.yaml") . | sha256sum }}
+        checksum/store-properties: {{ include (print $.Template.BasePath "/store-properties.yaml") . | sha256sum }}
+    spec:
+      containers:
+      - name: gaffer-wildfly
+        image: {{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
+        imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+        volumeMounts:
+        - name: config
+          mountPath: /opt/jboss/wildfly/standalone/gaffer/
+          readOnly: true
+        - name: schema
+          mountPath: /schema/
+          readOnly: true
+        - name: store-properties
+          mountPath: /opt/jboss/wildfly/standalone/store/
+          readOnly: true
+        ports:
+        - name: http
+          protocol: TCP
+          containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        resources:
+{{ toYaml .Values.api.resources | indent 10 }}
+{{- with .Values.api.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.api.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.api.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.api.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range . }}
+      - name: {{ . }}
+      {{- end }}
+{{- end }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ template "gaffer.fullname" . }}-graph-config
+          optional: false
+      - name: schema
+        configMap:
+          name: {{ template "gaffer.fullname" . }}-schema
+          optional: false
+      - name: store-properties
+        secret:
+          secretName: {{ template "gaffer.fullname" . }}-store-properties
+          optional: false

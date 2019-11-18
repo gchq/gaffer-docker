@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+
+  gaffer-wildfly:
+    image: gchq/gaffer-wildfly:0.0.1
+    build: .
+    restart: always
+    ports:
+    - 8080
+

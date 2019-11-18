@@ -1,0 +1,21 @@
+{{- define "gaffer.storeProperties" -}}
+gaffer.store.class=uk.gov.gchq.gaffer.accumulostore.AccumuloStore
+gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties
+accumulo.instance=accumulo
+accumulo.zookeepers={{ template "gaffer.zookeepers" . }}
+accumulo.user=root
+accumulo.password=accumulo
+{{- range $property, $value := .Values.graph.storeProperties }}
+{{ $property }}={{ $value }}
+{{- end }}
+{{- end -}}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "gaffer.fullname" . }}-store-properties
+  labels:
+    {{- include "gaffer.labels" . | nindent 4 }}
+type: Opaque
+data:
+  store.properties: {{ include "gaffer.storeProperties" . | b64enc }}
