@@ -11,4 +11,8 @@ services:
     restart: always
     ports:
     - 8080
+    volumes:
+    - ./config/store.properties:/opt/jboss/wildfly/standalone/store/store.properties:ro
+    - ./config/graphConfig.json:/opt/jboss/wildfly/standalone/gaffer/graphConfig.json:ro
+    - ./example/schema:/schema:ro
 
