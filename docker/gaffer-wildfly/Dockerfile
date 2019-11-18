@@ -9,11 +9,11 @@ COPY config/graphConfig.json /opt/jboss/wildfly/standalone/gaffer/graphConfig.js
 
 # Copy any WARs you would like to use instead of the default ones stored in maven central
 # The wars must be called rest.war / ui.war.
-COPY wars /opt/jboss/wildfly/standalone/deployments
+COPY --chown=jboss wars /opt/jboss/wildfly/standalone/deployments
 
 # Add Apps if they do not exist already.
-RUN curl http://central.maven.org/maven2/uk/gov/gchq/gaffer/accumulo-rest/${gaffer_version}/accumulo-rest-${gaffer_version}.war -o /opt/jboss/wildfly/standalone/deployments/rest.war -z /opt/jboss/wildfly/standalone/deployments/rest.war
-RUN curl http://central.maven.org/maven2/uk/gov/gchq/gaffer/ui/${gaffer_version}/ui-${gaffer_version}.war -o /opt/jboss/wildfly/standalone/deployments/ui.war -z /opt/jboss/wildfly/standalone/deployments/ui.war
+RUN if [ ! -f /opt/jboss/wildfly/standalone/deployments/rest.war ]; then curl http://central.maven.org/maven2/uk/gov/gchq/gaffer/accumulo-rest/${gaffer_version}/accumulo-rest-${gaffer_version}.war -o /opt/jboss/wildfly/standalone/deployments/rest.war --silent; fi
+RUN if [ ! -f /opt/jboss/wildfly/standalone/deployments/ui.war ]; then curl http://central.maven.org/maven2/uk/gov/gchq/gaffer/ui/${gaffer_version}/ui-${gaffer_version}.war -o /opt/jboss/wildfly/standalone/deployments/ui.war --silent; fi
 
 USER root
 # Create schema directory
