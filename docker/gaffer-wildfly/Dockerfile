@@ -1,6 +1,6 @@
 FROM jboss/wildfly:10.1.0.Final
 
-ARG gaffer_version
+ARG gaffer_version=1.10.2
 # Add store properties
 COPY config/store.properties /opt/jboss/wildfly/standalone/gaffer/store.properties
 
@@ -12,8 +12,8 @@ COPY config/graphConfig.json /opt/jboss/wildfly/standalone/gaffer/graphConfig.js
 COPY --chown=jboss wars /opt/jboss/wildfly/standalone/deployments
 
 # Add Apps if they do not exist already.
-RUN if [ ! -f /opt/jboss/wildfly/standalone/deployments/rest.war ]; then curl http://central.maven.org/maven2/uk/gov/gchq/gaffer/accumulo-rest/${gaffer_version}/accumulo-rest-${gaffer_version}.war -o /opt/jboss/wildfly/standalone/deployments/rest.war --silent; fi
-RUN if [ ! -f /opt/jboss/wildfly/standalone/deployments/ui.war ]; then curl http://central.maven.org/maven2/uk/gov/gchq/gaffer/ui/${gaffer_version}/ui-${gaffer_version}.war -o /opt/jboss/wildfly/standalone/deployments/ui.war --silent; fi
+RUN if [ ! -f /opt/jboss/wildfly/standalone/deployments/rest.war ]; then curl -f http://central.maven.org/maven2/uk/gov/gchq/gaffer/accumulo-rest/${gaffer_version}/accumulo-rest-${gaffer_version}.war -o /opt/jboss/wildfly/standalone/deployments/rest.war --silent; fi
+RUN if [ ! -f /opt/jboss/wildfly/standalone/deployments/ui.war ]; then curl -f http://central.maven.org/maven2/uk/gov/gchq/gaffer/ui/${gaffer_version}/ui-${gaffer_version}.war -o /opt/jboss/wildfly/standalone/deployments/ui.war --silent; fi
 
 USER root
 # Create schema directory
