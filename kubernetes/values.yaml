@@ -4,7 +4,7 @@ fullnameOverride: ""
 
 graph:
   config:
-    id: "simpleGraph"
+    graphId: "simpleGraph"
     description: "A graph for demo purposes"
     hooks: []
 
