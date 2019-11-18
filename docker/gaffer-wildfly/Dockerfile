@@ -19,4 +19,4 @@ USER jboss
 
 ADD example/schema /schema
 
-CMD [ "/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-Dgaffer.schemas=/schema", "-Dgaffer.storeProperties=/opt/jboss/wildfly/standalone/gaffer/store.properties", "-Dgaffer.graph.config=/opt/jboss/wildfly/standalone/gaffer/graphConfig.json" ]
+CMD [ "/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-Dgaffer.schemas=/schema", "-Dgaffer.storeProperties=/opt/jboss/wildfly/standalone/store/store.properties", "-Dgaffer.graph.config=/opt/jboss/wildfly/standalone/gaffer/graphConfig.json" ]

@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "gaffer.fullname" . }}-masters
+  labels:
+    {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: master
+spec:
+  podManagementPolicy: Parallel
+  replicas: 1
+  serviceName: {{ template "gaffer.fullname" . }}-masters
+  selector:
+    matchLabels:
+      {{- include "gaffer.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: master
+  template:
+    metadata:
+      labels:
+        {{- include "gaffer.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: master
+    spec:
+      containers:
+      - name: accumulo-master
+        image: {{ .Values.accumulo.image.repository }}:{{ .Values.accumulo.image.tag }}
+        imagePullPolicy: {{ .Values.accumulo.image.pullPolicy }}
+        command:
+        - /start-process
+        - master
+
+        env:
+        - name: NAMENODE_URI
+          value: {{ .Values.hdfs.namenodeUri }}
+        - name: HDFS_VOLUMES
+          value: {{ .Values.hdfs.volumes }}
+        - name: ZOOKEEPERS
+          value: {{ template "gaffer.zookeepers" . }}
+        # TODO: Make this cleaner...
+        - name: TMP_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MY_HOSTNAME
+          value: "$(TMP_HOSTNAME).{{ template "gaffer.fullname" . }}-masters"
+
+        resources:
+{{ toYaml .Values.accumulo.master.resources | indent 10 }}
+{{- with .Values.accumulo.master.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.accumulo.master.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.accumulo.master.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.accumulo.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range . }}
+      - name: {{ . }}
+      {{- end }}
+{{- end }}

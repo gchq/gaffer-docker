@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "gaffer.fullname" . }}-tservers
+  labels:
+    {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: tserver
+spec:
+  podManagementPolicy: Parallel
+  replicas: {{ .Values.accumulo.tabletServers.replicaCount }}
+  serviceName: {{ template "gaffer.fullname" . }}-tservers
+  selector:
+    matchLabels:
+      {{- include "gaffer.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: tserver
+  template:
+    metadata:
+      labels:
+        {{- include "gaffer.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: tserver
+    spec:
+      containers:
+      - name: accumulo-tserver
+        image: {{ .Values.accumulo.image.repository }}:{{ .Values.accumulo.image.tag }}
+        imagePullPolicy: {{ .Values.accumulo.image.pullPolicy }}
+        command:
+        - /start-process
+        - tserver
+
+        env:
+        - name: NAMENODE_URI
+          value: {{ .Values.hdfs.namenodeUri }}
+        - name: HDFS_VOLUMES
+          value: {{ .Values.hdfs.volumes }}
+        - name: ZOOKEEPERS
+          value: {{ template "gaffer.zookeepers" . }}
+        # TODO: Make this cleaner...
+        - name: TMP_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MY_HOSTNAME
+          value: "$(TMP_HOSTNAME).{{ template "gaffer.fullname" . }}-tservers"
+
+        resources:
+{{ toYaml .Values.accumulo.tabletServers.resources | indent 10 }}
+{{- with .Values.accumulo.tabletServers.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.accumulo.tabletServers.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.accumulo.tabletServers.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.accumulo.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range . }}
+      - name: {{ . }}
+      {{- end }}
+{{- end }}

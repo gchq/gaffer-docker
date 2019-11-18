@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gaffer.fullname" . }}-graph-config
+  labels:
+    {{- include "gaffer.labels" . | nindent 4 }}
+data:
+  graphConfig.json: {{ toJson .Values.graph.config | quote }}
