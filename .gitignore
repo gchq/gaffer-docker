@@ -20,13 +20,6 @@ target/
 *.iml
 */.settings
 */.project
-*/bin
-*/*.class
-*/atlassian-ide*
-*/.idea
-.idea/*
-*/.classpath
-__pycache__
-*.pem
-wildfly*.zip
-product
+docker/gaffer-wildfly/wars/*
+.DS_Store
+**/.DS_Store
