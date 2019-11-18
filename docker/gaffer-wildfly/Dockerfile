@@ -1,8 +1,9 @@
 FROM jboss/wildfly:10.1.0.Final
 
 ARG gaffer_version=1.10.2
+
 # Add store properties
-COPY config/store.properties /opt/jboss/wildfly/standalone/gaffer/store.properties
+COPY config/store.properties /opt/jboss/wildfly/standalone/store/store.properties
 
 # Add Graph config
 COPY config/graphConfig.json /opt/jboss/wildfly/standalone/gaffer/graphConfig.json
