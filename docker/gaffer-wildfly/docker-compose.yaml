@@ -4,7 +4,10 @@ services:
 
   gaffer-wildfly:
     image: gchq/gaffer-wildfly:0.0.1
-    build: .
+    build:
+      context: .
+      args:
+        gaffer_version: 1.10.2
     restart: always
     ports:
     - 8080
