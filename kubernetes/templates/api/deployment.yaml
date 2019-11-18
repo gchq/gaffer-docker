@@ -41,11 +41,11 @@ spec:
           containerPort: 8080
         livenessProbe:
           httpGet:
-            path: /
+            path: /rest/
             port: http
         readinessProbe:
           httpGet:
-            path: /
+            path: /rest/
             port: http
         resources:
 {{ toYaml .Values.api.resources | indent 10 }}

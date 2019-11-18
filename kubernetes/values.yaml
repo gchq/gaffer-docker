@@ -125,3 +125,8 @@ api:
     #pathPrefix: /gaffer/
     # For Nginx:
     pathPrefix: "/gaffer/(.*)"
+
+testImages:
+  curl:
+    repository: curlimages/curl
+    tag: 7.67.0
