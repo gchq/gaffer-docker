@@ -8,7 +8,6 @@ Pre-reqs:
 
 ```
 kind create cluster
-export KUBECONFIG="$(kind get kubeconfig-path --name="kind")"
 kind load docker-image gchq/hdfs:3.2.1
 helm install hdfs .
 helm test hdfs
