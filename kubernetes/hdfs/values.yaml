@@ -4,11 +4,6 @@ alpine:
   tag: 3.10.2
   imagePullPolicy: IfNotPresent
 
-busybox:
-  repository: busybox
-  tag: 1.31.0
-  imagePullPolicy: IfNotPresent
-
 namenode:
   repository: gchq/hdfs
   tag: 3.2.1
@@ -18,6 +13,11 @@ namenode:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
   ports:
     http: 9870
     https: 9871
@@ -28,8 +28,6 @@ namenode:
     count: 1
     size: 10Gi
     storageClassName: ""
-    uid: 1000
-    gid: 1000
 
 datanode:
   nodeCount: 3
@@ -41,6 +39,11 @@ datanode:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
   ports:
     http: 9864
     https: 9865
@@ -50,8 +53,6 @@ datanode:
     count: 2
     size: 10Gi
     storageClassName: ""
-    uid: 1000
-    gid: 1000
 
 shell:
   enabled: true

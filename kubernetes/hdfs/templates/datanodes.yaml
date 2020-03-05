@@ -35,16 +35,6 @@ spec:
         {{- include "hdfs.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: datanode
     spec:
-      initContainers:
-      - name: fix-volume-perms
-        image: {{ .Values.busybox.repository}}:{{ .Values.busybox.tag }}
-        imagePullPolicy: {{ .Values.busybox.imagePullPolicy }}
-        command: ["/bin/sh", "-c", "chown {{ .Values.datanode.dataVolumes.uid }}:{{ .Values.datanode.dataVolumes.gid }} /data*"]
-        volumeMounts:
-{{- range $k, $v := until (int .Values.datanode.dataVolumes.count) }}
-        - name: data{{$v}}
-          mountPath: /data{{$v}}
-{{- end }}
       containers:
       - name: datanode
         image: {{ .Values.datanode.repository }}:{{ .Values.datanode.tag }}
@@ -97,6 +87,10 @@ spec:
         secret:
           secretName: {{ template "hdfs.fullname" . }}
           optional: false
+      {{- with .Values.datanode.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.datanode.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
