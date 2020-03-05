@@ -63,6 +63,8 @@ zookeeper:
   externalHosts: ""
 
   replicaCount: 1
+  persistence:
+    enabled: false
 
 accumulo:
   image:
