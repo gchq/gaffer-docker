@@ -15,8 +15,8 @@ WORKDIR /home/curl_user
 COPY ./files/ .
 # Otherwise, download official Hadoop Distribution Tarball
 RUN if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then \
-        curl -fLO ${HADOOP_DOWNLOAD_URL}; \
-    fi
+		curl -fLO ${HADOOP_DOWNLOAD_URL}; \
+	fi
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 ARG HADOOP_VERSION
@@ -24,15 +24,15 @@ ARG USER=hadoop
 ARG GROUP=hadoop
 
 RUN mkdir -p /usr/share/man/man1 && \
-    apt update && \
-    apt install -y \
-        dumb-init \
-        openjdk-8-jre-headless \
-        libsnappy1v5 \
-        libssl1.0-dev \
-        libzstd1 \
-        xmlstarlet \
-    && rm -rf /var/lib/apt/lists/*
+	apt update && \
+	apt install -y \
+		dumb-init \
+		openjdk-8-jre-headless \
+		libsnappy1v5 \
+		libssl1.0-dev \
+		libzstd1 \
+		xmlstarlet \
+	&& rm -rf /var/lib/apt/lists/*
 
 COPY --from=hdfs-distribution --chown=root:root /home/curl_user/hadoop-${HADOOP_VERSION}.tar.gz /opt
 
@@ -40,12 +40,12 @@ RUN groupadd ${GROUP} && useradd --home-dir /opt/hadoop --gid ${GROUP} --no-crea
 
 RUN cd /opt \
 	&& tar -xf ./hadoop-${HADOOP_VERSION}.tar.gz \
-    && rm -rf ./hadoop-${HADOOP_VERSION}/share/doc \
+	&& rm -rf ./hadoop-${HADOOP_VERSION}/share/doc \
 	&& rm ./hadoop-${HADOOP_VERSION}.tar.gz \
 	&& ln -s ./hadoop-${HADOOP_VERSION} ./hadoop \
 	&& chown -R root:root ./hadoop/ \
 	&& mkdir -p -m 755 /var/log/hadoop \
-    && chown ${USER}:${GROUP} /var/log/hadoop
+	&& chown ${USER}:${GROUP} /var/log/hadoop
 
 COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh", "hdfs"]
