@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ template "hdfs.fullname" . }}-datanodes
+  labels:
+    {{ include "hdfs.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "hdfs.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: datanode
+  policyTypes:
+  - Ingress
+  ingress:
+  # Allow clients to access client RPC and HTTP servers
+  - ports:
+    - port: http
+    - port: https
+    - port: data-xfer
+  # Allow NameNode and DataNodes to access IPC Server
+  - from:
+    - podSelector:
+        matchLabels:
+          {{- include "hdfs.selectorLabels" . | nindent 10 }}
+    ports:
+    - port: ipc

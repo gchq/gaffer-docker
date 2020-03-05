@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "hdfs.fullname" . }}-datanode
+  labels:
+    {{- include "hdfs.labels" . | nindent 4 }}
+spec:
+  podManagementPolicy: Parallel
+  replicas: {{ .Values.datanode.nodeCount }}
+  serviceName: {{ template "hdfs.fullname" . }}-datanodes
+  selector:
+    matchLabels:
+      {{- include "hdfs.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: datanode
+  volumeClaimTemplates:
+{{- range $k, $v := until (int .Values.datanode.dataVolumes.count) }}
+  - metadata:
+      name: data{{$v}}
+    spec:
+      {{- if ne $.Values.datanode.dataVolumes.storageClassName "" }}
+      storageClassName: {{ $.Values.datanode.dataVolumes.storageClassName }}
+      {{- end }}
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ $.Values.datanode.dataVolumes.size }}
+{{- end }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+        checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+      labels:
+        {{- include "hdfs.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: datanode
+    spec:
+      initContainers:
+      - name: fix-volume-perms
+        image: {{ .Values.busybox.repository}}:{{ .Values.busybox.tag }}
+        imagePullPolicy: {{ .Values.busybox.imagePullPolicy }}
+        command: ["/bin/sh", "-c", "chown {{ .Values.datanode.dataVolumes.uid }}:{{ .Values.datanode.dataVolumes.gid }} /data*"]
+        volumeMounts:
+{{- range $k, $v := until (int .Values.datanode.dataVolumes.count) }}
+        - name: data{{$v}}
+          mountPath: /data{{$v}}
+{{- end }}
+      containers:
+      - name: datanode
+        image: {{ .Values.datanode.repository }}:{{ .Values.datanode.tag }}
+        imagePullPolicy: {{ .Values.datanode.imagePullPolicy }}
+        args:
+        - datanode
+        env:
+        - name: HADOOP_CONF_DIR
+          value: {{ .Values.config.path }}
+        volumeMounts:
+        - name: config
+          mountPath: {{ .Values.config.path }}
+          readOnly: true
+        - name: secrets
+          mountPath: {{ .Values.secrets.path }}
+          readOnly: true
+{{- range $k, $v := until (int .Values.datanode.dataVolumes.count) }}
+        - name: data{{$v}}
+          mountPath: /data{{$v}}
+{{- end }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.datanode.ports.http }}
+        - name: https
+          containerPort: {{ .Values.datanode.ports.https }}
+        - name: data-xfer
+          containerPort: {{ .Values.datanode.ports.data }}
+        - name: ipc
+          containerPort: {{ .Values.datanode.ports.ipc }}
+        livenessProbe:
+          httpGet:
+            scheme: HTTP
+            port: http
+            path: /
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            port: http
+            path: /
+          initialDelaySeconds: 30
+        resources:
+          {{- toYaml .Values.datanode.resources | nindent 10 }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ template "hdfs.fullname" . }}
+          optional: false
+      - name: secrets
+        secret:
+          secretName: {{ template "hdfs.fullname" . }}
+          optional: false
+      {{- with .Values.datanode.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.datanode.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.datanode.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.datanode.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range . }}
+      - name: {{ . }}
+      {{- end }}
+      {{- end }}

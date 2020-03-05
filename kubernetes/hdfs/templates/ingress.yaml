@@ -1,0 +1,23 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "hdfs.fullname" . }}
+  labels:
+    {{ include "hdfs.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+  - http:
+      paths:
+      - path: {{ required "Ingress path required, please set: .Values.ingress.pathPrefix" .Values.ingress.pathPrefix }}
+        backend:
+          serviceName: {{ template "hdfs.fullname" . }}-namenodes
+          servicePort: 80
+{{- if ne .Values.ingress.host "" }}
+    host: {{ .Values.ingress.host }}
+{{- end }}
+{{- end }}
