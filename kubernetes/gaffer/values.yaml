@@ -4,7 +4,7 @@ fullnameOverride: ""
 
 graph:
   config:
-    id: "simpleGraph"
+    graphId: "simpleGraph"
     description: "A graph for demo purposes"
     hooks: []
 
@@ -63,6 +63,8 @@ zookeeper:
   externalHosts: ""
 
   replicaCount: 1
+  persistence:
+    enabled: false
 
 accumulo:
   image:
@@ -125,3 +127,8 @@ api:
     #pathPrefix: /gaffer/
     # For Nginx:
     pathPrefix: "/gaffer/(.*)"
+
+testImages:
+  curl:
+    repository: curlimages/curl
+    tag: 7.67.0

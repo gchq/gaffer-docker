@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "hdfs.fullname" . }}-namenode
+  labels:
+    {{- include "hdfs.labels" . | nindent 4 }}
+spec:
+  podManagementPolicy: Parallel
+  replicas: 1
+  serviceName: {{ template "hdfs.fullname" . }}-namenodes
+  selector:
+    matchLabels:
+      {{- include "hdfs.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: namenode
+  volumeClaimTemplates:
+{{- range $k, $v := until (int .Values.namenode.dataVolumes.count) }}
+  - metadata:
+      name: data{{$v}}
+    spec:
+      {{- if ne $.Values.namenode.dataVolumes.storageClassName "" }}
+      storageClassName: {{ $.Values.namenode.dataVolumes.storageClassName }}
+      {{- end }}
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ $.Values.namenode.dataVolumes.size }}
+{{- end }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+        checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+      labels:
+        {{- include "hdfs.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: namenode
+    spec:
+      containers:
+      - name: namenode
+        image: {{ .Values.namenode.repository }}:{{ .Values.namenode.tag }}
+        imagePullPolicy: {{ .Values.namenode.imagePullPolicy }}
+        args:
+        - namenode
+        env:
+        - name: HADOOP_CONF_DIR
+          value: {{ .Values.config.path }}
+        volumeMounts:
+        - name: config
+          mountPath: {{ .Values.config.path }}
+          readOnly: true
+        - name: secrets
+          mountPath: {{ .Values.secrets.path }}
+          readOnly: true
+{{- range $k, $v := until (int .Values.namenode.dataVolumes.count) }}
+        - name: data{{$v}}
+          mountPath: /data{{$v}}
+{{- end }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.namenode.ports.http }}
+        - name: https
+          containerPort: {{ .Values.namenode.ports.https }}
+        - name: client-rpc
+          containerPort: {{ .Values.namenode.ports.clientRpc }}
+        - name: service-rpc
+          containerPort: {{ .Values.namenode.ports.serviceRpc }}
+        - name: lifeline-rpc
+          containerPort: {{ .Values.namenode.ports.lifelineRpc }}
+        livenessProbe:
+          httpGet:
+            scheme: HTTP
+            port: http
+            path: /
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            port: http
+            path: /
+          initialDelaySeconds: 30
+        resources:
+          {{- toYaml .Values.namenode.resources | nindent 10 }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ template "hdfs.fullname" . }}
+          optional: false
+      - name: secrets
+        secret:
+          secretName: {{ template "hdfs.fullname" . }}
+          optional: false
+      {{- with .Values.datanode.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.namenode.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.namenode.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.namenode.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.namenode.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range . }}
+      - name: {{ . }}
+      {{- end }}
+      {{- end }}
