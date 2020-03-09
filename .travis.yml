@@ -3,3 +3,6 @@ before_install:
   - sudo cd/before_install.sh
 install:
   - sudo cd/install.sh
+cache:
+  directories:
+    - /var/lib/docker
