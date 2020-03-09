@@ -9,7 +9,9 @@ cd ../..
 cd kubernetes/hdfs
 kind load docker-image gchq/hdfs:3.2.1
 helm install hdfs .
-kubectl port-forward svc/hdfs-namenodes 8080:80
+
+# Delete datanode to get around dodgy hdfs namenode issue
+kubectl delete pod hdfs-datanode-0 hdfs-datanode-1 hdfs-datanode-2
 
 # Deploy Accumulo
 # TODO
