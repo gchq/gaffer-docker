@@ -1,3 +1,5 @@
 #!/bin/bash
 
-# Run test scripts
+# Run tests
+cd kubernetes/hdfs
+helm test hdfs
