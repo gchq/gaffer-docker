@@ -1,5 +1,5 @@
 os: linux
 before_install:
-  - cd/before_install.sh
+  - sudo cd/before_install.sh
 install:
-  - cd/install.sh
+  - sudo cd/install.sh
