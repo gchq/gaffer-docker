@@ -73,11 +73,16 @@ spec:
             path: /
           initialDelaySeconds: 30
         readinessProbe:
-          httpGet:
-            scheme: HTTP
-            port: http
-            path: /
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - hdfs dfsadmin -fs hdfs://localhost -safemode get | grep "Safe mode is OFF"
           initialDelaySeconds: 30
+          periodSeconds: 20
+          timeoutSeconds: 20
+          successThreshold: 1
+          failureThreshold: 2
         resources:
           {{- toYaml .Values.namenode.resources | nindent 10 }}
       volumes:
