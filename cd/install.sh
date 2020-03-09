@@ -18,13 +18,13 @@ kind load docker-image gchq/hdfs:3.2.1
 helm install hdfs .
 
 # Wait for pod deployment
-kubectl wait --for=condition=Ready pods/hdfs-datanode-0 pods/hdfs-datanode-1 pods/hdfs-datanode-2 pods/hdfs-namenode-0
+kubectl wait --for=condition=Ready --timeout=300s pods/hdfs-datanode-0 pods/hdfs-datanode-1 pods/hdfs-datanode-2 pods/hdfs-namenode-0
 
 # Delete datanode to get around dodgy hdfs namenode issue
 kubectl delete pod hdfs-datanode-0 hdfs-datanode-1 hdfs-datanode-2
 
 # Wait for pod redeployment
-kubectl wait --for=condition=Ready pods/hdfs-datanode-0 pods/hdfs-datanode-1 pods/hdfs-datanode-2
+kubectl wait --for=condition=Ready --timeout=300s pods/hdfs-datanode-0 pods/hdfs-datanode-1 pods/hdfs-datanode-2
 
 # Deploy Accumulo
 # TODO
