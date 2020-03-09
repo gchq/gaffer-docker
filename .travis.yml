@@ -1,0 +1,5 @@
+language: python
+os: linux
+before_install:
+  - cd/before_install.sh
+
