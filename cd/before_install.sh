@@ -16,4 +16,4 @@ tar -zxvf helm.tar.gz
 mv linux-amd64/helm /usr/bin/
 
 # Create a cluster 
-kind create cluster
+kind create cluster -q

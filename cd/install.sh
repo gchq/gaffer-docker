@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 # Build images
-cd docker/hdfs && docker-compose build
+cd docker/hdfs
+docker-compose build
+cd ../..
 
 # Deploy HDFS
 cd kubernetes/hdfs
