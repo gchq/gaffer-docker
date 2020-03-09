@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
 
-  namenode:
+  hdfs-namenode:
     image: gchq/hdfs:${HADOOP_VERSION}
     build:
       context: .
@@ -21,9 +21,9 @@ services:
     - /data1
     - /data2
 
-  datanode:
+  hdfs-datanode:
     depends_on:
-    - namenode
+    - hdfs-namenode
     image: gchq/hdfs:${HADOOP_VERSION}
     build:
       context: .
