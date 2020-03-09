@@ -13,7 +13,7 @@ helm install hdfs .
 # Wait for pod deployment
 while [[ $(kubectl get pods hdfs-datanode-2 -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do 
     echo "waiting for pod" 
-    && sleep 5; 
+    sleep 5; 
 done
 
 # Delete datanode to get around dodgy hdfs namenode issue
