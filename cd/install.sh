@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 # Build images
 cd docker/hdfs && docker-compose build
 
