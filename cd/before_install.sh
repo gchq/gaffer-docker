@@ -1,5 +1,8 @@
 #!/bin/bash
 set -e
+# if [ ${TRAVIS_PULL_REQUEST} != 'true' ]; then
+#     exit 0
+# fi
 # Install Kubectl
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
 chmod +x kubectl
@@ -14,6 +17,3 @@ mv kind /usr/bin/
 curl -Lo ./helm.tar.gz https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
 tar -zxvf helm.tar.gz
 mv linux-amd64/helm /usr/bin/
-
-# Create a cluster 
-kind create cluster -q
