@@ -68,6 +68,13 @@ accumulo:
     tolerations: []
     affinity: {}
 
+  gc:
+    replicaCount: 1
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
   monitor:
     replicaCount: 1
     resources: {}
