@@ -18,6 +18,8 @@ spec:
       labels:
         {{- include "gaffer.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: master
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/accumulo/config.yaml") . | sha256sum }}
     spec:
       containers:
       - name: accumulo-master
@@ -30,8 +32,17 @@ spec:
           value: /etc/accumulo/
         - name: ACCUMULO_INSTANCE_NAME
           value: {{ .Values.accumulo.instanceId }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/accumulo/
+          readOnly: true
         resources:
           {{- toYaml .Values.accumulo.master.resources | nindent 10 }}
+      volumes:
+      - name: config
+        secret:
+          secretName: {{ include "gaffer.fullname" . }}-accumulo-config
+          optional: false
       {{- with .Values.accumulo.master.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

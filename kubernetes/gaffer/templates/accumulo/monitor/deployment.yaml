@@ -16,6 +16,8 @@ spec:
       labels:
         {{- include "gaffer.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: monitor
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/accumulo/config.yaml") . | sha256sum }}
     spec:
       containers:
       - name: accumulo-monitor
@@ -26,6 +28,10 @@ spec:
         env:
         - name: ACCUMULO_CONF_DIR
           value: /etc/accumulo/
+        volumeMounts:
+        - name: config
+          mountPath: /etc/accumulo/
+          readOnly: true
         ports:
         - name: http
           protocol: TCP
@@ -40,6 +46,11 @@ spec:
         #     port: http
         resources:
           {{- toYaml .Values.accumulo.monitor.resources | nindent 10 }}
+      volumes:
+      - name: config
+        secret:
+          secretName: {{ include "gaffer.fullname" . }}-accumulo-config
+          optional: false
       {{- with .Values.accumulo.monitor.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

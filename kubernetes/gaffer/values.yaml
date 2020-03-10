@@ -16,10 +16,10 @@ graph:
 hdfs:
   # Config used by this chart
   enabled: true
-  namenodeUri: hdfs://hdfs-namenodes:8020
-  volumes: hdfs://hdfs-namenodes:8020/accumulo
-  # Config used by hdfs sub-chart
+  volumes:
+  - /accumulo
   namenode:
+    hostname: "" # Only needs to be set if hdfs.enabled = false
     ports:
       clientRpc: 8020
   postInstallCommands:
@@ -31,13 +31,23 @@ hdfs:
 zookeeper:
   enabled: true
   externalHosts: ""
-
   replicaCount: 1
-  persistence:
-    enabled: false
 
 accumulo:
   instanceId: accumulo
+  config:
+    files: {}
+    accumuloSite:
+      instance.secret: DEFAULT
+      trace.user: root
+      trace.token.property.password: password
+      tserver.memory.maps.native.enabled: true
+      tserver.memory.maps.max: 80M
+      tserver.cache.data.size: 7M
+      tserver.cache.index.size: 16M
+      tserver.total.mutation.queue.max: 8M
+      tserver.sort.buffer.size: 20M
+      tserver.walog.max.size: 100M
 
   image:
     repository: gchq/gaffer
