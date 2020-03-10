@@ -55,8 +55,19 @@ graph:
     gaffer.store.job.tracker.enabled: true
 
 hdfs:
-  namenodeUri: hdfs://hdfs-namenode-0.hdfs-namenodes:8020
-  volumes: hdfs://hdfs-namenode-0.hdfs-namenodes:8020/accumulo
+  # Config used by this chart
+  enabled: true
+  namenodeUri: hdfs://hdfs-namenodes:8020
+  volumes: hdfs://hdfs-namenodes:8020/accumulo
+  # Config used by hdfs sub-chart
+  namenode:
+    ports:
+      clientRpc: 8020
+  postInstallCommands:
+  - hadoop fs -mkdir -p /accumulo
+  - hadoop fs -chown accumulo /accumulo
+  - hadoop fs -chmod 700 /accumulo
+  - hadoop fs -ls /
 
 zookeeper:
   enabled: true

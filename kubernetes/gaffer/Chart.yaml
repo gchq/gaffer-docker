@@ -12,3 +12,7 @@ dependencies:
   version: ~2.1.1
   repository: https://kubernetes-charts-incubator.storage.googleapis.com
   condition: zookeeper.enabled
+- name: hdfs
+  version: ^1.0.0
+  repository: file://../hdfs/
+  condition: hdfs.enabled
