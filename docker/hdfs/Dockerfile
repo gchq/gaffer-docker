@@ -9,7 +9,7 @@ ARG HADOOP_VERSION=3.2.1
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as hdfs-distribution
 ARG HADOOP_VERSION
 
-RUN dnf install -y java-1.8.0-openjdk maven patch
+RUN apk add maven patch
 
 ARG HADOOP_CLONE_URL=https://github.com/apache/hadoop.git
 COPY HADOOP-15129.patch .
