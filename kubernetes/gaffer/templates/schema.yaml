@@ -5,6 +5,12 @@ metadata:
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
 data:
-{{- range $fileName, $contents := .Values.graph.schema }}
+{{- if .Values.graph.schema }}
+  {{- range $fileName, $contents := .Values.graph.schema }}
   {{ $fileName }}: {{ $contents | quote }}
+  {{- end }}
+{{- else }}
+  {{- range $fileName, $bytes := .Files.Glob "schema/*.json" }}
+  {{ base $fileName }}: {{ $bytes | quote }}
+  {{- end }}
 {{- end }}
