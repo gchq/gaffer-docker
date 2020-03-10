@@ -19,12 +19,12 @@ COPY ./files/ .
 # Otherwise, download official Hadoop Distribution Source code and apply patch
 RUN if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then \
 		git clone ${HADOOP_CLONE_URL}; \
-		cd hadoop \
-		git checkout rel/hadoop-${HADOOP_VERSION} \
-		patch -p1 ../HADOOP-15129.patch \
-		mvn package -Pdist -DskipTests \
-		cp hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz ../hadoop-${HADOOP_VERSION}.tar.gz \
-		cd .. && rm -rf hadoop
+		cd hadoop; \
+		git checkout rel/hadoop-${HADOOP_VERSION}; \
+		patch -p1 ../HADOOP-15129.patch; \
+		mvn package -Pdist -DskipTests; \
+		cp hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz ../hadoop-${HADOOP_VERSION}.tar.gz; \
+		cd .. && rm -rf hadoop;
 	fi
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
