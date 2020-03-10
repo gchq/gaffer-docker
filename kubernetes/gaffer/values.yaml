@@ -38,8 +38,8 @@ zookeeper:
 
 accumulo:
   image:
-    repository: cybermaggedon/accumulo-gaffer
-    tag: 1.9.1
+    repository: gchq/gaffer
+    tag: 1.11.0
     pullPolicy: IfNotPresent
     pullSecrets: []
 

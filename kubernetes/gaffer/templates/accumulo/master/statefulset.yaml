@@ -23,25 +23,11 @@ spec:
       - name: accumulo-master
         image: {{ .Values.accumulo.image.repository }}:{{ .Values.accumulo.image.tag }}
         imagePullPolicy: {{ .Values.accumulo.image.pullPolicy }}
-        command:
-        - /start-process
+        args:
         - master
-
         env:
-        - name: NAMENODE_URI
-          value: {{ .Values.hdfs.namenodeUri }}
-        - name: HDFS_VOLUMES
-          value: {{ .Values.hdfs.volumes }}
-        - name: ZOOKEEPERS
-          value: {{ template "gaffer.zookeepers" . }}
-        # TODO: Make this cleaner...
-        - name: TMP_HOSTNAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: MY_HOSTNAME
-          value: "$(TMP_HOSTNAME).{{ template "gaffer.fullname" . }}-masters"
-
+        - name: ACCUMULO_CONF_DIR
+          value: /etc/accumulo/
         resources:
           {{- toYaml .Values.accumulo.master.resources | nindent 10 }}
       {{- with .Values.accumulo.master.affinity }}
