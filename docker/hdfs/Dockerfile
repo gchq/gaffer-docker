@@ -24,7 +24,7 @@ RUN if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then \
 		patch -p1 ../HADOOP-15129.patch; \
 		mvn package -Pdist -DskipTests; \
 		cp hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz ../hadoop-${HADOOP_VERSION}.tar.gz; \
-		cd .. && rm -rf hadoop;
+		cd .. && rm -rf hadoop; \
 	fi
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
