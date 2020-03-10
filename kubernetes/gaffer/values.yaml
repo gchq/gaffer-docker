@@ -37,6 +37,8 @@ zookeeper:
     enabled: false
 
 accumulo:
+  instanceId: accumulo
+
   image:
     repository: gchq/gaffer
     tag: 1.11.0

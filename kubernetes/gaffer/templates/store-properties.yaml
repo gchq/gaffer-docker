@@ -1,7 +1,7 @@
 {{- define "gaffer.storeProperties" -}}
 gaffer.store.class=uk.gov.gchq.gaffer.accumulostore.AccumuloStore
 gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties
-accumulo.instance=accumulo
+accumulo.instance={{ .Values.accumulo.instanceId }}
 accumulo.zookeepers={{ template "gaffer.zookeepers" . }}
 accumulo.user=root
 accumulo.password=accumulo
