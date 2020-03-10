@@ -1,21 +1,30 @@
 ARG BASE_IMAGE_NAME=debian
 ARG BASE_IMAGE_TAG=stretch-20200224-slim
 
-ARG CURL_IMAGE_NAME=curlimages/curl
-ARG CURL_IMAGE_TAG=7.68.0
+ARG BUILDER_IMAGE_NAME=alpine/git
+ARG BUILDER_IMAGE_TAG=v2.24.1
 
 ARG HADOOP_VERSION=3.2.1
 
-FROM ${CURL_IMAGE_NAME}:${CURL_IMAGE_TAG} as hdfs-distribution
+FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as hdfs-distribution
 ARG HADOOP_VERSION
-ARG HADOOP_DOWNLOAD_URL=https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz
 
-WORKDIR /home/curl_user
+RUN dnf install -y java-1.8.0-openjdk maven patch
+
+ARG HADOOP_CLONE_URL=https://github.com/apache/hadoop.git
+COPY HADOOP-15129.patch .
+
 # Allow users to provide their own Hadoop Distribution Tarball
 COPY ./files/ .
-# Otherwise, download official Hadoop Distribution Tarball
+# Otherwise, download official Hadoop Distribution Source code and apply patch
 RUN if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then \
-		curl -fLO ${HADOOP_DOWNLOAD_URL}; \
+		git clone ${HADOOP_CLONE_URL}; \
+		cd hadoop \
+		git checkout rel/hadoop-${HADOOP_VERSION} \
+		patch -p1 ../HADOOP-15129.patch \
+		mvn package -Pdist -DskipTests \
+		cp hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz ../hadoop-${HADOOP_VERSION}.tar.gz \
+		cd .. && rm -rf hadoop
 	fi
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
@@ -34,7 +43,7 @@ RUN mkdir -p /usr/share/man/man1 && \
 		xmlstarlet \
 	&& rm -rf /var/lib/apt/lists/*
 
-COPY --from=hdfs-distribution --chown=root:root /home/curl_user/hadoop-${HADOOP_VERSION}.tar.gz /opt
+COPY --from=hdfs-distribution --chown=root:root /git/hadoop-${HADOOP_VERSION}.tar.gz /opt
 
 RUN groupadd ${GROUP} && useradd --home-dir /opt/hadoop --gid ${GROUP} --no-create-home --shell /bin/bash ${USER}
 
