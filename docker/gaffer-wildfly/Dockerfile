@@ -44,4 +44,4 @@ RUN	if [ ! -f "./rest.war" ]; then \
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 COPY --from=builder --chown=jboss /wars/*.war /opt/jboss/wildfly/standalone/deployments/
 COPY --chown=jboss ./config /gaffer
-CMD [ "/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-Dgaffer.schemas=/gaffer/schema", "-Dgaffer.storeProperties=/gaffer/store.properties", "-Dgaffer.graph.config=/gaffer/graphConfig.json" ]
+CMD [ "/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-Dgaffer.schemas=/gaffer/schema", "-Dgaffer.storeProperties=/gaffer/store/store.properties", "-Dgaffer.graph.config=/gaffer/graph/graphConfig.json" ]

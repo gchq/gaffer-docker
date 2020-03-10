@@ -27,13 +27,13 @@ spec:
         imagePullPolicy: {{ .Values.api.image.pullPolicy }}
         volumeMounts:
         - name: config
-          mountPath: /opt/jboss/wildfly/standalone/gaffer/
+          mountPath: /gaffer/graph/
           readOnly: true
         - name: schema
-          mountPath: /schema/
+          mountPath: /gaffer/schema/
           readOnly: true
         - name: store-properties
-          mountPath: /opt/jboss/wildfly/standalone/store/
+          mountPath: /gaffer/store/
           readOnly: true
         ports:
         - name: http
