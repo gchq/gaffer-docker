@@ -43,22 +43,22 @@ spec:
           value: "$(TMP_HOSTNAME).{{ template "gaffer.fullname" . }}-tservers"
 
         resources:
-{{ toYaml .Values.accumulo.tabletServers.resources | indent 10 }}
-{{- with .Values.accumulo.tabletServers.affinity }}
+          {{- toYaml .Values.accumulo.tabletServers.resources | nindent 10 }}
+      {{- with .Values.accumulo.tabletServers.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
-{{- end }}
-{{- with .Values.accumulo.tabletServers.nodeSelector }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.accumulo.tabletServers.nodeSelector }}
       nodeSelector:
-{{ toYaml . | indent 8 }}
-{{- end }}
-{{- with .Values.accumulo.tabletServers.tolerations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.accumulo.tabletServers.tolerations }}
       tolerations:
-{{ toYaml . | indent 8 }}
-{{- end }}
-{{- with .Values.accumulo.image.pullSecrets }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.accumulo.image.pullSecrets }}
       imagePullSecrets:
       {{- range . }}
       - name: {{ . }}
       {{- end }}
-{{- end }}
+      {{- end }}

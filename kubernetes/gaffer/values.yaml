@@ -106,13 +106,11 @@ accumulo:
 
 api:
   replicaCount: 1
-
   image:
     repository: gchq/gaffer-wildfly
     tag: 0.0.1
     pullPolicy: IfNotPresent
     pullSecrets: []
-
   resources: {}
   nodeSelector: {}
   tolerations: []

@@ -43,22 +43,22 @@ spec:
           value: "$(TMP_HOSTNAME).{{ template "gaffer.fullname" . }}-masters"
 
         resources:
-{{ toYaml .Values.accumulo.master.resources | indent 10 }}
-{{- with .Values.accumulo.master.affinity }}
+          {{- toYaml .Values.accumulo.master.resources | nindent 10 }}
+      {{- with .Values.accumulo.master.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
-{{- end }}
-{{- with .Values.accumulo.master.nodeSelector }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.accumulo.master.nodeSelector }}
       nodeSelector:
-{{ toYaml . | indent 8 }}
-{{- end }}
-{{- with .Values.accumulo.master.tolerations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.accumulo.master.tolerations }}
       tolerations:
-{{ toYaml . | indent 8 }}
-{{- end }}
-{{- with .Values.accumulo.image.pullSecrets }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.accumulo.image.pullSecrets }}
       imagePullSecrets:
       {{- range . }}
       - name: {{ . }}
       {{- end }}
-{{- end }}
+      {{- end }}

@@ -48,22 +48,22 @@ spec:
         #     path: /
         #     port: http
         resources:
-{{ toYaml .Values.accumulo.monitor.resources | indent 10 }}
-{{- with .Values.accumulo.monitor.affinity }}
+          {{- toYaml .Values.accumulo.monitor.resources | nindent 10 }}
+      {{- with .Values.accumulo.monitor.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
-{{- end }}
-{{- with .Values.accumulo.monitor.nodeSelector }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.accumulo.monitor.nodeSelector }}
       nodeSelector:
-{{ toYaml . | indent 8 }}
-{{- end }}
-{{- with .Values.accumulo.monitor.tolerations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.accumulo.monitor.tolerations }}
       tolerations:
-{{ toYaml . | indent 8 }}
-{{- end }}
-{{- with .Values.accumulo.image.pullSecrets }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.accumulo.image.pullSecrets }}
       imagePullSecrets:
       {{- range . }}
       - name: {{ . }}
       {{- end }}
-{{- end }}
+      {{- end }}
