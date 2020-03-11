@@ -1,15 +1,19 @@
 ARG BASE_IMAGE_NAME=debian
 ARG BASE_IMAGE_TAG=stretch-20200224-slim
 
-ARG BUILDER_IMAGE_NAME=alpine/git
-ARG BUILDER_IMAGE_TAG=v2.24.1
+ARG BUILDER_IMAGE_NAME=maven
+ARG BUILDER_IMAGE_TAG=3.6.3
 
 ARG HADOOP_VERSION=3.2.1
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as hdfs-distribution
 ARG HADOOP_VERSION
 
-RUN apk add maven patch
+RUN apt-get update
+RUN apt-get install -y git curl tar build-essential autoconf automake libtool cmake zlib1g-dev pkg-config libssl-dev libsasl2-dev
+
+RUN mkdir /git
+WORKDIR /git
 
 ARG HADOOP_CLONE_URL=https://github.com/apache/hadoop.git
 COPY HADOOP-15129.patch .
@@ -18,14 +22,22 @@ COPY HADOOP-15129.patch .
 COPY ./files/ .
 # Otherwise, download official Hadoop Distribution Source code and apply patch
 RUN if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then \
-		git clone ${HADOOP_CLONE_URL}; \
-		cd hadoop; \
-		git checkout rel/hadoop-${HADOOP_VERSION}; \
-		patch -p1 ../HADOOP-15129.patch; \
-		mvn package -Pdist -DskipTests; \
-		cp hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz ../hadoop-${HADOOP_VERSION}.tar.gz; \
-		cd .. && rm -rf hadoop; \
-	fi
+				# Install Protobuf 2.5.0
+				PROTOC_VERSION=2.5.0; \
+        		PROTOC_ZIP=protobuf-${PROTOC_VERSION}.tar.gz; \
+        		curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/${PROTOC_ZIP}; \
+        		tar -xvf ${PROTOC_ZIP}; \
+        		cd protobuf-${PROTOC_VERSION} && ./configure && make install && ldconfig; \
+        		cd .. && rm -f ${PROTOC_ZIP}; \
+				# Build Hadoop from source
+				git clone ${HADOOP_CLONE_URL}; \
+                cd hadoop; \
+                git checkout rel/release-${HADOOP_VERSION}; \
+                patch -p1 ../HADOOP-15129.patch; \
+                mvn package -Pdist -DskipTests -Pnative -Dmaven.javadoc.skip=true -q; \
+                cp hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz ../hadoop-${HADOOP_VERSION}.tar.gz; \
+                cd .. && rm -rf hadoop; \
+        fi
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 ARG HADOOP_VERSION
