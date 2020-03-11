@@ -70,6 +70,7 @@ config:
   coreSite: {}
   hdfsSite:
     dfs.replication: 3
+    dfs.namenode.reject-unresolved-dn-topology-mapping: true
 
 secrets:
   path: /etc/hadoop/secrets
