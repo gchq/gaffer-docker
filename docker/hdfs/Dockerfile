@@ -22,19 +22,20 @@ COPY HADOOP-15129.patch .
 COPY ./files/ .
 # Otherwise, download official Hadoop Distribution Source code and apply patch
 RUN if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then \
+				set -e; \
 				# Install Protobuf 2.5.0
 				PROTOC_VERSION=2.5.0; \
         		PROTOC_ZIP=protobuf-${PROTOC_VERSION}.tar.gz; \
         		curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/${PROTOC_ZIP}; \
         		tar -xvf ${PROTOC_ZIP}; \
-        		cd protobuf-${PROTOC_VERSION} && ./configure && make install && ldconfig; \
+        		cd protobuf-${PROTOC_VERSION} && ./configure --silent && make --silent install && ldconfig; \
         		cd .. && rm -f ${PROTOC_ZIP}; \
 				# Build Hadoop from source
 				git clone ${HADOOP_CLONE_URL}; \
                 cd hadoop; \
                 git checkout rel/release-${HADOOP_VERSION}; \
                 patch -p1 ../HADOOP-15129.patch; \
-                mvn package -Pdist -DskipTests -Pnative -Dmaven.javadoc.skip=true -q; \
+                mvn install -Pdist -Dtar -DskipTests -Dmaven.javadoc.skip=true -q;\
                 cp hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz ../hadoop-${HADOOP_VERSION}.tar.gz; \
                 cd .. && rm -rf hadoop; \
         fi
