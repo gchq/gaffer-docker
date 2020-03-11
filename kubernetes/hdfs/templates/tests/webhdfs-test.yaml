@@ -13,4 +13,4 @@ spec:
   - name: test
     image: {{ .Values.alpine.repository}}:{{ .Values.alpine.tag }}
     imagePullPolicy: {{ .Values.alpine.imagePullPolicy }}
-    command: ["/bin/sh", "-c", "apk update && apk add curl && statusCode=$(curl -f -s -o /dev/null -w \"%{http_code}\" http://{{ template "hdfs.fullname" . }}-namenodes:80/webhdfs/v1?op=LISTSTATUS) && echo \"${statusCode}\" && [ \"${statusCode}\" {{ if hasKey .Values.config.hdfsSite "dfs.web.authentication.type" }}!={{ else }}={{ end }} \"200\" ]"]
+    command: ["/bin/sh", "-c", "apk update && apk add curl && statusCode=$(curl -f -s -o /dev/null -w \"%{http_code}\" http://{{ template "hdfs.fullname" . }}-namenodes:{{ .Values.namenode.ports.http }}/webhdfs/v1?op=LISTSTATUS) && echo \"${statusCode}\" && [ \"${statusCode}\" {{ if hasKey .Values.config.hdfsSite "dfs.web.authentication.type" }}!={{ else }}={{ end }} \"200\" ]"]

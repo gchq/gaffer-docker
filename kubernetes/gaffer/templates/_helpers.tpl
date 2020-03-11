@@ -69,3 +69,23 @@ Create the name of the service account to use
 {{- required ".Values.zookeeper.enabled = false, so .Values.zookeeper.externalHosts must be set" .Values.zookeeper.externalHosts }}
 {{- end -}}
 {{- end -}}
+
+{{- define "callSubChartTemplate" }}
+{{- $dot := index . 0 }}
+{{- $subchart := index . 1 | splitList "." }}
+{{- $template := index . 2 }}
+{{- $values := $dot.Values }}
+{{- range $subchart }}
+{{- $values = index $values . }}
+{{- end }}
+{{- include $template (dict "Chart" (dict "Name" (last $subchart)) "Values" $values "Release" $dot.Release "Capabilities" $dot.Capabilities) }}
+{{- end }}
+
+{{- define "gaffer.hdfsNamenodeHostname" -}}
+  {{- if .Values.hdfs.enabled -}}
+    {{ template "callSubChartTemplate" (list . "hdfs" "hdfs.fullname") }}-namenodes
+  {{- else -}}
+    {{ required ".Values.hdfs.namenode.hostname needs to be set as .Values.hdfs.enabled = false" .Values.hdfs.namenode.hostname }}
+  {{- end -}}
+  :{{ .Values.hdfs.namenode.ports.clientRpc }}
+{{- end -}}

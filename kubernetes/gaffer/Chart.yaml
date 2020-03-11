@@ -3,7 +3,7 @@ name: gaffer
 description: A large-scale entity and relation database supporting aggregation of properties
 type: application
 version: 0.0.1
-appVersion: 1.10.2
+appVersion: 1.11.0
 home: https://github.com/gchq/Gaffer
 sources:
 - https://github.com/gchq/gaffer-docker
@@ -12,3 +12,7 @@ dependencies:
   version: ~2.1.1
   repository: https://kubernetes-charts-incubator.storage.googleapis.com
   condition: zookeeper.enabled
+- name: hdfs
+  version: ^1.0.0
+  repository: file://../hdfs/
+  condition: hdfs.enabled

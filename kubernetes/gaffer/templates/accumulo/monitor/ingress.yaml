@@ -18,7 +18,7 @@ spec:
         backend:
           serviceName: {{ include "gaffer.fullname" . }}-monitor
           servicePort: http
-{{- if ne .Values.accumulo.monitor.ingress.host "" }}
+    {{- if ne .Values.accumulo.monitor.ingress.host "" }}
     host: {{ .Values.accumulo.monitor.ingress.host }}
-{{- end }}
+    {{- end }}
 {{- end }}

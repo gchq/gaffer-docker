@@ -7,69 +7,51 @@ graph:
     graphId: "simpleGraph"
     description: "A graph for demo purposes"
     hooks: []
-
-  schema:
-    elements.json: |-
-      {
-        "edges": {
-          "BasicEdge": {
-            "source": "vertex",
-            "destination": "vertex",
-            "directed": "true",
-            "properties": {
-              "count": "count"
-            }
-          }
-        },
-        "entities": {
-          "BasicEntity": {
-            "vertex": "vertex",
-            "properties": {
-              "count": "count"
-            }
-          }
-        },
-        "types": {
-          "vertex": {
-            "class": "java.lang.String"
-          },
-          "count": {
-            "class": "java.lang.Integer",
-            "aggregateFunction": {
-              "class": "uk.gov.gchq.koryphe.impl.binaryoperator.Sum"
-            }
-          },
-          "true": {
-            "description": "A simple boolean that must always be true.",
-            "class": "java.lang.Boolean",
-            "validateFunctions": [
-              { "class": "uk.gov.gchq.koryphe.impl.predicate.IsTrue" }
-            ]
-          }
-        }
-      }
-
-
+  schema: {}
+    # elements.json: "{}"
   storeProperties:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
 
 hdfs:
-  namenodeUri: hdfs://hdfs-namenode-0.hdfs-namenodes:8020
-  volumes: hdfs://hdfs-namenode-0.hdfs-namenodes:8020/accumulo
+  # Config used by this chart
+  enabled: true
+  volumes:
+  - /accumulo
+  namenode:
+    hostname: "" # Only needs to be set if hdfs.enabled = false
+    ports:
+      clientRpc: 8020
+  postInstallCommands:
+  - hadoop fs -mkdir -p /accumulo
+  - hadoop fs -chown accumulo /accumulo
+  - hadoop fs -chmod 700 /accumulo
+  - hadoop fs -ls /
 
 zookeeper:
   enabled: true
   externalHosts: ""
-
   replicaCount: 1
-  persistence:
-    enabled: false
 
 accumulo:
+  instanceId: accumulo
+  config:
+    files: {}
+    accumuloSite:
+      instance.secret: DEFAULT
+      trace.user: root
+      trace.token.property.password: password
+      tserver.memory.maps.native.enabled: true
+      tserver.memory.maps.max: 80M
+      tserver.cache.data.size: 7M
+      tserver.cache.index.size: 16M
+      tserver.total.mutation.queue.max: 8M
+      tserver.sort.buffer.size: 20M
+      tserver.walog.max.size: 100M
+
   image:
-    repository: cybermaggedon/accumulo-gaffer
-    tag: 1.9.1
+    repository: gchq/gaffer
+    tag: 1.11.0
     pullPolicy: IfNotPresent
     pullSecrets: []
 
@@ -81,6 +63,13 @@ accumulo:
 
   tabletServers:
     replicaCount: 3
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+  gc:
+    replicaCount: 1
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -106,13 +95,11 @@ accumulo:
 
 api:
   replicaCount: 1
-
   image:
     repository: gchq/gaffer-wildfly
-    tag: 0.0.1
+    tag: 1.11.0
     pullPolicy: IfNotPresent
     pullSecrets: []
-
   resources: {}
   nodeSelector: {}
   tolerations: []

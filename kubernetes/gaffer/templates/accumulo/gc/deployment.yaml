@@ -1,32 +1,30 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: {{ include "gaffer.fullname" . }}-tservers
+  name: {{ include "gaffer.fullname" . }}-gc
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
-    app.kubernetes.io/component: tserver
+    app.kubernetes.io/component: gc
 spec:
-  podManagementPolicy: Parallel
-  replicas: {{ .Values.accumulo.tabletServers.replicaCount }}
-  serviceName: {{ template "gaffer.fullname" . }}-tservers
+  replicas: {{ .Values.accumulo.gc.replicaCount }}
   selector:
     matchLabels:
       {{- include "gaffer.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: tserver
+      app.kubernetes.io/component: gc
   template:
     metadata:
       labels:
         {{- include "gaffer.selectorLabels" . | nindent 8 }}
-        app.kubernetes.io/component: tserver
+        app.kubernetes.io/component: gc
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/accumulo/config.yaml") . | sha256sum }}
     spec:
       containers:
-      - name: accumulo-tserver
+      - name: accumulo-gc
         image: {{ .Values.accumulo.image.repository }}:{{ .Values.accumulo.image.tag }}
         imagePullPolicy: {{ .Values.accumulo.image.pullPolicy }}
         args:
-        - tserver
+        - gc
         env:
         - name: ACCUMULO_CONF_DIR
           value: /etc/accumulo/
@@ -35,21 +33,21 @@ spec:
           mountPath: /etc/accumulo/
           readOnly: true
         resources:
-          {{- toYaml .Values.accumulo.tabletServers.resources | nindent 10 }}
+          {{- toYaml .Values.accumulo.gc.resources | nindent 10 }}
       volumes:
       - name: config
         secret:
           secretName: {{ include "gaffer.fullname" . }}-accumulo-config
           optional: false
-      {{- with .Values.accumulo.tabletServers.affinity }}
+      {{- with .Values.accumulo.gc.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.accumulo.tabletServers.nodeSelector }}
+      {{- with .Values.accumulo.gc.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.accumulo.tabletServers.tolerations }}
+      {{- with .Values.accumulo.gc.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

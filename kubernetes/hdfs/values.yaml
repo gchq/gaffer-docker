@@ -88,3 +88,9 @@ ingress:
   pathPrefix: /hdfs/
   # For Nginx:
   #pathPrefix: "/hdfs/(.*)"
+
+postInstallCommands: []
+# - hadoop fs -mkdir -p /accumulo
+# - hadoop fs -chown accumulo /accumulo
+# - hadoop fs -chmod 700 /accumulo
+# - hadoop fs -ls /
