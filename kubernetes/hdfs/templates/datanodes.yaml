@@ -35,6 +35,14 @@ spec:
         {{- include "hdfs.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: datanode
     spec:
+      initContainers:
+      - name: init-namenode # Waits for namenode to be ready to connect to Datanodes
+        image: alpine
+        command: [
+          "sh",
+          "-c",
+          'for i in $(seq 1 200); do nc -z -w3 {{ template "hdfs.fullname" . }}-namenode-0.{{ template "hdfs.fullname" . }}-namenodes:{{ .Values.namenode.ports.serviceRpc }} && exit 0 || sleep 3; done; exit 1'
+        ]
       containers:
       - name: datanode
         image: {{ .Values.datanode.repository }}:{{ .Values.datanode.tag }}
