@@ -7,5 +7,5 @@
 cd kubernetes/hdfs
 helm test hdfs
 
-kubectl hdfs-namenode-0 -- nslookup hdfs-datanode-0
-kubectl hdfs-namenode-0 -- nslookup hdfs-datanode-0.hdfs-datanodes
+kubectl exec hdfs-namenode-0 -- nslookup hdfs-datanode-0
+kubectl exec hdfs-namenode-0 -- nslookup hdfs-datanode-0.hdfs-datanodes
