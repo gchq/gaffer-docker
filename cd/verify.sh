@@ -17,3 +17,6 @@ echo "Doing DNS lookup"
 
 kubectl exec hdfs-namenode-0 -- nslookup hdfs-datanode-0.hdfs-datanodes
 
+echo "Getting dns settings"
+
+kubectl exec hdfs-namenode-0 cat /etc/resolv.conf
