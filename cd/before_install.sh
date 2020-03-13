@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
-if [ ${TRAVIS_PULL_REQUEST} != 'true' ]; then
-    exit 0
-fi
+# if [ ${TRAVIS_PULL_REQUEST} != 'true' ]; then
+#     exit 0
+# fi
 # Install Kubectl
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
 chmod +x kubectl
