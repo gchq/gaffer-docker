@@ -5,7 +5,7 @@ set -e
 # fi
 
 # Create a cluster 
-minikube start --vm-driver=none --kubernetes-version=${KUBERNETES_VERSION} --extra-config=kubelet.cluster-domain="localdomain"
+minikube start --vm-driver=none --kubernetes-version=${KUBERNETES_VERSION} --extra-config=kubelet.cluster-domain="default.svc.cluster.local svc.cluster.local cluster.local localdomain"
 minikube update-context
 
 # Build images
