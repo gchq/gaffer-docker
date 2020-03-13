@@ -7,5 +7,8 @@
 cd kubernetes/hdfs
 helm test hdfs
 
-kubectl exec hdfs-namenode-0 -- nslookup hdfs-datanode-0
+kubectl logs hdfs-namenode-0
+
+echo "Doing DNS lookup"
+
 kubectl exec hdfs-namenode-0 -- nslookup hdfs-datanode-0.hdfs-datanodes
