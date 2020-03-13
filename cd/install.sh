@@ -5,6 +5,7 @@ set -e
 # fi
 
 # Create a cluster 
+minikube config set bootstrapper localkube
 minikube start --vm-driver=none --kubernetes-version=${KUBERNETES_VERSION}
 minikube update-context
 
