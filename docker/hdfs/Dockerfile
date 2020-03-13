@@ -53,7 +53,7 @@ ENTRYPOINT ["/entrypoint.sh", "hdfs"]
 RUN for i in $(seq 1 8); do mkdir -p -m 750 /data${i} && chown ${USER}:${GROUP} /data${i}; done
 VOLUME /data1 /data2 /data3 /data4 /data5 /data6 /data7 /data8
 
-RUN apt-get install -y dnsutils
+RUN apt-get update apt-get install -y dnsutils
 USER ${USER}
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre/
 ENV HADOOP_HOME /opt/hadoop
