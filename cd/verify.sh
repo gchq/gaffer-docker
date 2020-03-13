@@ -15,7 +15,7 @@ for p in $(kubectl get pods --namespace=kube-system -l k8s-app=kube-dns -o name)
 
 echo "Doing DNS lookup"
 
-kubectl exec hdfs-namenode-0 -- nslookup hdfs-datanode-0.hdfs-datanodes
+kubectl exec hdfs-namenode-0 -- 'dig +short `dig +short hdfs-datanode-0.hdfs-datanodes`'
 
 echo "Getting dns settings"
 
