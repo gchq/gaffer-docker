@@ -7,6 +7,8 @@ set -e
 # Create a cluster 
 kind create cluster -q
 
+kubectl get pods --namespace=kube-system
+
 # Build images
 cd docker/hdfs
 docker-compose build
