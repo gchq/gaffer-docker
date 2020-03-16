@@ -17,7 +17,7 @@ cd ../..
 cd kubernetes/hdfs
 minikube cache add gchq/hdfs:3.2.1
 # Travis needs this to avoid reverse dns lookup errors
-helm install hdfs --set config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false --wait
+helm install hdfs . --set config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false --wait
 
 # Deploy Accumulo
 # TODO
