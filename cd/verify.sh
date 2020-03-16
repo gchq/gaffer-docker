@@ -20,3 +20,11 @@ kubectl exec hdfs-namenode-0 -- bash -c "ip=\$(dig +short +search hdfs-datanode-
 echo "Getting dns settings"
 
 kubectl exec hdfs-namenode-0 cat /etc/resolv.conf
+
+echo "Getting /etc/hosts on the namenode"
+
+kubectl exec hdfs-namenode-0 cat /etc/hosts
+
+echo "Getting /etc/hosts on the datanode (0)"
+
+kubectl exec hdfs-datanode-0 cat /etc/hosts
