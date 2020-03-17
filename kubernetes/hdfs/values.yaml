@@ -70,6 +70,7 @@ config:
   coreSite: {}
   hdfsSite:
     dfs.replication: 3
+    hadoop.security.authorization: true
 
 secrets:
   path: /etc/hadoop/secrets
