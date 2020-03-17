@@ -85,9 +85,10 @@ ingress:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
   host: ""
-  pathPrefix: /hdfs/
+  # For Traefik:
+  # pathPrefix: /hdfs/
   # For Nginx:
-  #pathPrefix: "/hdfs/(.*)"
+  pathPrefix: "/hdfs/(.*)"
 
 postInstallCommands: []
 # - hadoop fs -mkdir -p /accumulo
