@@ -67,20 +67,14 @@ spec:
         - name: lifeline-rpc
           containerPort: {{ .Values.namenode.ports.lifelineRpc }}
         livenessProbe:
-          httpGet:
-            scheme: HTTP
-            port: http
-            path: /
-          initialDelaySeconds: 30
-        readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
-            - hdfs dfsadmin -fs hdfs://localhost -safemode get | grep "Safe mode is OFF"
+            - hdfs dfsadmin -fs hdfs://localhost -safemode get
           initialDelaySeconds: 30
-          periodSeconds: 20
-          timeoutSeconds: 20
+          periodSeconds: 30
+          timeoutSeconds: 30
           successThreshold: 1
           failureThreshold: 2
         resources:
