@@ -148,3 +148,15 @@ services:
     volumes:
     - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
+
+  gaffer-wildfly:
+    image: gchq/gaffer-wildfly:${GAFFER_VERSION}
+    build:
+      context: ../gaffer-wildfly/
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
+    ports:
+    - 8080:8080
+    volumes:
+    - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
