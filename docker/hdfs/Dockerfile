@@ -1,22 +1,16 @@
+ARG BUILDER_IMAGE_NAME=debian
+ARG BUILDER_IMAGE_TAG=stretch-20200224-slim
+
 ARG BASE_IMAGE_NAME=debian
 ARG BASE_IMAGE_TAG=stretch-20200224-slim
 
-ARG CURL_IMAGE_NAME=curlimages/curl
-ARG CURL_IMAGE_TAG=7.68.0
-
 ARG HADOOP_VERSION=3.2.1
 
-FROM ${CURL_IMAGE_NAME}:${CURL_IMAGE_TAG} as hdfs-distribution
+FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 ARG HADOOP_VERSION
 ARG HADOOP_DOWNLOAD_URL=https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz
-
-WORKDIR /home/curl_user
-# Allow users to provide their own Hadoop Distribution Tarball
-COPY ./files/ .
-# Otherwise, download official Hadoop Distribution Tarball
-RUN if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then \
-		curl -fLO ${HADOOP_DOWNLOAD_URL}; \
-	fi
+COPY ./files/ /
+RUN ./build-hadoop.sh
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 ARG HADOOP_VERSION
@@ -34,7 +28,7 @@ RUN mkdir -p /usr/share/man/man1 && \
 		xmlstarlet \
 	&& rm -rf /var/lib/apt/lists/*
 
-COPY --from=hdfs-distribution --chown=root:root /home/curl_user/hadoop-${HADOOP_VERSION}.tar.gz /opt
+COPY --from=builder --chown=root:root /hadoop-${HADOOP_VERSION}.tar.gz /opt
 
 RUN groupadd ${GROUP} && useradd --home-dir /opt/hadoop --gid ${GROUP} --no-create-home --shell /bin/bash ${USER}
 
