@@ -3,7 +3,6 @@ version: "3.7"
 services:
 
   gaffer-wildfly:
-
     image: gchq/gaffer-wildfly:${GAFFER_VERSION}
     build:
       context: .
