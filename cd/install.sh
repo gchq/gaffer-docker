@@ -18,6 +18,9 @@ minikube cache add gchq/hdfs:3.2.1
 minikube cache add gchq/gaffer:1.11.0
 minikube cache add gchq/gaffer-wildfly:1.11.0
 
+# Install any dependencies
+helm dependency update
+
 # Deploy containers onto Minikube
 # Travis needs this setting to avoid reverse dns lookup errors
 helm install gaffer . --set hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false --wait
