@@ -23,4 +23,4 @@ helm dependency update
 
 # Deploy containers onto Minikube
 # Travis needs this setting to avoid reverse dns lookup errors
-helm install gaffer . --set hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false --wait
+helm install gaffer . --set hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false --timeout 10m0s --wait
