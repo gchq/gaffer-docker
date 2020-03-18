@@ -8,19 +8,16 @@ fi
 minikube start --vm-driver=none --kubernetes-version=${KUBERNETES_VERSION}
 minikube update-context
 
+cd kubernetes/gaffer
 # Build images
-cd docker/hdfs
-docker-compose build
-cd ../..
+docker-compose --project-directory ../../docker/accumulo/ -f ../../docker/accumulo/docker-compose.yaml build
+docker-compose --project-directory ../../docker/gaffer/ -f ../../docker/gaffer/docker-compose.yaml build
 
-# Deploy HDFS
-cd kubernetes/hdfs
+# Deploy Images to Minikube
 minikube cache add gchq/hdfs:3.2.1
-# Travis needs this to avoid reverse dns lookup errors
-helm install hdfs . --set config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false --wait
+minikube cache add gchq/gaffer:1.11.0
+minikube cache add gchq/hdfs:1.11.0
 
-# Deploy Accumulo
-# TODO
-
-# Deploy Gaffer REST service
-# TODO
+# Deploy containers onto Minikube
+# Travis needs this setting to avoid reverse dns lookup errors
+helm install gaffer . --set hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false --wait
