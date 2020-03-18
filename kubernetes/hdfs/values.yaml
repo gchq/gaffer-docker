@@ -70,6 +70,7 @@ config:
   coreSite: {}
   hdfsSite:
     dfs.replication: 3
+    hadoop.security.authorization: true
 
 secrets:
   path: /etc/hadoop/secrets
@@ -84,9 +85,10 @@ ingress:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
   host: ""
-  pathPrefix: /hdfs/
+  # For Traefik:
+  # pathPrefix: /hdfs/
   # For Nginx:
-  #pathPrefix: "/hdfs/(.*)"
+  pathPrefix: "/hdfs/(.*)"
 
 postInstallCommands: []
 # - hadoop fs -mkdir -p /accumulo

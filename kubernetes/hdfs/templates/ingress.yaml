@@ -16,7 +16,7 @@ spec:
       - path: {{ required "Ingress path required, please set: .Values.ingress.pathPrefix" .Values.ingress.pathPrefix }}
         backend:
           serviceName: {{ template "hdfs.fullname" . }}-namenodes
-          servicePort: 80
+          servicePort: {{ .Values.namenode.ports.http }}
 {{- if ne .Values.ingress.host "" }}
     host: {{ .Values.ingress.host }}
 {{- end }}

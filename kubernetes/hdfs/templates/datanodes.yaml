@@ -36,12 +36,13 @@ spec:
         app.kubernetes.io/component: datanode
     spec:
       initContainers:
-      - name: init-namenode # Waits for namenode to be ready to connect to Datanodes
-        image: alpine
+      - name: wait-for-namenode-startup
+        image: {{ .Values.alpine.repository}}:{{ .Values.alpine.tag }}
+        imagePullPolicy: {{ .Values.alpine.imagePullPolicy }}
         command: [
-          "sh",
+          "/bin/sh",
           "-c",
-          'for i in $(seq 1 200); do nc -z -w3 {{ template "hdfs.fullname" . }}-namenode-0.{{ template "hdfs.fullname" . }}-namenodes:{{ .Values.namenode.ports.serviceRpc }} && exit 0 || sleep 3; done; exit 1'
+          'for i in $(seq 1 300); do nc -z -w3 {{ template "hdfs.fullname" . }}-namenode-0.{{ template "hdfs.fullname" . }}-namenodes:{{ .Values.namenode.ports.serviceRpc }} && exit 0 || sleep 1; done; exit 1'
         ]
       containers:
       - name: datanode

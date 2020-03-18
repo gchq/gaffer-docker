@@ -11,7 +11,7 @@ kind create cluster
 kind load docker-image gchq/hdfs:3.2.1
 helm install hdfs .
 helm test hdfs
-kubectl port-forward svc/hdfs-namenodes 8080:80
+kubectl port-forward svc/hdfs-namenodes 8080:9870
 ```
 
 Access the HDFS web UI at: http://localhost:8080
