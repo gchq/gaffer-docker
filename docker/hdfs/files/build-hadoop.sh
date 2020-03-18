@@ -2,6 +2,7 @@
 
 test -z "${HADOOP_VERSION}" && HADOOP_VERSION=3.2.1
 test -z "${HADOOP_DOWNLOAD_URL}" && HADOOP_DOWNLOAD_URL=https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz
+test -z "${HADOOP_APPLY_PATCHES}" && HADOOP_APPLY_PATCHES=false
 test -z "${PROTOBUF_VERSION}" && PROTOBUF_VERSION=2.5.0
 
 # Allow users to provide their own Hadoop Distribution Tarball
@@ -14,7 +15,7 @@ apt update
 apt install -y wget
 
 # Download official Hadoop Distribution Tarball
-if [ ! -d "/patches/${HADOOP_VERSION}/" ]; then
+if [ ! -d "/patches/${HADOOP_VERSION}/" ] || [ "${HADOOP_APPLY_PATCHES}" != "true" ]; then
 	wget ${HADOOP_DOWNLOAD_URL}
 	exit 0
 fi

@@ -9,6 +9,7 @@ ARG HADOOP_VERSION=3.2.1
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 ARG HADOOP_VERSION
 ARG HADOOP_DOWNLOAD_URL=https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz
+ARG HADOOP_APPLY_PATCHES=false
 COPY ./files/ /
 RUN ./build-hadoop.sh
 
