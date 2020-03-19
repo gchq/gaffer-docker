@@ -19,11 +19,11 @@ COPY ./files/ .
 # Try to download required version from Maven Central, otherwise build from source
 RUN	allFilesDownloaded="TRUE" && \
 	if [ ! -f "./accumulo-store-${GAFFER_VERSION}-iterators.jar" ]; then \
-		wget "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-iterators.jar" || allFilesDownloaded="FALSE"; \
+		wget -q "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-iterators.jar" || allFilesDownloaded="FALSE"; \
 	fi && \
 	for lib in $(echo ${GAFFER_LIBS} | tr , ' '); do \
 		if [ ! -f "./${lib}-${GAFFER_VERSION}-deploy.jar" ]; then \
-			wget "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/${lib}/${GAFFER_VERSION}/${lib}-${GAFFER_VERSION}-deploy.jar" || allFilesDownloaded="FALSE"; \
+			wget -q "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/${lib}/${GAFFER_VERSION}/${lib}-${GAFFER_VERSION}-deploy.jar" || allFilesDownloaded="FALSE"; \
 		fi \
 	done && \
 	if [ "${allFilesDownloaded}" = "FALSE" ]; then \
@@ -32,7 +32,7 @@ RUN	allFilesDownloaded="TRUE" && \
 		git checkout ${GAFFER_VERSION} && \
 		for dir in library/*; do if [ -f "${dir}/pom.xml" ]; then echo "${dir}"; fi done | \
 		paste -sd, | \
-		xargs mvn clean package -Pquick --also-make -pl store-implementation/accumulo-store/ -pl && \
+		xargs mvn clean package -q -Pquick --also-make -pl store-implementation/accumulo-store/ -pl && \
 		if [ ! -f "/jars/accumulo-store-${GAFFER_VERSION}-iterators.jar" ]; then \
 			cp ./store-implementation/accumulo-store/target/accumulo-store-*-iterators.jar /jars; \
 		fi && \

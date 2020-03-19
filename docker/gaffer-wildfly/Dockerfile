@@ -19,16 +19,16 @@ WORKDIR /wars
 COPY ./wars/ .
 # Try to download required version from Maven Central, otherwise build from source
 RUN	if [ ! -f "./rest.war" ]; then \
-		curl -fLo rest.war "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/accumulo-rest/${GAFFER_VERSION}/accumulo-rest-${GAFFER_VERSION}.war" || true; \
+		curl -sfLo rest.war "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/accumulo-rest/${GAFFER_VERSION}/accumulo-rest-${GAFFER_VERSION}.war" || true; \
 	fi && \
 	if [ ! -f "./ui.war" ]; then \
-		curl -fLo ui.war "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/ui/${GAFFER_TOOLS_VERSION}/ui-${GAFFER_TOOLS_VERSION}.war" || true; \
+		curl -sfLo ui.war "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/ui/${GAFFER_TOOLS_VERSION}/ui-${GAFFER_TOOLS_VERSION}.war" || true; \
 	fi && \
 	if [ ! -f "./rest.war" ]; then \
 		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
 		cd /tmp/gaffer && \
 		git checkout ${GAFFER_VERSION} && \
-		mvn clean package -Pquick --also-make -pl rest-api/accumulo-rest && \
+		mvn clean package -q -Pquick --also-make -pl rest-api/accumulo-rest && \
 		cp ./rest-api/accumulo-rest/target/accumulo-rest-*.war /wars/ && \
 		cd /wars/; \
 	fi && \
@@ -36,7 +36,7 @@ RUN	if [ ! -f "./rest.war" ]; then \
 		git clone ${GAFFER_TOOLS_GIT_REPO} /tmp/gaffer-tools && \
 		cd /tmp/gaffer-tools && \
 		git checkout ${GAFFER_TOOLS_VERSION} && \
-		mvn clean package -Pquick --also-make -pl ui && \
+		mvn clean package -q -Pquick --also-make -pl ui && \
 		cp ./ui/target/ui-*.war /wars/ && \
 		cd /wars/; \
 	fi

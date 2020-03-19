@@ -34,13 +34,13 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 COPY ./files/ .
 # Otherwise, download official distributions
 RUN if [ ! -f "./accumulo-${ACCUMULO_VERSION}-bin.tar.gz" ]; then \
-		curl -fLO ${ACCUMULO_DOWNLOAD_URL}; \
+		curl -sfLO ${ACCUMULO_DOWNLOAD_URL}; \
 	fi && \
 	if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then \
-		curl -fLO ${HADOOP_DOWNLOAD_URL}; \
+		curl -sfLO ${HADOOP_DOWNLOAD_URL}; \
 	fi && \
 	if [ ! -f "./apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz" ]; then \
-		curl -fLO ${ZOOKEEPER_DOWNLOAD_URL}; \
+		curl -sfLO ${ZOOKEEPER_DOWNLOAD_URL}; \
 	fi
 
 # Extract required files
@@ -62,8 +62,8 @@ ARG USER=accumulo
 ARG GROUP=accumulo
 
 RUN mkdir -p /usr/share/man/man1 && \
-	apt update && \
-	apt install -y \
+	apt -qq update && \
+	apt -qq install -y \
 		dumb-init \
 		openjdk-8-jre-headless \
 		xmlstarlet \
