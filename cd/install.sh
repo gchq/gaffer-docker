@@ -5,7 +5,7 @@ if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
 fi
 
 # Create a cluster 
-kind create cluster
+kind create cluster --quiet
 
 cd kubernetes/gaffer
 # Build images
@@ -22,4 +22,5 @@ helm dependency update
 
 # Deploy containers onto Kind
 # Travis needs this setting to avoid reverse dns lookup errors
+echo "Starting helm install"
 helm install gaffer . --set hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false --timeout 10m0s --wait

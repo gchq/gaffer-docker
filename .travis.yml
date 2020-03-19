@@ -1,10 +1,11 @@
 os: linux
 language: minimal
+sudo: required
 env:
-  - KUBERNETES_VERSION=`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt` CHANGE_MINIKUBE_NONE_USER=true
+  - KUBERNETES_VERSION=`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`
 before_install:
-  - sudo cd/before_install.sh
+  - cd/before_install.sh
 install:
-  - sudo cd/install.sh
+  - cd/install.sh
 script:
-  - sudo cd/verify.sh
+  - cd/verify.sh
