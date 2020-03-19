@@ -21,6 +21,15 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/accumulo/config.yaml") . | sha256sum }}
     spec:
+      initContainers:
+      - name: wait-for-namenode-startup
+        image: {{ .Values.alpine.repository}}:{{ .Values.alpine.tag }}
+        imagePullPolicy: {{ .Values.alpine.imagePullPolicy }}
+        command: [
+          "/bin/sh",
+          "-c",
+          'if [ {{ .Values.hdfs.enabled }} != "false" ]; then; for i in $(seq 1 100); do nc -z -w3 {{ template gaffer.hdfsNamenodeHostname .}} && exit 0 || sleep 3; done; exit 1; fi;'
+        ]
       containers:
       - name: accumulo-master
         image: {{ .Values.accumulo.image.repository }}:{{ .Values.accumulo.image.tag }}

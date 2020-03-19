@@ -2,6 +2,11 @@
 nameOverride: ""
 fullnameOverride: ""
 
+alpine:
+  repository: alpine
+  tag: 3.10.2
+  imagePullPolicy: IfNotPresent
+
 graph:
   config:
     graphId: "simpleGraph"

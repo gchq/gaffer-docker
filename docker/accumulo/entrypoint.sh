@@ -3,14 +3,6 @@
 test -z "${ACCUMULO_CONF_DIR}" && HADOOP_CONF_DIR="${ACCUMULO_HOME}/conf"
 test -z "${ACCUMULO_INSTANCE_NAME}" && ACCUMULO_INSTANCE_NAME="accumulo"
 
-# TODO May need to split this up if there's more than one
-echo "Waiting for Hadoop to start"
-ACCUMULO_HDFS_DIRECTORY=$(xmlstarlet sel -t -v "/configuration/property[name='instance.volumes']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
-HDFS_READY="false"
-for i in $(seq 1 100); do 
-	hadoop fs -ls ${ACCUMULO_HDFS_DIRECTORY} && HDFS_READY="true" && break || sleep 3
-done; 
-
 if [ ${HDFS_READY} == "false" ]; then
 	exit 1
 fi
