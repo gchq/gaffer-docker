@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 test -z "${ACCUMULO_CONF_DIR}" && HADOOP_CONF_DIR="${ACCUMULO_HOME}/conf"
 test -z "${ACCUMULO_INSTANCE_NAME}" && ACCUMULO_INSTANCE_NAME="accumulo"
