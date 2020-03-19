@@ -19,6 +19,14 @@ if [ "$1" = "accumulo" ] && [ "$2" = "master" ]; then
 		exit 1
 	fi
 
+	# TODO May need to split this up if there's more than one
+	echo "Waiting for Hadoop to start"
+	ACCUMULO_HDFS_DIRECTORY=$(xmlstarlet sel -t -v "/configuration/property[name='instance.volumes']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
+	for i in $(seq 1 100); do 
+		hadoop fs -ls ${ACCUMULO_HDFS_DIRECTORY} && break || sleep 3
+	done; 
+	exit 1
+
 	echo "Initializing Accumulo..."
 	accumulo init --instance-name ${ACCUMULO_INSTANCE_NAME} --password ${PASSWORD}
 fi
