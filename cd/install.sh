@@ -5,22 +5,21 @@ if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
 fi
 
 # Create a cluster 
-minikube start --vm-driver=none --kubernetes-version=${KUBERNETES_VERSION}
-minikube update-context
+kind create cluster
 
 cd kubernetes/gaffer
 # Build images
 docker-compose --project-directory ../../docker/accumulo/ -f ../../docker/accumulo/docker-compose.yaml build
 docker-compose --project-directory ../../docker/gaffer/ -f ../../docker/gaffer/docker-compose.yaml build
 
-# Deploy Images to Minikube
-minikube cache add gchq/hdfs:3.2.1
-minikube cache add gchq/gaffer:1.11.0
-minikube cache add gchq/gaffer-wildfly:1.11.0
+# Deploy Images to Kind
+kind load docker-image gchq/hdfs:3.2.1
+kind load docker-image gchq/gaffer:1.11.0
+kind load docker-image gchq/gaffer-wildfly:1.11.0
 
 # Install any dependencies
 helm dependency update
 
-# Deploy containers onto Minikube
+# Deploy containers onto Kind
 # Travis needs this setting to avoid reverse dns lookup errors
 helm install gaffer . --set hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false --timeout 10m0s --wait

@@ -8,10 +8,10 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_
 chmod +x kubectl
 mv kubectl /usr/local/bin/
 
-# Install Minikube
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-chmod +x minikube
-mv minikube /usr/local/bin/
+# Install Kind
+curl -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(uname)-amd64
+chmod +x ./kind
+mv ./kind /usr/local/bin/kind
 
 # Install Helm
 curl -Lo ./helm.tar.gz https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
