@@ -92,7 +92,9 @@ RUN cd /opt \
 USER ${USER}
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre/
 ENV ACCUMULO_HOME /opt/accumulo
+ENV ACCUMULO_CONF_DIR ${ACCUMULO_HOME}/conf
 ENV ACCUMULO_LOG_DIR /var/log/accumulo
+ENV HADOOP_HOME /opt/hadoop
 ENV PATH $ACCUMULO_HOME/bin:$PATH
 
 COPY ./entrypoint.sh /
