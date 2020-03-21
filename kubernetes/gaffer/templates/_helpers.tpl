@@ -63,11 +63,11 @@ Create the name of the service account to use
 {{- end -}}
 
 {{- define "gaffer.zookeepers" -}}
-{{- if .Values.zookeeper.enabled -}}
-{{- include "gaffer.fullname" . }}-zookeeper
-{{- else -}}
-{{- required ".Values.zookeeper.enabled = false, so .Values.zookeeper.externalHosts must be set" .Values.zookeeper.externalHosts }}
-{{- end -}}
+  {{- if .Values.zookeeper.enabled -}}
+    {{ template "callSubChartTemplate" (list . "zookeeper" "zookeeper.fullname") }}
+  {{- else -}}
+    {{- required ".Values.zookeeper.enabled = false, so .Values.zookeeper.externalHosts must be set" .Values.zookeeper.externalHosts }}
+  {{- end -}}
 {{- end -}}
 
 {{- define "callSubChartTemplate" }}
