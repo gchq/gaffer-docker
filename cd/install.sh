@@ -4,6 +4,7 @@ set -e
 # Lint Helm Charts
 for chart in ./kubernetes/*; do
     helm lint ${chart}
+    helm dependency update ${chart}
     helm template test ${chart} >/dev/null
 done
 
@@ -23,9 +24,6 @@ docker-compose --project-directory ../../docker/gaffer/ -f ../../docker/gaffer/d
 kind load docker-image gchq/hdfs:3.2.1
 kind load docker-image gchq/gaffer:1.11.0
 kind load docker-image gchq/gaffer-wildfly:1.11.0
-
-# Install any dependencies
-helm dependency update
 
 # Deploy containers onto Kind
 # Travis needs this setting to avoid reverse dns lookup errors
