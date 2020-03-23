@@ -18,6 +18,7 @@ spec:
         app.kubernetes.io/component: api
       annotations:
         checksum/graph-config: {{ include (print $.Template.BasePath "/graph-config.yaml") . | sha256sum }}
+        checksum/ui-config: {{ include (print $.Template.BasePath "/api/ui-config.yaml") . | sha256sum }}
         checksum/schema: {{ include (print $.Template.BasePath "/schema.yaml") . | sha256sum }}
         checksum/store-properties: {{ include (print $.Template.BasePath "/store-properties.yaml") . | sha256sum }}
     spec:
@@ -26,8 +27,11 @@ spec:
         image: {{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
         imagePullPolicy: {{ .Values.api.image.pullPolicy }}
         volumeMounts:
-        - name: config
+        - name: graph-config
           mountPath: /gaffer/graph/
+          readOnly: true
+        - name: ui-config
+          mountPath: /opt/jboss/wildfly/standalone/deployments/ui.war/config/
           readOnly: true
         - name: schema
           mountPath: /gaffer/schema/
@@ -68,9 +72,13 @@ spec:
       {{- end }}
       {{- end }}
       volumes:
-      - name: config
+      - name: graph-config
         configMap:
           name: {{ template "gaffer.fullname" . }}-graph-config
+          optional: false
+      - name: ui-config
+        configMap:
+          name: {{ template "gaffer.fullname" . }}-ui-config
           optional: false
       - name: schema
         configMap:

@@ -13,6 +13,9 @@ graph:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
 
+# See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
+ui: "{}"
+
 hdfs:
   # Config used by this chart
   enabled: true
