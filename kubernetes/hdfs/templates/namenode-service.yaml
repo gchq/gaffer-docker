@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "hdfs.fullname" . }}-namenodes
+  labels:
+    {{ include "hdfs.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    {{- include "hdfs.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: namenode
+  ports:
+  - name: http
+    protocol: TCP
+    port: {{ .Values.namenode.ports.http }}
+    targetPort: http
+  - name: client-rpc
+    protocol: TCP
+    port: {{ .Values.namenode.ports.clientRpc }}
+    targetPort: client-rpc
+  - name: service-rpc
+    protocol: TCP
+    port: {{ .Values.namenode.ports.serviceRpc }}
+    targetPort: service-rpc
+  - name: lifeline-rpc
+    protocol: TCP
+    port: {{ .Values.namenode.ports.lifelineRpc }}
+    targetPort: lifeline-rpc

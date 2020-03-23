@@ -1,0 +1,36 @@
+{{- if .Values.postInstallCommands }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ template "hdfs.fullname" . }}-post-install-cmds
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+  labels:
+    {{- include "hdfs.labels" . | nindent 4 }}
+    app.kubernetes.io/component: hook
+spec:
+  restartPolicy: Never
+  containers:
+  - name: cmds
+    image: {{ .Values.shell.repository }}:{{ .Values.shell.tag }}
+    imagePullPolicy: {{ .Values.shell.imagePullPolicy }}
+    command: ["/bin/bash", "-c", "until hadoop fs -ls / >/dev/null 2>&1 || [ $(( ATTEMPTS++ )) -gt 300 ]; do echo \"$(date) - Waiting for HDFS instance to be ready...\" && sleep 10; done && {{ join " && " .Values.postInstallCommands}}"]
+    env:
+    - name: HADOOP_CONF_DIR
+      value: {{ .Values.config.path }}
+    volumeMounts:
+    - name: config
+      mountPath: {{ .Values.config.path }}
+      readOnly: true
+  volumes:
+  - name: config
+    configMap:
+      name: {{ template "hdfs.fullname" . }}
+      optional: false
+  {{- with .Values.shell.imagePullSecrets }}
+  imagePullSecrets:
+  {{- range . }}
+  - name: {{ . }}
+  {{- end }}
+  {{- end }}
+{{- end }}

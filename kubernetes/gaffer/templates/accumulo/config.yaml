@@ -1,0 +1,61 @@
+{{- define "gaffer.accumuloSite" -}}
+{{- $hdfsUri := print "hdfs://" ( include "gaffer.hdfsNamenodeHostname" . ) -}}
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>instance.volumes</name>
+    <value>{{ $hdfsUri }}{{ join (print "," $hdfsUri) .Values.hdfs.volumes }}</value>
+  </property>
+  <property>
+    <name>instance.zookeeper.host</name>
+    <value>{{ include "gaffer.zookeepers" . }}</value>
+  </property>
+  <property>
+    <name>general.classpaths</name>
+    <value>
+      <!-- Accumulo requirements -->
+      $ACCUMULO_HOME/lib/accumulo-server.jar,
+      $ACCUMULO_HOME/lib/accumulo-core.jar,
+      $ACCUMULO_HOME/lib/accumulo-start.jar,
+      $ACCUMULO_HOME/lib/accumulo-fate.jar,
+      $ACCUMULO_HOME/lib/accumulo-proxy.jar,
+      $ACCUMULO_HOME/lib/[^.].*.jar,
+      <!-- ZooKeeper requirements -->
+      $ZOOKEEPER_HOME/lib/zookeeper[^.].*.jar,
+      <!-- Common Hadoop requirements -->
+      $HADOOP_CONF_DIR,
+      <!-- Hadoop 3 requirements -->
+      $HADOOP_PREFIX/share/hadoop/client/[^.].*.jar,
+      $HADOOP_PREFIX/share/hadoop/common/lib/(?!slf4j)[^.].*.jar,
+    </value>
+  </property>
+  {{- range $k, $v := .Values.accumulo.config.accumuloSite }}
+  <property>
+    <name>{{$k}}</name>
+    <value>{{$v}}</value>
+  </property>
+  {{- end }}
+</configuration>
+{{- end -}}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "gaffer.fullname" . }}-accumulo-config
+  labels:
+    {{- include "gaffer.labels" . | nindent 4 }}
+data:
+  accumulo-site.xml: {{ include "gaffer.accumuloSite" . | b64enc | quote }}
+
+  {{- /* User supplied Accumulo config files */}}
+  {{- range $path, $contents := .Values.accumulo.config.files }}
+  {{ $path }}: {{ $contents | b64enc | quote }}
+  {{- end }}
+
+  {{- /* Default Accumulo config files */}}
+  {{- range $path, $_ := .Files.Glob "accumulo/*" }}
+    {{- if not (hasKey $.Values.accumulo.config.files (base $path)) }}
+      {{- base $path | nindent 2 }}: {{ $.Files.Get $path | b64enc | quote }}
+    {{- end }}
+  {{- end }}

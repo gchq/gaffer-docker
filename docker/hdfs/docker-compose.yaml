@@ -1,0 +1,41 @@
+version: "3.7"
+
+services:
+
+  hdfs-namenode:
+    image: gchq/hdfs:${HADOOP_VERSION}
+    build:
+      context: .
+      args:
+        HADOOP_VERSION: ${HADOOP_VERSION}
+    command: namenode
+    container_name: hdfs-namenode
+    hostname: hdfs-namenode
+    environment:
+    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
+    ports:
+    - 9870:9870
+    volumes:
+    - ./conf:${HADOOP_CONF_DIR}:ro
+    - /var/log/hadoop
+    - /data1
+    - /data2
+
+  hdfs-datanode:
+    depends_on:
+    - hdfs-namenode
+    image: gchq/hdfs:${HADOOP_VERSION}
+    build:
+      context: .
+      args:
+        HADOOP_VERSION: ${HADOOP_VERSION}
+    command: datanode
+    container_name: hdfs-datanode
+    hostname: hdfs-datanode
+    environment:
+    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
+    volumes:
+    - ./conf:${HADOOP_CONF_DIR}:ro
+    - /var/log/hadoop
+    - /data1
+    - /data2

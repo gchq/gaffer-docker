@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "hdfs.fullname" . }}-datanodes
+  labels:
+    {{ include "hdfs.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "hdfs.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: datanode
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: http
