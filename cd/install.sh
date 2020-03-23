@@ -3,8 +3,8 @@ set -e
 
 # Lint Helm Charts
 for chart in ./kubernetes/*; do
-    helm lint ${chart}
     helm dependency update ${chart}
+    helm lint ${chart}
     helm template test ${chart} >/dev/null
 done
 
