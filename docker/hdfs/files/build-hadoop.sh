@@ -11,18 +11,18 @@ if [ -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 fi
 
 mkdir -p /usr/share/man/man1
-apt update
-apt install -y wget
+apt -qq update
+apt -qq install -y wget
 
 # Download official Hadoop Distribution Tarball
 if [ ! -d "/patches/${HADOOP_VERSION}/" ] || [ "${HADOOP_APPLY_PATCHES}" != "true" ]; then
-	wget ${HADOOP_DOWNLOAD_URL}
+	wget -q ${HADOOP_DOWNLOAD_URL}
 	exit 0
 fi
 
 # Build our own HDFS Distribution Tarball with patches applied
 
-apt install -y \
+apt -qq install -y \
 	automake \
 	build-essential \
 	cmake \
@@ -42,7 +42,7 @@ apt install -y \
 
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
 
-wget https://github.com/google/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-${PROTOBUF_VERSION}.tar.gz
+wget -q https://github.com/google/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-${PROTOBUF_VERSION}.tar.gz
 tar -xf protobuf-${PROTOBUF_VERSION}.tar.gz
 cd protobuf-${PROTOBUF_VERSION}
 ./configure --prefix=/opt/protobuf/

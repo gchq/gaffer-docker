@@ -19,8 +19,8 @@ ARG USER=hadoop
 ARG GROUP=hadoop
 
 RUN mkdir -p /usr/share/man/man1 && \
-	apt update && \
-	apt install -y \
+	apt -qq update && \
+	apt -qq install -y \
 		dumb-init \
 		openjdk-8-jre-headless \
 		libsnappy1v5 \

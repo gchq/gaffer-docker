@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: hdfs
 description: Deploys the Hadoop Distributed File System (HDFS)
 type: application
