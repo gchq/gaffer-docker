@@ -1,5 +1,12 @@
 #!/bin/bash
 set -e
+
+# Lint Helm Charts
+for chart in ./kubernetes/*; do
+    helm lint ${chart}
+    helm template test ${chart} >/dev/null
+done
+
 if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
     exit 0
 fi
