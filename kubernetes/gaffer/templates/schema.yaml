@@ -10,7 +10,7 @@ data:
   {{ $fileName }}: {{ $contents | quote }}
   {{- end }}
 {{- else }}
-  {{- range $fileName, $bytes := .Files.Glob "schema/*.json" }}
+  {{- range $fileName, $bytes := .Files.Glob "config/schema/*.json" }}
   {{ base $fileName }}: {{ $bytes | quote }}
   {{- end }}
 {{- end }}

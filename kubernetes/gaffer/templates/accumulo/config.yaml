@@ -120,7 +120,7 @@ data:
   {{- end }}
 
   {{- /* Default Accumulo config files */}}
-  {{- range $path, $_ := .Files.Glob "accumulo/*" }}
+  {{- range $path, $_ := .Files.Glob "config/accumulo/*" }}
     {{- if not (hasKey $.Values.accumulo.config.files (base $path)) }}
       {{- base $path | nindent 2 }}: {{ $.Files.Get $path | b64enc | quote }}
     {{- end }}
