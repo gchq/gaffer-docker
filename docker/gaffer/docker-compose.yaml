@@ -56,7 +56,7 @@ services:
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
         BASE_IMAGE_NAME: gchq/accumulo
-        BASE_IMAGE_TAG: 1.9.3
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: master
     restart: on-failure
     container_name: accumulo-master
@@ -81,7 +81,7 @@ services:
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
         BASE_IMAGE_NAME: gchq/accumulo
-        BASE_IMAGE_TAG: 1.9.3
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: tserver
     restart: on-failure
     container_name: accumulo-tserver
@@ -106,7 +106,7 @@ services:
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
         BASE_IMAGE_NAME: gchq/accumulo
-        BASE_IMAGE_TAG: 1.9.3
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: monitor
     restart: on-failure
     container_name: accumulo-monitor
@@ -133,7 +133,7 @@ services:
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
         BASE_IMAGE_NAME: gchq/accumulo
-        BASE_IMAGE_TAG: 1.9.3
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: gc
     restart: on-failure
     container_name: accumulo-gc
