@@ -166,7 +166,9 @@ services:
     - 8080:8080
     volumes:
     - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
-    - ../gaffer-wildfly/config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro
+    - ./config/graph/graphConfig.json:/gaffer/graph/graphConfig.json:ro
+    - ./config/schema:/gaffer/schema:ro
+    - ./config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro
 
   data-loader:
     depends_on:
@@ -179,3 +181,5 @@ services:
     restart: on-failure
     volumes:
     - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
+    - ./config/graph/graphConfig.json:/gaffer/graph/graphConfig.json:ro
+    - ./config/schema:/gaffer/schema:ro
