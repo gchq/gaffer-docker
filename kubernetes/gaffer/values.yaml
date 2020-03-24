@@ -17,8 +17,10 @@ graph:
 ui: "{}"
 
 hdfs:
-  # Config used by this chart
   enabled: true
+  config:
+    hdfsSite:
+      dfs.datanode.synconclose: true
   volumes:
   - /accumulo
   namenode:
