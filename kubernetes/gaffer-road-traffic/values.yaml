@@ -2,6 +2,17 @@
 nameOverride: ""
 fullnameOverride: ""
 
+loader:
+  image:
+    repository: gchq/gaffer-road-traffic-loader
+    tag: 1.11.0
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
 gaffer:
   graph:
     config:
