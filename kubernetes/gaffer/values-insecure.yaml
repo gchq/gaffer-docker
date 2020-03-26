@@ -1,0 +1,7 @@
+
+accumulo:
+  config:
+    users:
+      gaffer:
+        password: "password"
+
