@@ -39,6 +39,17 @@
 </configuration>
 {{- end -}}
 
+{{- define "gaffer.accumuloClient" -}}
+auth.type=password
+auth.principal=root
+auth.token={{ index .Values.accumulo.config.accumuloSite "trace.token.property.password" }}
+instance.name={{ .Values.accumulo.instanceId }}
+# For Accumulo <2.0.0
+instance.zookeeper.host={{ include "gaffer.zookeepers" . }}
+# For Accumulo >=2.0.0
+instance.zookeepers={{ include "gaffer.zookeepers" . }}
+{{- end -}}
+
 apiVersion: v1
 kind: Secret
 metadata:
@@ -47,6 +58,7 @@ metadata:
     {{- include "gaffer.labels" . | nindent 4 }}
 data:
   accumulo-site.xml: {{ include "gaffer.accumuloSite" . | b64enc | quote }}
+  client.conf: {{ include "gaffer.accumuloClient" . | b64enc | quote }}
 
   {{- /* User supplied Accumulo config files */}}
   {{- range $path, $contents := .Values.accumulo.config.files }}
