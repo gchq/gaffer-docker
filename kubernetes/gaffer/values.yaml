@@ -53,10 +53,13 @@ accumulo:
         password: ""
         permissions:
           system:
-          - System.CREATE_TABLE
-#         table:
-#           gaffer:
-#           - Table.READ
+          - CREATE_TABLE
+          table:
+            simpleGraph:
+            - READ
+            - WRITE
+            - BULK_IMPORT
+            - ALTER_TABLE
         auths: []
     postInstallCommands:
     - users
