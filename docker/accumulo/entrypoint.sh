@@ -29,18 +29,29 @@ if [ "$1" = "accumulo" ] && [ "$2" = "master" ]; then
 		[ "${ALL_VOLUMES_READY}" != "true" ] && echo "$(date) - ERROR: Timed out waiting for HDFS instances to be ready..." && exit 1
 	fi
 
-	# Try to find desired root password from environment variable
-	PASSWORD="${ACCUMULO_ROOT_PASSWORD}"
-
-	# Try to find desired root password from config
+	# Try to find desired root password from trace config
 	TRACE_USER=$(xmlstarlet sel -t -v "/configuration/property[name='trace.user']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
 	if [ "${TRACE_USER}" = "root" ]; then
 		PASSWORD=$(xmlstarlet sel -t -v "/configuration/property[name='trace.token.property.password']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
 	fi
 
+	# Try to find desired root password from client config
+	if [ -f "${ACCUMULO_CONF_DIR}/client.conf" ]; then
+		CLIENT_USERNAME=$(cat ${ACCUMULO_CONF_DIR}/client.conf | grep "auth.principal" | cut -d= -f2)
+		if [ "${CLIENT_USERNAME}" = "root" ]; then
+			PASSWORD=$(cat ${ACCUMULO_CONF_DIR}/client.conf | grep "auth.token" | cut -d= -f2)
+		fi
+	fi
+
+	# Try to find desired root password from environment variable
+	[ ! -z "${ACCUMULO_ROOT_PASSWORD}" ] && PASSWORD="${ACCUMULO_ROOT_PASSWORD}"
+
 	if [ -z "${PASSWORD}" ]; then
 		echo "Unable to determine what the Accumulo root user's password should be."
-		echo "Please set \$ACCUMULO_ROOT_PASSWORD or the 'trace.token.property.password' property in ${ACCUMULO_CONF_DIR}/accumulo-site.xml (if you are using root for the trace user)"
+		echo "Please either set:"
+		echo "- \$ACCUMULO_ROOT_PASSWORD environment variable"
+		echo "- 'auth.token' property in ${ACCUMULO_CONF_DIR}/client.conf (if root is set for 'auth.principal')"
+		echo "- 'trace.token.property.password' property in ${ACCUMULO_CONF_DIR}/accumulo-site.xml (if you are using root for the trace user)"
 		exit 1
 	fi
 
