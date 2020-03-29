@@ -48,19 +48,34 @@ accumulo:
       tserver.total.mutation.queue.max: 8M
       tserver.sort.buffer.size: 20M
       tserver.walog.max.size: 100M
-    users:
-      gaffer:
-        password: ""
-        permissions:
-          system:
-          - CREATE_TABLE
-          table:
-            simpleGraph:
-            - READ
-            - WRITE
-            - BULK_IMPORT
-            - ALTER_TABLE
-        auths: []
+    userManagement:
+      # If accumulo.config.userManagement.revoke.enabled is:
+      # true - Any users or permissions not specified below will be removed
+      # false - Only missing users and permissions will be added
+      revoke:
+        enabled: true
+      users:
+        tracer:
+          password: ""
+          permissions:
+            system:
+            - CREATE_TABLE
+            table:
+              trace:
+              - READ
+              - WRITE
+        gaffer:
+          password: ""
+          auths: []
+          permissions:
+            system:
+            - CREATE_TABLE
+            table:
+              simpleGraph:
+              - READ
+              - WRITE
+              - BULK_IMPORT
+              - ALTER_TABLE
     postInstallCommands:
     - users
     - userpermissions -u gaffer

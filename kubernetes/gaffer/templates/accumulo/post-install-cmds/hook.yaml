@@ -1,4 +1,4 @@
-{{- if or .Values.accumulo.config.users .Values.accumulo.config.postInstallCommands }}
+{{- if or .Values.accumulo.config.userManagement.users .Values.accumulo.config.postInstallCommands }}
 apiVersion: v1
 kind: Pod
 metadata:

@@ -1,7 +1,9 @@
 
 accumulo:
   config:
-    users:
-      gaffer:
-        password: "password"
-
+    userManagement:
+      users:
+        gaffer:
+          password: "password"
+        tracer:
+          password: "password"
