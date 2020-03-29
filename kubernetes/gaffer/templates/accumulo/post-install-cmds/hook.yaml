@@ -5,6 +5,7 @@ metadata:
   name: {{ include "gaffer.fullname" . }}-accumulo-post-install-cmds
   annotations:
     helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "20"
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
     app.kubernetes.io/component: post-install-cmds
