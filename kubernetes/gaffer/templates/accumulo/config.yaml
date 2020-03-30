@@ -39,7 +39,7 @@
   </property>
   {{- end }}
 
-  {{- $tracePassword := .Values.accumulo.config.userManagement.rootPassword }}
+  {{- $tracePassword := required "Please set root password at: accumulo.config.userManagement.rootPassword" .Values.accumulo.config.userManagement.rootPassword }}
   {{- $traceTable := default "trace" (index .Values.accumulo.config.accumuloSite "trace.table") }}
 
   {{- if ne $traceUser "root" }}
@@ -92,7 +92,7 @@
 {{- define "gaffer.accumuloClient" -}}
 auth.type=password
 auth.principal=root
-auth.token={{ index .Values.accumulo.config.accumuloSite "trace.token.property.password" }}
+auth.token={{ required "Please set root password at: accumulo.config.userManagement.rootPassword" .Values.accumulo.config.userManagement.rootPassword }}
 instance.name={{ .Values.accumulo.instanceId }}
 # For Accumulo <2.0.0
 instance.zookeeper.host={{ include "gaffer.zookeepers" . }}
