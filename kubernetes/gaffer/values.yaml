@@ -39,8 +39,8 @@ accumulo:
     files: {}
     accumuloSite:
       instance.secret: DEFAULT
-      trace.user: root
-      trace.token.property.password: password
+      # trace.user: tracer
+      # trace.token.property.password: password
       tserver.memory.maps.native.enabled: true
       tserver.memory.maps.max: 80M
       tserver.cache.data.size: 7M
@@ -49,6 +49,7 @@ accumulo:
       tserver.sort.buffer.size: 20M
       tserver.walog.max.size: 100M
     userManagement:
+      rootPassword: ""
       # If accumulo.config.userManagement.revoke.enabled is:
       # true - Any users or permissions not specified below will be removed
       # false - Only missing users and permissions will be added
