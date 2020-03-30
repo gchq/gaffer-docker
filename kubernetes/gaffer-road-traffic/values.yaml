@@ -18,6 +18,7 @@ gaffer:
     config:
       graphId: "roadTraffic"
       description: "A graph containing sample GB road traffic data from the Department of Transport"
+
     schema:
       elements.json: |-
         {
@@ -348,3 +349,20 @@ gaffer:
         }
       }
     }
+
+  accumulo:
+    config:
+      userManagement:
+        rootPassword: ""
+        users:
+          tracer:
+            password: ""
+          gaffer:
+            password: ""
+            permissions:
+              table:
+                roadTraffic:
+                - READ
+                - WRITE
+                - BULK_IMPORT
+                - ALTER_TABLE
