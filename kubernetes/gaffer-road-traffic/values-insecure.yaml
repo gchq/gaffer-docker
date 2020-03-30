@@ -1,0 +1,11 @@
+
+gaffer:
+  accumulo:
+    config:
+      userManagement:
+        rootPassword: "root"
+        users:
+          gaffer:
+            password: "gaffer"
+          tracer:
+            password: "tracer"
