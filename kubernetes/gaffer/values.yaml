@@ -133,6 +133,7 @@ accumulo:
       pathPrefix: "/accumulo/(.*)"
 
 api:
+  user: gaffer
   replicaCount: 1
   image:
     repository: gchq/gaffer-wildfly
