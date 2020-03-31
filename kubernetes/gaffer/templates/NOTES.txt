@@ -1,0 +1,25 @@
+.
+             _<^```\
+           __>'- ~--^^~            .
+           _>  / '     \             o
+          _> ,/ .  @_^`^)                      O
+         -   |.   /_,__ )     o
+         _> | /   '  (.       ________        _____  __O__
+          >_(/ _    (_ \     /  _____/_____ _/ ____\/ ____\___________
+            /.'    (  `.\   /   \  ___\__  \\   __\\   __\/ __ \_  ___\
+              (   (         \    \_\  \/ __ \|  |   |  | \  ___/|  |
+               (   (         \________/(____/|__|   |__|  \_____|__|
+                `( `l./^^>               __
+                  `l.  /                /  \
+                    l |                 \__/   _
+                     l(                       (_)
+
+Version: {{ .Values.accumulo.image.repository }}:{{ .Values.accumulo.image.tag }}
+
+=== store.properties ===
+{{ include "gaffer.storeProperties" . }}
+
+REST API: http://{{ default "<default-ingress-host>" .Values.api.ingress.host }}{{ .Values.api.ingress.pathPrefix }}api/
+UI: http://{{ default "<default-ingress-host>" .Values.api.ingress.host }}{{ .Values.api.ingress.pathPrefix }}ui/
+
+.
