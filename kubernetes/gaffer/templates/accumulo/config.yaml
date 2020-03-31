@@ -80,10 +80,14 @@
   </property>
   {{- end }}
 
+  {{- if not (hasKey .Values.accumulo.config.accumuloSite "instance.secret") }}
+    {{- fail "accumulo.config.accumuloSite.\"instance.secret\" must be set!" }}
+  {{- end }}
+
   {{- range $k, $v := .Values.accumulo.config.accumuloSite }}
   <property>
-    <name>{{$k}}</name>
-    <value>{{$v}}</value>
+    <name>{{ $k }}</name>
+    <value>{{ required (print "accumulo.config.accumuloSite.\"" $k "\" should have a non-empty value") $v }}</value>
   </property>
   {{- end }}
 </configuration>

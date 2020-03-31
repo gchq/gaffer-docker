@@ -1,6 +1,8 @@
 
 accumulo:
   config:
+    accumuloSite:
+      instance.secret: "DEFAULT"
     userManagement:
       rootPassword: "root"
       users:

@@ -38,7 +38,7 @@ accumulo:
   config:
     files: {}
     accumuloSite:
-      instance.secret: DEFAULT
+      instance.secret: ""
       # trace.user: tracer
       # trace.token.property.password: password
       tserver.memory.maps.native.enabled: true
