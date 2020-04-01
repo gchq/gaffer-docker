@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gaffer-road-traffic.fullname" . }}-test-queries
+  labels:
+    {{- include "gaffer-road-traffic.labels" . | nindent 4 }}
+data:
+{{- range $path, $bytes := .Files.Glob "config/tests/*.json" }}
+  {{ base $path }}: {{ $bytes | quote }}
+{{- end }}
+
+  run-tests.sh: |
+    #!/bin/sh -e
+
+    idx=1
+    rc=0
+    while [ -f "query${idx}.json" ]; do
+      expectedResult=$(cat ./result${idx}.json)
+      actualResult=$(curl -s -XPOST -H "Content-Type: application/json" -d "@query${idx}.json" http://{{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80/rest/latest/graph/operations/execute)
+
+      echo "query${idx}:"
+      echo "  Expected Result:"
+      echo "    ${expectedResult}"
+      echo "  Actual Result:"
+      echo "    ${actualResult}"
+
+      if [ "${expectedResult}" = "${actualResult}" ]; then
+        echo "  PASS"
+      else
+        echo "  FAIL!"
+        rc=1
+      fi
+
+      idx=`expr $idx + 1`
+    done
+
+    exit ${rc}

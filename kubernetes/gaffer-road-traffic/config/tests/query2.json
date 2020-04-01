@@ -1,0 +1,119 @@
+{
+    "class": "uk.gov.gchq.gaffer.operation.OperationChain",
+    "operations": [
+        {
+            "class": "uk.gov.gchq.gaffer.operation.impl.get.GetAdjacentIds",
+            "input": [
+                {
+                    "class": "uk.gov.gchq.gaffer.operation.data.EntitySeed",
+                    "vertex": "South West"
+                }
+            ],
+            "view": {
+                "edges": {
+                    "RegionContainsLocation": {}
+                }
+            }
+        },
+        {
+            "class": "uk.gov.gchq.gaffer.operation.impl.get.GetAdjacentIds",
+            "view": {
+                "edges": {
+                    "LocationContainsRoad": {}
+                }
+            }
+        },
+        {
+            "class": "uk.gov.gchq.gaffer.operation.impl.get.GetAdjacentIds",
+            "view": {
+                "edges": {
+                    "RoadHasJunction": {}
+                }
+            }
+        },
+        {
+            "class": "uk.gov.gchq.gaffer.operation.impl.get.GetElements",
+            "includeIncomingOutGoing": "OUTGOING",
+            "view": {
+                "entities": {
+                    "JunctionUse": {
+                        "preAggregationFilterFunctions": [
+                            {
+                                "predicate": {
+                                    "class": "uk.gov.gchq.koryphe.impl.predicate.IsMoreThan",
+                                    "orEqualTo": true,
+                                    "value": {
+                                        "java.util.Date": 946684800000
+                                    }
+                                },
+                                "selection": [
+                                    "startDate"
+                                ]
+                            },
+                            {
+                                "predicate": {
+                                    "class": "uk.gov.gchq.koryphe.impl.predicate.IsLessThan",
+                                    "value": {
+                                        "java.util.Date": 978307200000
+                                    }
+                                },
+                                "selection": [
+                                    "endDate"
+                                ]
+                            }
+                        ],
+                        "postAggregationFilterFunctions": [
+                            {
+                                "predicate": {
+                                    "class": "uk.gov.gchq.koryphe.predicate.PredicateMap",
+                                    "key": {
+                                        "java.lang.String": "BUS"
+                                    },
+                                    "predicate": {
+                                        "class": "uk.gov.gchq.koryphe.impl.predicate.IsMoreThan",
+                                        "value": {
+                                            "java.lang.Long": 1000
+                                        }
+                                    }
+                                },
+                                "selection": [
+                                    "countByVehicleType"
+                                ]
+                            }
+                        ],
+                        "transientProperties": {
+                            "busCount": "java.lang.Long"
+                        },
+                        "transformFunctions": [
+                            {
+                                "selection": ["countByVehicleType"],
+                                "function": {
+                                    "class": "uk.gov.gchq.gaffer.types.function.FreqMapExtractor",
+                                    "key" : "BUS"
+                                },
+                                "projection": ["busCount"]
+                            }
+                        ]
+                    }
+                },
+                "globalElements": [
+                    {
+                        "groupBy": []
+                    }
+                ]
+            }
+        },
+        {
+            "class" : "uk.gov.gchq.gaffer.operation.impl.output.ToCsv",
+            "includeHeader" : false,
+            "elementGenerator" : {
+                "class" : "uk.gov.gchq.gaffer.data.generator.CsvGenerator",
+                "fields" : {
+                    "VERTEX" : "Junction",
+                    "busCount" : "Bus Count"
+                },
+                "quoted" : false
+            }
+        }
+    ]
+}
