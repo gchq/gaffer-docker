@@ -18,7 +18,6 @@ kind load docker-image gchq/gaffer:1.11.0
 kind load docker-image gchq/gaffer-wildfly:1.11.0
 helm dependency update
 helm install gaffer .
-kubectl wait po --for=condition=Ready --timeout=10m -l app.kubernetes.io/instance=gaffer,app.kubernetes.io/name=gaffer,app.kubernetes.io/component!=hook,app.kubernetes.io/component!=test
 helm test gaffer
 ```
 

@@ -32,5 +32,3 @@ kind load docker-image gchq/gaffer-wildfly:1.11.0
 # Travis needs this setting to avoid reverse dns lookup errors
 echo "Starting helm install"
 helm install gaffer . -f ./values-insecure.yaml --set hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
-# Wait for deployment to be healthy
-kubectl wait po --for=condition=Ready --timeout=10m -l app.kubernetes.io/instance=gaffer,app.kubernetes.io/name=gaffer,app.kubernetes.io/component!=hook,app.kubernetes.io/component!=test
