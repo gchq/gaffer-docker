@@ -4,7 +4,7 @@ set -e
 
 # Gets project root directory by calling two nested "dirname" commands on the this file 
 getRootDirectory() {
-    echo "$( cd "$(dirname "$(dirname ${BASH_SOURCE[0]})")" > /dev/null 2>&1 && pwd )"
+    echo "$( cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" > /dev/null 2>&1 && pwd )"
 }
 
 # Pushes Tags to Dockerhub
@@ -13,10 +13,10 @@ pushTags() {
     version=$2
     app_version=$3
 
-    tags="$(echo ${version} | sed -e "s/\(.*\)\.\(.*\)\..*/"${name}":"${version}"+"${app_version}" "${name}":"${version}" "${name}":\1.\2 "${name}":\1 "${name}":latest/")"
+    tags="$(echo "${version}" | sed -e "s/\(.*\)\.\(.*\)\..*/"${name}":"${version}"+"${app_version}" "${name}":"${version}" "${name}":\1.\2 "${name}":\1 "${name}":latest/")"
 
-    docker tag ${name} ${tags}
-    docker push ${tags}
+    docker tag "${name}" "${tags}"
+    docker push "${tags}"
 }
 
 # If branch is not master or is pull request, exit
@@ -26,13 +26,13 @@ fi
 
 # Retrieve versions from files
 ROOT_DIR="$(getRootDirectory)"
-APP_VERSION="$(cat ${ROOT_DIR}/app_version)"
+APP_VERSION="$(cat "${ROOT_DIR}"/app_version)"
 
 # This set's the values for:
 # HADOOP_VERSION
 # GAFFER_VERSION
 # ACCUMULO_VERSION
-source ${ROOT_DIR}/docker/gaffer/.env
+source "${ROOT_DIR}"/docker/gaffer/.env
 
 # Log in to Dockerhub
 docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
