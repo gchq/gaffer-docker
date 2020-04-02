@@ -38,9 +38,9 @@ accumulo:
   config:
     files: {}
     accumuloSite:
-      instance.secret: DEFAULT
-      trace.user: root
-      trace.token.property.password: password
+      instance.secret: ""
+      # trace.user: tracer
+      # trace.token.property.password: password
       tserver.memory.maps.native.enabled: true
       tserver.memory.maps.max: 80M
       tserver.cache.data.size: 7M
@@ -48,6 +48,39 @@ accumulo:
       tserver.total.mutation.queue.max: 8M
       tserver.sort.buffer.size: 20M
       tserver.walog.max.size: 100M
+    userManagement:
+      rootPassword: ""
+      # If accumulo.config.userManagement.revoke.enabled is:
+      # true - Any users or permissions not specified below will be removed
+      # false - Only missing users and permissions will be added
+      revoke:
+        enabled: true
+      users:
+        tracer:
+          password: ""
+          permissions:
+            system:
+            - CREATE_TABLE
+            table:
+              trace:
+              - READ
+              - WRITE
+        gaffer:
+          password: ""
+          auths: []
+          permissions:
+            system:
+            - CREATE_TABLE
+            table:
+              simpleGraph:
+              - READ
+              - WRITE
+              - BULK_IMPORT
+              - ALTER_TABLE
+    postInstallCommands:
+    - users
+    - userpermissions -u gaffer
+    - getauths -u gaffer
 
   image:
     repository: gchq/gaffer
@@ -75,6 +108,12 @@ accumulo:
     tolerations: []
     affinity: {}
 
+  cmds:
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
   monitor:
     replicaCount: 1
     resources: {}
@@ -94,6 +133,7 @@ accumulo:
       pathPrefix: "/accumulo/(.*)"
 
 api:
+  user: gaffer
   replicaCount: 1
   image:
     repository: gchq/gaffer-wildfly
