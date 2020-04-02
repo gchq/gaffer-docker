@@ -22,6 +22,9 @@ spec:
         - name: graph-config
           mountPath: /gaffer/graph/
           readOnly: true
+        # Schema isn't mounted because of GAFFER-2262
+        # Can be un-commented once it has been resolved and released
+        # In the mean time use the schema built into the container
         # - name: schema
         #   mountPath: /gaffer/schema/
         #   readOnly: true
