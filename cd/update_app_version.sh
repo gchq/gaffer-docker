@@ -29,7 +29,7 @@ createNewVersion() {
 
 # Performs a Find and replace on the Helm charts and the app.version file
 findAndReplace() {
-    find "$(getRootDirectory)" \( -iname Chart.y*ml -o -name app.version \) -exec sed -i '' -e "s:"$1":"$2":g" {} +
+    find "$(getRootDirectory)" \( -iname Chart.y*ml -o -name app_version \) -exec sed -i '' -e "s:"$1":"$2":g" {} +
 }
 
 if [ $# -gt 1 ]; then
