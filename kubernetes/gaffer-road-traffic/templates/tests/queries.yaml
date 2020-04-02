@@ -16,7 +16,7 @@ data:
     rc=0
     while [ -f "query${idx}.json" ]; do
       expectedResult=$(cat ./result${idx}.json)
-      actualResult=$(curl -s -XPOST -H "Content-Type: application/json" -d "@query${idx}.json" http://{{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80/rest/latest/graph/operations/execute)
+      actualResult=$(curl -s -XPOST -H "Content-Type: application/json" -d "@query${idx}.json" http://{{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80/rest/v2/graph/operations/execute)
 
       echo "query${idx}:"
       echo "  Expected Result:"
@@ -35,3 +35,17 @@ data:
     done
 
     exit ${rc}
+
+  check-data-loaded.sh: |
+    #!/bin/sh -e
+
+    until [ $(( ATTEMPTS++ )) -gt 300 ]; do
+      sleep 1
+      result=$(curl -f -s -XPOST -H "Content-Type: application/json" -d "@count.json" http://{{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80/rest/v2/graph/operations/execute)
+      rc=$?
+      echo "$(date) - rc: ${rc} result: ${result}"
+      if [ ! -z "${result}" ] && [ "${result}" != "0" ]; then
+        exit 0
+      fi
+    done
+    exit 1

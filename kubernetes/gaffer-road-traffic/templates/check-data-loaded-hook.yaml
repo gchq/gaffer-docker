@@ -1,0 +1,31 @@
+{{- if .Values.gaffer.waitFor.dataLoad }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "gaffer-road-traffic.fullname" . }}-data-load-check
+  labels:
+    {{- include "gaffer-road-traffic.labels" . | nindent 4 }}
+    app.kubernetes.io/component: hook
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "40"
+spec:
+  containers:
+  - name: check
+    image: {{ .Values.gaffer.testImages.curl.repository }}:{{ .Values.gaffer.testImages.curl.tag }}
+    workingDir: /gaffer/tests/
+    command:
+    - /bin/sh
+    - -c
+    - . ./check-data-loaded.sh
+    volumeMounts:
+    - name: test-queries
+      mountPath: /gaffer/tests/
+      readOnly: true
+  volumes:
+  - name: test-queries
+    configMap:
+      name: {{ template "gaffer-road-traffic.fullname" . }}-test-queries
+      optional: false
+  restartPolicy: Never
+{{- end }}
