@@ -367,7 +367,7 @@ gaffer:
                 - BULK_IMPORT
                 - ALTER_TABLE
 
-testImages:
-  curl:
-    repository: curlimages/curl
-    tag: 7.67.0
+  testImages:
+    curl:
+      repository: curlimages/curl
+      tag: 7.67.0
