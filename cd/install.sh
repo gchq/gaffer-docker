@@ -3,9 +3,12 @@ set -e
 
 # Lint Helm Charts
 for chart in ./kubernetes/*; do
+    flags=''
+    [ ! -f "${chart}/values-insecure.yaml" ] || flags="-f ${chart}/values-insecure.yaml"
+
     helm dependency update ${chart}
-    helm lint ${chart}
-    helm template test ${chart} >/dev/null
+    helm lint ${flags} ${chart}
+    helm template test ${flags} ${chart} >/dev/null
 done
 
 if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
@@ -28,6 +31,6 @@ kind load docker-image gchq/gaffer-wildfly:1.11.0
 # Deploy containers onto Kind
 # Travis needs this setting to avoid reverse dns lookup errors
 echo "Starting helm install"
-helm install gaffer . --set hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
+helm install gaffer . -f ./values-insecure.yaml --set hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
 # Wait for deployment to be healthy
-kubectl wait po -l app.kubernetes.io/instance=gaffer,app.kubernetes.io/name=gaffer --for=condition=Ready --timeout=10m
+kubectl wait po --for=condition=Ready --timeout=10m -l app.kubernetes.io/instance=gaffer,app.kubernetes.io/name=gaffer,app.kubernetes.io/component!=hook,app.kubernetes.io/component!=test
