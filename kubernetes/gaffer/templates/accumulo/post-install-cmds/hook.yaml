@@ -27,7 +27,7 @@ spec:
       mountPath: /cmds
       readOnly: true
     resources:
-      {{- toYaml .Values.accumulo.cmds.resources | nindent 10 }}
+      {{- toYaml .Values.accumulo.cmds.resources | nindent 6 }}
   volumes:
   - name: config
     secret:
@@ -39,15 +39,15 @@ spec:
       optional: false
   {{- with .Values.accumulo.cmds.affinity }}
   affinity:
-    {{- toYaml . | nindent 8 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.accumulo.cmds.nodeSelector }}
   nodeSelector:
-    {{- toYaml . | nindent 8 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.accumulo.cmds.tolerations }}
   tolerations:
-    {{- toYaml . | nindent 8 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.accumulo.image.pullSecrets }}
   imagePullSecrets:
