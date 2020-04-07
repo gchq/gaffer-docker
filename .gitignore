@@ -25,4 +25,5 @@ docker/gaffer-rest/wars/*
 **/.DS_Store
 **/Chart.lock
 linux-amd64/
-**/*.swp
+helm*.tar.gz
+**/*.swp*
