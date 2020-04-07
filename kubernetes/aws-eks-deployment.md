@@ -139,7 +139,7 @@ curl https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controlle
 * [Example Gaffer Graph containing Road Traffic Dataset](gaffer-road-traffic/docs/aws-eks-deployment.md)
 
 
-## Access Web UIs
+## Access Web UIs
 
 The AWS ALB Ingress Controller will create an application load balancer (ALB) for each Ingress resource deployed into the EKS cluster.
 
