@@ -20,6 +20,9 @@ target/
 *.iml
 */.settings
 */.project
-docker/gaffer-wildfly/wars/*
+docker/gaffer-rest/wars/*
 .DS_Store
 **/.DS_Store
+**/Chart.lock
+linux-amd64/
+**/*.swp

@@ -155,10 +155,10 @@ services:
     - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
-  gaffer-wildfly:
-    image: gchq/gaffer-wildfly:${GAFFER_VERSION}
+  gaffer-rest:
+    image: gchq/gaffer-rest:${GAFFER_VERSION}
     build:
-      context: ../gaffer-wildfly/
+      context: ../gaffer-rest/
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
         GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
