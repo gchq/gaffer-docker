@@ -38,14 +38,11 @@ source "${ROOT_DIR}"/docker/gaffer/.env
 docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
 
 # Push images to Dockerhub
-# HDFS
 pushTags gchq/hdfs "${HADOOP_VERSION}" "${APP_VERSION}"
-# Accumulo
 pushTags gchq/accumulo "${ACCUMULO_VERSION}" "${APP_VERSION}"
-# Gaffer
 pushTags gchq/gaffer "${GAFFER_VERSION}" "${APP_VERSION}"
-# Gaffer Wildfly
 pushTags gchq/gaffer-wildfly "${GAFFER_VERSION}" "${APP_VERSION}"
+pushTags gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}" "${APP_VERSION}"
 
 # Setup Git Credentials
 git config --global credential.helper "store --file=.git/credentials"
