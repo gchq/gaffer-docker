@@ -47,10 +47,29 @@ pushTags gchq/gaffer "${GAFFER_VERSION}" "${APP_VERSION}"
 # Gaffer Wildfly
 pushTags gchq/gaffer-wildfly "${GAFFER_VERSION}" "${APP_VERSION}"
 
+# Setup Git Credentials
+git config --global credential.helper "store --file=.git/credentials"
+echo "https://"${GITHUB_TOKEN}":@github.com" > .git/credentials
+
+# Add Develop branch
+git remote set-branches --add origin develop
+git pull
+
 # Tag release in Git
 TAG_NAME=v"${APP_VERSION}"
 git tag "${TAG_NAME}"
 git push origin "${TAG_NAME}"
+
+# Create release notes
+REPO_NAME="Gaffer-Docker"
+JSON_DATA="{
+                \"tag_name\": \""${TAG_NAME}"\",
+                \"name\": \""${REPO_NAME}" "${APP_VERSION}"\",
+                \"body\": \"["${APP_VERSION}" headliners](https://github.com/gchq/"${REPO_NAME}"/issues?q=milestone%3A"${TAG_NAME}"+label%3Aheadliner)\n\n["${APP_VERSION}" enhancements](https://github.com/gchq/"${REPO_NAME}"/issues?q=milestone%3A"${TAG_NAME}"+label%3Aenhancement)\n\n["${APP_VERSION}" bugs fixed](https://github.com/gchq/"${REPO_NAME}"/issues?q=milestone%3A"${TAG_NAME}"+label%3Abug)\n\n["${APP_VERSION}" migration notes](https://github.com/gchq/"${REPO_NAME}"/issues?q=milestone%3A"${TAG_NAME}"+label%3Amigration-required)\n\n["${APP_VERSION}" all issues resolved](https://github.com/gchq/"${REPO_NAME}"/issues?q=milestone%3A"${TAG_NAME}")\",
+                \"draft\": false
+            }"
+echo "${JSON_DATA}"
+curl -v --data "${JSON_DATA}" https://api.github.com/repos/gchq/"${REPO_NAME}"/releases?access_token="${GITHUB_TOKEN}"
 
 # Update version on develop
 git checkout develop
