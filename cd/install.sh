@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+buildImages() {
+    docker-compose --project-directory ../../docker/accumulo/ -f ../../docker/accumulo/docker-compose.yaml build
+    docker-compose --project-directory ../../docker/gaffer-road-traffic-loader/ -f ../../docker/gaffer-road-traffic-loader/docker-compose.yaml build
+}
+
 # Lint Helm Charts
 for chart in ./kubernetes/*; do
     flags=''
@@ -11,10 +16,12 @@ for chart in ./kubernetes/*; do
     helm template test ${flags} ${chart} >/dev/null
 done
 
+cd kubernetes/gaffer-road-traffic
+
 if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
     if [ "${TRAVIS_BRANCH}" == "master"]; then
         # Build images so they can be pushed later
-        docker-compose --project-directory ../../docker/gaffer-road-traffic-loader/ -f ../../docker/gaffer-road-traffic-loader/docker-compose.yaml build
+        buildImages
     fi
     exit 0
 fi
@@ -22,10 +29,7 @@ fi
 # Create a cluster 
 kind create cluster --quiet
 
-cd kubernetes/gaffer-road-traffic
-
-# Build images
-docker-compose --project-directory ../../docker/gaffer-road-traffic-loader/ -f ../../docker/gaffer-road-traffic-loader/docker-compose.yaml build
+buildImages
 
 # Deploy Images to Kind
 kind load docker-image gchq/hdfs:3.2.1
