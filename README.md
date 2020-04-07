@@ -9,3 +9,7 @@ It also contains Helm Charts so that the following applications can be deployed 
 * [HDFS](kubernetes/hdfs/)
 * [Gaffer](kubernetes/gaffer/)
 * [Example Gaffer Graph containing Road Traffic Dataset](kubernetes/gaffer-road-traffic/)
+
+## Contributing
+
+If you would like to make a Contribution, we have all the details for doing that [here](CONTRIBUTING.md)
