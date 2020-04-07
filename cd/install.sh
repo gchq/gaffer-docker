@@ -12,6 +12,10 @@ for chart in ./kubernetes/*; do
 done
 
 if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
+    if [ "${TRAVIS_BRANCH}" == "master"]; then
+        # Build images so they can be pushed later
+        docker-compose --project-directory ../../docker/gaffer-road-traffic-loader/ -f ../../docker/gaffer-road-traffic-loader/docker-compose.yaml build
+    fi
     exit 0
 fi
 
@@ -19,8 +23,8 @@ fi
 kind create cluster --quiet
 
 cd kubernetes/gaffer-road-traffic
+
 # Build images
-docker-compose --project-directory ../../docker/accumulo/ -f ../../docker/accumulo/docker-compose.yaml build
 docker-compose --project-directory ../../docker/gaffer-road-traffic-loader/ -f ../../docker/gaffer-road-traffic-loader/docker-compose.yaml build
 
 # Deploy Images to Kind
