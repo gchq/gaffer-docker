@@ -5,6 +5,7 @@ metadata:
   name: {{ template "hdfs.fullname" . }}-post-install-cmds
   annotations:
     helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "10"
   labels:
     {{- include "hdfs.labels" . | nindent 4 }}
     app.kubernetes.io/component: hook
