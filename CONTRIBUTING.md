@@ -22,6 +22,7 @@ We love your input! And we want to make it as easy as possible for you to contri
 * Sign the [GCHQ Contributor Licence Agreement](https://github.com/gchq/Gaffer/wiki/GCHQ-OSS-Contributor-License-Agreement-V1.0).
 * Push your changes to your fork.
 * Submit a [pull request](https://github.com/gchq/gaffer-docker/pulls).
+* Link the issue by putting `closes #<issue-number>` in the description
 * We'll look at it pretty soon after it's submitted, and we aim to respond within one week.
 
 ## Getting it accepted
