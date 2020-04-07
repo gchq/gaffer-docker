@@ -13,9 +13,14 @@ graph:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
 
+# See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
+ui: "{}"
+
 hdfs:
-  # Config used by this chart
   enabled: true
+  config:
+    hdfsSite:
+      dfs.datanode.synconclose: true
   volumes:
   - /accumulo
   namenode:
@@ -42,12 +47,12 @@ accumulo:
       # trace.user: tracer
       # trace.token.property.password: password
       tserver.memory.maps.native.enabled: true
-      tserver.memory.maps.max: 80M
-      tserver.cache.data.size: 7M
-      tserver.cache.index.size: 16M
-      tserver.total.mutation.queue.max: 8M
-      tserver.sort.buffer.size: 20M
-      tserver.walog.max.size: 100M
+      tserver.memory.maps.max: 128M
+      tserver.cache.data.size: 15M
+      tserver.cache.index.size: 40M
+      tserver.total.mutation.queue.max: 16M
+      tserver.sort.buffer.size: 50M
+      tserver.walog.max.size: 128M
     userManagement:
       rootPassword: ""
       # If accumulo.config.userManagement.revoke.enabled is:
@@ -154,6 +159,9 @@ api:
     #pathPrefix: /gaffer/
     # For Nginx:
     pathPrefix: "/gaffer/(.*)"
+
+waitFor:
+  graphStatusOk: true
 
 testImages:
   curl:

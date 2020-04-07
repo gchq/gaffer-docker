@@ -17,12 +17,12 @@
 	<property><name>trace.token.property.password</name><value>secret</value></property>
 
 	<property><name>tserver.memory.maps.native.enabled</name><value>true</value></property>
-	<property><name>tserver.memory.maps.max</name><value>80M</value></property>
-	<property><name>tserver.cache.data.size</name><value>7M</value></property>
-	<property><name>tserver.cache.index.size</name><value>16M</value></property>
-	<property><name>tserver.total.mutation.queue.max</name><value>8M</value></property>
-	<property><name>tserver.sort.buffer.size</name><value>20M</value></property>
-	<property><name>tserver.walog.max.size</name><value>100M</value></property>
+	<property><name>tserver.memory.maps.max</name><value>128M</value></property>
+	<property><name>tserver.cache.data.size</name><value>15M</value></property>
+	<property><name>tserver.cache.index.size</name><value>40M</value></property>
+	<property><name>tserver.total.mutation.queue.max</name><value>16M</value></property>
+	<property><name>tserver.sort.buffer.size</name><value>50M</value></property>
+	<property><name>tserver.walog.max.size</name><value>128M</value></property>
 
 	<property>
 		<name>general.classpaths</name>
