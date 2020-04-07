@@ -1,17 +1,15 @@
-### Deploying using [kind](https://kind.sigs.k8s.io/)
+# HDFS Helm Chart
 
-Pre-reqs:
-* Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-* Install [Helm](https://github.com/helm/helm/releases)
-* Install [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
-* Ensure you have built the HDFS container image [here](../../docker/hdfs/) e.g. `docker-compose build`
+The Hadoop Distributed File System (HDFS) is a distributed file system designed to run on commodity hardware. This Helm Chart can be used to deploy a HDFS instance onto a Kubernetes cluster.
 
-```
-kind create cluster
-kind load docker-image gchq/hdfs:3.2.1
-helm install hdfs .
-helm test hdfs
-kubectl port-forward svc/hdfs-namenodes 8080:9870
-```
+By default, this chart deploys:
+* a single name node, configured with 1 x 10GB data volume
+* 3 x data nodes, each configured with 2 x 10GB data volumes
+* configuration for a replication factor of 3
 
-Access the HDFS web UI at: http://localhost:8080
+
+## Deployment
+
+There are guides for deploying this chart on:
+* a local Kubernetes cluster, [using kind (Kubernetes IN Docker)](docs/kind-deployment.md)
+* an [AWS EKS cluster](docs/aws-eks-deployment.md)
