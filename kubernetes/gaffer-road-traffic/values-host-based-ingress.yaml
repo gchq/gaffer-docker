@@ -1,0 +1,20 @@
+
+gaffer:
+  hdfs:
+    ingress:
+      annotations: ~
+      host: hdfs.k8s.local
+      pathPrefix: /
+
+  accumulo:
+    monitor:
+      ingress:
+        annotations: ~
+        host: accumulo.k8s.local
+        pathPrefix: /
+
+  api:
+    ingress:
+      annotations: ~
+      host: gaffer.k8s.local
+      pathPrefix: /

@@ -56,13 +56,13 @@ services:
     - hdfs-namenode
     - hdfs-datanode
     - zookeeper
-    image: gchq/accumulo:${ACCUMULO_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}
     build:
-      context: .
+      context: ../gaffer/
       args:
-        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
-        HADOOP_VERSION: ${HADOOP_VERSION}
-        ZOOKEEPER_VERSION: ${ZOOKEEPER_VERSION}
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        BASE_IMAGE_NAME: gchq/accumulo
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: master
     restart: on-failure
     container_name: accumulo-master
@@ -75,19 +75,19 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ./conf:${ACCUMULO_CONF_DIR}:ro
+    - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-tserver:
     depends_on:
     - accumulo-master
-    image: gchq/accumulo:${ACCUMULO_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}
     build:
-      context: .
+      context: ../gaffer/
       args:
-        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
-        HADOOP_VERSION: ${HADOOP_VERSION}
-        ZOOKEEPER_VERSION: ${ZOOKEEPER_VERSION}
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        BASE_IMAGE_NAME: gchq/accumulo
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: tserver
     restart: on-failure
     container_name: accumulo-tserver
@@ -100,19 +100,19 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ./conf:${ACCUMULO_CONF_DIR}:ro
+    - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-monitor:
     depends_on:
     - accumulo-master
-    image: gchq/accumulo:${ACCUMULO_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}
     build:
-      context: .
+      context: ../gaffer/
       args:
-        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
-        HADOOP_VERSION: ${HADOOP_VERSION}
-        ZOOKEEPER_VERSION: ${ZOOKEEPER_VERSION}
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        BASE_IMAGE_NAME: gchq/accumulo
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: monitor
     restart: on-failure
     container_name: accumulo-monitor
@@ -127,19 +127,19 @@ services:
     ports:
     - 9995:9995
     volumes:
-    - ./conf:${ACCUMULO_CONF_DIR}:ro
+    - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-gc:
     depends_on:
     - accumulo-master
-    image: gchq/accumulo:${ACCUMULO_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}
     build:
-      context: .
+      context: ../gaffer/
       args:
-        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
-        HADOOP_VERSION: ${HADOOP_VERSION}
-        ZOOKEEPER_VERSION: ${ZOOKEEPER_VERSION}
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        BASE_IMAGE_NAME: gchq/accumulo
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: gc
     restart: on-failure
     container_name: accumulo-gc
@@ -152,5 +152,34 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ./conf:${ACCUMULO_CONF_DIR}:ro
+    - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
+
+  gaffer-wildfly:
+    image: gchq/gaffer-wildfly:${GAFFER_VERSION}
+    build:
+      context: ../gaffer-wildfly/
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
+    ports:
+    - 8080:8080
+    volumes:
+    - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
+    - ./config/graph/graphConfig.json:/gaffer/graph/graphConfig.json:ro
+    - ./config/schema:/gaffer/schema:ro
+    - ./config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro
+
+  data-loader:
+    depends_on:
+    - accumulo-master
+    image: gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
+    build:
+      context: .
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
+    restart: on-failure
+    volumes:
+    - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
+    - ./config/graph/graphConfig.json:/gaffer/graph/graphConfig.json:ro
+    - ./config/schema:/gaffer/schema:ro

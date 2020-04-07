@@ -12,3 +12,5 @@ services:
     restart: always
     ports:
     - 8080:8080
+    volumes:
+    - ./config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro

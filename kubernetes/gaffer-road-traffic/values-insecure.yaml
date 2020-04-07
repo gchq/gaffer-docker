@@ -1,0 +1,13 @@
+
+gaffer:
+  accumulo:
+    config:
+      accumuloSite:
+        instance.secret: "DEFAULT"
+      userManagement:
+        rootPassword: "root"
+        users:
+          gaffer:
+            password: "gaffer"
+          tracer:
+            password: "tracer"

@@ -29,7 +29,7 @@ RUN	if [ ! -f "./rest.war" ]; then \
 		cd /tmp/gaffer && \
 		git checkout ${GAFFER_VERSION} && \
 		mvn clean package -q -Pquick --also-make -pl rest-api/accumulo-rest && \
-		cp ./rest-api/accumulo-rest/target/accumulo-rest-*.war /wars/ && \
+		cp ./rest-api/accumulo-rest/target/accumulo-rest-*.war /wars/rest.war && \
 		cd /wars/; \
 	fi && \
 	if [ ! -f "./ui.war" ]; then \
@@ -37,11 +37,22 @@ RUN	if [ ! -f "./rest.war" ]; then \
 		cd /tmp/gaffer-tools && \
 		git checkout ${GAFFER_TOOLS_VERSION} && \
 		mvn clean package -q -Pquick --also-make -pl ui && \
-		cp ./ui/target/ui-*.war /wars/ && \
+		cp ./ui/target/ui-*.war /wars/ui.war && \
 		cd /wars/; \
-	fi
+	fi && \
+	mv ./ui.war ./ui.orig.war && \
+	mkdir -p /wars/ui.war/ && \
+	touch /wars/ui.war.dodeploy && \
+	cd /wars/ui.war/ && \
+	mv ../ui.orig.war . && \
+	jar -xf ./ui.orig.war && \
+	rm ./ui.orig.war && \
+	apt update && \
+	apt install -y xmlstarlet && \
+	rm -rf /var/lib/apt/lists/* && \
+	xmlstarlet ed --inplace -s "/jboss-web" -t elem -n "symbolic-linking-enabled" -v "true" ./WEB-INF/jboss-web.xml;
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
-COPY --from=builder --chown=jboss /wars/*.war /opt/jboss/wildfly/standalone/deployments/
+COPY --from=builder --chown=jboss /wars/ /opt/jboss/wildfly/standalone/deployments/
 COPY --chown=jboss ./config /gaffer
 CMD [ "/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-Dgaffer.schemas=/gaffer/schema", "-Dgaffer.storeProperties=/gaffer/store/store.properties", "-Dgaffer.graph.config=/gaffer/graph/graphConfig.json" ]
