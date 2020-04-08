@@ -29,7 +29,7 @@ helm test gaffer
 | Gaffer REST | `kubectl port-forward svc/gaffer-api 8080:80`              | http://localhost:8080/rest/ |
 
 
-## Accessing Web UI (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
+## Accessing Web UIs (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
 
 Register the FQDNs for each component in DNS e.g.
 ```
