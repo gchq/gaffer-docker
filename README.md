@@ -32,4 +32,7 @@ build metadata.
 
 This process is automated by Travis CI.
 
+## Contributing
+
+If you would like to make a Contribution, we have all the details for doing that [here](CONTRIBUTING.md)
 
