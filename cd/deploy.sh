@@ -41,7 +41,7 @@ docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
 pushTags gchq/hdfs "${HADOOP_VERSION}" "${APP_VERSION}"
 pushTags gchq/accumulo "${ACCUMULO_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer "${GAFFER_VERSION}" "${APP_VERSION}"
-pushTags gchq/gaffer-wildfly "${GAFFER_VERSION}" "${APP_VERSION}"
+pushTags gchq/gaffer-rest "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}" "${APP_VERSION}"
 
 # Setup Git Credentials
