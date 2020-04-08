@@ -31,7 +31,7 @@ docker-compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../d
 
 kind load docker-image gchq/hdfs:${HADOOP_VERSION}
 kind load docker-image gchq/gaffer:${GAFFER_VERSION}
-kind load docker-image gchq/gaffer-wildfly:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
 ```
 

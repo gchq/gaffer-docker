@@ -23,7 +23,7 @@ spec:
         checksum/store-properties: {{ include (print $.Template.BasePath "/store-properties.yaml") . | sha256sum }}
     spec:
       containers:
-      - name: gaffer-wildfly
+      - name: gaffer-rest
         image: {{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
         imagePullPolicy: {{ .Values.api.image.pullPolicy }}
         volumeMounts:

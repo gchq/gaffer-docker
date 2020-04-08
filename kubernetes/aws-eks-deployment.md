@@ -27,7 +27,7 @@ docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/doc
 docker-compose --project-directory ../docker/gaffer/ -f ../docker/gaffer/docker-compose.yaml build
 
 HADOOP_IMAGES="hdfs"
-GAFFER_IMAGES="gaffer gaffer-wildfly gaffer-road-traffic-loader"
+GAFFER_IMAGES="gaffer gaffer-rest gaffer-road-traffic-loader"
 
 ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 [ "${REGION}" = "" ] && REGION=$(aws configure get region)

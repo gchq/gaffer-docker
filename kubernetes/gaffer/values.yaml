@@ -141,7 +141,7 @@ api:
   user: gaffer
   replicaCount: 1
   image:
-    repository: gchq/gaffer-wildfly
+    repository: gchq/gaffer-rest
     tag: 1.11.0
     pullPolicy: IfNotPresent
     pullSecrets: []

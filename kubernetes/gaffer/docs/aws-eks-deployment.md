@@ -18,7 +18,7 @@ else
   EXTRA_HELM_ARGS+="--set hdfs.datanode.repository=${REPO_PREFIX}/hdfs "
   EXTRA_HELM_ARGS+="--set hdfs.shell.repository=${REPO_PREFIX}/hdfs "
   EXTRA_HELM_ARGS+="--set accumulo.image.repository=${REPO_PREFIX}/gaffer "
-  EXTRA_HELM_ARGS+="--set api.image.repository=${REPO_PREFIX}/gaffer-wildfly "
+  EXTRA_HELM_ARGS+="--set api.image.repository=${REPO_PREFIX}/gaffer-rest "
 fi
 ```
 
