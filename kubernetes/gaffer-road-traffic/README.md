@@ -4,7 +4,7 @@ Pre-reqs:
 * Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * Install [Helm](https://github.com/helm/helm/releases)
 * Install [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
-* Ensure you have built the [HDFS](../../docker/hdfs/), [Accumulo](../../docker/accumulo/), [Gaffer](../../docker/gaffer/), [gaffer-wildfly](../../docker/gaffer-wildfly/) and [gaffer-road-traffic-loader](../../docker/gaffer-road-traffic-loader/) container images e.g.
+* Ensure you have built the [HDFS](../../docker/hdfs/), [Accumulo](../../docker/accumulo/), [Gaffer](../../docker/gaffer/), [gaffer-rest](../../docker/gaffer-rest/) and [gaffer-road-traffic-loader](../../docker/gaffer-road-traffic-loader/) container images e.g.
   ```
   docker-compose --project-directory ../../docker/accumulo/ -f ../../docker/accumulo/docker-compose.yaml build
   docker-compose --project-directory ../../docker/gaffer-road-traffic-loader/ -f ../../docker/gaffer-road-traffic-loader/docker-compose.yaml build
@@ -15,7 +15,7 @@ Deployment:
 kind create cluster
 kind load docker-image gchq/hdfs:3.2.1
 kind load docker-image gchq/gaffer:1.11.0
-kind load docker-image gchq/gaffer-wildfly:1.11.0
+kind load docker-image gchq/gaffer-rest:1.11.0
 kind load docker-image gchq/gaffer-road-traffic-loader:1.11.0
 helm dependency update ../gaffer/
 helm dependency update

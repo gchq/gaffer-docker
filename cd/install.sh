@@ -34,7 +34,7 @@ buildImages
 # Deploy Images to Kind
 kind load docker-image gchq/hdfs:3.2.1
 kind load docker-image gchq/gaffer:1.11.0
-kind load docker-image gchq/gaffer-wildfly:1.11.0
+kind load docker-image gchq/gaffer-rest:1.11.0
 kind load docker-image gchq/gaffer-road-traffic-loader:1.11.0
 
 # Deploy containers onto Kind

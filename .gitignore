@@ -14,12 +14,11 @@
 # limitations under the License.
 ##########################################################
 
-*/target/
-target/
 */*.iml
 *.iml
 */.settings
 */.project
-docker/gaffer-wildfly/wars/*
 .DS_Store
 **/.DS_Store
+kubernetes/*/Chart.lock
+kubernetes/*/charts/

@@ -4,7 +4,7 @@ Pre-reqs:
 * Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * Install [Helm](https://github.com/helm/helm/releases)
 * Install [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
-* Ensure you have built the [HDFS](../../docker/hdfs/), [Accumulo](../../docker/accumulo/), [Gaffer](../../docker/gaffer/) and [gaffer-wildfly](../../docker/gaffer-wildfly/) container images e.g.
+* Ensure you have built the [HDFS](../../docker/hdfs/), [Accumulo](../../docker/accumulo/), [Gaffer](../../docker/gaffer/) and [gaffer-rest](../../docker/gaffer-rest/) container images e.g.
   ```
   docker-compose --project-directory ../../docker/accumulo/ -f ../../docker/accumulo/docker-compose.yaml build
   docker-compose --project-directory ../../docker/gaffer/ -f ../../docker/gaffer/docker-compose.yaml build
@@ -15,7 +15,7 @@ Deployment:
 kind create cluster
 kind load docker-image gchq/hdfs:3.2.1
 kind load docker-image gchq/gaffer:1.11.0
-kind load docker-image gchq/gaffer-wildfly:1.11.0
+kind load docker-image gchq/gaffer-rest:1.11.0
 helm dependency update
 helm install gaffer .
 helm test gaffer
