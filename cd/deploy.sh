@@ -12,9 +12,13 @@ pushTags() {
     name=$1
     version=$2
     app_version=$3
-    tags="$(echo ${version} | sed -e "s|\(.*\)\.\(.*\)\..*|${name}:${version}+${app_version} ${name}:${version} ${name}:\1.\2 ${name}:\1 ${name}:latest|")"
-    docker tag "${name}" "${tags}"
-    docker push "${tags}"
+    tags="$(echo ${version} | sed -e "s|\(.*\)\.\(.*\)\..*|${name}:${version}_build.${app_version} ${name}:${version} ${name}:\1.\2 ${name}:\1 ${name}:latest|")"
+    IFS=' '
+    read -a tagArray <<< "${tags}"
+    for tag in "${tagArray[@]}"; do
+        docker tag "${name}":"${version}" "${tag}"
+    done
+    docker push "${name}"
 }
 
 # If branch is not master or is pull request, exit

@@ -24,7 +24,7 @@ images would be pushed to Docker Hub:
 * gchq/gaffer:1
 * gchq/gaffer:1.11
 * gchq/gaffer:1.11.0
-* gchq/gaffer:1.11.0+1.0.0
+* gchq/gaffer:1.11.0_build.1.0.0
 
 Note that we maintain mutable versions of latest, as well as the major, minor and bugfix versions of Gaffer. If you want to
 ensure that your image will never change when doing a pull from docker, make sure to use the version with the git tag in the
