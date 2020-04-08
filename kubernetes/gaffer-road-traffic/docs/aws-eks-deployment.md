@@ -32,7 +32,7 @@ export GAFFER_VERSION=${GAFFER_VERSION:-1.11.0}
 helm dependency update ../gaffer/
 helm dependency update
 
-helm install gaffer . -f ./values-eks-alb.yaml \
+helm install road-traffic . -f ./values-eks-alb.yaml \
   ${EXTRA_HELM_ARGS} \
   --set gaffer.hdfs.namenode.tag=${HADOOP_VERSION} \
   --set gaffer.hdfs.datanode.tag=${HADOOP_VERSION} \
@@ -41,5 +41,5 @@ helm install gaffer . -f ./values-eks-alb.yaml \
   --set gaffer.api.image.tag=${GAFFER_VERSION} \
   --set loader.image.tag=${GAFFER_VERSION}
 
-helm test gaffer
+helm test road-traffic
 ```
