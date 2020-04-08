@@ -23,12 +23,12 @@ helm test road-traffic
 
 ## Accessing Web UIs (via `kubectl port-forward`)
 
-| Component   | Command                                                          | URL                    |
-| ----------- | ---------------------------------------------------------------- | ---------------------- |
-| HDFS        | `kubectl port-forward svc/road-traffic-hdfs-namenodes 9870:9870` | http://localhost:9870/ |
-| Accumulo    | `kubectl port-forward svc/road-traffic-gaffer-monitor 9995:80`   | http://localhost:9995/ |
-| Gaffer Web  | `kubectl port-forward svc/road-traffic-gaffer-api 8080:80`       | http://localhost:8080/ |
-| Gaffer REST | `kubectl port-forward svc/road-traffic-gaffer-api 8080:80`       | http://localhost:8080/ |
+| Component   | Command                                                          | URL                         |
+| ----------- | ---------------------------------------------------------------- | --------------------------- |
+| HDFS        | `kubectl port-forward svc/road-traffic-hdfs-namenodes 9870:9870` | http://localhost:9870/      |
+| Accumulo    | `kubectl port-forward svc/road-traffic-gaffer-monitor 9995:80`   | http://localhost:9995/      |
+| Gaffer Web  | `kubectl port-forward svc/road-traffic-gaffer-api 8080:80`       | http://localhost:8080/ui/   |
+| Gaffer REST | `kubectl port-forward svc/road-traffic-gaffer-api 8080:80`       | http://localhost:8080/rest/ |
 
 
 ## Accessing Web UI (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
