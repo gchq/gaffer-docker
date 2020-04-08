@@ -11,7 +11,7 @@ ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 if [ "${REGION}" = "" ]; then
   echo "Unable to detect AWS region, please set \$REGION"
 else
-  REPO_PREFIX="${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq/"
+  REPO_PREFIX="${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq"
 
   EXTRA_HELM_ARGS=""
   EXTRA_HELM_ARGS+="--set gaffer.hdfs.namenode.repository=${REPO_PREFIX}/hdfs "

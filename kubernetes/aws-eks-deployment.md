@@ -32,7 +32,7 @@ GAFFER_IMAGES="gaffer gaffer-rest gaffer-road-traffic-loader"
 ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 [ "${REGION}" = "" ] && REGION=$(aws configure get region)
 [ "${REGION}" = "" ] && REGION=$(curl --silent -m 5 http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | cut -d'"' -f 4)
-REPO_PREFIX="${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq/"
+REPO_PREFIX="${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq"
 
 for repo in ${HADOOP_IMAGES} ${GAFFER_IMAGES}; do
   aws ecr create-repository --repository-name gchq/${repo}
@@ -41,13 +41,13 @@ done
 $(aws ecr get-login --no-include-email)
 
 for repo in ${HADOOP_IMAGES}; do
-  docker image tag gchq/${repo}:${HADOOP_VERSION} ${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq/${repo}:${HADOOP_VERSION}
-  docker image push ${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq/${repo}:${HADOOP_VERSION}
+  docker image tag gchq/${repo}:${HADOOP_VERSION} ${REPO_PREFIX}/${repo}:${HADOOP_VERSION}
+  docker image push ${REPO_PREFIX}/${repo}:${HADOOP_VERSION}
 done
 
 for repo in ${GAFFER_IMAGES}; do
-  docker image tag gchq/${repo}:${GAFFER_VERSION} ${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq/${repo}:${GAFFER_VERSION}
-  docker image push ${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq/${repo}:${GAFFER_VERSION}
+  docker image tag gchq/${repo}:${GAFFER_VERSION} ${REPO_PREFIX}/${repo}:${GAFFER_VERSION}
+  docker image push ${REPO_PREFIX}/${repo}:${GAFFER_VERSION}
 done
 ```
 
