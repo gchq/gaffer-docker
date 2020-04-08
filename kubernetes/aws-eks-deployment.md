@@ -18,8 +18,7 @@ If the versions of the container images you would like to deploy are not availab
 
 The following instructions build all the container images and host them in AWS ECR:
 
-bash
-```
+```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
 export GAFFER_VERSION=${GAFFER_VERSION:-1.11.0}
 export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-$GAFFER_VERSION}
@@ -65,8 +64,7 @@ Before issuing any commands, the subnets that will be used by your EKS cluster n
 
 If you want the cluster to spin up in a VPC that isn't the default, then set `$VPC_ID`.
 
-bash
-```
+```bash
 EKS_CLUSTER_NAME=${EKS_CLUSTER_NAME:-gaffer}
 KUBERNETES_VERSION=${KUBERNETES_VERSION:-1.15}
 
@@ -102,8 +100,7 @@ Deploy the AWS ALB Ingress Controller, using the docs at https://docs.aws.amazon
 
 At the time of writing, this involves issuing the following commands:
 
-bash
-```
+```bash
 EKS_CLUSTER_NAME=${EKS_CLUSTER_NAME:-gaffer}
 
 [ "${ACCOUNT}" = "" ] && ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
@@ -154,8 +151,7 @@ By default, the security group assigned to the ALBs will allow anyone to access 
 
 ## Uninstall
 
-bash
-```
+```bash
 EKS_CLUSTER_NAME=${EKS_CLUSTER_NAME:-gaffer}
 
 # Use helm to uninstall any deployed charts

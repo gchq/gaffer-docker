@@ -4,8 +4,7 @@ First follow the [instructions here](../../aws-eks-deployment.md) to provision a
 
 If you are hosting the container images in your AWS account, using ECR, then run the following commands to configure the Helm Chart to use them:
 
-bash
-```
+```bash
 ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 [ "${REGION}" = "" ] && REGION=$(aws configure get region)
 [ "${REGION}" = "" ] && REGION=$(curl --silent -m 5 http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | cut -d'"' -f 4)
@@ -23,8 +22,7 @@ fi
 
 Deploy the Helm Chart with:
 
-bash
-```
+```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
 
 helm install hdfs . -f ./values-eks-alb.yaml \
