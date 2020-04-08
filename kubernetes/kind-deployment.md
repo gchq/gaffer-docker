@@ -21,6 +21,7 @@ kind create cluster
 ## Container Images
 
 If the versions of the container images you would like to deploy are not available in [Docker Hub](https://hub.docker.com/u/gchq) then you will need to build them yourself and import them into your kind cluster:
+bash
 ```
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
 export GAFFER_VERSION=${GAFFER_VERSION:-1.11.0}
