@@ -1,0 +1,25 @@
+
+hdfs:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+    pathPrefix: /*
+
+accumulo:
+  monitor:
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: alb
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/scheme: internet-facing
+      pathPrefix: /*
+
+api:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+    pathPrefix: /*

@@ -1,0 +1,5 @@
+
+ingress:
+  annotations: ~
+  host: hdfs.k8s.local
+  pathPrefix: /

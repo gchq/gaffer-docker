@@ -3,12 +3,14 @@ set -e
 
 # Lint Helm Charts
 for chart in ./kubernetes/*; do
-    flags=''
-    [ ! -f "${chart}/values-insecure.yaml" ] || flags="-f ${chart}/values-insecure.yaml"
+    if [ -f "${chart}/Chart.yaml" ]; then
+        flags=''
+        [ ! -f "${chart}/values-insecure.yaml" ] || flags="-f ${chart}/values-insecure.yaml"
 
-    helm dependency update ${chart}
-    helm lint ${flags} ${chart}
-    helm template test ${flags} ${chart} >/dev/null
+        helm dependency update ${chart}
+        helm lint ${flags} ${chart}
+        helm template test ${flags} ${chart} >/dev/null
+    fi
 done
 
 if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then

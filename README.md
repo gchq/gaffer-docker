@@ -10,6 +10,10 @@ It also contains Helm Charts so that the following applications can be deployed 
 * [Gaffer](kubernetes/gaffer/)
 * [Example Gaffer Graph containing Road Traffic Dataset](kubernetes/gaffer-road-traffic/)
 
+There are guides on how to deploy the charts on:
+* a local Kubernetes cluster, [using kind (Kubernetes IN Docker)](kubernetes/kind-deployment.md)
+* an [AWS EKS cluster](kubernetes/aws-eks-deployment.md)
+
 ## Contributing
 
 If you would like to make a Contribution, we have all the details for doing that [here](CONTRIBUTING.md)
