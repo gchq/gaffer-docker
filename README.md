@@ -13,6 +13,10 @@ It also contains Helm Charts so that the following applications can be deployed 
 * [Gaffer](kubernetes/gaffer/)
 * [Example Gaffer Graph containing Road Traffic Dataset](kubernetes/gaffer-road-traffic/)
 
+There are guides on how to deploy the charts on:
+* a local Kubernetes cluster, [using kind (Kubernetes IN Docker)](kubernetes/kind-deployment.md)
+* an [AWS EKS cluster](kubernetes/aws-eks-deployment.md)
+
 ## Versioning
 Each of our images will be tagged in DockerHub with the version of the software they represent. Every release,
 we update the image for that tag and add a new release which has the corresponding git tag.
@@ -35,4 +39,3 @@ This process is automated by Travis CI.
 ## Contributing
 
 If you would like to make a Contribution, we have all the details for doing that [here](CONTRIBUTING.md)
-

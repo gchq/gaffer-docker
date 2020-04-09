@@ -16,7 +16,7 @@ We love your input! And we want to make it as easy as possible for you to contri
 ## Making changes
 * Make sure you can reproduce any bugs you find.
 * Make your changes and test. Make sure you include new or updated tests if you need to.
-* Run the tests locally by following this guide on [Deploying using Kind](kubernetes/gaffer/README.md#deploying-using-kind).
+* Run the tests locally by following this guide on [Deploying using Kind](kubernetes/kind-deployment.md).
 
 ## Submitting changes
 * Sign the [GCHQ Contributor Licence Agreement](https://github.com/gchq/Gaffer/wiki/GCHQ-OSS-Contributor-License-Agreement-V1.0).
