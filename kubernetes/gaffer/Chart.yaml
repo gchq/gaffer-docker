@@ -2,7 +2,7 @@ apiVersion: v2
 name: gaffer
 description: A large-scale entity and relation database supporting aggregation of properties
 type: application
-version: 1.0.0
+version: 0.5.0
 appVersion: 1.11.0
 home: https://github.com/gchq/Gaffer
 sources:
@@ -13,6 +13,6 @@ dependencies:
   repository: https://kubernetes-charts-incubator.storage.googleapis.com
   condition: zookeeper.enabled
 - name: hdfs
-  version: ^1.0.0
+  version: ^0.5.0
   repository: file://../hdfs/
   condition: hdfs.enabled
