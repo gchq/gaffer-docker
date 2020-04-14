@@ -16,9 +16,9 @@ pushTags() {
     IFS=' '
     read -a tagArray <<< "${tags}"
     for tag in "${tagArray[@]}"; do
-        docker tag "${name}":"${version}" "${tag}"
+        docker tag "${name}:${version}" "${tag}"
+        docker push "${tag}"
     done
-    docker push "${name}"
 }
 
 # If branch is not master or is pull request, exit
