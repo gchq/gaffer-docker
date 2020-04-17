@@ -6,14 +6,13 @@ ARG BASE_IMAGE_TAG=1.11.0
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
+WORKDIR /operation-runner
+COPY ./operation-runner/ .
+RUN mvn -q clean package
+
 WORKDIR /gaffer
 COPY ./files/ .
-
-WORKDIR /gaffer/operation-runner
-RUN mvn -q clean package
-WORKDIR /gaffer
-RUN cp /gaffer/operation-runner/target/operation-runner-1.0-SNAPSHOT-with-dependencies.jar /gaffer/jars/ && \
-    rm -rf operation-runner
+RUN cp /operation-runner/target/operation-runner-1.0-SNAPSHOT-with-dependencies.jar /gaffer/jars/ 
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 

@@ -187,11 +187,11 @@ services:
   operation-runner:
     image: gchq/gaffer-operation-runner:${GAFFER_VERSION}
     command: 
-    - road_traffic
+    - roadTraffic
     build:
       context: .
     environment:
-    - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR} # TODO remove?
+    - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
     # There doesn't seem to be an easy way (with docker-compose) to init our
     # HDFS instance with the right permissions so that Accumulo can create the
     # file structure it needs. Using the following workaround to allow
@@ -199,7 +199,7 @@ services:
     - HADOOP_USER_NAME=hadoop
     - ACCUMULO_OTHER_OPTS=-Xmx2048m -Xms1024m
     volumes:
-    - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro #TODO remove?
+    - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
     - ../hdfs/conf/core-site.xml:${ACCUMULO_CONF_DIR}/core-site.xml:ro
     - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
     - ../gaffer-road-traffic-loader/config/schema:/gaffer/schema:ro
