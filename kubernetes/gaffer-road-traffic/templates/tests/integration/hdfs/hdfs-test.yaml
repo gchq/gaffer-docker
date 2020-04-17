@@ -21,7 +21,7 @@ spec:
       ". ./populate-hdfs.sh"
     ]
     env:
-    - name: HADOOP_CONF_DIR # TODO remove?
+    - name: HADOOP_CONF_DIR
       value: {{ .Values.gaffer.hdfs.config.path }}
     volumeMounts:
     - name: hdfs-test-files
