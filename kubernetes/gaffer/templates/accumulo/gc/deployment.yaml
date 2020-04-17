@@ -27,10 +27,10 @@ spec:
         - gc
         env:
         - name: ACCUMULO_CONF_DIR
-          value: /etc/accumulo/
+          value: {{ .Values.accumulo.config.path }}
         volumeMounts:
         - name: config
-          mountPath: /etc/accumulo/
+          mountPath: {{ .Values.accumulo.config.path }}
           readOnly: true
         resources:
           {{- toYaml .Values.accumulo.gc.resources | nindent 10 }}

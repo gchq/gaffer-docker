@@ -7,14 +7,17 @@ ARG BASE_IMAGE_TAG=1.11.0
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
 WORKDIR /gaffer
-COPY ./operation-runner/ .
+COPY ./files/ .
+
+WORKDIR /gaffer/operation-runner
 RUN mvn -q clean package
+WORKDIR /gaffer
+RUN cp /gaffer/operation-runner/target/operation-runner-1.0-SNAPSHOT-with-dependencies.jar /gaffer/jars/ && \
+    rm -rf operation-runner
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
-WORKDIR /operation
-COPY operation/operation.json .
-COPY --from=builder /gaffer/target/operation-runner-1.0-SNAPSHOT-with-dependencies.jar ./runner.jar
-COPY jars/ ./jars
+WORKDIR /gaffer
+COPY --from=builder /gaffer/ .
 COPY entrypoint.sh .
-ENTRYPOINT [ "/operation/entrypoint.sh" ]
+ENTRYPOINT [ "./entrypoint.sh" ]

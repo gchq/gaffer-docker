@@ -29,11 +29,13 @@ export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-$GAFFER_VERSION}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
 docker-compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../docker/gaffer-road-traffic-loader/docker-compose.yaml build
+docker-compose --project-directory ../docker/gaffer-operation-runner/ -f ../docker/gaffer-operation-runner/docker-compose.yaml build operation-runner
 
 kind load docker-image gchq/hdfs:${HADOOP_VERSION}
 kind load docker-image gchq/gaffer:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer-operation-runner:${GAFFER_VERSION}
 ```
 
 

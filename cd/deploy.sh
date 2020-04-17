@@ -45,6 +45,7 @@ pushTags gchq/accumulo "${ACCUMULO_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-rest "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}" "${APP_VERSION}"
+pushTags gchq/gaffer-operation-runner "${GAFFER_VERSION}" "${APP_VERSION}"
 
 # Setup Git Credentials
 git config --global credential.helper "store --file=.git/credentials"
