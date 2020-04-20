@@ -24,7 +24,7 @@ spec:
     - name: HADOOP_CONF_DIR
       value: {{ .Values.gaffer.hdfs.config.path }}
     volumeMounts:
-    - name: hdfs-test-files
+    - name: hdfs-setup-files
       mountPath: /setup
       readOnly: true
     - name: hdfs-config
@@ -44,7 +44,7 @@ spec:
     - name: ACCUMULO_OTHER_OPTS # prevent out of memory errors
       value: -Xmx2048m -Xms1024m
     volumeMounts:
-    - name: hdfs-test-files
+    - name: hdfs-setup-files
       mountPath: /gaffer/operation
       readOnly: true
     - name: accumulo-config
@@ -89,6 +89,10 @@ spec:
       mountPath: /gaffer/tests/
       readOnly: true
   volumes:
+  - name: hdfs-setup-files
+    configMap:
+      name: {{ template "gaffer-road-traffic.fullname" . }}-hdfs-setup-files
+      optional: false
   - name: hdfs-test-files
     configMap:
       name: {{ template "gaffer-road-traffic.fullname" . }}-hdfs-test-files

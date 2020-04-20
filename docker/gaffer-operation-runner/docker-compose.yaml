@@ -186,10 +186,14 @@ services:
 
   operation-runner:
     image: gchq/gaffer-operation-runner:${GAFFER_VERSION}
-    command: 
-    - roadTraffic
+    command:
+    - ${GRAPH_ID}
     build:
       context: .
+      args:
+        BASE_IMAGE_NAME: gchq/gaffer
+        BASE_IMAGE_TAG: ${GAFFER_VERSION}  
+    restart: on-failure
     environment:
     - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
     # There doesn't seem to be an easy way (with docker-compose) to init our
