@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 
 buildImages() {
@@ -28,7 +29,7 @@ if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
     exit 0
 fi
 
-# Create a cluster 
+# Create a cluster
 kind create cluster --quiet
 
 buildImages
