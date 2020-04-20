@@ -30,3 +30,4 @@ Here are some things you can do to make this all smoother:
 * If you think it might be controversial then discuss it with us beforehand, via a GitHub issue.
 * Add tests.
 * Avoid hardcoded values in templates or Docker Compose files. Try and extract them to the Values.yaml or .env files if you can.
+* Include the copyright banner on new files 
