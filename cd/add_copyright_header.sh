@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Note that the copyright of this header is not automatically updated.
+# Note that the copyright on this file's header is not automatically updated.
 
 set -e
 
@@ -39,7 +39,7 @@ do
       echo -e "${firstLine}\n\n${header}\n${withoutFirstLine}" > ${f}
     else
       contents=$(cat ${f})
-      echo -e "${header}\n${contents}" > ${f}
+      echo -e "${header}\n\n${contents}" > ${f}
     fi
   fi
 done
