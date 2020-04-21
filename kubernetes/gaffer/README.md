@@ -14,8 +14,8 @@ By default, this chart deploys:
 * a web server running the Gaffer REST API and UI
 * a Gaffer graph configured with a [basic simple schema](config/schema/)
 
-The Kubernetes components that will be provisioned, by default, by this Helm Chart:
-[![Kubernetes components provisioned by Gaffer Helm Chart](docs/gaffer-k8s-components-medium.png)](docs/gaffer-k8s-components.png?raw=true)
+The Kubernetes resources that will be provisioned, by default, by this Helm Chart:
+[![Kubernetes resources provisioned by Gaffer Helm Chart](docs/gaffer-k8s-components-medium.png)](docs/gaffer-k8s-components.png?raw=true)
 
 
 ## Deployment
