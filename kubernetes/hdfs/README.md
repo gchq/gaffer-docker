@@ -7,6 +7,9 @@ By default, this chart deploys:
 * 3 x data nodes, each configured with 2 x 10GB data volumes
 * configuration for a replication factor of 3
 
+The Kubernetes components that will be provisioned, by default, by this Helm Chart:
+[![Kubernetes components provisioned by HDFS Helm Chart](docs/hdfs-k8s-components-medium.png)](docs/hdfs-k8s-components.png)
+
 
 ## Deployment
 

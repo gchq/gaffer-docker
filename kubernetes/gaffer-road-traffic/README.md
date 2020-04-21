@@ -14,6 +14,9 @@ By default, this chart deploys:
 * a web server running the Gaffer REST API and UI
 * a Gaffer graph configured with the [Road Traffic Counts Schema](https://github.com/gchq/Gaffer/tree/master/example/road-traffic/road-traffic-model/src/main/resources/schema)
 
+The Kubernetes components that will be provisioned, by default, by this Helm Chart:
+[![Kubernetes components provisioned by Gaffer Road Traffic Helm Chart](docs/road-traffic-k8s-components-medium.png)](docs/road-traffic-k8s-components.png)
+
 
 ## Deployment
 
