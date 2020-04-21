@@ -54,6 +54,7 @@ zookeeper:
 accumulo:
   instanceId: accumulo
   config:
+    path: /etc/accumulo/conf
     files: {}
     accumuloSite:
       instance.secret: ""
@@ -180,3 +181,6 @@ testImages:
   curl:
     repository: curlimages/curl
     tag: 7.67.0
+  operationRunner:
+    repository: gchq/gaffer-operation-runner
+    tag: 1.11.0

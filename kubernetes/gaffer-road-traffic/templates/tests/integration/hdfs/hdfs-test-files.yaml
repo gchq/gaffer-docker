@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gaffer-road-traffic.fullname" . }}-hdfs-test-files
+  labels:
+    {{- include "gaffer-road-traffic.labels" . | nindent 4 }}
+data:
+{{- range $path, $bytes := .Files.Glob "config/tests/integration/hdfs/tests/*.json" }}
+  {{ base $path }}: {{ $bytes | quote }}
+{{- end }}
+
+  check-elements-exist.sh: |
+    #!/bin/sh
+    set -e
+
+    expectedResult=$(cat ./result.json)
+    actualResult=$(curl -s -XPOST -H "Content-Type: application/json" -d "@query.json" http://{{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80/rest/v2/graph/operations/execute)
+
+    echo "  Expected Result:"
+    echo "    ${expectedResult}"
+    echo "  Actual Result:"
+    echo "    ${actualResult}"
+
+    if [ "${expectedResult}" = "${actualResult}" ]; then
+      echo "  PASS"
+    else
+      echo "  FAIL!"
+      rc=1
+    fi

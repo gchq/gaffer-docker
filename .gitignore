@@ -20,3 +20,8 @@
 **/.DS_Store
 kubernetes/*/Chart.lock
 kubernetes/*/charts/
+# The following can be removed once operation runner utility is moved into Gaffer
+**/target
+**/.classpath
+**/.settings
+**/.project
