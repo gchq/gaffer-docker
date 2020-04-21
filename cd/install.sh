@@ -3,7 +3,7 @@ set -e
 
 buildImages() {
     docker-compose --project-directory ../../docker/accumulo/ -f ../../docker/accumulo/docker-compose.yaml build
-    docker-compose --project-directory ../../docker/gaffer-road-traffic-loader/ -f ../../docker/gaffer-road-traffic-loader/docker-compose.yaml build
+    docker-compose --project-directory ../../docker/gaffer-operation-runner/ -f ../../docker/gaffer-operation-runner/docker-compose.yaml build
 }
 
 # Lint Helm Charts
@@ -28,7 +28,7 @@ if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
     exit 0
 fi
 
-# Create a cluster 
+# Create a cluster
 kind create cluster --quiet
 
 buildImages
@@ -38,6 +38,7 @@ kind load docker-image gchq/hdfs:3.2.1
 kind load docker-image gchq/gaffer:1.11.0
 kind load docker-image gchq/gaffer-rest:1.11.0
 kind load docker-image gchq/gaffer-road-traffic-loader:1.11.0
+kind load docker-image gchq/gaffer-operation-runner:1.11.0
 
 # Deploy containers onto Kind
 # Travis needs this setting to avoid reverse dns lookup errors

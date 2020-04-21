@@ -24,10 +24,10 @@ export GAFFER_VERSION=${GAFFER_VERSION:-1.11.0}
 export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-$GAFFER_VERSION}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
-docker-compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../docker/gaffer-road-traffic-loader/docker-compose.yaml build
+docker-compose --project-directory ../docker/gaffer-operation-runner/ -f ../docker/gaffer-operation-runner/docker-compose.yaml build 
 
 HADOOP_IMAGES="hdfs"
-GAFFER_IMAGES="gaffer gaffer-rest gaffer-road-traffic-loader"
+GAFFER_IMAGES="gaffer gaffer-rest gaffer-road-traffic-loader gaffer-operation-runner"
 
 ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 [ "${REGION}" = "" ] && REGION=$(aws configure get region)

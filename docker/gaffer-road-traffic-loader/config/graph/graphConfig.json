@@ -1,5 +1,5 @@
 {
-  "graphId": "road_traffic",
+  "graphId": "roadTraffic",
   "description": "A graph containing road traffic counts",
   "library": {
     "class": "uk.gov.gchq.gaffer.store.library.HashMapGraphLibrary"

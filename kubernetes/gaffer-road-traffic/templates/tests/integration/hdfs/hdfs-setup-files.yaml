@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gaffer-road-traffic.fullname" . }}-hdfs-setup-files
+  labels:
+    {{- include "gaffer-road-traffic.labels" . | nindent 4 }}
+data:
+{{- range $path, $bytes := .Files.Glob "config/tests/integration/hdfs/setup/*.json" }}
+  {{ base $path }}: {{ $bytes | quote }}
+{{- end }}
+
+  populate-hdfs.sh: |
+    #!/bin/bash
+    set -e
+
+    echo "Removing any existing volume"
+    hadoop fs -rm -r -f /test
+
+    # Create Directories
+    hadoop fs -mkdir -p /test
+    hadoop fs -mkdir -p /test/input
+    hadoop fs -mkdir -p /test/output
+    hadoop fs -mkdir -p /test/failure
+
+    # Populate input
+    hadoop fs -put -f ./elements.json /test/input
+
+    hadoop fs -chown -R accumulo /test
+    hadoop fs -chmod -R u+rwX,g+rwX,o-rwx /test
+    echo "Elements successfully added to HDFS"

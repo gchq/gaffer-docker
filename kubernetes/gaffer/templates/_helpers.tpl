@@ -83,7 +83,7 @@ Create the name of the service account to use
 
 {{- define "gaffer.hdfsNamenodeHostname" -}}
   {{- if .Values.hdfs.enabled -}}
-    {{ template "callSubChartTemplate" (list . "hdfs" "hdfs.fullname") }}-namenodes
+    {{ template "callSubChartTemplate" (list . "hdfs" "hdfs.fullname") }}-namenode-0.{{ template "callSubChartTemplate" (list . "hdfs" "hdfs.fullname") }}-namenodes
   {{- else -}}
     {{ required ".Values.hdfs.namenode.hostname needs to be set as .Values.hdfs.enabled = false" .Values.hdfs.namenode.hostname }}
   {{- end -}}
