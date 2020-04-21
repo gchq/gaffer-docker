@@ -7,6 +7,7 @@ This repo contains Dockerfiles for building container images for:
 * [Gaffer](docker/gaffer/)
 * Gaffer's [REST API and Web UI](docker/gaffer-rest/)
 * Gaffer's [Road Traffic Data Loader](docker/gaffer-road-traffic-loader/)
+* Gaffer's [Operation Runner](docker/gaffer-operation-runner/)
 
 It also contains Helm Charts so that the following applications can be deployed onto Kubernetes clusters:
 * [HDFS](kubernetes/hdfs/)

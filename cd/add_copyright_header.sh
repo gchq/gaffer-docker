@@ -30,10 +30,10 @@ do
   if ! grep -q "Crown Copyright" ${f}; then
     echo ${f}
 
-    if grep -q "#!" ${f}; then
-      # Append after the first line for shell scripts
+    if [[ ${f} =~ ^.*\.(xml|sh)$ ]]; then
+      # Append after the first line for shell scripts and xml files
       firstLine=$(head -n 1 ${f})
-      withoutFirstLine=$(sed -e "1s|^#!.*$||" ${f})
+      withoutFirstLine=$(sed -e "1s|^.*$||" ${f})
       echo -e "${firstLine}\n\n${header}\n${withoutFirstLine}" > ${f}
     else
       contents=$(cat ${f})
