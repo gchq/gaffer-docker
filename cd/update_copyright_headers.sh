@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Note that the copyright on this file's header is not automatically updated.
-
 set -e
 
 currentYear=$(date +%Y)
