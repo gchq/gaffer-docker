@@ -84,3 +84,12 @@ fi
 
 tar -xf ./hadoop-${HADOOP_VERSION}.tar.gz
 
+for dir in \
+	share/doc \
+	share/hadoop/client \
+	share/hadoop/mapreduce \
+	share/hadoop/tools \
+	share/hadoop/yarn \
+; do
+	[ -d "./hadoop-${HADOOP_VERSION}/${dir}" ] && rm -rf ./hadoop-${HADOOP_VERSION}/${dir}/*
+done
