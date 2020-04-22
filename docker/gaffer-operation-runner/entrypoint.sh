@@ -26,7 +26,7 @@ echo "Using Graph Id: ${graph_id}"
 # Find all the Jars and produce comma seperated list
 jars=()
 for jar in $(find /gaffer/jars -name "*.jar"); do
-  jars+=${jar}
+  jars+=(${jar})
 done
 
 jar_files=$(join , ${jars[@]})
