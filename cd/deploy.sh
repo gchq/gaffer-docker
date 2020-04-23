@@ -1,8 +1,22 @@
 #!/bin/bash
 
+# Copyright 2020 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 set -e
 
-# Gets project root directory by calling two nested "dirname" commands on the this file 
+# Gets project root directory by calling two nested "dirname" commands on the this file
 getRootDirectory() {
     echo "$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 }
@@ -65,7 +79,15 @@ REPO_NAME="Gaffer-Docker"
 JSON_DATA="{
                 \"tag_name\": \"${TAG_NAME}\",
                 \"name\": \"${REPO_NAME} ${APP_VERSION}\",
-                \"body\": \"[${APP_VERSION} headliners](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Aheadliner)\n\n[${APP_VERSION} enhancements](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Aenhancement)\n\n[${APP_VERSION} bugs fixed](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Abug)\n\n[${APP_VERSION} migration notes](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Amigration-required)\n\n[${APP_VERSION} all issues resolved](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME})\",
+                \"body\": \"[${APP_VERSION} headliners](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Aheadliner)
+
+[${APP_VERSION} enhancements](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Aenhancement)
+
+[${APP_VERSION} bugs fixed](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Abug)
+
+[${APP_VERSION} migration notes](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Amigration-required)
+
+[${APP_VERSION} all issues resolved](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME})\",
                 \"draft\": false
             }"
 echo "${JSON_DATA}"
