@@ -36,7 +36,7 @@ done
 cd kubernetes/gaffer-road-traffic
 
 if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
-    if [ "${TRAVIS_BRANCH}" == "master"]; then
+    if [ "${TRAVIS_BRANCH}" == "master" ]; then
         # Build images so they can be pushed later
         buildImages
     fi
