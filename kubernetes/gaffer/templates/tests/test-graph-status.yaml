@@ -12,16 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-*/*.iml
-*.iml
-*/.settings
-*/.project
-.DS_Store
-**/.DS_Store
-kubernetes/*/Chart.lock
-kubernetes/*/charts/
-# The following can be removed once operation runner utility is moved into Gaffer
-**/target
-**/.classpath
-**/.settings
-**/.project
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "gaffer.fullname" . }}-test-graph-status"
+  labels:
+    {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: test
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+  - name: curl
+    image: {{ .Values.testImages.curl.repository }}:{{ .Values.testImages.curl.tag}}
+    args:
+    - -D-
+    - -f
+    - http://{{ include "gaffer.fullname" . }}-api:80/rest/v2/graph/status
+  restartPolicy: Never

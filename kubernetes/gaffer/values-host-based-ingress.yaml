@@ -12,16 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-*/*.iml
-*.iml
-*/.settings
-*/.project
-.DS_Store
-**/.DS_Store
-kubernetes/*/Chart.lock
-kubernetes/*/charts/
-# The following can be removed once operation runner utility is moved into Gaffer
-**/target
-**/.classpath
-**/.settings
-**/.project
+hdfs:
+  ingress:
+    annotations: ~
+    host: hdfs.k8s.local
+    pathPrefix: /
+
+accumulo:
+  monitor:
+    ingress:
+      annotations: ~
+      host: accumulo.k8s.local
+      pathPrefix: /
+
+api:
+  ingress:
+    annotations: ~
+    host: gaffer.k8s.local
+    pathPrefix: /

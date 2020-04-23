@@ -1,0 +1,80 @@
+# Copyright 2020 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "gaffer-road-traffic.fullname" . }}-data-loader
+  labels:
+    {{- include "gaffer-road-traffic.labels" . | nindent 4 }}
+spec:
+  parallelism: 1
+  completions: 1
+  template:
+    metadata:
+      labels:
+        {{- include "gaffer-road-traffic.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: loader
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: data-loader
+        image: {{ .Values.loader.image.repository }}:{{ .Values.loader.image.tag }}
+        imagePullPolicy: {{ .Values.loader.image.pullPolicy }}
+        volumeMounts:
+        - name: graph-config
+          mountPath: /gaffer/graph/
+          readOnly: true
+        # Schema isn't mounted because of GAFFER-2262
+        # Can be un-commented once it has been resolved and released
+        # In the mean time use the schema built into the container
+        # - name: schema
+        #   mountPath: /gaffer/schema/
+        #   readOnly: true
+        - name: store-properties
+          mountPath: /gaffer/store/
+          readOnly: true
+        resources:
+          {{- toYaml .Values.loader.resources | nindent 10 }}
+      volumes:
+      - name: graph-config
+        configMap:
+          name: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-graph-config
+          optional: false
+      - name: schema
+        configMap:
+          name: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-schema
+          optional: false
+      - name: store-properties
+        secret:
+          secretName: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-store-properties
+          optional: false
+      {{- with .Values.loader.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.loader.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.loader.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.loader.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range . }}
+      - name: {{ . }}
+      {{- end }}
+      {{- end }}

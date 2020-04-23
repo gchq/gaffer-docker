@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2020 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-*/*.iml
-*.iml
-*/.settings
-*/.project
-.DS_Store
-**/.DS_Store
-kubernetes/*/Chart.lock
-kubernetes/*/charts/
-# The following can be removed once operation runner utility is moved into Gaffer
-**/target
-**/.classpath
-**/.settings
-**/.project
+set -e
+
+if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
+    exit 0
+fi
+
+# Run tests
+helm test gaffer

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Copyright 2020 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-*/*.iml
-*.iml
-*/.settings
-*/.project
-.DS_Store
-**/.DS_Store
-kubernetes/*/Chart.lock
-kubernetes/*/charts/
-# The following can be removed once operation runner utility is moved into Gaffer
-**/target
-**/.classpath
-**/.settings
-**/.project
+
+if [ -z "${HADOOP_CONF_DIR}" ]; then
+	HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop
+fi
+
+if [ "$1" = "hdfs" ] && [ "$2" = "namenode" ]; then
+	NAME_DIRS=$(xmlstarlet sel -t -v "/configuration/property[name='dfs.namenode.name.dir']/value" ${HADOOP_CONF_DIR}/hdfs-site.xml)
+	FIRST_NAME_DIR=${NAME_DIRS%%,*}
+
+	if [ "${FIRST_NAME_DIR}" != "" ] && [ ! -d "${FIRST_NAME_DIR}" ]; then
+		echo "Formatting HDFS NameNode volumes: ${NAME_DIRS}"
+		hdfs namenode -format -force
+	fi
+fi
+
+exec /usr/bin/dumb-init -- "$@"

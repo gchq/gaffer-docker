@@ -12,16 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-*/*.iml
-*.iml
-*/.settings
-*/.project
+# Patterns to ignore when building packages.
+# This supports shell glob matching, relative path matching, and
+# negation (prefixed with !). Only one pattern per line.
 .DS_Store
-**/.DS_Store
-kubernetes/*/Chart.lock
-kubernetes/*/charts/
-# The following can be removed once operation runner utility is moved into Gaffer
-**/target
-**/.classpath
-**/.settings
-**/.project
+# Common VCS dirs
+.git/
+.gitignore
+.bzr/
+.bzrignore
+.hg/
+.hgignore
+.svn/
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*.orig
+*~
+# Various IDEs
+.project
+.idea/
+*.tmproj
+.vscode/

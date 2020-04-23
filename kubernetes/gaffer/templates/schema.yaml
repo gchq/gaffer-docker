@@ -12,16 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-*/*.iml
-*.iml
-*/.settings
-*/.project
-.DS_Store
-**/.DS_Store
-kubernetes/*/Chart.lock
-kubernetes/*/charts/
-# The following can be removed once operation runner utility is moved into Gaffer
-**/target
-**/.classpath
-**/.settings
-**/.project
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gaffer.fullname" . }}-schema
+  labels:
+    {{- include "gaffer.labels" . | nindent 4 }}
+data:
+{{- if .Values.graph.schema }}
+  {{- range $fileName, $contents := .Values.graph.schema }}
+  {{ $fileName }}: {{ $contents | quote }}
+  {{- end }}
+{{- else }}
+  {{- range $fileName, $bytes := .Files.Glob "config/schema/*.json" }}
+  {{ base $fileName }}: {{ $bytes | quote }}
+  {{- end }}
+{{- end }}

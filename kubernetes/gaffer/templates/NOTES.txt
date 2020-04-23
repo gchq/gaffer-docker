@@ -1,0 +1,37 @@
+.
+             _<^```\
+           __>'- ~--^^~            .
+           _>  / '     \             o
+          _> ,/ .  @_^`^)                      O
+         -   |.   /_,__ )     o
+         _> | /   '  (.       ________        _____  __O__
+          >_(/ _    (_ \     /  _____/_____ _/ ____\/ ____\___________
+            /.'    (  `.\   /   \  ___\__  \\   __\\   __\/ __ \_  ___\
+              (   (         \    \_\  \/ __ \|  |   |  | \  ___/|  |
+               (   (         \________/(____/|__|   |__|  \_____|__|
+                `( `l./^^>               __
+                  `l.  /                /  \
+                    l |                 \__/   _
+                     l(                       (_)
+
+Version: {{ .Values.accumulo.image.repository }}:{{ .Values.accumulo.image.tag }}
+
+=== store.properties ===
+{{ include "gaffer.storeProperties" . }}
+
+REST API: http://{{ default "<default-ingress-host>" .Values.api.ingress.host }}{{ .Values.api.ingress.pathPrefix }}api/
+UI: http://{{ default "<default-ingress-host>" .Values.api.ingress.host }}{{ .Values.api.ingress.pathPrefix }}ui/
+
+{{- if or (eq (index .Values.accumulo.config.accumuloSite "instance.secret") "DEFAULT") (eq .Values.accumulo.config.userManagement.rootPassword "root") }}
+
+!!!!! ⚠️  WARNING ⚠️  !!!!!
+{{- if eq (index .Values.accumulo.config.accumuloSite "instance.secret") "DEFAULT" }}
+It looks like you are using a default value for accumulo.config.accumuloSite."instance.secret" ({{ index .Values.accumulo.config.accumuloSite "instance.secret" }})
+{{- end }}
+{{- if eq .Values.accumulo.config.userManagement.rootPassword "root" }}
+It looks like you are using a default value for accumulo.config.userManagement.rootPassword ({{ .Values.accumulo.config.userManagement.rootPassword }})
+{{- end }}
+Consider setting different values to improve security.
+{{- end }}
+
+.

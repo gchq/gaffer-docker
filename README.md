@@ -1,57 +1,42 @@
-Copyright 2016 Crown Copyright, cybermaggedon
+ Gaffer Docker
+================
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+This repo contains Dockerfiles for building container images for:
+* [HDFS](docker/hdfs/)
+* [Accumulo](docker/accumulo/)
+* [Gaffer](docker/gaffer/)
+* Gaffer's [REST API and Web UI](docker/gaffer-rest/)
+* Gaffer's [Road Traffic Data Loader](docker/gaffer-road-traffic-loader/)
+* Gaffer's [Operation Runner](docker/gaffer-operation-runner/)
 
-  http://www.apache.org/licenses/LICENSE-2.0
+It also contains Helm Charts so that the following applications can be deployed onto Kubernetes clusters:
+* [HDFS](kubernetes/hdfs/)
+* [Gaffer](kubernetes/gaffer/)
+* [Example Gaffer Graph containing Road Traffic Dataset](kubernetes/gaffer-road-traffic/)
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+There are guides on how to deploy the charts on:
+* a local Kubernetes cluster, [using kind (Kubernetes IN Docker)](kubernetes/kind-deployment.md)
+* an [AWS EKS cluster](kubernetes/aws-eks-deployment.md)
 
+## Versioning
+Each of our images will be tagged in DockerHub with the version of the software they represent. Every release,
+we update the image for that tag and add a new release which has the corresponding git tag.
 
-# Gaffer Docker
+So if we tag this code in git as 1.0.0 and publish the resulting gaffer image at gaffer version 1.11.0, the following
+images would be pushed to Docker Hub:
 
-What you have here, is a Docker container for Gaffer.  This is a small
-instance and is really only useful only development / trial
-purposes.  But containerising allows a quick way to find out what Gaffer is
-like and develop against the interfaces.  The container deploys: Hadoop,
-Accumulo, Zookeeper, and launches Gaffer using Wildfly.
+* gchq/gaffer:latest
+* gchq/gaffer:1
+* gchq/gaffer:1.11
+* gchq/gaffer:1.11.0
+* gchq/gaffer:1.11.0_build.1.0.0
 
-The memory settings of Accumulo are low to ensure Accumulo runs in a
-small footprint.  Budget for around 2GB for trivial amounts of data, 6GB
-for anything with some load.
+Note that we maintain mutable versions of latest, as well as the major, minor and bugfix versions of Gaffer. If you want to
+ensure that your image will never change when doing a pull from docker, make sure to use the version with the git tag in the
+build metadata.
 
-To run:
+This process is automated by Travis CI.
 
-  docker run -it -p 8080:8080 gchq/gaffer:0.4.4
+## Contributing
 
-You can then access the Gaffer API at port 8080:
-```
-http://localhost:8080/rest
-```
-
-and the prototype Gaffer UI at:
-```
-http://localhost:8080/ui
-```
-
-
-When the container dies, the data is lost.  If you want data to persist,
-mount a volume on /data e.g.
-
-  docker run -it -p 8080:8080 -v /data/gaffer:/data gchq/gaffer:0.4.4
-
-The default schema deployed is usable.  If you want to set your own schema
-then you need to change /usr/local/wildfly/schema/* by e.g. mounting
-replacement volumes.
-
-At high input load, Zookeeper seems to continually grow until it exhausts the
-container memory footprint.
-
-In future, I will probably detangle Hadoop, Accumulo, Zookeeper and Gaffer
-into separate containers to run linked.
-
+If you would like to make a Contribution, we have all the details for doing that [here](CONTRIBUTING.md)

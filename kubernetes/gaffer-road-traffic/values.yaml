@@ -1,0 +1,390 @@
+# Copyright 2020 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+nameOverride: ""
+fullnameOverride: ""
+
+loader:
+  image:
+    repository: gchq/gaffer-road-traffic-loader
+    tag: 1.11.0
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+gaffer:
+  graph:
+    config:
+      graphId: "roadTraffic"
+      description: "A graph containing sample GB road traffic data from the Department of Transport"
+
+    schema:
+      elements.json: |-
+        {
+          "edges": {
+            "RoadUse": {
+              "description": "A directed edge representing vehicles moving from junction A to junction B.",
+              "source": "junction",
+              "destination": "junction",
+              "directed": "true",
+              "properties": {
+                "startDate": "date.earliest",
+                "endDate": "date.latest",
+                "count": "count.long",
+                "countByVehicleType": "counts.freqmap"
+              },
+              "groupBy": [
+                "startDate",
+                "endDate"
+              ]
+            },
+            "RoadHasJunction": {
+              "description": "A directed edge from each road to all the junctions on that road.",
+              "source": "road",
+              "destination": "junction",
+              "directed": "true"
+            },
+            "RegionContainsLocation": {
+              "description": "A directed edge from each region to location.",
+              "source": "region",
+              "destination": "location",
+              "directed": "true"
+            },
+            "LocationContainsRoad": {
+              "description": "A directed edge from each location to road.",
+              "source": "location",
+              "destination": "road",
+              "directed": "true"
+            },
+            "JunctionLocatedAt": {
+              "description": "A directed edge from each junction to its coordinates",
+              "source": "junction",
+              "destination": "coordinates",
+              "directed": "true"
+            }
+          },
+          "entities": {
+            "Cardinality": {
+              "description": "An entity that is added to every vertex representing the connectivity of the vertex.",
+              "vertex": "anyVertex",
+              "properties": {
+                "edgeGroup": "set",
+                "hllp": "hllp",
+                "count": "count.long"
+              },
+              "groupBy": [
+                "edgeGroup"
+              ]
+            },
+            "JunctionUse": {
+              "description": "An entity on the junction vertex representing the counts of vehicles moving from junction A to junction B.",
+              "vertex": "junction",
+              "properties": {
+                "startDate": "date.earliest",
+                "endDate": "date.latest",
+                "count": "count.long",
+                "countByVehicleType": "counts.freqmap"
+              },
+              "groupBy": [
+                "startDate",
+                "endDate"
+              ]
+            }
+          }
+        }
+
+      types.json: |-
+        {
+          "types": {
+            "junction": {
+              "description": "A road junction represented by a String.",
+              "class": "java.lang.String"
+            },
+            "road": {
+              "description": "A road represented by a String.",
+              "class": "java.lang.String"
+            },
+            "location": {
+              "description": "A location represented by a String.",
+              "class": "java.lang.String",
+              "validateFunctions": [
+                {
+                  "class": "uk.gov.gchq.koryphe.impl.predicate.Exists"
+                }
+              ]
+            },
+            "anyVertex": {
+              "description": "An String vertex - used for cardinalities",
+              "class": "java.lang.String",
+              "validateFunctions": [
+                {
+                  "class": "uk.gov.gchq.koryphe.impl.predicate.Exists"
+                }
+              ]
+            },
+            "coordinates": {
+              "description": "Coordinates represented by a String in the format 'Eastings,Northings'.",
+              "class": "java.lang.String",
+              "validateFunctions": [
+                {
+                  "class": "uk.gov.gchq.koryphe.impl.predicate.Exists"
+                }
+              ]
+            },
+            "region": {
+              "description": "A region represented by a String.",
+              "class": "java.lang.String",
+              "validateFunctions": [
+                {
+                  "class": "uk.gov.gchq.koryphe.impl.predicate.Exists"
+                }
+              ]
+            },
+            "count.long": {
+              "description": "A long count that must be greater than or equal to 0.",
+              "class": "java.lang.Long",
+              "validateFunctions": [
+                {
+                  "class": "uk.gov.gchq.koryphe.impl.predicate.IsMoreThan",
+                  "orEqualTo": true,
+                  "value": {
+                    "java.lang.Long": 0
+                  }
+                }
+              ],
+              "aggregateFunction": {
+                "class": "uk.gov.gchq.koryphe.impl.binaryoperator.Sum"
+              }
+            },
+            "true": {
+              "description": "A simple boolean that must always be true.",
+              "class": "java.lang.Boolean",
+              "validateFunctions": [
+                {
+                  "class": "uk.gov.gchq.koryphe.impl.predicate.IsTrue"
+                }
+              ]
+            },
+            "date.earliest": {
+              "description": "A Date that when aggregated together will be the earliest date.",
+              "class": "java.util.Date",
+              "validateFunctions": [
+                {
+                  "class": "uk.gov.gchq.koryphe.impl.predicate.Exists"
+                }
+              ],
+              "aggregateFunction": {
+                "class": "uk.gov.gchq.koryphe.impl.binaryoperator.Min"
+              }
+            },
+            "date.latest": {
+              "description": "A Date that when aggregated together will be the latest date.",
+              "class": "java.util.Date",
+              "validateFunctions": [
+                {
+                  "class": "uk.gov.gchq.koryphe.impl.predicate.Exists"
+                }
+              ],
+              "aggregateFunction": {
+                "class": "uk.gov.gchq.koryphe.impl.binaryoperator.Max"
+              }
+            },
+            "set": {
+              "class": "java.util.TreeSet",
+              "aggregateFunction": {
+                "class": "uk.gov.gchq.koryphe.impl.binaryoperator.CollectionConcat"
+              }
+            },
+            "hllp": {
+              "class": "com.clearspring.analytics.stream.cardinality.HyperLogLogPlus",
+              "aggregateFunction": {
+                "class": "uk.gov.gchq.gaffer.sketches.clearspring.cardinality.binaryoperator.HyperLogLogPlusAggregator"
+              },
+              "serialiser": {
+                "class": "uk.gov.gchq.gaffer.sketches.clearspring.cardinality.serialisation.HyperLogLogPlusSerialiser"
+              }
+            },
+            "counts.freqmap": {
+              "class": "uk.gov.gchq.gaffer.types.FreqMap",
+              "validateFunctions": [
+                {
+                  "class": "uk.gov.gchq.koryphe.impl.predicate.Exists"
+                }
+              ],
+              "aggregateFunction": {
+                "class": "uk.gov.gchq.gaffer.types.function.FreqMapAggregator"
+              }
+            }
+          }
+        }
+
+  ui: |-
+    {
+      "title": "Road Traffic Example",
+      "quickQuery": {
+        "description": "Run a 2 hop query",
+        "placeholder": "Enter a seed",
+        "operation": {
+          "class": "uk.gov.gchq.gaffer.operation.OperationChain",
+          "operations": [
+            {
+              "class": "uk.gov.gchq.gaffer.operation.impl.get.GetAdjacentIds",
+              "input": [
+                "${input}"
+              ]
+            },
+            {
+              "class": "uk.gov.gchq.gaffer.operation.impl.get.GetElements",
+              "view": {
+                "globalElements": [
+                  {
+                    "groupBy": []
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "graph": {
+        "style": {
+          "edges": {
+            "RoadUse": {
+              "line-color": "#9C27B0",
+              "target-arrow-color": "#9C27B0",
+              "text-outline-color": "#9C27B0"
+            },
+            "JunctionLocatedAt": {
+              "line-color": "#F44336",
+              "target-arrow-color": "#F44336",
+              "text-outline-color": "#F44336"
+            },
+            "RoadHasJunction": {
+              "line-color": "#009688",
+              "target-arrow-color": "#009688",
+              "text-outline-color": "#009688"
+            },
+            "RegionContainsLocation": {
+              "line-color": "#FF9800",
+              "target-arrow-color": "#FF9800",
+              "text-outline-color": "#FF9800"
+            },
+            "LocationContainsRoad": {
+              "line-color": "#795548",
+              "target-arrow-color": "#795548",
+              "text-outline-color": "#795548"
+            }
+          },
+          "vertexTypes": {
+            "junction": {
+              "style": {
+                "background-image": "app/img/material-icons/call_split.svg",
+                "text-valign": "top"
+              }
+            },
+            "road": {
+              "style": {
+                "background-image": "app/img/material-icons/directions_car.svg",
+                "text-valign": "top"
+              }
+            },
+            "location": {
+              "style": {
+                "background-image": "app/img/material-icons/pin_drop.svg",
+                "text-valign": "top"
+              }
+            },
+            "region": {
+              "style": {
+                "background-image": "app/img/material-icons/location_searching.svg",
+                "text-valign": "top"
+              }
+            },
+            "coordinates": {
+              "style": {
+                "background-image": "app/img/material-icons/my_location.svg",
+                "text-valign": "top"
+              }
+            }
+          }
+        }
+      },
+      "time": {
+        "filter": {
+          "class": "java.util.Date",
+          "unit": "millisecond",
+          "startProperty": "startDate",
+          "endProperty": "endDate",
+          "presets": {
+            "Today": {
+              "offset": 0,
+              "unit": "day"
+            },
+            "Last week": {
+              "offset": -1,
+              "unit": "week"
+            },
+            "Last month": {
+              "offset": -1,
+              "unit": "month"
+            },
+            "2002": {
+              "date": "2002-01-01"
+            },
+            "2001": {
+              "date": "2001-01-01"
+            }
+          }
+        },
+        "properties": {
+          "startDate": {
+            "class": "java.util.Date",
+            "unit": "millisecond"
+          },
+          "endDate": {
+            "class": "java.util.Date",
+            "unit": "millisecond"
+          }
+        }
+      }
+    }
+
+  accumulo:
+    config:
+      userManagement:
+        rootPassword: ""
+        users:
+          tracer:
+            password: ""
+          gaffer:
+            password: ""
+            permissions:
+              table:
+                roadTraffic:
+                - READ
+                - WRITE
+                - BULK_IMPORT
+                - ALTER_TABLE
+
+  waitFor:
+    graphStatusOk: true
+    dataLoad: true
+
+  testImages:
+    curl:
+      repository: curlimages/curl
+      tag: 7.67.0

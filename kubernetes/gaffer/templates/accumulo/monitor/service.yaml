@@ -12,16 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-*/*.iml
-*.iml
-*/.settings
-*/.project
-.DS_Store
-**/.DS_Store
-kubernetes/*/Chart.lock
-kubernetes/*/charts/
-# The following can be removed once operation runner utility is moved into Gaffer
-**/target
-**/.classpath
-**/.settings
-**/.project
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gaffer.fullname" . }}-monitor
+  labels:
+    {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: monitor
+spec:
+  selector:
+    {{- include "gaffer.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: monitor
+  type: ClusterIP
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: http

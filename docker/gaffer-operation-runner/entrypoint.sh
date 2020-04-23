@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2020 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +14,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-*/*.iml
-*.iml
-*/.settings
-*/.project
-.DS_Store
-**/.DS_Store
-kubernetes/*/Chart.lock
-kubernetes/*/charts/
-# The following can be removed once operation runner utility is moved into Gaffer
-**/target
-**/.classpath
-**/.settings
-**/.project
+function join { local IFS="$1"; shift; echo "$*"; }
+
+graph_id=$1
+
+if [ -z $graph_id ]; then
+    echo "Missing argument Graph ID"
+    exit 1
+fi
+echo "Using Graph Id: ${graph_id}"
+# Find all the Jars and produce comma seperated list
+jars=()
+for jar in $(find /gaffer/jars -name "*.jar"); do
+  jars+=(${jar})
+done
+
+jar_files=$(join , ${jars[@]})
+
+accumulo -add "${jar_files}" uk.gov.gchq.gaffer.docker.App /gaffer/operation/operation.json /gaffer/schema /gaffer/store/store.properties "${graph_id}"
