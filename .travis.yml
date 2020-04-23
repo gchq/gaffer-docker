@@ -23,5 +23,4 @@ install:
   - cd/install.sh
 script:
   - cd/verify.sh
-deploy:
   - cd/deploy.sh
