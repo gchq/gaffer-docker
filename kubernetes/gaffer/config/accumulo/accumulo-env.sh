@@ -31,13 +31,13 @@ if [[ -f ${ACCUMULO_CONF_DIR}/accumulo.policy ]]; then
 	POLICY="-Djava.security.manager -Djava.security.policy=${ACCUMULO_CONF_DIR}/accumulo.policy"
 fi
 
-test -z "$ACCUMULO_TSERVER_OPTS" && export ACCUMULO_TSERVER_OPTS="${POLICY} -Xmx128m -Xms128m "
-test -z "$ACCUMULO_MASTER_OPTS"  && export ACCUMULO_MASTER_OPTS="${POLICY} -Xmx128m -Xms128m"
-test -z "$ACCUMULO_MONITOR_OPTS" && export ACCUMULO_MONITOR_OPTS="${POLICY} -Xmx64m -Xms64m"
-test -z "$ACCUMULO_GC_OPTS"      && export ACCUMULO_GC_OPTS="-Xmx64m -Xms64m"
-test -z "$ACCUMULO_SHELL_OPTS"   && export ACCUMULO_SHELL_OPTS="-Xmx128m -Xms64m"
+test -z "$ACCUMULO_TSERVER_OPTS" && export ACCUMULO_TSERVER_OPTS="${POLICY} -Xmx{{ .Values.accumulo.tabletServers.javaOpts.Xmx }} -Xms{{ .Values.accumulo.tabletServers.javaOpts.Xms }}"
+test -z "$ACCUMULO_MASTER_OPTS"  && export ACCUMULO_MASTER_OPTS="${POLICY} -Xmx{{ .Values.accumulo.master.javaOpts.Xmx }} -Xms{{ .Values.accumulo.master.javaOpts.Xms }}"
+test -z "$ACCUMULO_MONITOR_OPTS" && export ACCUMULO_MONITOR_OPTS="${POLICY} -Xmx{{ .Values.accumulo.monitor.javaOpts.Xmx }} -Xms{{ .Values.accumulo.monitor.javaOpts.Xms }}"
+test -z "$ACCUMULO_GC_OPTS"      && export ACCUMULO_GC_OPTS="-Xmx{{ .Values.accumulo.gc.javaOpts.Xmx }} -Xms{{ .Values.accumulo.gc.javaOpts.Xms }}"
+test -z "$ACCUMULO_SHELL_OPTS"   && export ACCUMULO_SHELL_OPTS="-Xmx{{ .Values.accumulo.cmds.javaOpts.Xmx }} -Xms{{ .Values.accumulo.cmds.javaOpts.Xms }}"
+test -z "$ACCUMULO_OTHER_OPTS"   && export ACCUMULO_OTHER_OPTS="-Xmx{{ .Values.accumulo.cmds.javaOpts.Xmx }} -Xms{{ .Values.accumulo.cmds.javaOpts.Xms }}"
 test -z "$ACCUMULO_GENERAL_OPTS" && export ACCUMULO_GENERAL_OPTS="-XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -Djava.net.preferIPv4Stack=true -XX:+CMSClassUnloadingEnabled"
-test -z "$ACCUMULO_OTHER_OPTS"   && export ACCUMULO_OTHER_OPTS="-Xmx128m -Xms64m"
 test -z "${ACCUMULO_PID_DIR}"    && export ACCUMULO_PID_DIR="${ACCUMULO_HOME}/run"
 
 # what to do when the JVM runs out of heap memory

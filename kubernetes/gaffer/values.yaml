@@ -112,6 +112,9 @@ accumulo:
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    javaOpts:
+      Xms: 128m
+      Xmx: 128m
 
   tabletServers:
     replicaCount: 3
@@ -119,6 +122,9 @@ accumulo:
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    javaOpts:
+      Xms: 128m
+      Xmx: 128m
 
   gc:
     replicaCount: 1
@@ -126,12 +132,18 @@ accumulo:
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    javaOpts:
+      Xms: 64m
+      Xmx: 64m
 
   cmds:
     resources: {}
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    javaOpts:
+      Xms: 64m
+      Xmx: 128m
 
   monitor:
     replicaCount: 1
@@ -139,6 +151,9 @@ accumulo:
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    javaOpts:
+      Xms: 64m
+      Xmx: 64m
 
     ingress:
       enabled: true
