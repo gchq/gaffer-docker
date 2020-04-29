@@ -38,7 +38,7 @@ for repo in ${HADOOP_IMAGES} ${GAFFER_IMAGES}; do
   aws ecr create-repository --repository-name gchq/${repo}
 done
 
-$(aws ecr get-login --no-include-email)
+echo $(aws ecr get-login-password) | docker login -u AWS --password-stdin https://${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com
 
 for repo in ${HADOOP_IMAGES}; do
   docker image tag gchq/${repo}:${HADOOP_VERSION} ${REPO_PREFIX}/${repo}:${HADOOP_VERSION}

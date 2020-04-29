@@ -5,6 +5,7 @@ The following instructions will guide you through provisioning and configuring a
 
 ## Install CLI Tools
 
+* [docker-compose](https://github.com/docker/compose/releases/latest)
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [helm](https://github.com/helm/helm/releases)
 * [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
@@ -42,8 +43,9 @@ kind load docker-image gchq/gaffer-operation-runner:${GAFFER_VERSION}
 
 Deploy the Nginx Ingress Controller:
 ```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/service-nodeport.yaml
+INGRESS_NGINX_VERSION="nginx-0.30.0"
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_NGINX_VERSION}/deploy/static/mandatory.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_NGINX_VERSION}/deploy/static/provider/baremetal/service-nodeport.yaml
 ```
 
 
