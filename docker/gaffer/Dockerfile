@@ -22,13 +22,12 @@ FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
 ARG GAFFER_VERSION=1.11.0
 ARG GAFFER_LIBS=bitmap-library,sketches-library,time-library
+ARG GAFFER_LIB_DIR=/files/
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
 
 WORKDIR /jars
 
-# Allow users to provide their own JAR files
-COPY ./files/ .
 # Try to download required version from Maven Central, otherwise build from source
 RUN	allFilesDownloaded="TRUE" && \
 	if [ ! -f "./accumulo-store-${GAFFER_VERSION}-iterators.jar" ]; then \
@@ -38,7 +37,7 @@ RUN	allFilesDownloaded="TRUE" && \
 		if [ ! -f "./${lib}-${GAFFER_VERSION}-deploy.jar" ]; then \
 			wget -q "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/${lib}/${GAFFER_VERSION}/${lib}-${GAFFER_VERSION}-deploy.jar" || allFilesDownloaded="FALSE"; \
 		fi \
-	done && \
+	done && i\
 	if [ "${allFilesDownloaded}" = "FALSE" ]; then \
 		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
 		cd /tmp/gaffer && \
@@ -55,6 +54,9 @@ RUN	allFilesDownloaded="TRUE" && \
 			fi \
 		done \
 	fi
+
+# Override or provide additional jars from local filesystem
+COPY ${GAFFER_LIB_DIR} .
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 COPY --from=builder --chown=root:root /jars/*.jar /opt/accumulo/lib/ext/
