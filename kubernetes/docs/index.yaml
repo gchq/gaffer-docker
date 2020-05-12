@@ -1,0 +1,38 @@
+apiVersion: v1
+entries:
+  gaffer:
+  - apiVersion: v2
+    appVersion: 1.11.0
+    created: "2020-05-12T15:37:54.723779229+01:00"
+    dependencies:
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://kubernetes-charts-incubator.storage.googleapis.com
+      version: ~2.1.1
+    - condition: hdfs.enabled
+      name: hdfs
+      repository: file://../hdfs/
+      version: ^1.0.0
+    description: A large-scale entity and relation database supporting aggregation
+      of properties
+    digest: 302f1a31c299b4f8dac3e1c92f7da46e95bab191c66b648cb8740e4fdb4a5a0c
+    home: https://github.com/gchq/Gaffer
+    name: gaffer
+    sources:
+    - https://github.com/gchq/gaffer-docker
+    type: application
+    urls:
+    - gaffer-1.0.0.tgz
+    version: 1.0.0
+  hdfs:
+  - apiVersion: v2
+    appVersion: 3.2.1
+    created: "2020-05-12T15:37:54.724805407+01:00"
+    description: Deploys the Hadoop Distributed File System (HDFS)
+    digest: 34aaf291fc3e744b4d70d2e8a24da4418cffd8025110fd435a122a56ef6ef0e3
+    name: hdfs
+    type: application
+    urls:
+    - hdfs-1.0.0.tgz
+    version: 1.0.0
+generated: "2020-05-12T15:37:54.716908468+01:00"
