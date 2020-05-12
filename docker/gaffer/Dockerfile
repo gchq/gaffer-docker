@@ -37,7 +37,7 @@ RUN	allFilesDownloaded="TRUE" && \
 		if [ ! -f "./${lib}-${GAFFER_VERSION}-deploy.jar" ]; then \
 			wget -q "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/${lib}/${GAFFER_VERSION}/${lib}-${GAFFER_VERSION}-deploy.jar" || allFilesDownloaded="FALSE"; \
 		fi \
-	done && i\
+	done && \
 	if [ "${allFilesDownloaded}" = "FALSE" ]; then \
 		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
 		cd /tmp/gaffer && \
