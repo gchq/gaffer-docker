@@ -3,7 +3,7 @@ entries:
   gaffer:
   - apiVersion: v2
     appVersion: 1.11.0
-    created: "2020-05-12T15:37:54.723779229+01:00"
+    created: "2020-05-13T14:36:59.577892465+01:00"
     dependencies:
     - condition: zookeeper.enabled
       name: zookeeper
@@ -22,17 +22,17 @@ entries:
     - https://github.com/gchq/gaffer-docker
     type: application
     urls:
-    - gaffer-1.0.0.tgz
+    - https://gchq.github.io/gaffer-docker/kubernetes/dist/gaffer-1.0.0.tgz
     version: 1.0.0
   hdfs:
   - apiVersion: v2
     appVersion: 3.2.1
-    created: "2020-05-12T15:37:54.724805407+01:00"
+    created: "2020-05-13T14:36:59.578848664+01:00"
     description: Deploys the Hadoop Distributed File System (HDFS)
     digest: 34aaf291fc3e744b4d70d2e8a24da4418cffd8025110fd435a122a56ef6ef0e3
     name: hdfs
     type: application
     urls:
-    - hdfs-1.0.0.tgz
+    - https://gchq.github.io/gaffer-docker/kubernetes/dist/hdfs-1.0.0.tgz
     version: 1.0.0
-generated: "2020-05-12T15:37:54.716908468+01:00"
+generated: "2020-05-13T14:36:59.572866959+01:00"
