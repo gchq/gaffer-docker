@@ -9,4 +9,4 @@ It also contains Helm Charts so that the following applications can be deployed 
 * [Gaffer](kubernetes/gaffer/)
 
 The Helm Charts are hosted here:
-* [Helm Charts Repository] (kubernetes/dist/) 
+* [Helm Charts Repository](kubernetes/dist/) 
