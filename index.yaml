@@ -1,0 +1,58 @@
+apiVersion: v1
+entries:
+  gaffer:
+  - apiVersion: v2
+    appVersion: 1.11.0
+    created: "2020-05-14T10:11:35.531904133+01:00"
+    dependencies:
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://kubernetes-charts-incubator.storage.googleapis.com
+      version: ~2.1.1
+    - condition: hdfs.enabled
+      name: hdfs
+      repository: file://../hdfs/
+      version: ^0.5.0
+    description: A large-scale entity and relation database supporting aggregation
+      of properties
+    digest: 4a458684cba19b93c97f93c441d04e604439a35206d066773085e2bb11513152
+    home: https://github.com/gchq/Gaffer
+    name: gaffer
+    sources:
+    - https://github.com/gchq/gaffer-docker
+    type: application
+    urls:
+    - https://github.com/gchq/gaffer-docker/releases/download/v0.5.0/gaffer-0.5.0.tgz
+    version: 0.5.0
+  gaffer-road-traffic:
+  - apiVersion: v2
+    appVersion: 1.11.0
+    created: "2020-05-14T10:11:35.553277+01:00"
+    dependencies:
+    - name: gaffer
+      repository: file://../gaffer/
+      version: ^0.5.0
+    description: A Gaffer instance containing sample GB road traffic data from the
+      Department of Transport
+    digest: e1981508fc52e509bf14b7eeea7627e78c6e9f9fb5edff8267d415abd67cac6a
+    home: https://github.com/gchq/Gaffer
+    name: gaffer-road-traffic
+    sources:
+    - https://github.com/gchq/gaffer-docker
+    - https://data.gov.uk/dataset/208c0e7b-353f-4e2d-8b7a-1a7118467acc/gb-road-traffic-counts
+    type: application
+    urls:
+    - https://github.com/gchq/gaffer-docker/releases/download/v0.5.0/gaffer-road-traffic-0.5.0.tgz
+    version: 0.5.0
+  hdfs:
+  - apiVersion: v2
+    appVersion: 3.2.1
+    created: "2020-05-14T10:11:35.558487024+01:00"
+    description: Deploys the Hadoop Distributed File System (HDFS)
+    digest: a02b10e1a9da7cbaa35250c6e43909ca1b299e71f5f3fb9a2adfe7bc66635f0f
+    name: hdfs
+    type: application
+    urls:
+    - https://github.com/gchq/gaffer-docker/releases/download/v0.5.0/hdfs-0.5.0.tgz
+    version: 0.5.0
+generated: "2020-05-14T10:11:35.50605509+01:00"
