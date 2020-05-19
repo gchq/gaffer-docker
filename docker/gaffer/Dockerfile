@@ -27,6 +27,8 @@ ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
 
 WORKDIR /jars
 
+# Allow users to provide their own JAR files
+COPY ./files/ .
 # Try to download required version from Maven Central, otherwise build from source
 RUN	allFilesDownloaded="TRUE" && \
 	if [ ! -f "./accumulo-store-${GAFFER_VERSION}-iterators.jar" ]; then \
@@ -53,9 +55,6 @@ RUN	allFilesDownloaded="TRUE" && \
 			fi \
 		done \
 	fi
-
-# Override or provide additional jars from local filesystem
-COPY ./files/ .
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 COPY --from=builder --chown=root:root /jars/*.jar /opt/accumulo/lib/ext/
