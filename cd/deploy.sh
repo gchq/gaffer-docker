@@ -90,3 +90,23 @@ git checkout develop
 ./cd/update_app_version.sh
 git commit -a -m "Updated App version"
 git push
+
+
+# Package chart directories into chart archives
+git checkout master
+cd ./kubernetes/dist/
+helm package ../gaffer/
+helm package ../gaffer-road-traffic/
+helm package ../hdfs/
+
+# Build index.yaml file
+helm repo index --url https://github.com/gchq/gaffer-docker/releases/tag/v"${APP_VERSION}"
+git commit -a -m "Chart directories pacakaged and index.yaml file built"
+git push origin master
+
+# Merge master with gh-pages
+git checkout gh-pages
+git merge master
+git push origin gh-pages
+git checkout master
+
