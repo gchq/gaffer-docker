@@ -100,9 +100,15 @@ helm package ../gaffer-road-traffic/
 helm package ../hdfs/
 
 # Build index.yaml file
-helm repo index --url https://github.com/gchq/gaffer-docker/releases/tag/v"${APP_VERSION}"
+helm repo index . --url https://github.com/gchq/gaffer-docker/releases/tag/v"${APP_VERSION}"
 git commit -a -m "Chart directories pacakaged and index.yaml file built"
 git push origin master
+
+# Add assets to github releases
+POST https://github.com/gchq/gaffer-docker/releases/tag/v"${APP_VERSION}"/assets?name=gaffer-"${APP_VERSION}".tgz
+POST https://github.com/gchq/gaffer-docker/releases/tag/v"${APP_VERSION}"/assets?name=gaffer-road-traffic-"${APP_VERSION}".tgz
+POST https://github.com/gchq/gaffer-docker/releases/tag/v"${APP_VERSION}"/assets?name=hdfs-"${APP_VERSION}".tgz
+
 
 # Merge master with gh-pages
 git checkout gh-pages
