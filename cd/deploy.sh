@@ -95,7 +95,7 @@ JSON_DATA="{
                 \"draft\": false
             }"
 echo "${JSON_DATA}"
-curl -v --data "${JSON_DATA}" https://api.github.com/repos/gchq/"${REPO_NAME}"/releases?access_token="${GITHUB_TOKEN}"
+curl -v --data "${JSON_DATA}" -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/gchq/${REPO_NAME}/releases"
 
 # Update version on develop
 git checkout develop
