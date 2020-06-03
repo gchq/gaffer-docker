@@ -41,9 +41,10 @@ uploadChart() {
     version=$2
     token=$3
 
+    helm dependency update "kubernetes/${chart}"
     helm package "kubernetes/${chart}"
-    curl -v -H "Authorization: token $token" -H "Content-Type: application/zip" --data-binary @${chart}-${version}.tar.gz "https://api.github.com/repos/gchq/gaffer-docker/releases/tag/v${version}/assets"
-    rm ${chart}-${version}.tar.gz
+    curl -v -H "Authorization: token $token" -H "Content-Type: application/zip" --data-binary @${chart}-${version}.tgz "https://api.github.com/repos/gchq/gaffer-docker/releases/tag/v${version}/assets"
+    rm ${chart}-${version}.tgz
 }
 
 # If branch is not master or is pull request, exit
@@ -103,13 +104,11 @@ git commit -a -m "Updated App version"
 git push
 
 # Upload Charts to Github releases
+uploadChart hdfs "${APP_VERSION}" "${GITHUB_TOKEN}"
 uploadChart gaffer "${APP_VERSION}" "${GITHUB_TOKEN}"
 uploadChart gaffer-road-traffic "${APP_VERSION}" "${GITHUB_TOKEN}"
-uploadChart hdfs "${APP_VERSION}" "${GITHUB_TOKEN}"
 
-# Build index.yaml file
+# Update gh-pages
 git checkout gh-pages
 git merge master -m "Updated docs to latest version"
-helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/tag/${TAG_NAME}"
-git commit -a -m "Updated Repo to ${TAG_NAME}"
-git push origin gh-pages
+helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/tag/${TAG_NAME}" --merge index.yaml
