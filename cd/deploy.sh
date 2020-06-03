@@ -35,6 +35,17 @@ pushTags() {
     done
 }
 
+# Adds an Chart to a github release 
+uploadChart() {
+    chart=$1
+    version=$2
+    token=$3
+
+    helm package "kubernetes/${chart}"
+    curl -v -H "Authorization: token $token" -H "Content-Type: application/zip" --data-binary @${chart}-${version}.tar.gz "https://api.github.com/repos/gchq/gaffer-docker/releases/tag/v${version}/assets"
+    rm ${chart}-${version}.tar.gz
+}
+
 # If branch is not master or is pull request, exit
 if [ "${TRAVIS_PULL_REQUEST}" != "false" ] || [ "${TRAVIS_BRANCH}" != "master" ]; then
     exit 0
@@ -66,7 +77,7 @@ git config --global credential.helper "store --file=.git/credentials"
 echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
 
 # Add Develop branch
-git remote set-branches --add origin develop
+git remote set-branches --add origin develop gh-pages
 git pull
 
 # Tag release in Git
@@ -91,28 +102,14 @@ git checkout develop
 git commit -a -m "Updated App version"
 git push
 
-
-# Package chart directories into chart archives
-git checkout master
-cd ./kubernetes/dist/
-helm package ../gaffer/
-helm package ../gaffer-road-traffic/
-helm package ../hdfs/
+# Upload Charts to Github releases
+uploadChart gaffer "${APP_VERSION}" "${GITHUB_TOKEN}"
+uploadChart gaffer-road-traffic "${APP_VERSION}" "${GITHUB_TOKEN}"
+uploadChart hdfs "${APP_VERSION}" "${GITHUB_TOKEN}"
 
 # Build index.yaml file
-helm repo index . --url https://github.com/gchq/gaffer-docker/releases/tag/v"${APP_VERSION}"
-git commit -a -m "Chart directories pacakaged and index.yaml file built"
-git push origin master
-
-# Add assets to github releases
-POST https://github.com/gchq/gaffer-docker/releases/tag/v"${APP_VERSION}"/assets?name=gaffer-"${APP_VERSION}".tgz
-POST https://github.com/gchq/gaffer-docker/releases/tag/v"${APP_VERSION}"/assets?name=gaffer-road-traffic-"${APP_VERSION}".tgz
-POST https://github.com/gchq/gaffer-docker/releases/tag/v"${APP_VERSION}"/assets?name=hdfs-"${APP_VERSION}".tgz
-
-
-# Merge master with gh-pages
 git checkout gh-pages
-git merge master
+git merge master -m "Updated docs to latest version"
+helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/tag/${TAG_NAME}"
+git commit -a -m "Updated Repo to ${TAG_NAME}"
 git push origin gh-pages
-git checkout master
-
