@@ -50,10 +50,6 @@ services:
     depends_on:
     - hdfs-namenode
     image: gchq/hdfs:${HADOOP_VERSION}
-    build:
-      context: ../hdfs/
-      args:
-        HADOOP_VERSION: ${HADOOP_VERSION}
     command: datanode
     container_name: hdfs-datanode
     hostname: hdfs-datanode
@@ -96,12 +92,6 @@ services:
     depends_on:
     - accumulo-master
     image: gchq/gaffer:${GAFFER_VERSION}
-    build:
-      context: .
-      args:
-        GAFFER_VERSION: ${GAFFER_VERSION}
-        BASE_IMAGE_NAME: gchq/accumulo
-        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: tserver
     restart: on-failure
     container_name: accumulo-tserver
@@ -121,12 +111,6 @@ services:
     depends_on:
     - accumulo-master
     image: gchq/gaffer:${GAFFER_VERSION}
-    build:
-      context: .
-      args:
-        GAFFER_VERSION: ${GAFFER_VERSION}
-        BASE_IMAGE_NAME: gchq/accumulo
-        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: monitor
     restart: on-failure
     container_name: accumulo-monitor
@@ -148,12 +132,6 @@ services:
     depends_on:
     - accumulo-master
     image: gchq/gaffer:${GAFFER_VERSION}
-    build:
-      context: .
-      args:
-        GAFFER_VERSION: ${GAFFER_VERSION}
-        BASE_IMAGE_NAME: gchq/accumulo
-        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: gc
     restart: on-failure
     container_name: accumulo-gc
