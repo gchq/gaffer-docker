@@ -35,6 +35,18 @@ pushTags() {
     done
 }
 
+# Adds an Chart to a github release 
+uploadChart() {
+    chart=$1
+    version=$2
+    token=$3
+
+    helm dependency update "kubernetes/${chart}"
+    helm package "kubernetes/${chart}"
+    curl -v -H "Authorization: token $token" -H "Content-Type: application/zip" --data-binary @${chart}-${version}.tgz "https://api.github.com/repos/gchq/gaffer-docker/releases/tag/v${version}/assets"
+    rm ${chart}-${version}.tgz
+}
+
 # If branch is not master or is pull request, exit
 if [ "${TRAVIS_PULL_REQUEST}" != "false" ] || [ "${TRAVIS_BRANCH}" != "master" ]; then
     exit 0
@@ -66,7 +78,7 @@ git config --global credential.helper "store --file=.git/credentials"
 echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
 
 # Add Develop branch
-git remote set-branches --add origin develop
+git remote set-branches --add origin develop gh-pages
 git pull
 
 # Tag release in Git
@@ -79,22 +91,26 @@ REPO_NAME="Gaffer-Docker"
 JSON_DATA="{
                 \"tag_name\": \"${TAG_NAME}\",
                 \"name\": \"${REPO_NAME} ${APP_VERSION}\",
-                \"body\": \"[${APP_VERSION} headliners](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Aheadliner)
-
-[${APP_VERSION} enhancements](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Aenhancement)
-
-[${APP_VERSION} bugs fixed](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Abug)
-
-[${APP_VERSION} migration notes](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Amigration-required)
-
-[${APP_VERSION} all issues resolved](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME})\",
+                \"body\": \"[${APP_VERSION} headliners](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Aheadliner)\n\n[${APP_VERSION} enhancements](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Aenhancement)\n\n[${APP_VERSION} bugs fixed](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Abug)\n\n[${APP_VERSION} migration notes](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME}+label%3Amigration-required)\n\n[${APP_VERSION} all issues resolved](https://github.com/gchq/${REPO_NAME}/issues?q=milestone%3A${TAG_NAME})\",
                 \"draft\": false
             }"
 echo "${JSON_DATA}"
-curl -v --data "${JSON_DATA}" https://api.github.com/repos/gchq/"${REPO_NAME}"/releases?access_token="${GITHUB_TOKEN}"
+curl -v --data "${JSON_DATA}" -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/gchq/${REPO_NAME}/releases"
 
 # Update version on develop
 git checkout develop
 ./cd/update_app_version.sh
 git commit -a -m "Updated App version"
+git push
+
+# Upload Charts to Github releases
+uploadChart hdfs "${APP_VERSION}" "${GITHUB_TOKEN}"
+uploadChart gaffer "${APP_VERSION}" "${GITHUB_TOKEN}"
+uploadChart gaffer-road-traffic "${APP_VERSION}" "${GITHUB_TOKEN}"
+
+# Update gh-pages
+git checkout gh-pages
+git merge master -m "Updated docs to latest version"
+helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/tag/${TAG_NAME}" --merge index.yaml
+git commit -am "Updated index.yaml"
 git push

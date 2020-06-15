@@ -5,6 +5,7 @@ The following instructions will guide you through provisioning and configuring a
 
 ## Install CLI Tools
 
+* [docker-compose](https://github.com/docker/compose/releases/latest)
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [helm](https://github.com/helm/helm/releases)
 * [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
@@ -24,7 +25,7 @@ If the versions of the container images you would like to deploy are not availab
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.11.0}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.12.0}
 export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-$GAFFER_VERSION}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
@@ -42,8 +43,9 @@ kind load docker-image gchq/gaffer-operation-runner:${GAFFER_VERSION}
 
 Deploy the Nginx Ingress Controller:
 ```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/service-nodeport.yaml
+INGRESS_NGINX_VERSION="nginx-0.30.0"
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_NGINX_VERSION}/deploy/static/mandatory.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_NGINX_VERSION}/deploy/static/provider/baremetal/service-nodeport.yaml
 ```
 
 

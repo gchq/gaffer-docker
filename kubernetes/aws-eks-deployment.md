@@ -20,7 +20,7 @@ The following instructions build all the container images and host them in AWS E
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.11.0}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.12.0}
 export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-$GAFFER_VERSION}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
@@ -38,7 +38,7 @@ for repo in ${HADOOP_IMAGES} ${GAFFER_IMAGES}; do
   aws ecr create-repository --repository-name gchq/${repo}
 done
 
-$(aws ecr get-login --no-include-email)
+echo $(aws ecr get-login-password) | docker login -u AWS --password-stdin https://${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com
 
 for repo in ${HADOOP_IMAGES}; do
   docker image tag gchq/${repo}:${HADOOP_VERSION} ${REPO_PREFIX}/${repo}:${HADOOP_VERSION}
