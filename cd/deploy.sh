@@ -77,7 +77,7 @@ pushTags gchq/gaffer-operation-runner "${GAFFER_VERSION}" "${APP_VERSION}"
 git config --global credential.helper "store --file=.git/credentials"
 echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
 
-# Add Develop branch
+# Add branches to be updated
 git remote set-branches --add origin develop gh-pages
 git pull
 
@@ -97,12 +97,6 @@ JSON_DATA="{
 echo "${JSON_DATA}"
 curl -v --data "${JSON_DATA}" -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/gchq/${REPO_NAME}/releases"
 
-# Update version on develop
-git checkout develop
-./cd/update_app_version.sh
-git commit -a -m "Updated App version"
-git push
-
 # Upload Charts to Github releases
 uploadChart hdfs "${APP_VERSION}" "${GITHUB_TOKEN}"
 uploadChart gaffer "${APP_VERSION}" "${GITHUB_TOKEN}"
@@ -114,3 +108,10 @@ git merge master -m "Updated docs to latest version"
 helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/tag/${TAG_NAME}" --merge index.yaml
 git commit -am "Updated index.yaml"
 git push
+
+# Update version on develop
+git checkout develop
+./cd/update_app_version.sh
+git commit -a -m "Updated App version"
+git push
+
