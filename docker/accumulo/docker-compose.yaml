@@ -1,3 +1,17 @@
+# Copyright 2020 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 version: "3.7"
 
 services:
@@ -6,6 +20,12 @@ services:
     image: zookeeper:3.5.6
     container_name: zookeeper
     hostname: zookeeper
+    environment:
+    - ZOO_SERVERS=server.1=zookeeper:2888:3888;2181
+    - ZOO_4LW_COMMANDS_WHITELIST=*
+    volumes:
+    - /data
+    - /datalog
 
   hdfs-namenode:
     image: gchq/hdfs:${HADOOP_VERSION}
@@ -30,10 +50,6 @@ services:
     depends_on:
     - hdfs-namenode
     image: gchq/hdfs:${HADOOP_VERSION}
-    build:
-      context: ../hdfs/
-      args:
-        HADOOP_VERSION: ${HADOOP_VERSION}
     command: datanode
     container_name: hdfs-datanode
     hostname: hdfs-datanode
@@ -76,12 +92,6 @@ services:
     depends_on:
     - accumulo-master
     image: gchq/accumulo:${ACCUMULO_VERSION}
-    build:
-      context: .
-      args:
-        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
-        HADOOP_VERSION: ${HADOOP_VERSION}
-        ZOOKEEPER_VERSION: ${ZOOKEEPER_VERSION}
     command: tserver
     restart: on-failure
     container_name: accumulo-tserver
@@ -101,12 +111,6 @@ services:
     depends_on:
     - accumulo-master
     image: gchq/accumulo:${ACCUMULO_VERSION}
-    build:
-      context: .
-      args:
-        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
-        HADOOP_VERSION: ${HADOOP_VERSION}
-        ZOOKEEPER_VERSION: ${ZOOKEEPER_VERSION}
     command: monitor
     restart: on-failure
     container_name: accumulo-monitor
@@ -128,12 +132,6 @@ services:
     depends_on:
     - accumulo-master
     image: gchq/accumulo:${ACCUMULO_VERSION}
-    build:
-      context: .
-      args:
-        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
-        HADOOP_VERSION: ${HADOOP_VERSION}
-        ZOOKEEPER_VERSION: ${ZOOKEEPER_VERSION}
     command: gc
     restart: on-failure
     container_name: accumulo-gc

@@ -1,0 +1,26 @@
+{
+    "class":"uk.gov.gchq.gaffer.operation.OperationChain",
+    "operations":[
+        {
+            "class":"uk.gov.gchq.gaffer.operation.impl.get.GetElements",
+            "input":[
+                {
+                    "class":"uk.gov.gchq.gaffer.operation.data.EntitySeed",
+                    "vertex":"M4"
+                }
+            ],
+            "view":{
+                "entities":{},
+                "edges":{
+                    "RoadHasJunction":{}
+                },
+                "globalElements":[
+                    {"groupBy":[]}
+                ]
+            }
+        },
+        {
+            "class":"uk.gov.gchq.gaffer.operation.impl.Count"
+        }
+    ]
+}

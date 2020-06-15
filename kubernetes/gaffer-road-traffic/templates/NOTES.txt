@@ -1,0 +1,40 @@
+.
+
+     _<^```\
+   __>'- ~--^^~            .
+   _>  / '     \             o
+  _> ,/ .  @_^`^)                      O
+ -   |.   /_,__ )     o
+ _> | /   '  (.       ________        _____  __O__
+  >_(/ _    (_ \     /  _____/_____ _/ ____\/ ____\___________
+    /.'    (  `.\   /   \  ___\__  \\   __\\   __\/ __ \_  ___\
+      (   (         \    \_\  \/ __ \|  |   |  | \  ___/|  |
+       (   (         \________/(____/|__|   |__|  \_____|__|
+        `( `l./^^>               __
+          `l.  /                /  \
+            l |                 \__/   _
+             l(                       (_)
+
+🚗 🚚 🚛 🏍️  🚲   Example GB Road Traffic Graph   🚗 🚚 🚛 🏍️  🚲
+
+Version: {{ .Values.gaffer.accumulo.image.repository }}:{{ .Values.gaffer.accumulo.image.tag }}
+
+=== store.properties ===
+{{ template "callSubChartTemplate" (list . "gaffer" "gaffer.storeProperties") }}
+
+REST API: http://{{ default "<default-ingress-host>" .Values.gaffer.api.ingress.host }}{{ .Values.gaffer.api.ingress.pathPrefix }}api/
+UI: http://{{ default "<default-ingress-host>" .Values.gaffer.api.ingress.host }}{{ .Values.gaffer.api.ingress.pathPrefix }}ui/
+
+{{- if or (eq (index .Values.gaffer.accumulo.config.accumuloSite "instance.secret") "DEFAULT") (eq .Values.gaffer.accumulo.config.userManagement.rootPassword "root") }}
+
+!!!!! ⚠️  WARNING ⚠️  !!!!!
+{{- if eq (index .Values.gaffer.accumulo.config.accumuloSite "instance.secret") "DEFAULT" }}
+It looks like you are using a default value for gaffer.accumulo.config.accumuloSite."instance.secret" ({{ index .Values.gaffer.accumulo.config.accumuloSite "instance.secret" }})
+{{- end }}
+{{- if eq .Values.gaffer.accumulo.config.userManagement.rootPassword "root" }}
+It looks like you are using a default value for gaffer.accumulo.config.userManagement.rootPassword ({{ .Values.gaffer.accumulo.config.userManagement.rootPassword }})
+{{- end }}
+Consider setting different values to improve security.
+{{- end }}
+
+.

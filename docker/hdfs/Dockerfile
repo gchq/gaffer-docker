@@ -1,3 +1,17 @@
+# Copyright 2020 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 ARG BUILDER_IMAGE_NAME=debian
 ARG BUILDER_IMAGE_TAG=stretch-20200224-slim
 
@@ -29,16 +43,12 @@ RUN mkdir -p /usr/share/man/man1 && \
 		xmlstarlet \
 	&& rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder --chown=root:root /hadoop-${HADOOP_VERSION}.tar.gz /opt
-
 RUN groupadd ${GROUP} && useradd --home-dir /opt/hadoop --gid ${GROUP} --no-create-home --shell /bin/bash ${USER}
 
+COPY --from=builder --chown=root:root /hadoop-${HADOOP_VERSION} /opt/hadoop-${HADOOP_VERSION}
+
 RUN cd /opt \
-	&& tar -xf ./hadoop-${HADOOP_VERSION}.tar.gz \
-	&& rm -rf ./hadoop-${HADOOP_VERSION}/share/doc \
-	&& rm ./hadoop-${HADOOP_VERSION}.tar.gz \
 	&& ln -s ./hadoop-${HADOOP_VERSION} ./hadoop \
-	&& chown -R root:root ./hadoop/ \
 	&& mkdir -p -m 755 /var/log/hadoop \
 	&& chown ${USER}:${GROUP} /var/log/hadoop
 

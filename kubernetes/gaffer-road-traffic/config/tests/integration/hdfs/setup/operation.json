@@ -1,0 +1,14 @@
+{
+    "class": "uk.gov.gchq.gaffer.hdfs.operation.AddElementsFromHdfs",
+    "inputMapperPairs": {
+        "/test/input": "uk.gov.gchq.gaffer.hdfs.operation.mapper.generator.JsonMapperGenerator"
+    },
+    "outputPath": "/test/output",
+    "failurePath": "/test/failure",
+    "workingPath": "/test/tmp/workingDir",
+    "splitsFilePath": "/test/tmp/splits",
+    "useProvidedSplits": false,
+    "jobInitialiser": {
+        "class": "uk.gov.gchq.gaffer.hdfs.operation.handler.job.initialiser.TextJobInitialiser"
+    }
+}

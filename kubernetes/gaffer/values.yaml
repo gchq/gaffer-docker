@@ -1,3 +1,16 @@
+# Copyright 2020 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 nameOverride: ""
 fullnameOverride: ""
@@ -13,9 +26,14 @@ graph:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
 
+# See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
+ui: "{}"
+
 hdfs:
-  # Config used by this chart
   enabled: true
+  config:
+    hdfsSite:
+      dfs.datanode.synconclose: true
   volumes:
   - /accumulo
   namenode:
@@ -36,18 +54,19 @@ zookeeper:
 accumulo:
   instanceId: accumulo
   config:
+    path: /etc/accumulo/conf
     files: {}
     accumuloSite:
       instance.secret: ""
       # trace.user: tracer
       # trace.token.property.password: password
       tserver.memory.maps.native.enabled: true
-      tserver.memory.maps.max: 80M
-      tserver.cache.data.size: 7M
-      tserver.cache.index.size: 16M
-      tserver.total.mutation.queue.max: 8M
-      tserver.sort.buffer.size: 20M
-      tserver.walog.max.size: 100M
+      tserver.memory.maps.max: 128M
+      tserver.cache.data.size: 15M
+      tserver.cache.index.size: 40M
+      tserver.total.mutation.queue.max: 16M
+      tserver.sort.buffer.size: 50M
+      tserver.walog.max.size: 128M
     userManagement:
       rootPassword: ""
       # If accumulo.config.userManagement.revoke.enabled is:
@@ -84,7 +103,7 @@ accumulo:
 
   image:
     repository: gchq/gaffer
-    tag: 1.11.0
+    tag: 1.12.0
     pullPolicy: IfNotPresent
     pullSecrets: []
 
@@ -136,8 +155,8 @@ api:
   user: gaffer
   replicaCount: 1
   image:
-    repository: gchq/gaffer-wildfly
-    tag: 1.11.0
+    repository: gchq/gaffer-rest
+    tag: 1.12.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -155,7 +174,13 @@ api:
     # For Nginx:
     pathPrefix: "/gaffer/(.*)"
 
+waitFor:
+  graphStatusOk: true
+
 testImages:
   curl:
     repository: curlimages/curl
     tag: 7.67.0
+  operationRunner:
+    repository: gchq/gaffer-operation-runner
+    tag: 1.12.0

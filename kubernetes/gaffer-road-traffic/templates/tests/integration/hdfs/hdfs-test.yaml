@@ -1,0 +1,137 @@
+{{- /*
+
+Copyright 2020 Crown Copyright
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+*/ -}}
+{{- if .Values.gaffer.hdfs.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "gaffer-road-traffic.fullname" . }}-hdfs-integration-test
+  labels:
+    {{- include "gaffer-road-traffic.labels" . | nindent 4 }}
+    app.kubernetes.io/component: test
+  annotations:
+    helm.sh/hook: test-success
+spec:
+  restartPolicy: Never
+  initContainers:
+  - name: populate-hdfs
+    image: {{ .Values.gaffer.hdfs.shell.repository }}:{{ .Values.gaffer.hdfs.shell.tag }}
+    imagePullPolicy: {{ .Values.gaffer.hdfs.shell.imagePullPolicy }}
+    workingDir: /setup
+    command: [
+      "/bin/bash",
+      "-c",
+      ". ./populate-hdfs.sh"
+    ]
+    env:
+    - name: HADOOP_CONF_DIR
+      value: {{ .Values.gaffer.hdfs.config.path }}
+    volumeMounts:
+    - name: hdfs-setup-files
+      mountPath: /setup
+      readOnly: true
+    - name: hdfs-config
+      mountPath: {{ .Values.gaffer.hdfs.config.path }}
+      readOnly: true
+    - name: hdfs-secrets
+      mountPath: {{ .Values.gaffer.hdfs.secrets.path }}
+      readOnly: true
+
+  - name: add-elements-from-hdfs
+    image: {{ .Values.gaffer.testImages.operationRunner.repository }}:{{ .Values.gaffer.testImages.operationRunner.tag }}
+    args:
+    - {{ .Values.gaffer.graph.config.graphId }}
+    env:
+    - name: ACCUMULO_CONF_DIR
+      value: {{ .Values.gaffer.accumulo.config.path }}
+    - name: ACCUMULO_OTHER_OPTS # prevent out of memory errors
+      value: -Xmx2048m -Xms1024m
+    volumeMounts:
+    - name: hdfs-setup-files
+      mountPath: /gaffer/operation
+      readOnly: true
+    - name: accumulo-config
+      mountPath: {{ .Values.gaffer.accumulo.config.path }}/accumulo-site.xml
+      readOnly: true
+      subPath: accumulo-site.xml
+    - name: accumulo-config
+      mountPath: {{ .Values.gaffer.accumulo.config.path }}/client.conf
+      readOnly: true
+      subPath: client.conf
+    - name: accumulo-config
+      mountPath: {{ .Values.gaffer.accumulo.config.path }}/accumulo-env.sh
+      readOnly: true
+      subPath: accumulo-env.sh
+    - name: accumulo-config
+      mountPath: {{ .Values.gaffer.accumulo.config.path }}/log4j.properties
+      readOnly: true
+      subPath: log4j.properties
+    - name: hdfs-config
+      mountPath: {{ .Values.gaffer.accumulo.config.path }}/core-site.xml
+      subPath: core-site.xml
+      readOnly: true
+    - name: store-properties
+      mountPath: /gaffer/store/
+      readOnly: true
+    # Schema isn't mounted because of GAFFER-2262
+    # Can be un-commented once it has been resolved and released
+    # In the meantime use the schema built into the container
+    # - name: schema
+    #   mountPath: /gaffer/schema/
+    #   readOnly: true
+  containers:
+  - name: hdfs-test
+    image: {{ .Values.gaffer.testImages.curl.repository }}:{{ .Values.gaffer.testImages.curl.tag }}
+    workingDir: /gaffer/tests/
+    command:
+    - /bin/sh
+    - -c
+    - . ./check-elements-exist.sh
+    volumeMounts:
+    - name: hdfs-test-files
+      mountPath: /gaffer/tests/
+      readOnly: true
+  volumes:
+  - name: hdfs-setup-files
+    configMap:
+      name: {{ template "gaffer-road-traffic.fullname" . }}-hdfs-setup-files
+      optional: false
+  - name: hdfs-test-files
+    configMap:
+      name: {{ template "gaffer-road-traffic.fullname" . }}-hdfs-test-files
+      optional: false
+  - name: store-properties
+    secret:
+      secretName: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-store-properties
+      optional: false
+  - name: schema
+    configMap:
+      name: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-schema
+      optional: false
+  - name: accumulo-config
+    secret:
+      secretName: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-accumulo-config
+      optional: false
+  - name: hdfs-config
+    configMap:
+      name: {{ template "callSubChartTemplate" (list . "gaffer.hdfs"  "hdfs.fullname") }}
+      optional: false
+  - name: hdfs-secrets
+    secret:
+      secretName: {{ template "callSubChartTemplate" (list . "gaffer.hdfs"  "hdfs.fullname") }}
+      optional: false
+{{- end}}
