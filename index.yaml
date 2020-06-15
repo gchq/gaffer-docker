@@ -55,4 +55,4 @@ entries:
     urls:
     - https://github.com/gchq/gaffer-docker/releases/download/v0.5.0/hdfs-0.5.0.tgz
     version: 0.5.0
-generated: "2020-05-14T10:11:35.50605509+01:00"
+generated: "2020-06-15T14:01:26.338938403Z"
