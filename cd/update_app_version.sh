@@ -43,7 +43,12 @@ createNewVersion() {
 
 # Performs a Find and replace on the Helm charts and the app_version file
 findAndReplace() {
-    find "$(getRootDirectory)" \( -iname Chart.y*ml -o -name app_version \) -exec sed -i'' -e "/# managed version/s:$1:$2:g" {} +
+    # Replace the app version file
+    echo $2 > "$(getRootDirectory)/app_version"
+    # Replace version marked with # managed version in the Chart.yaml files
+    managed_version_tag='# managed version'
+    find "$(getRootDirectory)" -iname Chart.y*ml -exec sed -i'' -e "s:$1 ${managed_version_tag}:$2 ${managed_version_tag}:g" {} +
+
 }
 
 if [ $# -gt 1 ]; then
@@ -58,7 +63,7 @@ new_version=$1
 app_version="$(getAppVersion)"
 
 if [ -z "${new_version}" ]; then
-    new_version="$(createNewVersion ${app_version}) # managed version"
+    new_version="$(createNewVersion ${app_version})"
 fi
 
 findAndReplace "${app_version}" "${new_version}"
