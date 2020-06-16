@@ -45,7 +45,6 @@ uploadChart() {
     helm dependency update "kubernetes/${chart}"
     helm package "kubernetes/${chart}"
     curl -v -H "Authorization: token $token" -H "Content-Type: application/zip" --data-binary @${chart}-${version}.tgz "https://uploads.github.com/repos/gchq/gaffer-docker/releases/${id}/assets?name=${chart}-${version}.tgz"
-    rm ${chart}-${version}.tgz
 }
 
 # If branch is not master or is pull request, exit
@@ -108,8 +107,8 @@ uploadChart gaffer-road-traffic "${APP_VERSION}" "${GITHUB_TOKEN}" "${id}"
 
 # Update gh-pages
 git checkout gh-pages
-git merge master -m "Updated docs to latest version"
 helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/tag/${TAG_NAME}" --merge index.yaml
+rm *.tgz
 git commit -am "Updated index.yaml"
 git push
 
