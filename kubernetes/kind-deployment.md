@@ -25,7 +25,7 @@ If the versions of the container images you would like to deploy are not availab
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.11.0}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.12.0}
 export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-$GAFFER_VERSION}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
