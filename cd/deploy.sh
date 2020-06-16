@@ -40,10 +40,11 @@ uploadChart() {
     chart=$1
     version=$2
     token=$3
+    id=$4
 
     helm dependency update "kubernetes/${chart}"
     helm package "kubernetes/${chart}"
-    curl -v -H "Authorization: token $token" -H "Content-Type: application/zip" --data-binary @${chart}-${version}.tgz "https://api.github.com/repos/gchq/gaffer-docker/releases/tag/v${version}/assets"
+    curl -v -H "Authorization: token $token" -H "Content-Type: application/zip" --data-binary @${chart}-${version}.tgz "https://uploads.github.com/repos/gchq/gaffer-docker/releases/${id}/assets?name=${chart}-${version}.tgz"
     rm ${chart}-${version}.tgz
 }
 
@@ -95,12 +96,15 @@ JSON_DATA="{
                 \"draft\": false
             }"
 echo "${JSON_DATA}"
-curl -v --data "${JSON_DATA}" -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/gchq/${REPO_NAME}/releases"
+curl -v -o output.json --data "${JSON_DATA}" -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/gchq/${REPO_NAME}/releases"
+idLine="$(grep '^  "id"' output.json)"
+id="$(echo ${idLine} | sed -e 's|^"id": \([0-9]*\).*|\1|')"
+rm output.json
 
 # Upload Charts to Github releases
-uploadChart hdfs "${APP_VERSION}" "${GITHUB_TOKEN}"
-uploadChart gaffer "${APP_VERSION}" "${GITHUB_TOKEN}"
-uploadChart gaffer-road-traffic "${APP_VERSION}" "${GITHUB_TOKEN}"
+uploadChart hdfs "${APP_VERSION}" "${GITHUB_TOKEN}" "${id}"
+uploadChart gaffer "${APP_VERSION}" "${GITHUB_TOKEN}" "${id}"
+uploadChart gaffer-road-traffic "${APP_VERSION}" "${GITHUB_TOKEN}" "${id}"
 
 # Update gh-pages
 git checkout gh-pages
