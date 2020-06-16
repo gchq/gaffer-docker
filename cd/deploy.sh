@@ -107,7 +107,7 @@ uploadChart gaffer-road-traffic "${APP_VERSION}" "${GITHUB_TOKEN}" "${id}"
 
 # Update gh-pages
 git checkout gh-pages
-helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/tag/${TAG_NAME}" --merge index.yaml
+helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/download/${TAG_NAME}" --merge index.yaml
 rm *.tgz
 git commit -am "Updated index.yaml"
 git push
