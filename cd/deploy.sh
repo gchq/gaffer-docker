@@ -110,6 +110,7 @@ git checkout gh-pages
 helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/download/${TAG_NAME}" --merge index.yaml
 rm *.tgz
 git commit -am "Updated index.yaml"
+git merge master -m "Updated docs to latest version"
 git push
 
 # Update version on develop
