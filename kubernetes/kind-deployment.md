@@ -21,7 +21,9 @@ kind create cluster
 
 ## Container Images
 
-If the versions of the container images you would like to deploy are not available in [Docker Hub](https://hub.docker.com/u/gchq) then you will need to build them yourself and import them into your kind cluster:
+If the versions of the container images you would like to deploy are not available in [Docker Hub](https://hub.docker.com/u/gchq) then you will need to build them yourself and import them into your kind cluster. 
+
+To import the images, run this from the kubernetes directory:
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
@@ -38,7 +40,6 @@ kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-operation-runner:${GAFFER_VERSION}
 ```
 
-
 ## Ingress
 
 Deploy the Nginx Ingress Controller:
@@ -47,7 +48,6 @@ INGRESS_NGINX_VERSION="nginx-0.30.0"
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_NGINX_VERSION}/deploy/static/mandatory.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_NGINX_VERSION}/deploy/static/provider/baremetal/service-nodeport.yaml
 ```
-
 
 ## Deploy Helm Charts
 
