@@ -21,6 +21,7 @@ metadata:
     app.kubernetes.io/component: hook
   annotations:
     helm.sh/hook: post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
     helm.sh/hook-weight: "35"
 spec:
   restartPolicy: Never
