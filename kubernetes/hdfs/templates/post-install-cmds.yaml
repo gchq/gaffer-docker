@@ -22,6 +22,7 @@ metadata:
   name: {{ template "hdfs.fullname" . }}-post-install-cmds
   annotations:
     helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
     helm.sh/hook-weight: "10"
   labels:
     {{- include "hdfs.labels" . | nindent 4 }}

@@ -40,11 +40,11 @@ uploadChart() {
     chart=$1
     version=$2
     token=$3
+    id=$4
 
     helm dependency update "kubernetes/${chart}"
     helm package "kubernetes/${chart}"
-    curl -v -H "Authorization: token $token" -H "Content-Type: application/zip" --data-binary @${chart}-${version}.tgz "https://api.github.com/repos/gchq/gaffer-docker/releases/tag/v${version}/assets"
-    rm ${chart}-${version}.tgz
+    curl -v -H "Authorization: token $token" -H "Content-Type: application/zip" --data-binary @${chart}-${version}.tgz "https://uploads.github.com/repos/gchq/gaffer-docker/releases/${id}/assets?name=${chart}-${version}.tgz"
 }
 
 # If branch is not master or is pull request, exit
@@ -95,18 +95,22 @@ JSON_DATA="{
                 \"draft\": false
             }"
 echo "${JSON_DATA}"
-curl -v --data "${JSON_DATA}" -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/gchq/${REPO_NAME}/releases"
+curl -v -o output.json --data "${JSON_DATA}" -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/gchq/${REPO_NAME}/releases"
+idLine="$(grep '^  "id"' output.json)"
+id="$(echo ${idLine} | sed -e 's|^"id": \([0-9]*\).*|\1|')"
+rm output.json
 
 # Upload Charts to Github releases
-uploadChart hdfs "${APP_VERSION}" "${GITHUB_TOKEN}"
-uploadChart gaffer "${APP_VERSION}" "${GITHUB_TOKEN}"
-uploadChart gaffer-road-traffic "${APP_VERSION}" "${GITHUB_TOKEN}"
+uploadChart hdfs "${APP_VERSION}" "${GITHUB_TOKEN}" "${id}"
+uploadChart gaffer "${APP_VERSION}" "${GITHUB_TOKEN}" "${id}"
+uploadChart gaffer-road-traffic "${APP_VERSION}" "${GITHUB_TOKEN}" "${id}"
 
 # Update gh-pages
 git checkout gh-pages
-git merge master -m "Updated docs to latest version"
-helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/tag/${TAG_NAME}" --merge index.yaml
+helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/download/${TAG_NAME}" --merge index.yaml
+rm *.tgz
 git commit -am "Updated index.yaml"
+git merge master -m "Updated docs to latest version"
 git push
 
 # Update version on develop

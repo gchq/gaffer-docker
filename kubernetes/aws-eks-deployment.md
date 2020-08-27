@@ -16,7 +16,8 @@ The following instructions will guide you through provisioning and configuring a
 
 If the versions of the container images you would like to deploy are not available in [Docker Hub](https://hub.docker.com/u/gchq) then you will need to host them in a registry yourself.
 
-The following instructions build all the container images and host them in AWS ECR:
+The following instructions build all the container images and host them in AWS ECR when run from the ./kubernetes folder:
+
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
