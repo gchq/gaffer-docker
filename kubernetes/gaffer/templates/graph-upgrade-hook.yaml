@@ -32,8 +32,7 @@ spec:
     args:
     - uk.gov.gchq.gaffer.accumulostore.utils.AddUpdateTableIterator
     - {{ .Values.graph.config.graphId }}
-    # Argument for schema directory should be /gaffer/schema/, but this is a workaround for GAFFER-2262
-    - /gaffer/schema/..data/
+    - /gaffer/schema/
     - /gaffer/store/store.properties
     - update
     env:

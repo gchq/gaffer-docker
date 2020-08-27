@@ -88,12 +88,9 @@ spec:
     - name: store-properties
       mountPath: /gaffer/store/
       readOnly: true
-    # Schema isn't mounted because of GAFFER-2262
-    # Can be un-commented once it has been resolved and released
-    # In the meantime use the schema built into the container
-    # - name: schema
-    #   mountPath: /gaffer/schema/
-    #   readOnly: true
+    - name: schema
+      mountPath: /gaffer/schema/
+      readOnly: true
   containers:
   - name: hdfs-test
     image: {{ .Values.gaffer.testImages.curl.repository }}:{{ .Values.gaffer.testImages.curl.tag }}
