@@ -34,7 +34,7 @@ echo "127.0.0.1 hdfs.k8s.local" | sudo tee -a /etc/hosts
 
 Update the HDFS deployment to route ingress based on FQDNs:
 ```bash
-helm upgrade hdfs . -f ./values-host-based-ingress.yaml
+helm upgrade hdfs . -f ./values-host-based-ingress.yaml --reuse-values
 ```
 
 Set up port forwarding to the nginx ingress controller:
