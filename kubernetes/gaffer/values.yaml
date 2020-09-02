@@ -25,6 +25,7 @@ graph:
   storeProperties:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
+  # operationDeclarations: []
 
 # See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
 ui: "{}"

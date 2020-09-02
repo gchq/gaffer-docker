@@ -42,6 +42,9 @@ spec:
         - name: store-properties
           mountPath: /gaffer/store/
           readOnly: true
+        - name: operation-declarations
+          mountPath: /gaffer/operations/
+          readOnly: true
         resources:
           {{- toYaml .Values.loader.resources | nindent 10 }}
       volumes:
@@ -57,6 +60,10 @@ spec:
         secret:
           secretName: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-store-properties
           optional: false
+      - name: operation-declarations
+        configMap:
+          name: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-operation-declarations
+          optional: true
       {{- with .Values.loader.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

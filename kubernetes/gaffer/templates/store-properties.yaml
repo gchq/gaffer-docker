@@ -45,6 +45,9 @@ accumulo.password={{ required (print "Password required for API's Accumulo User:
 {{- range $property, $value := .Values.graph.storeProperties }}
 {{ $property }}={{ $value }}
 {{- end }}
+{{- if and .Values.graph.operationDeclarations (not (hasKey .Values.graph.storeProperties "gaffer.store.operation.declarations")) }}
+gaffer.store.operation.declarations=/gaffer/operations/operationDeclarations.json
+{{- end }}
 {{- end -}}
 
 apiVersion: v1

@@ -53,6 +53,9 @@ spec:
         - name: store-properties
           mountPath: /gaffer/store/
           readOnly: true
+        - name: operation-declarations
+          mountPath: /gaffer/operations/
+          readOnly: true
         ports:
         - name: http
           protocol: TCP
@@ -102,3 +105,7 @@ spec:
         secret:
           secretName: {{ template "gaffer.fullname" . }}-store-properties
           optional: false
+      - name: operation-declarations
+        configMap:
+          name: {{ template "gaffer.fullname" . }}-operation-declarations
+          optional: true
