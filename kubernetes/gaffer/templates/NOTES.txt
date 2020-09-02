@@ -19,7 +19,7 @@ Version: {{ .Values.accumulo.image.repository }}:{{ .Values.accumulo.image.tag }
 === store.properties ===
 {{ include "gaffer.storeProperties" . }}
 
-REST API: http://{{ default "<default-ingress-host>" .Values.api.ingress.host }}{{ .Values.api.ingress.pathPrefix }}api/
+REST API: http://{{ default "<default-ingress-host>" .Values.api.ingress.host }}{{ .Values.api.ingress.pathPrefix }}rest/
 UI: http://{{ default "<default-ingress-host>" .Values.api.ingress.host }}{{ .Values.api.ingress.pathPrefix }}ui/
 
 {{- if or (eq (index .Values.accumulo.config.accumuloSite "instance.secret") "DEFAULT") (eq .Values.accumulo.config.userManagement.rootPassword "root") }}
