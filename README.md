@@ -25,10 +25,6 @@ There are guides on how to deploy the charts on:
 * a local Kubernetes cluster, [using kind (Kubernetes IN Docker)](kubernetes/kind-deployment.md)
 * an [AWS EKS cluster](kubernetes/aws-eks-deployment.md)
 
-These guides assume you've cloned the repository and are using the Helm charts contained within. We do also host our Helm Charts index on our Github pages site. You can get access to them by running:
-```bash
-helm repo add gaffer https://gchq.github.io/gaffer-docker
-```
 
 ## Versioning
 Each of our images will be tagged in DockerHub with the version of the software they represent. Every release,
