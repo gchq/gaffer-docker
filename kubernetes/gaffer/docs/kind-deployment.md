@@ -43,7 +43,7 @@ echo "127.0.0.1 gaffer.k8s.local accumulo.k8s.local hdfs.k8s.local" | sudo tee -
 
 Update the Gaffer deployment to route ingress based on FQDNs:
 ```
-helm upgrade gaffer . -f ./values-host-based-ingress.yaml
+helm upgrade gaffer . -f ./values-host-based-ingress.yaml --reuse-values
 ```
 
 Set up port forwarding to the nginx ingress controller:
