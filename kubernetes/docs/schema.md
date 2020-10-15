@@ -3,7 +3,7 @@ How to Deploy your own Schema
 Gaffer uses schema files to describe the data contained in a Graph. This guide will tell you how
 to deploy your own schemas with a Gaffer Graph.
 
-The first thing you'll need to do is Deploy the demo graph. We have a guide for how to do that [here](./deploy-demo-graph.md)
+The first thing you'll need to do is Deploy the demo graph. We have a guide for how to do that [here](./deploy-demo-graph.md).
 
 Once you have that deployed, we can change the schema.
 
