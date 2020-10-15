@@ -38,7 +38,7 @@ docker build -t custom-gaffer-accumulo:latest
 
 ### Switch the images in the deployment
 
-You'll need a way of making the custom images visible to the kubernetes cluster. With EKS, you can do this by uploading the images to ECR. Theres an example for how to do that in one of our [other guides](./aws-eks-deployment.md#Container+Images). With KinD, you just run `kind load docker-image <image:tag>`.
+You'll need a way of making the custom images visible to the kubernetes cluster. With EKS, you can do this by uploading the images to ECR. There's an example for how to do that in one of our [other guides](./aws-eks-deployment.md#Container+Images). With KinD, you just run `kind load docker-image <image:tag>`.
 
 Once visible you can switch them out. Create a `custom-images.yaml` file with the following contents:
 ```yaml
