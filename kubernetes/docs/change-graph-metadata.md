@@ -7,8 +7,6 @@ The first thing you'll need to do is [deploy the demo graph](./deploy-demo-graph
 ### Changing the description
 Create a file called `graph-meta.yaml`. We will use this file to add our description and graph Id.
 Changing the description is as easy as changing the `graph.config.description` value.
-
-graph-meta.yaml
 ```yaml
 graph:
   config:
@@ -28,9 +26,7 @@ The `--reuse-values` argument means we don't override any passwords that we set 
 You can see your new description if you go to the Swagger UI and call the /graph/config/description endpoint.
 
 ### Updating the graph Id
-Updating the graph Id is a little more complicated since the Graph Id corresponds to an Accumulo table. We have to graph the gaffer user permissions to read and write to that table. Here's how to do that
-
-graph-meta.yaml
+Updating the graph Id is a little more complicated since the Graph Id corresponds to an Accumulo table. We have to graph the gaffer user permissions to read and write to that table. To do that update the `graph-meta.yaml` file with the following contents:
 ```yaml
 graph:
   config:
@@ -50,7 +46,7 @@ accumulo:
 ```
 
 ### Deploy out your changes
-Upgrade your deployment using helm
+Upgrade your deployment using Helm.
 ```bash
 helm upgrade my-graph gaffer-docker/gaffer -f graph-metadata.yaml --reuse-values
 ```

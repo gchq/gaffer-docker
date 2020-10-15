@@ -15,9 +15,8 @@ helm repo add gaffer-docker https://gchq.github.io/gaffer-docker
 ```
 
 ### Set the Accumulo passwords
-By default, we don't set the Accumulo passwords for you. To set these create a file called "password-values.yaml" and add the following:
+By default, we don't set the Accumulo passwords for you. To set these create a file called `password-values.yaml` and add the following:
 
-password-values.yaml
 ```yaml
 accumulo:
   config:

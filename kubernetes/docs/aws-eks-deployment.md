@@ -52,7 +52,6 @@ for repo in ${GAFFER_IMAGES}; do
 done
 ```
 
-
 ## EKS Cluster
 
 There are a number of ways to provision an AWS EKS cluster. This guide uses a cli tool called `eksctl`. Documentation is available at https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html for some of the other methods.
