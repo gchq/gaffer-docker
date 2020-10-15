@@ -33,7 +33,7 @@ COPY ./my-library-1.0-SNAPSHOT.jar /opt/accumulo/lib/ext
 ```
 Then build the image
 ```bash
-docker build -t custom-gaffer-accumulo:latest
+docker build -t custom-gaffer-accumulo:latest .
 ```
 
 ### Switch the images in the deployment
