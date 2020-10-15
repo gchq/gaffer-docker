@@ -66,3 +66,7 @@ helm upgrade my-graph gaffer-tools/gaffer -f schema-values.yaml --reuse-values
 The `--reuse-values` argument tells helm to re-use the passwords that we defined earlier.
 
 Now if we inspect the schema, you'll see that the `count` property has changed to a Long.
+
+
+### What next?
+See our [guides](./guides.md) for other things you can do with Gaffer on Kubernetes.

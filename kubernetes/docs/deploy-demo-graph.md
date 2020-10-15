@@ -40,3 +40,6 @@ Gaffer it can take around 5 minutes for everything to start so it may be worth a
 helm install my-graph gaffer-docker/gaffer -f password-values.yaml
 ```
 Feel free to change "my-graph" to something more interesting.
+
+### What next?
+See our [guides](./guides.md) for other things you can do with Gaffer on Kubernetes.

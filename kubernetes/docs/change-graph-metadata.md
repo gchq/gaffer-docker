@@ -56,3 +56,6 @@ helm upgrade my-graph gaffer-docker/gaffer -f graph-metadata.yaml --reuse-values
 ```
 
 If you take a look at the Accumulo monitor, you will see your new Accumulo table
+
+### What next?
+See our [guides](./guides.md) for other things you can do with Gaffer on Kubernetes.
