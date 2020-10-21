@@ -22,6 +22,7 @@ metadata:
   name: {{ template "hdfs.fullname" . }}
   labels:
     {{ include "hdfs.labels" . | nindent 4 }}
+    app.kubernetes.io/component: namenode
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

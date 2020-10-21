@@ -18,6 +18,7 @@ metadata:
   name: {{ template "hdfs.fullname" . }}-datanodes
   labels:
     {{ include "hdfs.labels" . | nindent 4 }}
+    app.kubernetes.io/component: datanode
 spec:
   podSelector:
     matchLabels:
