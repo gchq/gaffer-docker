@@ -2,7 +2,7 @@ Changing the Graph Id and Description
 =======================================
 By default, the default Gaffer deployment ships with the Graph name "simpleGraph" and description "A  graph for demo purposes" These are just placeholders and can be overwritten. This guide will show you how.
 
-The first thing you'll need to do is [deploy the demo graph](./deploy-demo-graph.md).
+The first thing you'll need to do is [deploy a simple graph](./deploy-empty-graph.md).
 
 ### Changing the description
 Create a file called `graph-meta.yaml`. We will use this file to add our description and graph Id.

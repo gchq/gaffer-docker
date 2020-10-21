@@ -6,7 +6,7 @@ By default with the Gaffer deployment you get access to the:
 
 If you want more libraries than this (either one of ours of one of your own) you'll need to customise the docker images and use them in place of the defaults.
 
-You'll need a basic Gaffer instance deployed on Kubernetes. Here's [how to do that](./deploy-demo-graph.md).
+You'll need a basic Gaffer instance deployed on Kubernetes. Here's [how to do that](./deploy-empty-graph.md).
 
 ### Overwrite the REST war file
 At the moment, Gaffer uses a WAR file with all the dependencies bundled in. You'll need to extend the WAR file using [these instructions](https://gchq.github.io/gaffer-doc/components/rest-api.html#how-to-modify-the-rest-api-for-your-project). Once you have a custom war file, you'll need to create a new image based on the `gaffer-rest` one. To do that you'll need a `Dockerfile` like this one:
