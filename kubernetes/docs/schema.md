@@ -61,7 +61,7 @@ graph:
 ### Update deployment with the new schema
 For our deployment to pick up the changes, we need to run a helm upgrade:
 ```bash
-helm upgrade my-graph gaffer-tools/gaffer -f schema-values.yaml --reuse-values
+helm upgrade my-graph gaffer-docker/gaffer -f schema-values.yaml --reuse-values
 ```
 The `--reuse-values` argument tells helm to re-use the passwords that we defined earlier.
 

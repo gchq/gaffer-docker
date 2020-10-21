@@ -26,7 +26,7 @@ The `--reuse-values` argument means we don't override any passwords that we set 
 You can see your new description if you go to the Swagger UI and call the /graph/config/description endpoint.
 
 ### Updating the graph Id
-Updating the graph Id is a little more complicated since the Graph Id corresponds to an Accumulo table. We have to graph the gaffer user permissions to read and write to that table. To do that update the `graph-meta.yaml` file with the following contents:
+Updating the graph Id is a little more complicated since the Graph Id corresponds to an Accumulo table. We have to change the gaffer user's permissions to read and write to that table. To do that update the `graph-meta.yaml` file with the following contents:
 ```yaml
 graph:
   config:
@@ -45,7 +45,7 @@ accumulo:
           - ALTER_TABLE
 ```
 
-### Deploy out your changes
+### Deploy your changes
 Upgrade your deployment using Helm.
 ```bash
 helm upgrade my-graph gaffer-docker/gaffer -f graph-metadata.yaml --reuse-values
