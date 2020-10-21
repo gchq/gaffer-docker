@@ -55,7 +55,7 @@ accumulo:
 
 To switch them run:
 ```bash
-helm upgrade my-graph -f custom-images.yaml --reuse-values
+helm upgrade my-graph gaffer-docker/gaffer -f custom-images.yaml --reuse-values
 ```
 
 ### What next?
