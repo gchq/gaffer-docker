@@ -1,4 +1,5 @@
-# Gaffer Helm Chart
+Gaffer Helm Chart
+==========================
 
 Gaffer is a graph database framework. It allows the storage of very large graphs containing rich properties on the nodes and edges. This Helm Chart can be used to deploy a Gaffer instance, using Accumulo as its store, onto a Kubernetes cluster.
 
