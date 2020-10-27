@@ -1,7 +1,7 @@
 # Deploying Gaffer on AWS EKS
 All the scripts found here are designed to be run from the kubernetes/gaffer folder.
 
-First follow the [instructions here](../../aws-eks-deployment.md) to provision and configure an [AWS EKS](https://aws.amazon.com/eks/) cluster that the Gaffer Helm Chart can be deployed on.
+First follow the [instructions here](../../docs/aws-eks-deployment.md) to provision and configure an [AWS EKS](https://aws.amazon.com/eks/) cluster that the Gaffer Helm Chart can be deployed on.
 
 ## Using ECR
 If you are hosting the container images in your AWS account, using ECR, then run the following commands to configure the Helm Chart to use them:

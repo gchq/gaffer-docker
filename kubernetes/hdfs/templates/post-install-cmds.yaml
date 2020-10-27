@@ -28,7 +28,7 @@ metadata:
     {{- include "hdfs.labels" . | nindent 4 }}
     app.kubernetes.io/component: hook
 spec:
-  restartPolicy: Never
+  restartPolicy: OnFailure
   containers:
   - name: cmds
     image: {{ .Values.shell.repository }}:{{ .Values.shell.tag }}

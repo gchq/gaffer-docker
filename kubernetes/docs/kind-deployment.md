@@ -51,9 +51,9 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${IN
 
 ## Deploy Helm Charts
 
-* [HDFS](hdfs/docs/kind-deployment.md)
-* [Gaffer](gaffer/docs/kind-deployment.md)
-* [Example Gaffer Graph containing Road Traffic Dataset](gaffer-road-traffic/docs/kind-deployment.md)
+* [HDFS](../hdfs/docs/kind-deployment.md)
+* [Gaffer](../gaffer/docs/kind-deployment.md)
+* [Example Gaffer Graph containing Road Traffic Dataset](../gaffer-road-traffic/docs/kind-deployment.md)
 
 
 ## Uninstall
