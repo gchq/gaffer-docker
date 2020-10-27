@@ -18,17 +18,12 @@ These charts can be accessed by cloning our repository or by using our Helm repo
 
 To use this repo, run:
 ```bash
-helm repo add gaffer https://gchq.github.io/gaffer-docker
+helm repo add gaffer-docker https://gchq.github.io/gaffer-docker
 ```
 
-There are guides on how to deploy the charts on:
-* a local Kubernetes cluster, [using kind (Kubernetes IN Docker)](kubernetes/kind-deployment.md)
-* an [AWS EKS cluster](kubernetes/aws-eks-deployment.md)
+## Kubernetes How-to Guides
 
-These guides assume you've cloned the repository and are using the Helm charts contained within. We do also host our Helm Charts index on our Github pages site. You can get access to them by running:
-```bash
-helm repo add gaffer https://gchq.github.io/gaffer-docker
-```
+We have a number of [guides](./kubernetes/docs/guides.md) to help you deploy Gaffer on Kubernetes.
 
 ## Versioning
 Each of our images will be tagged in DockerHub with the version of the software they represent. Every release,

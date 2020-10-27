@@ -52,7 +52,6 @@ for repo in ${GAFFER_IMAGES}; do
 done
 ```
 
-
 ## EKS Cluster
 
 There are a number of ways to provision an AWS EKS cluster. This guide uses a cli tool called `eksctl`. Documentation is available at https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html for some of the other methods.
@@ -135,9 +134,9 @@ curl https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controlle
 
 ## Deploy Helm Charts
 
-* [HDFS](hdfs/docs/aws-eks-deployment.md)
-* [Gaffer](gaffer/docs/aws-eks-deployment.md)
-* [Example Gaffer Graph containing Road Traffic Dataset](gaffer-road-traffic/docs/aws-eks-deployment.md)
+* [HDFS](../hdfs/docs/aws-eks-deployment.md)
+* [Gaffer](../gaffer/docs/aws-eks-deployment.md)
+* [Example Gaffer Graph containing Road Traffic Dataset](../gaffer-road-traffic/docs/aws-eks-deployment.md)
 
 
 ## Access Web UIs
