@@ -18,5 +18,6 @@ metadata:
   name: {{ include "gaffer.fullname" . }}-graph-config
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: graph-config
 data:
   graphConfig.json: {{ toJson .Values.graph.config | quote }}

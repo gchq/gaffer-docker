@@ -127,6 +127,7 @@ metadata:
   name: {{ include "gaffer.fullname" . }}-accumulo-config
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: accumulo-config
 data:
   accumulo-site.xml: {{ include "gaffer.accumuloSite" . | b64enc | quote }}
   client.conf: {{ include "gaffer.accumuloClient" . | b64enc | quote }}
