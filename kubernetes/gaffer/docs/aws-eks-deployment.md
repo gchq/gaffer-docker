@@ -30,7 +30,7 @@ Next you'll need to setup the passwords for the accumulo users in the values.yam
 Finally, deploy the Helm Chart:
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.12.0}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.13.4}
 
 helm dependency update
 
