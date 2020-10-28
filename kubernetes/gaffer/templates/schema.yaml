@@ -18,6 +18,7 @@ metadata:
   name: {{ include "gaffer.fullname" . }}-schema
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: schema
 data:
 {{- if .Values.graph.schema }}
   {{- range $fileName, $contents := .Values.graph.schema }}
