@@ -103,7 +103,7 @@ accumulo:
 
   image:
     repository: gchq/gaffer
-    tag: 1.12.0
+    tag: 1.13.4
     pullPolicy: IfNotPresent
     pullSecrets: []
 
@@ -143,7 +143,6 @@ accumulo:
     ingress:
       enabled: true
       annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /$1
         traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
       host: ""
       # For Traefik:
@@ -156,7 +155,7 @@ api:
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 1.12.0
+    tag: 1.13.4
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -166,7 +165,6 @@ api:
 
   ingress:
     annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$1
       traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
     host: ""
     # For Traefik:
@@ -183,4 +181,4 @@ testImages:
     tag: 7.67.0
   operationRunner:
     repository: gchq/gaffer-operation-runner
-    tag: 1.12.0
+    tag: 1.13.4

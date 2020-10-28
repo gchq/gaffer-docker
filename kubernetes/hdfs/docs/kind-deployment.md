@@ -1,7 +1,7 @@
 # Deploying HDFS using kind
 All scripts listed here are intended to be run from the kubernetes/hdfs folder
 
-First follow the [instructions here](../../kind-deployment.md) to provision and configure a local Kubernetes cluster, using [kind](https://kind.sigs.k8s.io/) (Kubernetes IN Docker), that the HDFS Helm Chart can be deployed on.
+First follow the [instructions here](../../docs/kind-deployment.md) to provision and configure a local Kubernetes cluster, using [kind](https://kind.sigs.k8s.io/) (Kubernetes IN Docker), that the HDFS Helm Chart can be deployed on.
 
 ## Deploying Helm charts
 
@@ -34,7 +34,7 @@ echo "127.0.0.1 hdfs.k8s.local" | sudo tee -a /etc/hosts
 
 Update the HDFS deployment to route ingress based on FQDNs:
 ```bash
-helm upgrade hdfs . -f ./values-host-based-ingress.yaml
+helm upgrade hdfs . -f ./values-host-based-ingress.yaml --reuse-values
 ```
 
 Set up port forwarding to the nginx ingress controller:

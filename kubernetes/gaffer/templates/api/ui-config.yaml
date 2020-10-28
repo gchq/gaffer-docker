@@ -18,6 +18,7 @@ metadata:
   name: {{ include "gaffer.fullname" . }}-ui-config
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ui-config
 data:
   defaultConfig.json: {{ .Files.Get "config/ui/defaultConfig.json" | quote }}
   config.json: {{ .Values.ui | quote }}

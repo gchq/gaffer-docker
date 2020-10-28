@@ -18,6 +18,7 @@ metadata:
   name: {{ template "hdfs.fullname" . }}-namenodes
   labels:
     {{ include "hdfs.labels" . | nindent 4 }}
+    app.kubernetes.io/component: namenode
 spec:
   type: ClusterIP
   clusterIP: None
