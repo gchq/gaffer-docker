@@ -53,6 +53,7 @@ metadata:
   name: {{ include "gaffer.fullname" . }}-store-properties
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: store-properties
 type: Opaque
 data:
   store.properties: {{ include "gaffer.storeProperties" . | b64enc | quote }}

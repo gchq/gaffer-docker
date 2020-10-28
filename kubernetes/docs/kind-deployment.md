@@ -27,8 +27,8 @@ To import the images, run this from the kubernetes directory:
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.12.0}
-export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-$GAFFER_VERSION}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.13.4}
+export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-1.13.1}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
 docker-compose --project-directory ../docker/gaffer-operation-runner/ -f ../docker/gaffer-operation-runner/docker-compose.yaml build
@@ -51,9 +51,9 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${IN
 
 ## Deploy Helm Charts
 
-* [HDFS](hdfs/docs/kind-deployment.md)
-* [Gaffer](gaffer/docs/kind-deployment.md)
-* [Example Gaffer Graph containing Road Traffic Dataset](gaffer-road-traffic/docs/kind-deployment.md)
+* [HDFS](../hdfs/docs/kind-deployment.md)
+* [Gaffer](../gaffer/docs/kind-deployment.md)
+* [Example Gaffer Graph containing Road Traffic Dataset](../gaffer-road-traffic/docs/kind-deployment.md)
 
 
 ## Uninstall

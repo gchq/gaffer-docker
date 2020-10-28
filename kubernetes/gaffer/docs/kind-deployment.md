@@ -1,7 +1,7 @@
 # Deploying Gaffer using kind
 All the scripts found here are designed to be run from the kubernetes/gaffer folder.
 
-First follow the [instructions here](../../kind-deployment.md) to provision and configure a local Kubernetes cluster, using [kind](https://kind.sigs.k8s.io/) (Kubernetes IN Docker), that the Gaffer Helm Chart can be deployed on.
+First follow the [instructions here](../../docs/kind-deployment.md) to provision and configure a local Kubernetes cluster, using [kind](https://kind.sigs.k8s.io/) (Kubernetes IN Docker), that the Gaffer Helm Chart can be deployed on.
 
 Then update the Accumulo users' passwords in the values.yaml file. These are found under `accumulo.config.userManagement`.
 
@@ -9,7 +9,7 @@ Gaffer is then ready be deployed:
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.12.0}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.13.4}
 
 helm dependency update
 
@@ -43,7 +43,7 @@ echo "127.0.0.1 gaffer.k8s.local accumulo.k8s.local hdfs.k8s.local" | sudo tee -
 
 Update the Gaffer deployment to route ingress based on FQDNs:
 ```
-helm upgrade gaffer . -f ./values-host-based-ingress.yaml
+helm upgrade gaffer . -f ./values-host-based-ingress.yaml --reuse-values
 ```
 
 Set up port forwarding to the nginx ingress controller:

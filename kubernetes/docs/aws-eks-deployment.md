@@ -21,8 +21,8 @@ The following instructions build all the container images and host them in AWS E
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.12.0}
-export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-$GAFFER_VERSION}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.13.4}
+export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-1.13.1}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
 docker-compose --project-directory ../docker/gaffer-operation-runner/ -f ../docker/gaffer-operation-runner/docker-compose.yaml build 
@@ -51,7 +51,6 @@ for repo in ${GAFFER_IMAGES}; do
   docker image push ${REPO_PREFIX}/${repo}:${GAFFER_VERSION}
 done
 ```
-
 
 ## EKS Cluster
 
@@ -135,9 +134,9 @@ curl https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controlle
 
 ## Deploy Helm Charts
 
-* [HDFS](hdfs/docs/aws-eks-deployment.md)
-* [Gaffer](gaffer/docs/aws-eks-deployment.md)
-* [Example Gaffer Graph containing Road Traffic Dataset](gaffer-road-traffic/docs/aws-eks-deployment.md)
+* [HDFS](../hdfs/docs/aws-eks-deployment.md)
+* [Gaffer](../gaffer/docs/aws-eks-deployment.md)
+* [Example Gaffer Graph containing Road Traffic Dataset](../gaffer-road-traffic/docs/aws-eks-deployment.md)
 
 
 ## Access Web UIs
