@@ -20,7 +20,6 @@ env:
 before_install:
   - cd/before_install.sh
 install:
-  - cd/install.sh
+  - cd/build_images.sh
 script:
-  - cd/verify.sh
   - cd/deploy.sh
