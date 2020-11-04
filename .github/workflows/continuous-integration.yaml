@@ -12,7 +12,7 @@ jobs:
       run: ./cd/before_install.sh
 
     - name: Build Images
-      run: ./cd/install.sh
+      run: ./cd/build_images.sh
 
     - name: Deploy to Kubernetes
       run: ./cd/deploy_to_kind.sh
