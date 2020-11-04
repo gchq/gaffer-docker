@@ -3,7 +3,7 @@ name: Release
 on:
   milestone:
     types:
-      - closed
+    - closed
 
 jobs:
   create-git-tag:
