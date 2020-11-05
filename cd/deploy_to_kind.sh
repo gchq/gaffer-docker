@@ -28,6 +28,5 @@ kind load docker-image gchq/gaffer-road-traffic-loader:1.13.4
 kind load docker-image gchq/gaffer-operation-runner:1.13.4
 
 # Deploy containers onto Kind
-# Travis needs this setting to avoid reverse dns lookup errors
 echo "Starting helm install"
 helm install gaffer . -f ./values-insecure.yaml
