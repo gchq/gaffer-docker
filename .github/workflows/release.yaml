@@ -70,6 +70,9 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: develop
+        
+    - name: Build images
+      run: ./cd/build_images.sh
 
     - name: Set version
       run: echo "APP_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
