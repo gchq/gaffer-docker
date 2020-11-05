@@ -14,6 +14,9 @@ jobs:
     - name: Build Images
       run: ./cd/build_images.sh
 
+    - name: Lint charts
+      run: ./cd/lint_charts.sh
+
     - name: Deploy to Kubernetes
       run: ./cd/deploy_to_kind.sh
   
