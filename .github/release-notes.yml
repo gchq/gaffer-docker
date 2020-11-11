@@ -2,13 +2,16 @@ releasenotes:
   sections:
   - title: "Headliners"
     emoji: ":star:"
-    group: "highlights"
+    labels: [ "headliner" ]
   - title: "New Features"
     emoji: ":sparkles:"
     labels: [ "enhancement" ]
   - title: "Bugs Fixed"
     emoji: ":beetle:"
     labels: [ "bug" ]
+  - title: "Documentation"
+    emoji: ":book:"
+    labels: "documentation"
   - title: "Automation"
     emoji: ":robot:"
     labels: [ "automation" ]
