@@ -179,9 +179,12 @@ jobs:
     
     - name: Download packaged charts
       uses: actions/download-artifact@v2
+      with:
+        path: artifacts
 
     - name: Update repo
       run: |
+        cp artifacts/*/*.tgz .
         helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/download/${{ github.event.milestone.title }}"
         rm *.tgz
         git commit -am "Updated index.yaml"
