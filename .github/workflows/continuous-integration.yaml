@@ -1,0 +1,24 @@
+name: Continuous Integration
+
+on: [ pull_request ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Kubernetes
+      run: ./cd/before_install.sh
+
+    - name: Build Images
+      run: ./cd/build_images.sh
+
+    - name: Lint charts
+      run: ./cd/lint_charts.sh
+
+    - name: Deploy to Kubernetes
+      run: ./cd/deploy_to_kind.sh
+  
+    - name: Run Tests
+      run: helm test gaffer

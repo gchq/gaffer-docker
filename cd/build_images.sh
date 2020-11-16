@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2020 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-os: linux
-language: minimal
-sudo: required
-env:
-  - KUBERNETES_VERSION=`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`
-before_install:
-  - cd/before_install.sh
-install:
-  - cd/install.sh
-script:
-  - cd/verify.sh
-  - cd/deploy.sh
+set -e
+
+root_directory="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
+cd $root_directory
+
+docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
+docker-compose --project-directory ./docker/gaffer-operation-runner/ -f ./docker/gaffer-operation-runner/docker-compose.yaml build
