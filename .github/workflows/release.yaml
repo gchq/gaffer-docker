@@ -56,7 +56,7 @@ jobs:
       run: |
         git remote set-branches --add origin develop
         git pull
-        git merge origin/develop --allow-unrelated-histories 
+        git merge origin/develop --strategy recursive --strategy-option theirs --allow-unrelated-histories 
 
     - name: Push changes
       run: git push
@@ -130,7 +130,7 @@ jobs:
         ref: develop
     
     - name: Install helm
-      run: ./before_install.sh
+      run: ./cd/before_install.sh
     
     - name: Create Asset
       env:
