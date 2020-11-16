@@ -175,7 +175,7 @@ jobs:
         git config user.email github-actions@github.com
 
     - name: Install helm
-      run: ./before_install.sh
+      run: ./cd/before_install.sh
     
     - name: Download packaged charts
       uses: actions/download-artifact@v2
