@@ -1,0 +1,188 @@
+name: Release
+
+on:
+  milestone:
+    types:
+    - closed
+
+jobs:
+  create-git-tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: develop
+        token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+    
+    - name: Set up Github credentials
+      run: |
+        git config user.name Gaffer
+        git config user.email github-actions@github.com
+    
+    - name: Set version
+      run: echo "RELEASE_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
+    
+    - name: Update version
+      run: ./cd/update_app_version.sh ${RELEASE_VERSION}
+
+    - name: Push changes
+      run: |
+        git commit -a -m "Release v${RELEASE_VERSION}"
+        git tag v${RELEASE_VERSION}
+        git push origin --tags
+        git push
+
+  update-branches:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch:
+        - master
+        - gh-pages
+    needs:
+    - create-git-tag
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ matrix.branch }}
+        token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+    
+    - name: Set up Github credentials
+      run: |
+        git config user.name Gaffer
+        git config user.email github-actions@github.com
+  
+    - name: Update branch
+      run: |
+        git remote set-branches --add origin develop
+        git pull
+        git merge origin/develop --allow-unrelated-histories 
+
+    - name: Push changes
+      run: git push
+  
+  publish-images-to-dockerhub:
+    runs-on: ubuntu-latest
+    needs:
+    - create-git-tag
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: develop
+        
+    - name: Build images
+      run: ./cd/build_images.sh
+
+    - name: Set version
+      run: echo "APP_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
+
+    - name: Publish images
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: ./cd/publish_images.sh
+
+  create-release-notes:
+    runs-on: ubuntu-latest
+    needs:
+    - create-git-tag
+    outputs:
+      release_upload_url: ${{ steps.upload_notes.outputs.upload_url }}
+    steps:
+    - name: Checkout develop
+      uses: actions/checkout@v2
+      with:
+        ref: develop
+    
+    - name: Create Release Notes
+      id: create_release_notes
+      uses: docker://decathlon/release-notes-generator-action:2.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set version
+      run: echo "RELEASE_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
+      
+    - name: Upload notes
+      id: upload_notes
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ env.RELEASE_VERSION }}
+        release_name: Gaffer Docker ${{ env.RELEASE_VERSION }}
+        body_path: release_file.md
+  
+  upload-release-artifacts:
+    runs-on: ubuntu-latest
+    needs:
+    - create-release-notes
+    strategy:
+      matrix:
+        chart:
+        - hdfs
+        - gaffer
+        - gaffer-road-traffic
+    steps:
+    - name: Checkout develop
+      uses: actions/checkout@v2
+      with:
+        ref: develop
+    
+    - name: Install helm
+      run: ./before_install.sh
+    
+    - name: Create Asset
+      env:
+        chart: ${{ matrix.chart }}
+      run: |
+        helm dependency update "kubernetes/${chart}"
+        helm package "kubernetes/${chart}"
+        filename=$(ls | grep ${chart}-[0-9]*.[0-9]*.[0-9]*.tgz)
+        echo "ASSET_FILENAME=${filename}" >> $GITHUB_ENV
+    
+    - name: Upload chart artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.chart }}
+        path: ${{ env.ASSET_FILENAME }}
+        retention-days: 1
+    
+    - name: Upload Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release-notes.outputs.release_upload_url }}
+        asset_path: ${{ env.ASSET_FILENAME }}
+        asset_name: ${{ env.ASSET_FILENAME }}
+        asset_content_type: application/zip
+
+  update-helm-repo:
+    runs-on: ubuntu-latest
+    needs:
+    - upload-release-artifacts
+    steps:
+    - name: Checkout gh-pages
+      uses: actions/checkout@v2
+      with:
+        ref: gh-pages
+        token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+    
+    - name: Set up Github credentials
+      run: |
+        git config user.name Gaffer
+        git config user.email github-actions@github.com
+
+    - name: Install helm
+      run: ./before_install.sh
+    
+    - name: Download packaged charts
+      uses: actions/download-artifact@v2
+
+    - name: Update repo
+      run: |
+        helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/download/${{ github.event.milestone.title }}"
+        rm *.tgz
+        git commit -am "Updated index.yaml"
+        git push
