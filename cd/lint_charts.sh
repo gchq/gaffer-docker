@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 project_root="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 for chart in ${project_root}/kubernetes/*; do	
     if [ -f "${chart}/Chart.yaml" ]; then	
