@@ -16,5 +16,5 @@ apiVersion: v2
 name: hdfs
 description: Deploys the Hadoop Distributed File System (HDFS)
 type: application
-version: 0.7.0 # managed version
+version: 0.7.1 # managed version
 appVersion: 3.2.1
