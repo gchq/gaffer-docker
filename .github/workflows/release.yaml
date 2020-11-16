@@ -96,7 +96,7 @@ jobs:
     
     - name: Create Release Notes
       id: create_release_notes
-      uses: docker://decathlon/release-notes-generator-action:2.0.1
+      uses: docker://decathlon/release-notes-generator-action:2.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
