@@ -186,6 +186,7 @@ jobs:
       run: |
         mv artifacts/*/*.tgz .
         helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/download/${{ github.event.milestone.title }}" --merge index.yaml
+        sed -i'' -e 's|file://.*|https://gchq.github.io/gaffer-docker|g' index.yaml
         rm *.tgz
         rm -r artifacts
         git commit -am "Updated index.yaml"
