@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2020 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v2
-name: gaffer
-description: A large-scale entity and relation database supporting aggregation of properties
-type: application
-version: 0.7.1 # managed version
-appVersion: 1.13.4
-home: https://github.com/gchq/Gaffer
-sources:
-- https://github.com/gchq/gaffer-docker
-dependencies:
-- name: zookeeper
-  version: 2.1.5
-  repository: https://kubernetes-charts-incubator.storage.googleapis.com
-  condition: zookeeper.enabled
-- name: hdfs
-  version: ^0.7.1 # managed version
-  repository: file://../hdfs/
-  condition: hdfs.enabled
+set -e
+
+project_root="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
+for chart in ${project_root}/kubernetes/*; do	
+    if [ -f "${chart}/Chart.yaml" ]; then	
+        flags=''	
+        [ ! -f "${chart}/values-insecure.yaml" ] || flags="-f ${chart}/values-insecure.yaml"	
+
+        helm dependency update ${chart}	
+        helm lint ${flags} ${chart}	
+        helm template test ${flags} ${chart}	
+    fi	
+done

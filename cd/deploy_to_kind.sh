@@ -16,9 +16,19 @@
 
 set -e
 
-if [ ${TRAVIS_PULL_REQUEST} == 'false' ]; then
-    exit 0
-fi
+cd ./kubernetes/gaffer-road-traffic
 
-# Run tests
-helm test gaffer
+kind create cluster --quiet
+
+# Deploy Images to Kind
+kind load docker-image gchq/hdfs:3.2.1
+kind load docker-image gchq/gaffer:1.13.4
+kind load docker-image gchq/gaffer-rest:1.13.4
+kind load docker-image gchq/gaffer-road-traffic-loader:1.13.4
+kind load docker-image gchq/gaffer-operation-runner:1.13.4
+
+# Deploy containers onto Kind
+# Hostname check is disabled for CI
+echo "Starting helm install"
+helm install gaffer . -f ./values-insecure.yaml \
+--set gaffer.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
