@@ -1,6 +1,10 @@
 name: Continuous Integration
 
-on: [ pull_request ]
+# on: [ pull_request ]
+on: 
+  push:
+    branches:
+    - gh-110-switch-CI-to-github-actions
 
 jobs:
   build:

@@ -22,6 +22,6 @@ for chart in ${project_root}/kubernetes/*; do
 
         helm dependency update ${chart}	
         helm lint ${flags} ${chart}	
-        helm template test ${flags} ${chart} >/dev/null	
+        helm template test ${flags} ${chart}	
     fi	
 done
