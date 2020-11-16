@@ -41,7 +41,7 @@ pushTags() {
 
 ROOT_DIR="$(getRootDirectory)"
 
-# This set's the values for:
+# This sets the values for:
 # HADOOP_VERSION
 # GAFFER_VERSION
 # ACCUMULO_VERSION
