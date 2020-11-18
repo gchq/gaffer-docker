@@ -32,14 +32,7 @@ spec:
   - metadata:
       name: data{{$v}}
     spec:
-      {{- if ne $.Values.namenode.dataVolumes.storageClassName "" }}
-      storageClassName: {{ $.Values.namenode.dataVolumes.storageClassName }}
-      {{- end }}
-      accessModes:
-      - ReadWriteOnce
-      resources:
-        requests:
-          storage: {{ $.Values.namenode.dataVolumes.size }}
+      {{- toYaml $.Values.namenode.dataVolumes.pvcTemplateSpec | nindent 6 }}
 {{- end }}
   template:
     metadata:
