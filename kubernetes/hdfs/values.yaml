@@ -40,7 +40,7 @@ namenode:
   dataVolumes:
     count: 1
     pvcTemplateSpec:
-      storageClassName: ""
+      storageClassName: null
       accessModes:
       - ReadWriteOnce
       resources:
@@ -70,7 +70,7 @@ datanode:
   dataVolumes:
     count: 1
     pvcTemplateSpec:
-      storageClassName: ""
+      storageClassName: null
       accessModes:
       - ReadWriteOnce
       resources:
