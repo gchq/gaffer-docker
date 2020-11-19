@@ -39,8 +39,13 @@ namenode:
     lifelineRpc: 8022
   dataVolumes:
     count: 1
-    size: 10Gi
-    storageClassName: ""
+    pvcTemplateSpec:
+      storageClassName: null
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
 
 datanode:
   nodeCount: 3
@@ -63,9 +68,14 @@ datanode:
     data: 9866
     ipc: 9867
   dataVolumes:
-    count: 2
-    size: 10Gi
-    storageClassName: ""
+    count: 1
+    pvcTemplateSpec:
+      storageClassName: null
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
 
 shell:
   enabled: true
