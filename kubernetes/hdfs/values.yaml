@@ -104,6 +104,7 @@ fullnameOverride: ""
 
 ingress:
   enabled: true
+  version: v1 # v1beta1 also supported
   annotations:
     traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
   host: ""
