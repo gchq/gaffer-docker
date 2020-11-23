@@ -16,7 +16,11 @@ limitations under the License.
 
 */ -}}
 {{- if .Values.accumulo.monitor.ingress.enabled }}
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+apiVersion: networking.k8s.io/v1
+{{- else }}
 apiVersion: networking.k8s.io/v1beta1
+{{- end }}
 kind: Ingress
 metadata:
   name: {{ include "gaffer.fullname" . }}-monitor
@@ -32,9 +36,18 @@ spec:
   - http:
       paths:
       - path: {{ required "Ingress path required, please set: .Values.monitor.ingress.pathPrefix" .Values.accumulo.monitor.ingress.pathPrefix }}
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "gaffer.fullname" . }}-monitor
+            port: 
+              name: http
+{{- else }}
         backend:
           serviceName: {{ include "gaffer.fullname" . }}-monitor
           servicePort: http
+{{- end }}
     {{- if ne .Values.accumulo.monitor.ingress.host "" }}
     host: {{ .Values.accumulo.monitor.ingress.host }}
     {{- end }}
