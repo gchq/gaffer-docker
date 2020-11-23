@@ -36,12 +36,12 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ template "gaffer.fullname" . }}-api
+            name: {{ include "gaffer.fullname" . }}-api
             port: 
               number: 80
 {{- else }}
         backend:
-          serviceName: {{ template "gaffer.fullname" . }}-api
+          serviceName: {{ include "gaffer.fullname" . }}-api
           servicePort: http
 {{- end }}
 {{- if ne .Values.api.ingress.host "" }}

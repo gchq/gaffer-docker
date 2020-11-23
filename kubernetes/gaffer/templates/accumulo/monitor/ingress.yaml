@@ -40,12 +40,12 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ template "gaffer.fullname" . }}-monitor
+            name: {{ include "gaffer.fullname" . }}-monitor
             port: 
               number: 80
 {{- else }}
         backend:
-          serviceName: {{ template "gaffer.fullname" . }}-monitor
+          serviceName: {{ include "gaffer.fullname" . }}-monitor
           servicePort: http
 {{- end }}
     {{- if ne .Values.accumulo.monitor.ingress.host "" }}
