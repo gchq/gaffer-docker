@@ -32,6 +32,7 @@ spec:
   - http:
       paths:
       - path: {{ required "Ingress path required, please set: .Values.monitor.ingress.pathPrefix" .Values.accumulo.monitor.ingress.pathPrefix }}
+        pathType: Prefix
         backend:
           service:
             name: {{ include "gaffer.fullname" . }}-monitor

@@ -28,6 +28,7 @@ spec:
   - http:
       paths:
       - path: {{ required "Ingress path required, please set: .Values.api.ingress.pathPrefix" .Values.api.ingress.pathPrefix }}
+        pathType: Prefix
         backend:
           service:
             name: {{ include "gaffer.fullname" . }}-api
