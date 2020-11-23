@@ -42,7 +42,7 @@ spec:
           service:
             name: {{ include "gaffer.fullname" . }}-monitor
             port: 
-              number: 80
+              name: http
 {{- else }}
         backend:
           serviceName: {{ include "gaffer.fullname" . }}-monitor
