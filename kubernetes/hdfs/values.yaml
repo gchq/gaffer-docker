@@ -94,6 +94,8 @@ config:
   hdfsSite:
     dfs.replication: 3
     hadoop.security.authorization: true
+  rackAwareness:
+    nodeTopologyLabel: topology.kubernetes.io/zone
 
 secrets:
   path: /etc/hadoop/secrets

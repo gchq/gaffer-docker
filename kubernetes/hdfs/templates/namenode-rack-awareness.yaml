@@ -1,0 +1,96 @@
+# Copyright 2020 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+{{- if .Values.config.rackAwareness }}
+{{- if .Values.config.rackAwareness.nodeTopologyLabel }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    name: {{ template "hdfs.fullname" . }}-namenode
+  name: {{ template "hdfs.fullname" . }}-namenode
+
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ template "hdfs.fullname" . }}-namenode
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get"]
+
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ template "hdfs.fullname" . }}-namenode
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "hdfs.fullname" . }}-namenode-cluster
+  # namespace: hdfs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "hdfs.fullname" . }}-namenode
+subjects:
+- kind: ServiceAccount
+  name: {{ template "hdfs.fullname" . }}-namenode
+  namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ template "hdfs.fullname" . }}-namenode-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "hdfs.fullname" . }}-namenode
+subjects:
+- kind: ServiceAccount
+  name: {{ template "hdfs.fullname" . }}-namenode
+  namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "hdfs.fullname" . }}-rack-awareness
+data:
+  resolve-rack.sh: |
+    #!/bin/bash
+    POD_IP=$1
+
+    API_SERVER="kubernetes.default.svc"
+    TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+    NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+    CA_CERT="/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+
+    POD_RESPONSE=$(curl --cacert $CA_CERT --header "Authorization: Bearer $TOKEN" https://$API_SERVER/api/v1/namespaces/$NAMESPACE/pods?fieldSelector=status.podIP%3D$POD_IP)
+    NODE_NAME=$(echo $POD_RESPONSE | jq -r '.items[0] | .spec.nodeName')
+
+    NODE_RESPONSE=$(curl --cacert $CA_CERT  --header "Authorization: Bearer $TOKEN" https://$API_SERVER/api/v1/nodes/$NODE_NAME)
+    NODE_ZONE=$(echo $NODE_RESPONSE | jq -r '.metadata.labels."{{ .Values.config.rackAwareness.nodeTopologyLabel }}"')
+    echo "/$NODE_ZONE"
+{{- end -}}
+{{- end -}}
