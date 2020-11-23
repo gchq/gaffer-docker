@@ -46,7 +46,7 @@ spec:
 {{- else }}
         backend:
           serviceName: {{ template "gaffer.fullname" . }}-monitor
-          servicePort: htpp
+          servicePort: http
 {{- end }}
     {{- if ne .Values.accumulo.monitor.ingress.host "" }}
     host: {{ .Values.accumulo.monitor.ingress.host }}
