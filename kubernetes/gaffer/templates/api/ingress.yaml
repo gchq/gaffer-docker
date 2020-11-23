@@ -29,8 +29,10 @@ spec:
       paths:
       - path: {{ required "Ingress path required, please set: .Values.api.ingress.pathPrefix" .Values.api.ingress.pathPrefix }}
         backend:
-          serviceName: {{ include "gaffer.fullname" . }}-api
-          servicePort: http
+          service:
+            name: {{ include "gaffer.fullname" . }}-api
+            port: 
+              number: 80
 {{- if ne .Values.api.ingress.host "" }}
     host: {{ .Values.api.ingress.host }}
 {{- end }}

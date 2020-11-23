@@ -33,8 +33,10 @@ spec:
       paths:
       - path: {{ required "Ingress path required, please set: .Values.ingress.pathPrefix" .Values.ingress.pathPrefix }}
         backend:
-          serviceName: {{ template "hdfs.fullname" . }}-namenodes
-          servicePort: {{ .Values.namenode.ports.http }}
+          service:
+            name: {{ template "hdfs.fullname" . }}-namenodes
+            port: 
+              number: {{ .Values.namenode.ports.http }}
 {{- if ne .Values.ingress.host "" }}
     host: {{ .Values.ingress.host }}
 {{- end }}
