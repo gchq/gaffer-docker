@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2020 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,9 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v2
-name: hdfs
-description: Deploys the Hadoop Distributed File System (HDFS)
-type: application
-version: 0.8.0 # managed version
-appVersion: 3.2.1
+set -e
+
+# Resolve dependencies of these charts in order
+charts_to_resolve="gaffer gaffer-road-traffic"
+
+project_root="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
+cd ${project_root}/kubernetes
+for chart in ${charts_to_resolve}; do	
+    helm dependency update ${chart}	
+done

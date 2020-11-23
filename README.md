@@ -42,7 +42,7 @@ Note that we maintain mutable versions of latest, as well as the major, minor an
 ensure that your image will never change when doing a pull from docker, make sure to use the version with the git tag in the
 build metadata.
 
-This process is automated by Travis CI.
+This process is automated by Github actions.
 
 ## Contributing
 
