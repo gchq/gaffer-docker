@@ -45,7 +45,7 @@ spec:
     spec:
       {{- if .Values.config.rackAwareness }}
       {{- if .Values.config.rackAwareness.nodeTopologyLabel }}
-      serviceAccountName: hdfs-namenode
+      serviceAccountName: {{ template "hdfs.fullname" . }}-namenode
       {{- end }}
       {{- end }}
       containers:
@@ -113,7 +113,7 @@ spec:
       {{- if .Values.config.rackAwareness.nodeTopologyLabel }}
       - name: rack-awareness
         configMap:
-          name: hdfs-rack-awareness
+          name: {{ template "hdfs.fullname" . }}-rack-awareness
           defaultMode: 0755
       {{- end }}
       {{- end }}
