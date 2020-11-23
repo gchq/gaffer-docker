@@ -131,12 +131,14 @@ jobs:
     
     - name: Install helm
       run: ./cd/before_install.sh
+
+    - name: Install dependencies
+      run: ./cd/install_dependenices.sh
     
     - name: Create Asset
       env:
         chart: ${{ matrix.chart }}
       run: |
-        helm dependency update "kubernetes/${chart}"
         helm package "kubernetes/${chart}"
         filename=$(ls | grep ${chart}-[0-9]*.[0-9]*.[0-9]*.tgz)
         echo "ASSET_FILENAME=${filename}" >> $GITHUB_ENV
@@ -185,7 +187,8 @@ jobs:
     - name: Update repo
       run: |
         mv artifacts/*/*.tgz .
-        helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/download/${{ github.event.milestone.title }}"
+        helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/download/${{ github.event.milestone.title }}" --merge index.yaml
+        sed -i'' -e 's|file://.*|https://gchq.github.io/gaffer-docker|g' index.yaml
         rm *.tgz
         rm -r artifacts
         git commit -am "Updated index.yaml"

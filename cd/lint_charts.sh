@@ -20,9 +20,8 @@ project_root="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 for chart in ${project_root}/kubernetes/*; do	
     if [ -f "${chart}/Chart.yaml" ]; then	
         flags=''	
-        [ ! -f "${chart}/values-insecure.yaml" ] || flags="-f ${chart}/values-insecure.yaml"	
-
-        helm dependency update ${chart}	
+        [ ! -f "${chart}/values-insecure.yaml" ] || flags="-f ${chart}/values-insecure.yaml"
+        
         helm lint ${flags} ${chart}	
         helm template test ${flags} ${chart}	
     fi	
