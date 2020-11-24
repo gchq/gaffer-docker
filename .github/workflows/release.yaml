@@ -133,7 +133,7 @@ jobs:
       run: ./cd/before_install.sh
 
     - name: Install dependencies
-      run: ./cd/install_dependenices.sh
+      run: ./cd/install_dependencies.sh
     
     - name: Create Asset
       env:
