@@ -3,6 +3,29 @@ entries:
   gaffer:
   - apiVersion: v2
     appVersion: 1.13.4
+    created: "2020-11-24T10:22:12.753572845Z"
+    dependencies:
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://kubernetes-charts-incubator.storage.googleapis.com
+      version: 2.1.5
+    - condition: hdfs.enabled
+      name: hdfs
+      repository: https://gchq.github.io/gaffer-docker
+      version: ^0.8.1
+    description: A large-scale entity and relation database supporting aggregation
+      of properties
+    digest: 9a81430711eee151607ca07f494021df293a7443cc0e4609c992debbf7f09dab
+    home: https://github.com/gchq/Gaffer
+    name: gaffer
+    sources:
+    - https://github.com/gchq/gaffer-docker
+    type: application
+    urls:
+    - https://github.com/gchq/gaffer-docker/releases/download/v0.8.1/gaffer-0.8.1.tgz
+    version: 0.8.1
+  - apiVersion: v2
+    appVersion: 1.13.4
     created: "2020-11-16T16:54:45.288480825Z"
     dependencies:
     - condition: zookeeper.enabled
@@ -11,7 +34,7 @@ entries:
       version: 2.1.5
     - condition: hdfs.enabled
       name: hdfs
-      repository: file://../hdfs/
+      repository: https://gchq.github.io/gaffer-docker
       version: ^0.7.9
     description: A large-scale entity and relation database supporting aggregation
       of properties
@@ -27,10 +50,29 @@ entries:
   gaffer-road-traffic:
   - apiVersion: v2
     appVersion: 1.13.4
+    created: "2020-11-24T10:22:12.759810552Z"
+    dependencies:
+    - name: gaffer
+      repository: https://gchq.github.io/gaffer-docker
+      version: ^0.8.1
+    description: A Gaffer instance containing sample GB road traffic data from the
+      Department of Transport
+    digest: ef030d554f397a9d3ff2904bac5416a3d87ce2251f6692af441a8dbbe6ec348b
+    home: https://github.com/gchq/Gaffer
+    name: gaffer-road-traffic
+    sources:
+    - https://github.com/gchq/gaffer-docker
+    - https://data.gov.uk/dataset/208c0e7b-353f-4e2d-8b7a-1a7118467acc/gb-road-traffic-counts
+    type: application
+    urls:
+    - https://github.com/gchq/gaffer-docker/releases/download/v0.8.1/gaffer-road-traffic-0.8.1.tgz
+    version: 0.8.1
+  - apiVersion: v2
+    appVersion: 1.13.4
     created: "2020-11-16T16:54:45.292029728Z"
     dependencies:
     - name: gaffer
-      repository: file://../gaffer/
+      repository: https://gchq.github.io/gaffer-docker
       version: ^0.7.9
     description: A Gaffer instance containing sample GB road traffic data from the
       Department of Transport
@@ -47,6 +89,16 @@ entries:
   hdfs:
   - apiVersion: v2
     appVersion: 3.2.1
+    created: "2020-11-24T10:22:12.761771348Z"
+    description: Deploys the Hadoop Distributed File System (HDFS)
+    digest: 6557496da9d660f0f7060240b08b5fd686564de85343206d6329ea3be3595738
+    name: hdfs
+    type: application
+    urls:
+    - https://github.com/gchq/gaffer-docker/releases/download/v0.8.1/hdfs-0.8.1.tgz
+    version: 0.8.1
+  - apiVersion: v2
+    appVersion: 3.2.1
     created: "2020-11-16T16:54:45.292997929Z"
     description: Deploys the Hadoop Distributed File System (HDFS)
     digest: 41615aaf0873dd2882c62c165f7fc8398b8add68956127511e0ef360820ee08b
@@ -55,4 +107,4 @@ entries:
     urls:
     - https://github.com/gchq/gaffer-docker/releases/download/v0.7.9/hdfs-0.7.9.tgz
     version: 0.7.9
-generated: "2020-11-16T16:54:45.284208321Z"
+generated: "2020-11-24T10:22:12.74898782Z"
