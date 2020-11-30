@@ -20,7 +20,8 @@ ARG BASE_IMAGE_TAG=10.1.0.Final
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
-ARG GAFFER_TOOLS_VERSION=gaffer-tools-1.12.0
+ARG GAFFER_VERSION=1.12.0
+ARG GAFFER_TOOLS_VERSION=1.12.0
 ARG GAFFER_TOOLS_GIT_REPO=https://github.com/gchq/gaffer-tools.git
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 
@@ -32,6 +33,7 @@ COPY ./federated-store/ /federated-store/
 # Try to download required version from Maven Central, otherwise build from source
 RUN	if [ ! -f "./rest.war" ]; then \
 		cd /federated-store/ && \
+		sed -i -e 's/{GAFFER_VERSION}/${GAFFER_VERSION}/g' pom.xml && \
 		mvn clean install && \
 		cp /federated-store/target/federated-rest-*.war /wars/rest.war && \
 		cd /wars/; \
@@ -42,7 +44,7 @@ RUN	if [ ! -f "./rest.war" ]; then \
 	if [ ! -f "./ui.war" ]; then \
 		git clone ${GAFFER_TOOLS_GIT_REPO} /tmp/gaffer-tools && \
 		cd /tmp/gaffer-tools && \
-		git checkout ${GAFFER_TOOLS_VERSION} && \
+		git checkout gaffer-tools-${GAFFER_TOOLS_VERSION} && \
 		mvn clean package -q -Pquick --also-make -pl ui && \
 		cp ./ui/target/ui-*.war /wars/ui.war && \
 		cd /wars/; \
