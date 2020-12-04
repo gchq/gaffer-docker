@@ -95,6 +95,7 @@ config:
     dfs.replication: 3
     hadoop.security.authorization: true
   rackAwareness:
+    serviceAccountName:
     nodeTopologyLabel: topology.kubernetes.io/zone
 
 secrets:

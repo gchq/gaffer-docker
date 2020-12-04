@@ -43,10 +43,8 @@ spec:
         {{- include "hdfs.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: namenode
     spec:
-      {{- if .Values.config.rackAwareness }}
-      {{- if .Values.config.rackAwareness.nodeTopologyLabel }}
-      serviceAccountName: {{ template "hdfs.fullname" . }}-namenode
-      {{- end }}
+      {{- if and .Values.config.rackAwareness .Values.config.rackAwareness.nodeTopologyLabel }}
+      serviceAccountName: {{ template "hdfs.namenodeServiceAccountName" . }}
       {{- end }}
       containers:
       - name: namenode
@@ -64,13 +62,10 @@ spec:
         - name: secrets
           mountPath: {{ .Values.secrets.path }}
           readOnly: true
-
-      {{- if .Values.config.rackAwareness }}
-      {{- if .Values.config.rackAwareness.nodeTopologyLabel }}
+        {{- if and .Values.config.rackAwareness .Values.config.rackAwareness.nodeTopologyLabel }}
         - name: rack-awareness
           mountPath: /scripts/resolve-rack.sh
           subPath: resolve-rack.sh
-        {{- end }}
         {{- end }}
         {{- range $k, $v := until (int .Values.namenode.dataVolumes.count) }}
         - name: data{{$v}}
