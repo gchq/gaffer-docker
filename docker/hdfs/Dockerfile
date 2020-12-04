@@ -35,14 +35,14 @@ ARG GROUP=hadoop
 RUN mkdir -p /usr/share/man/man1 && \
 	apt -qq update && \
 	apt -qq install -y \
-	dumb-init \
-	openjdk-8-jre-headless \
-	libsnappy1v5 \
-	libssl1.0-dev \
-	libzstd1 \
-	xmlstarlet \
-	curl \
-	jq \
+		dumb-init \
+		openjdk-8-jre-headless \
+		libsnappy1v5 \
+		libssl1.0-dev \
+		libzstd1 \
+		xmlstarlet \
+		curl \
+		jq \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN groupadd ${GROUP} && useradd --home-dir /opt/hadoop --gid ${GROUP} --no-create-home --shell /bin/bash ${USER}
