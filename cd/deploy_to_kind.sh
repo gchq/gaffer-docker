@@ -16,9 +16,9 @@
 
 set -e
 
-cd ./kubernetes/gaffer-road-traffic
+kind create cluster --quiet --config ./cd/kind.yaml
 
-kind create cluster --quiet
+cd ./kubernetes/gaffer-road-traffic
 
 # Deploy Images to Kind
 kind load docker-image gchq/hdfs:3.2.1
