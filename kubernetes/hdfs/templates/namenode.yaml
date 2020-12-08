@@ -43,6 +43,9 @@ spec:
         {{- include "hdfs.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: namenode
     spec:
+      {{- if and .Values.config.rackAwareness .Values.config.rackAwareness.nodeTopologyLabel }}
+      serviceAccountName: {{ template "hdfs.namenodeServiceAccountName" . }}
+      {{- end }}
       containers:
       - name: namenode
         image: {{ .Values.namenode.repository }}:{{ .Values.namenode.tag }}
@@ -59,10 +62,15 @@ spec:
         - name: secrets
           mountPath: {{ .Values.secrets.path }}
           readOnly: true
-{{- range $k, $v := until (int .Values.namenode.dataVolumes.count) }}
+        {{- if and .Values.config.rackAwareness .Values.config.rackAwareness.nodeTopologyLabel }}
+        - name: rack-awareness
+          mountPath: /scripts/resolve-rack.sh
+          subPath: resolve-rack.sh
+        {{- end }}
+        {{- range $k, $v := until (int .Values.namenode.dataVolumes.count) }}
         - name: data{{$v}}
           mountPath: /data{{$v}}
-{{- end }}
+        {{- end }}
         ports:
         - name: http
           containerPort: {{ .Values.namenode.ports.http }}
@@ -96,6 +104,14 @@ spec:
         secret:
           secretName: {{ template "hdfs.fullname" . }}
           optional: false
+      {{- if .Values.config.rackAwareness }}
+      {{- if .Values.config.rackAwareness.nodeTopologyLabel }}
+      - name: rack-awareness
+        configMap:
+          name: {{ template "hdfs.fullname" . }}-rack-awareness
+          defaultMode: 0755
+      {{- end }}
+      {{- end }}
       {{- with .Values.datanode.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
