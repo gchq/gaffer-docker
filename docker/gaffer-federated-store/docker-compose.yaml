@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Copyright 2020 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
+version: "3.7"
 
-root_directory="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
-cd $root_directory
+services:
 
-docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
-docker-compose --project-directory ./docker/gaffer-operation-runner/ -f ./docker/gaffer-operation-runner/docker-compose.yaml build
-docker-compose --project-directory ./docker/gaffer-federated-store/ -f ./docker/gaffer-federated-store/docker-compose.yaml build
+  gaffer-rest:
+    image: gchq/gaffer-federated-rest:${GAFFER_VERSION}
+    build:
+      context: .
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
+    restart: always
+    ports:
+    - 8080:8080
+    volumes:
+    - ./config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro
