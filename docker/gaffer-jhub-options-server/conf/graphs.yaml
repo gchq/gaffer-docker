@@ -1,0 +1,19 @@
+- id: simple-graph
+  name: Simple Graph
+  graphConfig:
+    description: "A very simple graph"
+  restApi: http://gaffer-api.gaffer.svc:80/rest/latest
+- id: road-traffic
+  name: Road Traffic Example Graph
+  graphConfig:
+    description: "A graph containing sample GB road traffic data from the Department of Transport"
+  restApi: http://road-traffic-gaffer-api.gaffer.svc:80/rest/latest
+  users:
+  - user1
+- id: secret
+  name: Super Secret Graph
+  graphConfig:
+    description: "You shouldn't be able to see this graph unless you are an admin!"
+  restApi: null
+  users:
+  - admin

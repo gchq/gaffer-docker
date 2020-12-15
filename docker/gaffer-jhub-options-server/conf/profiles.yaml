@@ -1,0 +1,16 @@
+- display_name: "Minimal Python Notebook"
+  slug: "minimal"
+  description: "Just Python"
+  default: true
+  kubespawner_override:
+    image: jupyter/minimal-notebook:b90cce83f37b
+- display_name: "Gaffer pySpark Notebook"
+  description: "Python, Hadoop, Spark, AWS CLI 2, kubectl, gafferpy"
+  slug: "gaffer-pyspark"
+  enable_hdfs: true
+  enable_gaffer: true
+  enable_spark: true
+  spark_image: gchq/spark-py:latest
+  spark_ingress_host: "{{USERNAME}}-{{SERVERNAME}}.spark.example.com"
+  kubespawner_override:
+    image: gchq/gaffer-pyspark-notebook:latest
