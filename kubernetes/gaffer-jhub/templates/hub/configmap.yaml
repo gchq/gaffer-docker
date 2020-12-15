@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ (first .Values.jupyterhub.hub.extraVolumes).configMap.name }}
+  labels:
+    {{- include "gaffer-jhub.labels" . | nindent 4 }}
+    app.kubernetes.io/component: hub
+data:
+  {{- /* Glob files to allow them to be mounted by the hub pod */ -}}
+  {{- /* key=filename: value=content */ -}}
+  {{- (.Files.Glob "files/*").AsConfig | nindent 2 }}

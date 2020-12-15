@@ -1,0 +1,145 @@
+
+nameOverride: ""
+fullnameOverride: ""
+
+jupyterhub:
+  debug:
+    enabled: true
+  custom:
+    optionsServerServiceName: gaffer-jhub-options-server
+  cull:
+    enabled: true
+    removeNamedServers: true
+  rbac:
+    enabled: true
+  proxy:
+    secretToken: ""
+    service:
+      type: ClusterIP
+  scheduling:
+    userScheduler:
+      enabled: false
+    userPlaceholder:
+      enabled: false
+  prePuller:
+    hook:
+      enabled: false
+    continuous:
+      enabled: false
+  hub:
+    image:
+      name: jupyterhub/k8s-hub
+      tag: 0.10.6
+    allowNamedServers: true
+    extraVolumes:
+    - name: gaffer-docker-scripts
+      configMap:
+        name: gaffer-docker-scripts
+        optional: false
+    extraVolumeMounts:
+    - name: gaffer-docker-scripts
+      mountPath: /scripts
+      readOnly: true
+    extraConfig:
+      scripts: |
+        from glob import glob
+        for file_path in glob('/scripts/*.py'):
+          print('Executing {}'.format(file_path))
+          with open(file_path) as file:
+            script = file.read()
+            exec(script)
+  singleuser:
+    defaultUrl: "/lab"
+    extraEnv:
+      GRANT_SUDO: "yes"
+    profileList:
+    - display_name: "Minimal Python Notebook"
+      slug: "minimal"
+      description: "Just Python"
+      kubespawner_override:
+        image: jupyter/minimal-notebook:b90cce83f37b
+    - display_name: "Gaffer pySpark Notebook"
+      description: "Python 3, Hadoop 3.2.1, Spark 3.0.0, AWS CLI 2, kubectl 1.20.0, gafferpy 1.13.1"
+      slug: "gaffer-pyspark"
+      default: true
+      enable_hdfs: true
+      enable_gaffer: true
+      enable_spark: true
+      spark_image: gchq/spark-py:0.8.1
+      spark_ingress_host: "{{USERNAME}}-{{SERVERNAME}}.spark.example.com"
+      kubespawner_override:
+        image: gchq/gaffer-pyspark-notebook:0.8.1
+
+optionsServer:
+  replicaCount: 1
+  image:
+    repository: gchq/gaffer-jhub-options-server
+    pullPolicy: IfNotPresent
+    tag: ""
+  imagePullSecrets: []
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  config:
+    namespaces:
+      templated:
+      - "user-#{username}"
+      static:
+        # namespace: list of users
+        default: []
+    hdfs: []
+    graphs: []
+    sparkDefaults:
+      spark.master: k8s://https://kubernetes.default.svc
+      spark.submit.deployMode: client
+      spark.authenticate: true
+      spark.ui.killEnabled: false
+      spark.serializer': org.apache.spark.serializer.KryoSerializer
+      spark.kubernetes.driver.label.app.kubernetes.io/name: gaffer-jhub
+      spark.kubernetes.driver.label.app.kubernetes.io/component: notebook-spark-config
+      spark.kubernetes.executor.label.app.kubernetes.io/name: gaffer-jhub
+      spark.kubernetes.executor.label.app.kubernetes.io/component: notebook-spark-config
+      spark.driver.cores: 1
+      spark.driver.memory: 1g
+      spark.executor.cores: 1
+      spark.executor.memory: 1g
+      spark.dynamicAllocation.enabled: true
+      spark.dynamicAllocation.shuffleTracking.enabled: true
+      spark.dynamicAllocation.executorIdleTimeout: 60s
+      spark.dynamicAllocation.cachedExecutorIdleTimeout: 2h
+      spark.dynamicAllocation.shuffleTracking.timeout: 2h
+
+testImages:
+  curl:
+    repository: curlimages/curl
+    tag: 7.67.0

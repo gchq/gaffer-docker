@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gaffer-jhub.fullname" . }}-options-server
+  labels:
+    {{- include "gaffer-jhub.labels" . | nindent 4 }}
+    app.kubernetes.io/component: options-server
+data:
+  namespaces.yaml: |
+    {{- toYaml .Values.optionsServer.config.namespaces | nindent 4 }}
+  hdfs.yaml: |
+    {{- toYaml .Values.optionsServer.config.hdfs | nindent 4 }}
+  graphs.yaml: |
+    {{- toYaml .Values.optionsServer.config.graphs | nindent 4 }}
+  spark-defaults.yaml: |
+    {{- toYaml .Values.optionsServer.config.sparkDefaults | nindent 4 }}
+  profiles.yaml: |
+    {{- toYaml .Values.jupyterhub.singleuser.profileList | nindent 4 }}
