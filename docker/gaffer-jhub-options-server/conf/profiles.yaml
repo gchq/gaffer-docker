@@ -3,7 +3,7 @@
   description: "Just Python"
   default: true
   kubespawner_override:
-    image: jupyter/minimal-notebook:b90cce83f37b
+    image: jupyter/minimal-notebook:399cbb986c6b
 - display_name: "Gaffer pySpark Notebook"
   description: "Python, Hadoop, Spark, AWS CLI 2, kubectl, gafferpy"
   slug: "gaffer-pyspark"

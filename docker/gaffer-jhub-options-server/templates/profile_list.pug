@@ -15,7 +15,7 @@ style
 h3 Container Image
 
 div#kubespawner-profiles-list.form-group
-	each profile in profile_list
+	each profile in profiles
 		label.form-control.input-group(for='profile-item-' + profile.slug)
 			div.col-md-1
 				input(type='radio' name='profile' id='profile-item-' + profile.slug value=profile.slug checked=profile.default)
@@ -57,7 +57,7 @@ div.form-horizontal
 		div.col-md-9
 			select.form-control(id='k8s_namespace' name='k8s_namespace')
 				each namespace in namespaces
-					option(selected= default_namespace == namespace)= namespace
+					option(selected= default_namespace == namespace.name)= namespace.name
 
 	div.form-group
 		label.col-md-3.control-label(for='volume')
@@ -72,7 +72,7 @@ div.form-horizontal
 		div.col-md-6.col-md-offset-3
 			div.input-group
 				div.input-group-addon
-					| Name: #{username}-
+					| Name:
 				input.form-control(type='text' id='volume_name' name='volume_name' value=servername)
 
 		div.col-md-3
@@ -111,7 +111,7 @@ div.form-horizontal
 		div.col-md-9
 			select.form-control(id='hdfs' name='hdfs')
 				option(value='') - None -
-				each hdfs_instance in hdfs_instances
+				each hdfs_instance in hdfs
 					option= hdfs_instance.id
 
 	div.form-group#gaffer_section

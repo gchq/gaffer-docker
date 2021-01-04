@@ -86,11 +86,14 @@ app.post('/options', (req, res) => {
 		volumeLookup.getForUser(req.body.username, namespaces)
 	]).then(([namespaces, hdfsInstances, graphs, serviceAccounts, volumes]) => {
 
-		const formData = {
+		const data = {
+			username: req.body.username,
 			servername: req.body.server_name,
 			profiles: profiles.getLookup(),
+			default_namespace: 'default_namespace' in req.body ? req.body.default_namespace : null,
 			namespaces: namespaces.reduce((acc, namespace) => {
 				acc[namespace] = {
+					name: namespace,
 					volumes: [],
 					serviceAccounts: []
 				}
@@ -107,28 +110,19 @@ app.post('/options', (req, res) => {
 		}
 
 		Array.from(serviceAccounts.values()).forEach(serviceAccount => {
-			formData.namespaces[serviceAccount.namespace].serviceAccounts.push(serviceAccount)
+			data.namespaces[serviceAccount.namespace].serviceAccounts.push(serviceAccount)
 		})
 		Array.from(volumes.values()).forEach(volume => {
-			formData.namespaces[volume.namespace].volumes.push(volume)
+			data.namespaces[volume.namespace].volumes.push(volume)
 		})
 
-		const js = '<script type="text/javascript">const PROFILE_FORM_DATA=JSON.parse(\'' + JSON.stringify(formData) + '\');' + profileFormScript + '</script>'
+		const js = '<script type="text/javascript">const PROFILE_FORM_DATA=JSON.parse(\'' + JSON.stringify(data) + '\');' + profileFormScript + '</script>'
+		const tpl = profileListTemplate(data)
+		data.html = js + tpl
 
-		const tplData = {
-			username: req.body.username,
-			servername: req.body.server_name,
-			profile_list: profiles.getAll(),
-			default_namespace: 'default_namespace' in req.body ? req.body.default_namespace : null,
-			namespaces: namespaces,
-			hdfs_instances: Array.from(hdfsInstances.values()),
-			graphs: Array.from(graphs.values())
-		}
-		const tpl = profileListTemplate(tplData)
-
-		return js + tpl
-	}).then(html => {
-		return res.status(200).json({ 'html': html })
+		return data
+	}).then(data => {
+		return res.status(200).json(data)
 	}).catch(err => {
 		console.error(err)
 		return res.status(500).send()
@@ -208,7 +202,7 @@ const prespawn = async (username, server_name, pod_name, default_namespace, user
 			const podSpec = volumeLookup.getPodSpecConfigForNewVolume(user_options.volume_name, username, server_name)
 			mergeObjects(config, podSpec)
 		} else {
-			const podSpec = volumeLookup.getPodSpecConfigForNewVolume('default', username, server_name)
+			const podSpec = volumeLookup.getPodSpecConfigForNewVolume(server_name || 'default', username, server_name)
 			mergeObjects(config, podSpec)
 		}
 
@@ -235,7 +229,7 @@ const prespawn = async (username, server_name, pod_name, default_namespace, user
 		}
 
 		let hdfsEnabled = false
-		if ('hdfs' in user_options && user_options.hdfs.length > 0) {
+		if (profile.enable_hdfs && 'hdfs' in user_options && user_options.hdfs.length > 0) {
 			const hdfsInstance = allowedHdfsInstances.get(user_options.hdfs)
 			if (hdfsInstance) {
 				hdfsEnabled = true
@@ -256,7 +250,7 @@ const prespawn = async (username, server_name, pod_name, default_namespace, user
 			}
 		}
 
-		if ('gaffer_graph' in user_options && user_options.gaffer_graph.length > 0) {
+		if (profile.enable_gaffer && 'gaffer_graph' in user_options && user_options.gaffer_graph.length > 0) {
 			const graph = allowedGraphs.get(user_options.gaffer_graph)
 			if (graph) {
 				const podSpec = await gafferGraphs.getPodSpecConfig(graph, username, server_name, config.namespace)
@@ -267,7 +261,7 @@ const prespawn = async (username, server_name, pod_name, default_namespace, user
 		}
 
 		if (profile.enable_spark) {
-			if (profile.spark_image) {
+			if (!profile.spark_image) {
 				throw `${profile.slug} profile does not specify which spark image to use!`
 			}
 
@@ -281,7 +275,7 @@ const prespawn = async (username, server_name, pod_name, default_namespace, user
 				hdfsEnabled,
 				renderTemplate(profile.spark_ingress_host, {
 					USERNAME: username,
-					SERVERNAME: server_name
+					SERVERNAME: server_name || 'default'
 				})
 			)
 			mergeObjects(config, podSpec)
