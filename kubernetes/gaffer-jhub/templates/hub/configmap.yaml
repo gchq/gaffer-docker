@@ -8,4 +8,4 @@ metadata:
 data:
   {{- /* Glob files to allow them to be mounted by the hub pod */ -}}
   {{- /* key=filename: value=content */ -}}
-  {{- (.Files.Glob "files/*").AsConfig | nindent 2 }}
+  {{- (.Files.Glob "files/hub/*").AsConfig | nindent 2 }}

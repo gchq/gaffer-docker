@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "gaffer-jhub.fullname" . }}-test-notebooks
+  labels:
+    {{- include "gaffer-jhub.labels" . | nindent 4 }}
+    app.kubernetes.io/component: test
+  annotations:
+    helm.sh/hook: test-success
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  containers:
+  - name: test
+    image: {{ .Values.testImages.python.repository }}:{{ .Values.testImages.python.tag}}
+    args:
+    - python3
+    - /scripts/notebook_tests.py
+    env:
+    - name: HUB_API_URL
+      value: http://proxy-public/hub/api
+    - name: OPTIONS_SERVER_URL
+      value: http://{{ .Values.jupyterhub.custom.optionsServerServiceName }}
+    - name: API_TOKEN
+      value: {{ .Values.jupyterhub.hub.services.test.apiToken }}
+    - name: NAMESPACE
+      value: {{ .Release.Namespace }}
+    - name: SERVICE_ACCOUNT_NAME
+      value: {{ include "gaffer-jhub.fullname" . }}-test-notebooks
+    volumeMounts:
+    - name: scripts
+      mountPath: /scripts
+      readOnly: true
+  volumes:
+  - name: scripts
+    configMap:
+      name: {{ include "gaffer-jhub.fullname" . }}-test-scripts
+      optional: false
+  restartPolicy: Never
+  serviceAccountName: {{ include "gaffer-jhub.fullname" . }}-test-notebooks
