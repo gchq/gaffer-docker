@@ -23,5 +23,8 @@ jobs:
     - name: Deploy to Kubernetes
       run: ./cd/deploy_to_kind.sh
   
-    - name: Run Tests
+    - name: Run gaffer-road-traffic Tests
       run: helm test gaffer
+
+    - name: Run gaffer-jhub Tests
+      run: helm test jhub

@@ -45,7 +45,10 @@ ROOT_DIR="$(getRootDirectory)"
 # HADOOP_VERSION
 # GAFFER_VERSION
 # ACCUMULO_VERSION
-source "${ROOT_DIR}"/docker/gaffer/.env
+# SPARK_VERSION
+source "${ROOT_DIR}"/docker/gaffer-pyspark-notebook/.env
+# JHUB_OPTIONS_SERVER_VERSION
+source "${ROOT_DIR}"/docker/gaffer-jhub-options-server/.env
 
 # Log in to Dockerhub
 docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
@@ -59,4 +62,5 @@ pushTags gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-operation-runner "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-federated-store "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-pyspark-notebook "${GAFFER_VERSION}" "${APP_VERSION}"
-pushTags gchq/gaffer-jhub-options-server "${APP_VERSION}" "${APP_VERSION}"
+pushTags gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}" "${APP_VERSION}"
+pushTags gchq/spark-py "${SPARK_VERSION}" "${APP_VERSION}"

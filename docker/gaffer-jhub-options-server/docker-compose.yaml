@@ -17,7 +17,7 @@ version: "3.7"
 services:
 
   gaffer-jhub-options-server:
-    image: gchq/gaffer-jhub-options-server:${APP_VERSION}
+    image: gchq/gaffer-jhub-options-server:${JHUB_OPTIONS_SERVER_VERSION}
     container_name: gaffer-jhub-options-server
     hostname: gaffer-jhub-options-server
     build: .

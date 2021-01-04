@@ -75,7 +75,7 @@ optionsServer:
   image:
     repository: gchq/gaffer-jhub-options-server
     pullPolicy: IfNotPresent
-    tag: ""
+    tag: 1.0.0
   imagePullSecrets: []
   serviceAccount:
     # Specifies whether a service account should be created
