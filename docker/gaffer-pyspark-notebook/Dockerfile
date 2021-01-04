@@ -63,7 +63,7 @@ RUN cd /opt && \
 	ln -s ./spark-${SPARK_VERSION}-*/ ./spark
 
 ARG FINDSPARK_VERSION=1.4.2
-RUN pip install findspark==${FINDSPARK_VERSION}
+RUN pip install findspark==${FINDSPARK_VERSION} kubernetes
 
 ARG KUBECTL_VERSION=1.20.0
 
@@ -80,7 +80,13 @@ RUN git clone -b ${GAFFER_PYTHON_SHELL_VERSION} --depth 1 https://github.com/gch
 RUN jupyter labextension install jupyterlab-plotly@4.10.0 && \
 	rm -rf "/home/${NB_USER}/.cache/yarn"
 
+COPY ./examples /examples
+
 ENV PATH=/opt/spark/bin:/opt/hadoop/bin:$PATH \
-    JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
+	JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/ \
+	HADOOP_HOME=/opt/hadoop \
+	SPARK_HOME=/opt/spark \
+	PYSPARK_DRIVER_PYTHON=python3 \
+	PYSPARK_PYTHON=python3
 
 USER $NB_UID
