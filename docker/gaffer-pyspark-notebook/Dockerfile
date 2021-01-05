@@ -38,7 +38,8 @@ RUN cd /opt && \
 	wget -q ${HADOOP_DOWNLOAD_URL} && \
 	tar -xf ./hadoop-${HADOOP_VERSION}.tar.gz && \
 	rm ./hadoop-${HADOOP_VERSION}.tar.gz && \
-	ln -s ./hadoop-${HADOOP_VERSION} ./hadoop
+	ln -s ./hadoop-${HADOOP_VERSION} ./hadoop && \
+	rm -rf ./hadoop/share/doc
 
 # AWS Auth via K8s Service Accounts is only supported in AWS Java SDK 1.11.704+
 # @see https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts-minimum-sdk.html
