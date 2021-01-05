@@ -6,6 +6,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@v2
+
     - uses: actions/checkout@v2
 
     - name: Install Kubernetes
