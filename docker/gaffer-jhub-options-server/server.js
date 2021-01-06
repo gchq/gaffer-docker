@@ -272,6 +272,8 @@ const prespawn = async (username, server_name, pod_name, default_namespace, user
 				config.namespace,
 				profile.spark_image,
 				'serviceAccount' in config ? config.serviceAccount : null,
+				user_options.spark_cpu,
+				user_options.spark_mem,
 				hdfsEnabled,
 				renderTemplate(profile.spark_ingress_host, {
 					USERNAME: username,
