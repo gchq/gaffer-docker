@@ -14,6 +14,7 @@ spec:
     image: {{ .Values.testImages.python.repository }}:{{ .Values.testImages.python.tag}}
     args:
     - python3
+    - -u
     - /scripts/notebook_tests.py
     env:
     - name: HUB_API_URL

@@ -121,6 +121,7 @@ def test_jhub_profiles(username, servername, namespace, service_account_name):
 	options = get_notebook_spawn_options(username, servername)
 	for profile_slug in options['profiles']:
 		profile = options['profiles'][profile_slug]
+		print('')
 		print('=== Testing profile {}: {}'.format(profile['slug'], profile['display_name']))
 		print(profile)
 

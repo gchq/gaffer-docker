@@ -30,7 +30,7 @@ jobs:
       run: ./cd/deploy_to_kind.sh
   
     - name: Run gaffer-road-traffic Tests
-      run: helm test gaffer
+      run: helm test gaffer || (kubectl get po && kubectl logs -l app.kubernetes.io/component=test && false)
 
     - name: Run gaffer-jhub Tests
-      run: helm test jhub
+      run: helm test jhub || (kubectl get po && kubectl logs -l app.kubernetes.io/component=test && false)
