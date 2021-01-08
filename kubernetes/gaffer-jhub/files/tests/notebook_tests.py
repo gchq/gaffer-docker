@@ -157,4 +157,9 @@ def test_jhub_profiles(username, servername, namespace, service_account_name):
 			delete_user_notebook(username, servername)
 
 test_custom_kubespawner_is_being_used()
+
+# E2E Test
+# - Query options server and get a list of all available profiles and options
+# - Spawn a Jupyter server for each profile
+# - Check that all example notebooks run successfully
 test_jhub_profiles(USERNAME, SERVERNAME, NAMESPACE, SERVICE_ACCOUNT_NAME)
