@@ -161,7 +161,6 @@ app.post('/prespawn', (req, res) => {
 
 	prespawn(req.body.username, req.body.server_name, req.body.pod_name, req.body.default_namespace, user_options, profile)
 		.then(config => {
-			// console.log(config)
 			return res.status(200).json(config)
 		})
 		.catch(err => {

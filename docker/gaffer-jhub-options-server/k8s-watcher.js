@@ -17,7 +17,6 @@ class K8sWatcher extends EventEmitter {
 		this.emit('RESET')
 		const k8sWatch = new k8s.Watch(this.kubeConfig)
 		this.watcher = k8sWatch.watch(this.url, this.params, (type, resource) => {
-			// console.log(type + ': ' + JSON.stringify(resource))
 
 			if (['ADDED', 'MODIFIED', 'DELETED'].includes(type)) {
 				this.emit(type, resource)

@@ -20,7 +20,6 @@ class NamespaceLookup {
 	loadConfigFile(configFile) {
 		if (fs.existsSync(configFile)) {
 			const config = yaml.safeLoad(fs.readFileSync(configFile, 'utf8'))
-			// console.log(JSON.stringify(config, null, 2))
 
 			config.templated.forEach(templateString => {
 				this.addNamespaceTemplate(templateString)
