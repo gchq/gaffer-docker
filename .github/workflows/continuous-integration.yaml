@@ -24,6 +24,9 @@ jobs:
     - name: Build Images
       run: ./cd/build_images.sh
 
+    - name: Update versions in charts
+      run: ./cd/update_versions.sh
+
     - name: Install subcharts
       run: ./cd/install_dependencies.sh
 

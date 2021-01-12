@@ -65,7 +65,7 @@ jobs:
         git config user.email github-actions@github.com
 
     - name: Update versions
-      run: ./cd/update_app_version.sh ${RELEASE_VERSION}
+      run: ./cd/update_versions.sh ${RELEASE_VERSION}
 
     - name: Push to hotfix branch
       run: |
