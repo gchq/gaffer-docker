@@ -22,8 +22,8 @@ jobs:
     - name: Set version
       run: echo "RELEASE_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
     
-    - name: Update version
-      run: ./cd/update_app_version.sh ${RELEASE_VERSION}
+    - name: Update versions
+      run: ./cd/update_versions.sh ${RELEASE_VERSION}
 
     - name: Push changes
       run: |
@@ -123,6 +123,7 @@ jobs:
         - hdfs
         - gaffer
         - gaffer-road-traffic
+        - gaffer-jhub
     steps:
     - name: Checkout develop
       uses: actions/checkout@v2

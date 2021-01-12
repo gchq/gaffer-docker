@@ -14,43 +14,38 @@
 
 nameOverride: ""
 fullnameOverride: ""
-
 graph:
   config:
     graphId: "simpleGraph"
     description: "A graph for demo purposes"
     hooks: []
   schema: {}
-    # elements.json: "{}"
+  # elements.json: "{}"
   storeProperties:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
-
 # See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
 ui: "{}"
-
 hdfs:
   enabled: true
   config:
     hdfsSite:
       dfs.datanode.synconclose: true
   volumes:
-  - /accumulo
+    - /accumulo
   namenode:
     hostname: "" # Only needs to be set if hdfs.enabled = false
     ports:
       clientRpc: 8020
   postInstallCommands:
-  - hadoop fs -mkdir -p /accumulo
-  - hadoop fs -chown accumulo /accumulo
-  - hadoop fs -chmod 700 /accumulo
-  - hadoop fs -ls /
-
+    - hadoop fs -mkdir -p /accumulo
+    - hadoop fs -chown accumulo /accumulo
+    - hadoop fs -chmod 700 /accumulo
+    - hadoop fs -ls /
 zookeeper:
   enabled: true
   externalHosts: ""
   replicaCount: 1
-
 accumulo:
   instanceId: accumulo
   config:
@@ -79,67 +74,60 @@ accumulo:
           password: ""
           permissions:
             system:
-            - CREATE_TABLE
+              - CREATE_TABLE
             table:
               trace:
-              - READ
-              - WRITE
+                - READ
+                - WRITE
         gaffer:
           password: ""
           auths: []
           permissions:
             system:
-            - CREATE_TABLE
+              - CREATE_TABLE
             table:
               simpleGraph:
-              - READ
-              - WRITE
-              - BULK_IMPORT
-              - ALTER_TABLE
+                - READ
+                - WRITE
+                - BULK_IMPORT
+                - ALTER_TABLE
     postInstallCommands:
-    - users
-    - userpermissions -u gaffer
-    - getauths -u gaffer
-
+      - users
+      - userpermissions -u gaffer
+      - getauths -u gaffer
   image:
     repository: gchq/gaffer
-    tag: 1.13.4
+    tag: 1.13.4 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
-
   master:
     resources: {}
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
   tabletServers:
     replicaCount: 3
     resources: {}
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
   gc:
     replicaCount: 1
     resources: {}
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
   cmds:
     resources: {}
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
   monitor:
     replicaCount: 1
     resources: {}
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
     ingress:
       enabled: true
       annotations:
@@ -149,20 +137,18 @@ accumulo:
       #pathPrefix: /accumulo/
       # For Nginx:
       pathPrefix: "/accumulo/(.*)"
-
 api:
   user: gaffer
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 1.13.4
+    tag: 1.13.4 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
   ingress:
     annotations:
       traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
@@ -171,14 +157,12 @@ api:
     #pathPrefix: /gaffer/
     # For Nginx:
     pathPrefix: "/gaffer/(.*)"
-
 waitFor:
   graphStatusOk: true
-
 testImages:
   curl:
     repository: curlimages/curl
     tag: 7.67.0
   operationRunner:
     repository: gchq/gaffer-operation-runner
-    tag: 1.13.4
+    tag: 1.13.4 # managed version

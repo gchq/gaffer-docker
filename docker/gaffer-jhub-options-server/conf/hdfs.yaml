@@ -1,0 +1,6 @@
+- id: gaffer:road-traffic-hdfs
+  name: road-traffic-hdfs
+  namespace: gaffer
+  namenodeClientRpcUrl: hdfs://road-traffic-hdfs-namenodes.gaffer.svc:8020
+  users:
+  - user1
