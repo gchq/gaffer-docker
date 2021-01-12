@@ -48,7 +48,7 @@ ROOT_DIR="$(getRootDirectory)"
 # SPARK_VERSION
 source "${ROOT_DIR}"/docker/gaffer-pyspark-notebook/.env
 # JHUB_OPTIONS_SERVER_VERSION
-source "${ROOT_DIR}"/docker/gaffer-jhub-options-server/.env
+source "${ROOT_DIR}"/docker/gaffer-jhub-options-server/get-version.sh
 
 # Log in to Dockerhub
 docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"

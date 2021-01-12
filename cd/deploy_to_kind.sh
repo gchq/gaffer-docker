@@ -18,15 +18,23 @@ set -e
 
 kind create cluster --quiet --config ./cd/kind.yaml
 
+# This sets the values for:
+# HADOOP_VERSION
+# GAFFER_VERSION
+# SPARK_VERSION
+source ./docker/gaffer-pyspark-notebook/.env
+# JHUB_OPTIONS_SERVER_VERSION
+source ./docker/gaffer-jhub-options-server/get-version.sh
+
 # Deploy Images to Kind
-kind load docker-image gchq/hdfs:3.2.1
-kind load docker-image gchq/gaffer:1.13.4
-kind load docker-image gchq/gaffer-rest:1.13.4
-kind load docker-image gchq/gaffer-road-traffic-loader:1.13.4
-kind load docker-image gchq/gaffer-operation-runner:1.13.4
-kind load docker-image gchq/gaffer-pyspark-notebook:1.13.4
-kind load docker-image gchq/gaffer-jhub-options-server:1.0.0
-kind load docker-image gchq/spark-py:3.0.1
+kind load docker-image gchq/hdfs:${HADOOP_VERSION}
+kind load docker-image gchq/gaffer:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer-operation-runner:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer-pyspark-notebook:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer-jhub-options-server:${JHUB_OPTIONS_SERVER_VERSION}
+kind load docker-image gchq/spark-py:${SPARK_VERSION}
 
 # Deploy containers onto Kind
 # Hostname check is disabled for CI
