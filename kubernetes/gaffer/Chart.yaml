@@ -20,9 +20,9 @@ version: 0.17.1 # managed version
 appVersion: 1.21.1
 home: https://github.com/gchq/Gaffer
 sources:
-- https://github.com/gchq/gaffer-docker
+  - https://github.com/gchq/gaffer-docker
 dependencies:
 - name: accumulo
-  version: ^0.17.1 # managed version
+  version: "^0.17.1" # managed version
   repository: file://../accumulo/
   condition: accumulo.enabled

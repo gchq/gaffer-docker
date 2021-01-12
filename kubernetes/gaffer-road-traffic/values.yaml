@@ -19,20 +19,18 @@ labels: {}
 loader:
   image:
     repository: gchq/gaffer-road-traffic-loader
-    tag: 1.21.1
+    tag: 1.21.1 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
 gaffer:
   graph:
     config:
       graphId: "roadTraffic"
       description: "A graph containing sample GB road traffic data from the Department of Transport"
-
     schema:
       elements.json: |-
         {
@@ -107,7 +105,6 @@ gaffer:
             }
           }
         }
-
       types.json: |-
         {
           "types": {
@@ -367,7 +364,6 @@ gaffer:
           }
         }
       }
-
   accumulo:
     enabled: true
     config:
@@ -381,11 +377,10 @@ gaffer:
             permissions:
               table:
                 roadTraffic:
-                - READ
-                - WRITE
-                - BULK_IMPORT
-                - ALTER_TABLE
-
+                  - READ
+                  - WRITE
+                  - BULK_IMPORT
+                  - ALTER_TABLE
   waitFor:
     graphStatusOk: true
     dataLoad: true

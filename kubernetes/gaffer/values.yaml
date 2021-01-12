@@ -22,7 +22,7 @@ graph:
     description: "A graph for demo purposes"
     hooks: []
   schema: {}
-    # elements.json: "{}"
+  # elements.json: "{}"
   storeProperties:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
@@ -32,7 +32,7 @@ graph:
 ui:
   image:
     repository: gchq/gaffer-ui
-    tag: 1.21.1
+    tag: 1.21.1 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   # See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
@@ -55,7 +55,7 @@ api:
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 1.21.1
+    tag: 1.21.1 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -92,7 +92,7 @@ accumulo:
   enabled: false
   image:
     repository: gchq/gaffer
-    tag: 1.21.1
+    tag: 1.21.1 # managed version
   config:
     postInstallCommands:
     - users
