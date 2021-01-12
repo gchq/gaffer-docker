@@ -16,10 +16,9 @@ alpine:
   repository: alpine
   tag: 3.10.2
   imagePullPolicy: IfNotPresent
-
 namenode:
   repository: gchq/hdfs
-  tag: 3.2.1
+  tag: 3.2.1 # managed version
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
@@ -42,15 +41,14 @@ namenode:
     pvcTemplateSpec:
       storageClassName: null
       accessModes:
-      - ReadWriteOnce
+        - ReadWriteOnce
       resources:
         requests:
           storage: 10Gi
-
 datanode:
   nodeCount: 3
   repository: gchq/hdfs
-  tag: 3.2.1
+  tag: 3.2.1 # managed version
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
@@ -72,22 +70,20 @@ datanode:
     pvcTemplateSpec:
       storageClassName: null
       accessModes:
-      - ReadWriteOnce
+        - ReadWriteOnce
       resources:
         requests:
           storage: 10Gi
-
 shell:
   enabled: true
   repository: gchq/hdfs
-  tag: 3.2.1
+  tag: 3.2.1 # managed version
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
 config:
   path: /etc/hadoop/conf
   coreSite: {}
@@ -97,14 +93,11 @@ config:
   rackAwareness:
     serviceAccountName:
     nodeTopologyLabel: topology.kubernetes.io/zone
-
 secrets:
   path: /etc/hadoop/secrets
   files: {}
-
 nameOverride: ""
 fullnameOverride: ""
-
 ingress:
   enabled: true
   annotations:
@@ -114,7 +107,6 @@ ingress:
   # pathPrefix: /hdfs/
   # For Nginx:
   pathPrefix: "/hdfs/(.*)"
-
 postInstallCommands: []
 # - hadoop fs -mkdir -p /accumulo
 # - hadoop fs -chown accumulo /accumulo

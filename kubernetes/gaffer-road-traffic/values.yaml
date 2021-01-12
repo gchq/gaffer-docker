@@ -14,24 +14,21 @@
 
 nameOverride: ""
 fullnameOverride: ""
-
 loader:
   image:
     repository: gchq/gaffer-road-traffic-loader
-    tag: 1.13.4
+    tag: 1.13.4 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
 gaffer:
   graph:
     config:
       graphId: "roadTraffic"
       description: "A graph containing sample GB road traffic data from the Department of Transport"
-
     schema:
       elements.json: |-
         {
@@ -106,7 +103,6 @@ gaffer:
             }
           }
         }
-
       types.json: |-
         {
           "types": {
@@ -231,7 +227,6 @@ gaffer:
             }
           }
         }
-
   ui: |-
     {
       "title": "Road Traffic Example",
@@ -362,7 +357,6 @@ gaffer:
         }
       }
     }
-
   accumulo:
     config:
       userManagement:
@@ -375,15 +369,13 @@ gaffer:
             permissions:
               table:
                 roadTraffic:
-                - READ
-                - WRITE
-                - BULK_IMPORT
-                - ALTER_TABLE
-
+                  - READ
+                  - WRITE
+                  - BULK_IMPORT
+                  - ALTER_TABLE
   waitFor:
     graphStatusOk: true
     dataLoad: true
-
   testImages:
     curl:
       repository: curlimages/curl
