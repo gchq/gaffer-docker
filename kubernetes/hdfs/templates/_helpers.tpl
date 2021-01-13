@@ -66,3 +66,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 /data{{- $v -}}/dfs/data
 {{- end -}}
 {{- end -}}
+
+{{- define "hdfs.namenodeServiceAccountName" -}}
+{{- default (printf "%s-namenode" (include "hdfs.fullname" .)) .Values.config.rackAwareness.serviceAccountName -}}
+{{- end -}}

@@ -12,21 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v2
-name: gaffer
-description: A large-scale entity and relation database supporting aggregation of properties
-type: application
-version: 0.9.0 # managed version
-appVersion: 1.13.4
-home: https://github.com/gchq/Gaffer
-sources:
-- https://github.com/gchq/gaffer-docker
-dependencies:
-- name: zookeeper
-  version: 2.1.5
-  repository: https://charts.helm.sh/incubator/
-  condition: zookeeper.enabled
-- name: hdfs
-  version: ^0.9.0 # managed version
-  repository: file://../hdfs/
-  condition: hdfs.enabled
+version: "3.7"
+
+services:
+
+  gaffer-rest:
+    image: gchq/gaffer-federated-rest:${GAFFER_VERSION}
+    build:
+      context: .
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
+    restart: always
+    ports:
+    - 8080:8080
+    volumes:
+    - ./config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro
