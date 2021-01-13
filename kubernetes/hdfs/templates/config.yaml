@@ -53,6 +53,18 @@ data:
         <value>{{$v}}</value>
       </property>
 {{- end }}
+{{- if .Values.config.rackAwareness }}
+{{- if .Values.config.rackAwareness.nodeTopologyLabel }}
+      <property>
+        <name>net.topology.script.file.name</name>
+        <value>/scripts/resolve-rack.sh</value>
+      </property>
+      <property>
+        <name>net.topology.script.number.args</name>
+        <value>1</value>
+      </property>
+{{- end }}
+{{- end }}
       <property>
         <name>dfs.namenode.rpc-address</name>
         <value>{{ template "hdfs.fullname" . }}-namenode-0.{{ template "hdfs.fullname" . }}-namenodes:{{ .Values.namenode.ports.clientRpc }}</value>
