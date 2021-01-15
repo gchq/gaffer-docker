@@ -1,7 +1,4 @@
-
 name: Deploy Gaffer On Kind
-
-# Controls when the action will run. 
 on:
   workflow_dispatch:
   # Triggers the workflow to run at at 0900 Monday and Thursday day each week 
@@ -12,80 +9,41 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: kubernetes
+        working-directory: 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Create kind cluster 
-        run: kind create cluster 
-      - name: Deploy Gaffer on kind
-        run: sh ../.github/workflows/execute-bash.sh docs/kind-deployment.md
-      - name: Send failure message to ms teams
-        if: ${{ failure() }}
-        uses: fjogeleit/http-request-action@master
-        with:
-           url: https://prod-100.westeurope.logic.azure.com:443/workflows/e77148a40306467683f9f5abec3ac060/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=maJl7kx5roUQGhZNvbuyKGb5PCrYjmjaan8lyKOiP1M
-           method: 'POST'
-           contentType: "application/json"
-           data: "{'message': 'Gaffer deployment on kind failed'}"  
-  Test: 
-    needs: Build
-    runs-on: ubuntu-latest 
-    defaults:
-      run:
-        working-directory: store-implementation/accumulo-store/src/test/resources/
-    steps:     
-      - name: Checkout tools repo
-        uses: actions/checkout@v2
-        with:
-          repository: gchq/Gaffer
-      # Runs script to to execute bash commands in kind-deployment.md 
-      - name: Update properties files #1
-        run: sed -i '16 a gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties' store.properties
-      - name: Update properties files #2 
-        run: sed -i 's/localhost/localhost:58630/g' store.properties
-      - name: Update properties files #3 
-        run: sed -i 's/=user/=root/g' store.properties
-      - name: Update properties files #4 
-        run: sed -i 's/standardInstance/instance/g' store.properties
-      - name: Update properties files #5
-        run: sed -i '16 a gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties' store2.properties
-      - name: Update properties files #6
-        run: sed -i 's/localhost/localhost:58630/g' store2.properties
-      - name: Update properties files #7 
-        run: sed -i 's/=user/=root/g' store2.properties
-      - name: Update properties files #8 
-        run: sed -i 's/standardInstance/instance/g' store2.properties
-      - name: Update properties files #9 
-        run: sed -i 's/localhost/localhost:58630/g' accumuloStoreClassicKeys.properties
-      - name: Update properties files #10 
-        run: sed -i 's/=user/=root/g' accumuloStoreClassicKeys.properties
-      - name: Update properties files #11 
-        run: sed -i 's/standardInstance/instance/g' accumuloStoreClassicKeys.properties
-      - name: Update properties files #12
-        run: sed -i '16 a gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties' accumuloStoreClassicKeys.properties 
-      - name: Dependencies	       
-        run:  |		         
-           cd ../../../../..	          
-           mvn clean install -pl :accumulo-store -am -Pquick	
-           mv findbugs-exclude.xml store-implementation/accumulo-store/
-      - name: Run Integration Tests
-        run: |		         
-           cd ../../..
-           mvn verify    	          
+      
+      - name: Build Images
+        run: ./cd/build_images.sh
+      
+      - name: Build integration test image 
+        run: docker-compose ./docker/gaffer-integration-tests/ -f ./docker/gaffer-integration-tests/docker-compose.yaml build  
+      
+      - name: Install subcharts
+        run: ./cd/install_dependencies.sh
+
+      - name: Deploy to Kubernetes
+        run: ./cd/deploy_to_kind.sh
+
+      - name: Load integration test image 
+        run: kind load docker-image gchq/gaffer-integration-test:develop  
+       
+          	          
       - name: Send success message to ms teams
         if: ${{ success() }}
         uses: fjogeleit/http-request-action@master
         with:
-           url: https://prod-100.westeurope.logic.azure.com:443/workflows/e77148a40306467683f9f5abec3ac060/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=maJl7kx5roUQGhZNvbuyKGb5PCrYjmjaan8lyKOiP1M
+           url: ${{secret.WORKFLOW_URL}}
            method: 'POST'
            contentType: "application/json"
            data: "{'message': 'Integration Tests passed'}"
+      
       - name: Send failure message to ms teams
         if: ${{ failure() }}
         uses: fjogeleit/http-request-action@master
         with:
-           url: https://prod-100.westeurope.logic.azure.com:443/workflows/e77148a40306467683f9f5abec3ac060/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=maJl7kx5roUQGhZNvbuyKGb5PCrYjmjaan8lyKOiP1M
+           url: ${{secret.WORKFLOW_URL}}
            method: 'POST'
            contentType: "application/json"
            data: "{'message': 'Integration Tests failed'}"
