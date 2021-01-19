@@ -17,7 +17,7 @@ name: accumulo
 description: A Key-Value store containing the Gaffer iterators for rapid filtering and lookup
 type: application
 version: 0.9.0 # managed version
-appVersion: 1.13.4
+appVersion: 1.9.3
 home: https://github.com/gchq/Gaffer
 sources:
 - https://github.com/gchq/gaffer-docker

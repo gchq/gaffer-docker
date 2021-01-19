@@ -16,11 +16,14 @@ limitations under the License.
 
 */ -}}
 {{- define "gaffer.storeProperties" -}}
+
+{{- if .Values.accumulo.enabled }}
 gaffer.store.class=uk.gov.gchq.gaffer.accumulostore.AccumuloStore
 gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties
 accumulo.instance={{ .Values.accumulo.instanceId }}
-accumulo.zookeepers={{ template "gaffer.zookeepers" . }}
+accumulo.zookeepers={{ template "callSubChartTemplate" (list . "accumulo" "accumulo.zookeepers") }}
 accumulo.user={{ required "Please set api.user to the name of the user that the REST API should authenticate to Accumulo with" .Values.api.user }}
+
 
 {{- /* Make sure that the Accumulo user that the API will be using will be created */}}
 {{- if not (hasKey .Values.accumulo.config.userManagement.users .Values.api.user) }}
@@ -41,7 +44,11 @@ accumulo.password={{ required (print "Password required for API's Accumulo User:
     {{- fail (print "API Accumulo User: " .Values.api.user " needs to have READ and WRITE permission to the " .Values.graph.config.graphId " table!") }}
   {{- end }}
 {{- end }}
+{{- else if not (hasKey .Values.graph.storeProperties "gaffer.store.properties.class") }}
+gaffer.store.class=uk.gov.gchq.gaffer.mapstore.MapStore
+gaffer.store.properties.class=uk.gov.gchq.gaffer.mapstore.MapStoreProperties
 
+{{- end}}
 {{- range $property, $value := .Values.graph.storeProperties }}
 {{ $property }}={{ $value }}
 {{- end }}
