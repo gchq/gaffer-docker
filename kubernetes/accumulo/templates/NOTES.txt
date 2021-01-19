@@ -1,0 +1,25 @@
+.
+|__||__||__||__||__||__||__||__||__||__||__|
+__   __  __  __       __ __          __  __
+  | |__||   |   |  | |  |  ||  ||   |  ||
+__| |  ||__ |__ |__| |     ||__||__ |__||__
+ __  __  __  __  __  __  __  __  __  __  __ 
+|  ||  ||  ||  ||  ||  ||  ||  ||  ||  ||  |
+
+Version: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+
+
+
+{{- if or (eq (index .Values.config.accumuloSite "instance.secret") "DEFAULT") (eq .Values.config.userManagement.rootPassword "root") }}
+
+!!!!! ⚠️  WARNING ⚠️  !!!!!
+{{- if eq (index .Values.config.accumuloSite "instance.secret") "DEFAULT" }}
+It looks like you are using a default value for config.accumuloSite."instance.secret" ({{ index .Values.config.accumuloSite "instance.secret" }})
+{{- end }}
+{{- if eq .Values.config.userManagement.rootPassword "root" }}
+It looks like you are using a default value for config.userManagement.rootPassword ({{ .Values.config.userManagement.rootPassword }})
+{{- end }}
+Consider setting different values to improve security.
+{{- end }}
+
+.
