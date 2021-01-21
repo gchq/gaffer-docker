@@ -152,10 +152,8 @@ services:
     build:
       context: ../gaffer-rest/
       args:
-        GAFFER_VERSION: ${GAFFER_VERSION}
-        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
+        # GAFFER_VERSION: ${GAFFER_VERSION}
     ports:
     - 8080:8080
     volumes:
-    - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
-    - ../gaffer-rest/config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro
+    - ./conf/store.properties:/gaffer/config/store/store.properties:ro

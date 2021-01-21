@@ -20,9 +20,8 @@ services:
     image: gchq/gaffer-rest:${GAFFER_VERSION}
     build:
       context: .
-      args:
-        # GAFFER_VERSION: ${GAFFER_VERSION} # Use this when exec jar is released
-        GAFFER_VERSION: add-classifier
+      # args:
+      #   GAFFER_VERSION: ${GAFFER_VERSION} # Use this when exec jar is released
     restart: always
     ports:
     - 8080:8080

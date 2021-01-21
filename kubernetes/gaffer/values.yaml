@@ -34,7 +34,7 @@ api:
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 1.13.4
+    tag: 1.14.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -60,7 +60,7 @@ testImages:
     tag: 7.67.0
   operationRunner:
     repository: gchq/gaffer-operation-runner
-    tag: 1.13.4
+    tag: 1.14.0
 
 # Extras
 

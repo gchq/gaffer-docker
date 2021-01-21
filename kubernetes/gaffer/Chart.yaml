@@ -17,7 +17,7 @@ name: gaffer
 description: A large-scale entity and relation database supporting aggregation of properties
 type: application
 version: 0.9.0 # managed version
-appVersion: 1.13.4
+appVersion: 1.14.0
 home: https://github.com/gchq/Gaffer
 sources:
 - https://github.com/gchq/gaffer-docker

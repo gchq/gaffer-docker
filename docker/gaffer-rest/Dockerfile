@@ -7,7 +7,7 @@ ARG BASE_IMAGE_TAG=8-jre-alpine
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
 # ARG GAFFER_VERSION=1.14.0
-# Using branch with classifier in place
+# Using branch with classifier in place for development
 ARG GAFFER_VERSION=add-classifier
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
