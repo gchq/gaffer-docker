@@ -13,12 +13,19 @@
 # limitations under the License.
 
 apiVersion: v1
-kind: ConfigMap
+kind: Service
 metadata:
-  name: {{ include "gaffer.fullname" . }}-ui-config
+  name: {{ include "gaffer.fullname" . }}-ui
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
-    app.kubernetes.io/component: ui-config
-data:
-  defaultConfig.json: {{ .Files.Get "config/ui/defaultConfig.json" | quote }}
-  config.json: {{ .Values.ui | quote }}
+    app.kubernetes.io/component: ui
+spec:
+  selector:
+    {{- include "gaffer.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: ui
+  type: ClusterIP
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: http

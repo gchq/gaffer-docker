@@ -156,4 +156,4 @@ services:
     ports:
     - 8080:8080
     volumes:
-    - ./conf/store.properties:/gaffer/config/store/store.properties:ro
+    - ./conf/store.properties:/gaffer/store/store.properties:ro

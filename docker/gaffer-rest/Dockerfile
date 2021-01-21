@@ -38,7 +38,7 @@ RUN addgroup ${GROUP} && adduser -h /gaffer -G ${GROUP} -H -D ${USER}
 
 USER ${USER}:${GROUP}
 
-COPY /config /gaffer/config
+COPY /config /gaffer
 COPY --from=builder /jars /gaffer/jars
 
 WORKDIR /gaffer

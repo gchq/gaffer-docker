@@ -156,9 +156,9 @@ services:
     ports:
     - 8080:8080
     volumes:
-    - ../gaffer/conf/store.properties:/gaffer/config/store/store.properties:ro
-    - ./config/graph/graphConfig.json:/gaffer/config/graph/graphConfig.json:ro
-    - ./config/schema:/gaffer/config/schema:ro
+    - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
+    - ./config/graph/graphConfig.json:/gaffer/graph/graphConfig.json:ro
+    - ./config/schema:/gaffer/schema:ro
 
   gaffer-ui:
     image: gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}

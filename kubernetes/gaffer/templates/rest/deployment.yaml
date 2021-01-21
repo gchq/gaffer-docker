@@ -53,17 +53,20 @@ spec:
         - name: store-properties
           mountPath: /gaffer/store/
           readOnly: true
+        - name: application-properties
+          mountPath: /gaffer/config
+
         ports:
         - name: http
           protocol: TCP
           containerPort: 8080
         livenessProbe:
           httpGet:
-            path: /rest/
+            path: {{ .Values.graph.applicationProperties."server.context-path" }}
             port: http
         readinessProbe:
           httpGet:
-            path: /rest/v2/graph/status
+            path: {{ .Values.graph.applicationProperties."server.context-path" }}/graph/status
             port: http
         resources:
           {{- toYaml .Values.api.resources | nindent 10 }}
@@ -101,4 +104,8 @@ spec:
       - name: store-properties
         secret:
           secretName: {{ template "gaffer.fullname" . }}-store-properties
+          optional: false
+      - name: application-properties
+        configMap:
+          name: {{ template "gaffer.fullname" .}}-application-properties
           optional: false

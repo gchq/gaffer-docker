@@ -9,16 +9,16 @@ The image is based off Gaffer's spring-rest module. It runs a Gaffer REST API us
 ### store.properties: 
 The store properties file tells Gaffer how to store it's data. You have to provide a store class and store properties class. 
 To keep this image small, the only store that is supported is the MapStore which is an in-memory store. A default is provided
-in /gaffer/config/store/store.properties
+in /gaffer/store/store.properties
 
 ### schema.json
 The Schema files make up a Gaffer schema which tells Gaffer what datasets are stored in your graph. It contains type information
 which a store may use to serialise and aggregate the data. You can put the whole schema in one file or split it up into as many
-as you choose. A basic schema is provided in /gaffer/config/schema by default
+as you choose. A basic schema is provided in /gaffer/schema by default
 
 ### graphConfig.json
 The Graph config tells Gaffer what the graph is called as well as any hooks to run before an operation chain is run. A default
-is provided at /gaffer/config/graph/graphConfig.json
+is provided at /gaffer/graph/graphConfig.json
 
 ### application.properties
 This is a spring concept and is used to change the context root and any properties related to Gaffer or the app. A default is

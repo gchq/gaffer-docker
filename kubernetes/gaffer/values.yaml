@@ -25,9 +25,32 @@ graph:
   storeProperties:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
+  applicationProperties:
+    server.context-path: /rest
 
-# See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
-ui: "{}"
+ui:
+  image:
+    repository: gchq/gaffer-ui
+    tag: 1.14.0
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+  # See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
+  config: "{}"
+
+  replicaCount: 1
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  ingress:
+    annotations:
+      traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
+    host: ""
+    # For Traefik:
+    #pathPrefix: /gaffer-ui/
+    # For Nginx:
+    pathPrefix: "/gaffer-ui/(.*)"
 
 api:
   user: gaffer # May be interpretted by stores depending on implementation
