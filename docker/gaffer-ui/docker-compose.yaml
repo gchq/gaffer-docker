@@ -32,7 +32,7 @@ services:
     build:
       context: .
       args:
-        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
+        GAFFER_TOOLS_VERSION: allow-custom-endpoint-path
     restart: always
     ports:
     - 5000:8080

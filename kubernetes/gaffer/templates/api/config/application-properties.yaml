@@ -15,16 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 */ -}}
+
 {{- define "gaffer.applicationProperties" -}}
-# Default Config
+
 gaffer.storeProperties=/gaffer/store/store.properties
 gaffer.schemas=/gaffer/schema
 gaffer.graph.config=/gaffer/graph/graphConfig.json
-# User Defined config
 {{- range $property, $value := .Values.graph.applicationProperties }}
 {{ $property }}={{ $value }}
 {{- end }}
-{{- end }}
+{{- end -}}
+
 
 apiVersion: v1
 kind: ConfigMap
@@ -34,4 +35,4 @@ metadata:
     {{- include "gaffer.labels" . | nindent 4 }}
     app.kubernetes.io/component: application-properties
 data:
-  application.properties: {{ include "gaffer.applicationProperties" . }}
+  application.properties: {{ include "gaffer.applicationProperties" . | quote}}

@@ -12,13 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "gaffer.fullname" . }}-ui-config
-  labels:
-    {{- include "gaffer.labels" . | nindent 4 }}
-    app.kubernetes.io/component: ui-config
-data:
-  defaultConfig.json: {{ .Files.Get "config/ui/defaultConfig.json" | quote }}
-  config.json: {{ .Values.ui.config | quote }}
+
+  # accumulo:
+  #   hdfs:
+  #     ingress:
+  #       annotations: ~
+  #       host: hdfs.k8s.local
+  #       pathPrefix: /
+
+  #   monitor:
+  #     ingress:
+  #       annotations: ~
+  #       host: accumulo.k8s.local
+  #       pathPrefix: /
+
+ingress:
+  annotations: ~
+  host: gaffer.k8s.local
+  pathPrefix: 
+    rest: /rest/
+    ui: /ui/

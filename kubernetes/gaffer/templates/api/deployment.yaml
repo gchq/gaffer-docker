@@ -31,10 +31,10 @@ spec:
         {{- include "gaffer.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: api
       annotations:
-        checksum/graph-config: {{ include (print $.Template.BasePath "/graph-config.yaml") . | sha256sum }}
-        checksum/ui-config: {{ include (print $.Template.BasePath "/api/ui-config.yaml") . | sha256sum }}
-        checksum/schema: {{ include (print $.Template.BasePath "/schema.yaml") . | sha256sum }}
-        checksum/store-properties: {{ include (print $.Template.BasePath "/store-properties.yaml") . | sha256sum }}
+        checksum/graph-config: {{ include (print $.Template.BasePath "/api/config/graph-config.yaml") . | sha256sum }}
+        checksum/schema: {{ include (print $.Template.BasePath "/api/config/schema.yaml") . | sha256sum }}
+        checksum/store-properties: {{ include (print $.Template.BasePath "/api/config/store-properties.yaml") . | sha256sum }}
+        checksum/application-properties: {{ include (print $.Template.BasePath "/api/config/application-properties.yaml") . | sha256sum }}
     spec:
       containers:
       - name: gaffer-rest
@@ -43,9 +43,6 @@ spec:
         volumeMounts:
         - name: graph-config
           mountPath: /gaffer/graph/
-          readOnly: true
-        - name: ui-config
-          mountPath: /opt/jboss/wildfly/standalone/deployments/ui.war/config/
           readOnly: true
         - name: schema
           mountPath: /gaffer/schema/
@@ -62,11 +59,11 @@ spec:
           containerPort: 8080
         livenessProbe:
           httpGet:
-            path: {{ .Values.graph.applicationProperties."server.context-path" }}
+            path: {{ pluck "server.context-path" .Values.graph.applicationProperties | first }}
             port: http
         readinessProbe:
           httpGet:
-            path: {{ .Values.graph.applicationProperties."server.context-path" }}/graph/status
+            path: {{ pluck "server.context-path" .Values.graph.applicationProperties | first }}/graph/status
             port: http
         resources:
           {{- toYaml .Values.api.resources | nindent 10 }}
@@ -92,10 +89,6 @@ spec:
       - name: graph-config
         configMap:
           name: {{ template "gaffer.fullname" . }}-graph-config
-          optional: false
-      - name: ui-config
-        configMap:
-          name: {{ template "gaffer.fullname" . }}-ui-config
           optional: false
       - name: schema
         configMap:

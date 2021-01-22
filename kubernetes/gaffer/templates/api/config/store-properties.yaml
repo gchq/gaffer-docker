@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 */ -}}
+
 {{- define "gaffer.storeProperties" -}}
 
 {{- if .Values.accumulo.enabled }}
@@ -48,7 +49,7 @@ accumulo.password={{ required (print "Password required for API's Accumulo User:
 gaffer.store.class=uk.gov.gchq.gaffer.mapstore.MapStore
 gaffer.store.properties.class=uk.gov.gchq.gaffer.mapstore.MapStoreProperties
 
-{{- end}}
+{{- end }}
 {{- range $property, $value := .Values.graph.storeProperties }}
 {{ $property }}={{ $value }}
 {{- end }}

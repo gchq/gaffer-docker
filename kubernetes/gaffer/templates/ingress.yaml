@@ -19,11 +19,11 @@ apiVersion: networking.k8s.io/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ include "gaffer.fullname" . }}-ui
+  name: {{ include "gaffer.fullname" . }}-app
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
     app.kubernetes.io/component: ui
-  {{- with .Values.ui.ingress.annotations }}
+  {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -31,7 +31,20 @@ spec:
   rules:
   - http:
       paths:
-      - path: {{ required "Ingress path required, please set: .Values.ui.ingress.pathPrefix" .Values.ui.ingress.pathPrefix }}
+      - path: {{ .Values.ingress.pathPrefix.rest }}
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "gaffer.fullname" . }}-api
+            port: 
+              name: http
+{{- else }}
+        backend:
+          serviceName: {{ include "gaffer.fullname" . }}-api
+          servicePort: http
+{{- end }}
+      - path: {{ .Values.ingress.pathPrefix.ui }}
 {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
         pathType: Prefix
         backend:
@@ -44,6 +57,6 @@ spec:
           serviceName: {{ include "gaffer.fullname" . }}-ui
           servicePort: http
 {{- end }}
-{{- if ne .Values.ui.ingress.host "" }}
-    host: {{ .Values.ui.ingress.host }}
+{{- if ne .Values.ingress.host "" }}
+    host: {{ .Values.ingress.host }}
 {{- end }}

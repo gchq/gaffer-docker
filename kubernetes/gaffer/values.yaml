@@ -35,22 +35,19 @@ ui:
     pullPolicy: IfNotPresent
     pullSecrets: []
   # See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
-  config: "{}"
+  # You need to change the REST endpoint if you're using different path prefixes 
+  config: |-
+    {
+      "gafferEndpoint": {
+        "path": "/rest"
+      }
+    }
 
   replicaCount: 1
   resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
-  ingress:
-    annotations:
-      traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
-    host: ""
-    # For Traefik:
-    #pathPrefix: /gaffer-ui/
-    # For Nginx:
-    pathPrefix: "/gaffer-ui/(.*)"
 
 api:
   user: gaffer # May be interpretted by stores depending on implementation
@@ -65,14 +62,13 @@ api:
   tolerations: []
   affinity: {}
 
-  ingress:
-    annotations:
-      traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
-    host: ""
-    # For Traefik:
-    #pathPrefix: /gaffer/
-    # For Nginx:
-    pathPrefix: "/gaffer/(.*)"
+ingress:
+  annotations:
+    traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
+  host: ""
+  pathPrefix:
+    ui: /ui/(.*)
+    rest: /rest/(.*)
 
 waitFor:
   graphStatusOk: true
