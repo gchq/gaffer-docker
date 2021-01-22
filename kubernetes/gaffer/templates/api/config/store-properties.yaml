@@ -22,7 +22,7 @@ limitations under the License.
 gaffer.store.class=uk.gov.gchq.gaffer.accumulostore.AccumuloStore
 gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties
 accumulo.instance={{ .Values.accumulo.instanceId }}
-accumulo.zookeepers={{ template "callSubChartTemplate" (list . "accumulo" "accumulo.zookeepers") }}
+accumulo.zookeepers={{ template "gaffer.callSubChartTemplate" (list . "accumulo" "accumulo.zookeepers") }}
 accumulo.user={{ required "Please set api.user to the name of the user that the REST API should authenticate to Accumulo with" .Values.api.user }}
 
 

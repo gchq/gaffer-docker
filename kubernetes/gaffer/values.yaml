@@ -68,7 +68,7 @@ ingress:
   host: ""
   pathPrefix:
     ui: /ui/(.*)
-    rest: /rest/(.*)
+    api: /rest/(.*)
 
 waitFor:
   graphStatusOk: true

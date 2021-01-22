@@ -64,13 +64,13 @@ Create the name of the service account to use
 
 {{- define "accumulo.zookeepers" -}}
   {{- if .Values.zookeeper.enabled -}}
-    {{ template "callSubChartTemplate" (list . "zookeeper" "zookeeper.fullname") }}
+    {{ template "accumulo.callSubChartTemplate" (list . "zookeeper" "zookeeper.fullname") }}
   {{- else -}}
     {{- required ".Values.zookeeper.enabled = false, so .Values.zookeeper.externalHosts must be set" .Values.zookeeper.externalHosts }}
   {{- end -}}
 {{- end -}}
 
-{{- define "callSubChartTemplate" }}
+{{- define "accumulo.callSubChartTemplate" }}
 {{- $dot := index . 0 }}
 {{- $subchart := index . 1 | splitList "." }}
 {{- $template := index . 2 }}
@@ -83,7 +83,7 @@ Create the name of the service account to use
 
 {{- define "accumulo.hdfsNamenodeHostname" -}}
   {{- if .Values.hdfs.enabled -}}
-    {{ template "callSubChartTemplate" (list . "hdfs" "hdfs.fullname") }}-namenode-0.{{ template "callSubChartTemplate" (list . "hdfs" "hdfs.fullname") }}-namenodes
+    {{ template "accumulo.callSubChartTemplate" (list . "hdfs" "hdfs.fullname") }}-namenode-0.{{ template "accumulo.callSubChartTemplate" (list . "hdfs" "hdfs.fullname") }}-namenodes
   {{- else -}}
     {{ required ".Values.hdfs.namenode.hostname needs to be set as .Values.hdfs.enabled = false" .Values.hdfs.namenode.hostname }}
   {{- end -}}

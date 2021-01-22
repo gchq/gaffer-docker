@@ -31,7 +31,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: {{ .Values.ingress.pathPrefix.rest }}
+      - path: {{ .Values.ingress.pathPrefix.api }}
 {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
         pathType: Prefix
         backend:

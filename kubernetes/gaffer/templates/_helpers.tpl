@@ -62,7 +62,7 @@ Create the name of the service account to use
 {{- end -}}
 {{- end -}}
 
-{{- define "callSubChartTemplate" }}
+{{- define "gaffer.callSubChartTemplate" }}
 {{- $dot := index . 0 }}
 {{- $subchart := index . 1 | splitList "." }}
 {{- $template := index . 2 }}
