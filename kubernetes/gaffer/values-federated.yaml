@@ -1,0 +1,4 @@
+graph:
+  storeProperties:
+    gaffer.store.class: uk.gov.gchq.gaffer.federatedstore.FederatedStore
+    gaffer.store.properties.class: uk.gov.gchq.gaffer.federatedstore.FederatedStoreProperties
