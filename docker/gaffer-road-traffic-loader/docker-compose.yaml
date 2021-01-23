@@ -164,8 +164,8 @@ services:
     image: gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
     build:
       context: ../gaffer-ui
-      args:
-        GAFFER_TOOLS_VERSION: master
+      # args:
+      #   GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
     ports:
     - 5000:8080
     volumes:

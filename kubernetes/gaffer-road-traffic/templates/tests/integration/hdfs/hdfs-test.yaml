@@ -122,7 +122,7 @@ spec:
       optional: false
   - name: accumulo-config
     secret:
-      secretName: {{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-accumulo-config
+      secretName: {{ template "traffic.callSubChartTemplate" (list . "gaffer.accumulo" "accumulo.fullname") }}-accumulo-config
       optional: false
   - name: hdfs-config
     configMap:

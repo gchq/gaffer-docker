@@ -57,7 +57,7 @@ spec:
   volumes:
   - name: config
     secret:
-      secretName: {{ include "gaffer.fullname" . }}-accumulo-config
+      secretName: {{ include "gaffer.callSubChartTemplate" (list . "accumulo" "accumulo.fullname") }}-accumulo-config
       optional: false
   - name: schema
     configMap:

@@ -29,5 +29,5 @@ spec:
     args:
     - -D-
     - -f
-    - http://{{ include "gaffer.fullname" . }}-api:80/rest/v2/graph/status
+    - http://{{ include "gaffer.fullname" . }}-api:80{{ pluck "server.context-path" .Values.graph.applicationProperties | first }}/graph/status
   restartPolicy: Never

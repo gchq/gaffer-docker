@@ -30,7 +30,7 @@ data:
     rc=0
     while [ -f "query${idx}.json" ]; do
       expectedResult=$(cat ./result${idx}.json)
-      actualResult=$(curl -s -XPOST -H "Content-Type: application/json" -d "@query${idx}.json" http://{{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80/rest/v2/graph/operations/execute)
+      actualResult=$(curl -s -XPOST -H "Content-Type: application/json" -d "@query${idx}.json" http://{{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80{{ pluck "server.context-path" .Values.gaffer.graph.applicationProperties | first }}/graph/operations/execute)
 
       echo "query${idx}:"
       echo "  Expected Result:"
@@ -55,7 +55,7 @@ data:
 
     until [ $(( ATTEMPTS++ )) -gt 300 ]; do
       sleep 1
-      result=$(curl -f -s -XPOST -H "Content-Type: application/json" -d "@count.json" http://{{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80/rest/v2/graph/operations/execute)
+      result=$(curl -f -s -H "Content-Type: application/json" -H "Accept: application/json" -d "@count.json" http://{{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80{{ pluck "server.context-path" .Values.gaffer.graph.applicationProperties | first }}/graph/operations/execute)
       rc=$?
       echo "$(date) - rc: ${rc} result: ${result}"
       if [ ! -z "${result}" ] && [ "${result}" != "0" ]; then

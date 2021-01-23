@@ -65,6 +65,12 @@ spec:
           httpGet:
             path: {{ pluck "server.context-path" .Values.graph.applicationProperties | first }}/graph/status
             port: http
+        startupProbe:
+          httpGet:
+            path: {{ pluck "server.context-path" .Values.graph.applicationProperties | first }}
+            port: http
+          failureThreshold: 6
+          periodSeconds: 10
         resources:
           {{- toYaml .Values.api.resources | nindent 10 }}
       {{- with .Values.api.affinity }}
