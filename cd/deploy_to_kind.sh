@@ -24,6 +24,7 @@ cd ./kubernetes/gaffer-road-traffic
 kind load docker-image gchq/hdfs:3.2.1
 kind load docker-image gchq/gaffer:1.14.0
 kind load docker-image gchq/gaffer-rest:1.14.0
+kind load docker-image gchq/gaffer-ui:1.14.0
 kind load docker-image gchq/gaffer-road-traffic-loader:1.14.0
 kind load docker-image gchq/gaffer-operation-runner:1.14.0
 
