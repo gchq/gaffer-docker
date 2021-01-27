@@ -2,6 +2,8 @@ Adding your own libraries and functions
 =======================================
 By default with the Gaffer deployment you get access to the:
 * Sketches library
+* Time library
+* Bitmap Library
 * JCS cache library
 
 If you want more libraries than this (either one of ours of one of your own) you'll need to customise the docker images and use them in place of the defaults.
@@ -9,10 +11,10 @@ If you want more libraries than this (either one of ours of one of your own) you
 You'll need a basic Gaffer instance deployed on Kubernetes. Here's [how to do that](./deploy-empty-graph.md).
 
 ### Overwrite the REST war file
-At the moment, Gaffer uses a WAR file with all the dependencies bundled in. You'll need to extend the WAR file using [these instructions](https://gchq.github.io/gaffer-doc/components/rest-api.html#how-to-modify-the-rest-api-for-your-project). Once you have a custom war file, you'll need to create a new image based on the `gaffer-rest` one. To do that you'll need a `Dockerfile` like this one:
+At the moment, Gaffer uses a runnable jar file located at /gaffer/jars. When it runs it includes the /gaffer/jars/lib on the classpath. There is nothing in there by default because all the dependencies are bunled in to the JAR. However if you wanted to add your own jars, you could do it like this:
 ```Dockerfile
 FROM gchq/gaffer-rest:latest
-COPY ./my-custom-rest:1.0-SNAPSHOT.war /opt/jboss/wildfly/standalone/deployments/rest.war
+COPY ./my-custom-lib:1.0-SNAPSHOT.jar /gaffer/jars/lib/
 ```
 
 Build the image using:

@@ -10,6 +10,7 @@ Once that's done, run this to deploy and test the Road Traffic Graph.
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
 export GAFFER_VERSION=${GAFFER_VERSION:-1.14.0}
 
+helm dependency update ../accumulo/
 helm dependency update ../gaffer/
 helm dependency update
 

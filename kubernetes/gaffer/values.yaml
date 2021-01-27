@@ -85,3 +85,25 @@ testImages:
 
 accumulo:
   enabled: false
+  image:
+    repository: gchq/gaffer
+    tag: 1.14.0
+  config:
+    postInstallCommands:
+    - users
+    - userpermissions -u gaffer
+    - getauths -u gaffer
+    userManagement:
+      users:
+        gaffer:
+          password: "gaffer"
+          auths: []
+          permissions:
+            system:
+            - CREATE_TABLE
+            table:
+              simpleGraph:
+              - READ
+              - WRITE
+              - BULK_IMPORT
+              - ALTER_TABLE

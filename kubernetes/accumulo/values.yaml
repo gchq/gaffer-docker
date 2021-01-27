@@ -43,8 +43,6 @@ config:
   files: {}
   accumuloSite:
     instance.secret: "DEFAULT"
-    # trace.user: tracer
-    # trace.token.property.password: password
     tserver.memory.maps.native.enabled: true
     tserver.memory.maps.max: 128M
     tserver.cache.data.size: 15M
@@ -69,26 +67,12 @@ config:
             trace:
             - READ
             - WRITE
-      gaffer:
-        password: "gaffer"
-        auths: []
-        permissions:
-          system:
-          - CREATE_TABLE
-          table:
-            simpleGraph:
-            - READ
-            - WRITE
-            - BULK_IMPORT
-            - ALTER_TABLE
-  postInstallCommands:
-  - users
-  - userpermissions -u gaffer
-  - getauths -u gaffer
+      
+  postInstallCommands: []
 
 image:
-  repository: gchq/gaffer
-  tag: 1.14.0
+  repository: gchq/accumulo
+  tag: 1.9.3
   pullPolicy: IfNotPresent
   pullSecrets: []
 
