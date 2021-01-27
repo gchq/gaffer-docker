@@ -29,6 +29,7 @@ WORKDIR /gaffer
 # Allow users to provide their own JARs, config and data files
 COPY ./files/ .
 # Try to download required version of files from Maven Central and GitHub, otherwise build from source
+# For some reason, Github has opted to use a certificate which is untrusted by Ubuntu, hence the --insecure additions
 RUN	allFilesDownloaded="TRUE" && \
 	if [ ! -f "./road-traffic-generators-${GAFFER_VERSION}-utility.jar" ]; then \
 		curl -fLO "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/road-traffic-generators/${GAFFER_VERSION}/road-traffic-generators-${GAFFER_VERSION}-utility.jar" || allFilesDownloaded="FALSE"; \
@@ -37,24 +38,24 @@ RUN	allFilesDownloaded="TRUE" && \
 		curl -fLO "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-utility.jar" || allFilesDownloaded="FALSE"; \
 	fi && \
 	if [ ! -f "./roadTrafficSampleData.csv" ]; then \
-		curl -fLO https://raw.githubusercontent.com/gchq/Gaffer/gaffer2-${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/roadTrafficSampleData.csv || \
-		curl -fLO https://raw.githubusercontent.com/gchq/Gaffer/${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/roadTrafficSampleData.csv; \
+		curl --insecure -fLO https://raw.githubusercontent.com/gchq/Gaffer/gaffer2-${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/roadTrafficSampleData.csv || \
+		curl --insecure -fLO https://raw.githubusercontent.com/gchq/Gaffer/${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/roadTrafficSampleData.csv; \
 	fi && \
 	if [ ! -f "./graph/graphConfig.json" ]; then \
 		mkdir -p graph; \
-		curl -fLo graph/graphConfig.json https://raw.githubusercontent.com/gchq/Gaffer/gaffer2-${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/graphConfig.json || \
-		curl -fLo graph/graphConfig.json https://raw.githubusercontent.com/gchq/Gaffer/${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/graphConfig.json; \
+		curl --insecure -fLo graph/graphConfig.json https://raw.githubusercontent.com/gchq/Gaffer/gaffer2-${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/graphConfig.json || \
+		curl --insecure -fLo graph/graphConfig.json https://raw.githubusercontent.com/gchq/Gaffer/${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/graphConfig.json; \
 	fi && \
 	if [ -z "$(ls ./schema/*.json)" ]; then \
 		mkdir -p schema; \
-		curl -fLo schema/elements.json https://raw.githubusercontent.com/gchq/Gaffer/gaffer2-${GAFFER_VERSION}/example/road-traffic/road-traffic-model/src/main/resources/schema/elements.json || \
-		curl -fLo schema/elements.json https://raw.githubusercontent.com/gchq/Gaffer/${GAFFER_VERSION}/example/road-traffic/road-traffic-model/src/main/resources/schema/elements.json; \
-		curl -fLo schema/types.json https://raw.githubusercontent.com/gchq/Gaffer/gaffer2-${GAFFER_VERSION}/example/road-traffic/road-traffic-model/src/main/resources/schema/types.json || \
-		curl -fLo schema/types.json https://raw.githubusercontent.com/gchq/Gaffer/${GAFFER_VERSION}/example/road-traffic/road-traffic-model/src/main/resources/schema/types.json; \
+		curl --insecure -fLo schema/elements.json https://raw.githubusercontent.com/gchq/Gaffer/gaffer2-${GAFFER_VERSION}/example/road-traffic/road-traffic-model/src/main/resources/schema/elements.json || \
+		curl --insecure -fLo schema/elements.json https://raw.githubusercontent.com/gchq/Gaffer/${GAFFER_VERSION}/example/road-traffic/road-traffic-model/src/main/resources/schema/elements.json; \
+		curl --insecure -fLo schema/types.json https://raw.githubusercontent.com/gchq/Gaffer/gaffer2-${GAFFER_VERSION}/example/road-traffic/road-traffic-model/src/main/resources/schema/types.json || \
+		curl --insecure -fLo schema/types.json https://raw.githubusercontent.com/gchq/Gaffer/${GAFFER_VERSION}/example/road-traffic/road-traffic-model/src/main/resources/schema/types.json; \
 	fi && \
 	if [ ! -f "./log4j.xml" ]; then \
-		curl -fLO https://raw.githubusercontent.com/gchq/Gaffer/gaffer2-${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/log4j.xml || \
-		curl -fLO https://raw.githubusercontent.com/gchq/Gaffer/${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/log4j.xml; \
+		curl --insecure -fLO https://raw.githubusercontent.com/gchq/Gaffer/gaffer2-${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/log4j.xml || \
+		curl --insecure -fLO https://raw.githubusercontent.com/gchq/Gaffer/${GAFFER_VERSION}/example/road-traffic/road-traffic-demo/src/main/resources/log4j.xml; \
 	fi && \
 	if [ "${allFilesDownloaded}" = "FALSE" ]; then \
 		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
