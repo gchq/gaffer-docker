@@ -37,29 +37,16 @@ helm install my-graph gaffer-docker/gaffer
 
 #### Deploy the Accumulo Store
 
-If you want to deploy Accumulo with your graph, that's relatively easy to do. We are going to need some extra configuration though. Create a file called
-`accumulo.yaml` and add the following.
+If you want to deploy Accumulo with your graph, that's relatively easy to do. We are going to need some extra configuration though. Create a file called `accumulo.yaml` and add the following.
 
 ```yaml
 accumulo:
   enabled: true
-  config:
-    accumuloSite:
-      instance.secret: "DEFAULT"
-    userManagement:
-      rootPassword: "root"
-      users:
-        gaffer:
-          password: "gaffer"
-        tracer:
-          password: "tracer"
 ```
 
-Change these values to something better as once this is deployed the instance.secret cannot be changed.
-By default, the gaffer user is created with the `CREATE_TABLE` system permission and full access to 
-the `simpleGraph` table which is coupled to the graphId.
-
-If you wanted to just try it out, you could just set the accumulo.enabled value to true.
+By default, the gaffer user is created with a password of "gaffer" the `CREATE_TABLE` system permission with full access to 
+the `simpleGraph` table which is coupled to the graphId. All the default accumulo passwords are in place so if you were to
+deploy this in production, you should consider [changing the default accumulo passwords](./change-accumulo-passwords.md).
 
 You can stand up the accumulo store by running:
 ```bash
