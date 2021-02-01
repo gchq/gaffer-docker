@@ -34,7 +34,7 @@ class SparkConfigProvisioner {
 		}
 	}
 
-	getSparkDefaultProperties(containerImage, namespace, username, servername, serviceAccountName, driverCores, executorCores, hdfsEnabled) {
+	getSparkDefaultProperties(containerImage, namespace, username, servername, serviceAccountName, executorCores, executorMemory, hdfsEnabled) {
 		const props = Object.assign({
 			'spark.ui.port': DEFAULT_UI_PORT
 		}, this.staticProperties)
@@ -56,13 +56,12 @@ class SparkConfigProvisioner {
 		props['spark.kubernetes.executor.label.hub.jupyter.org/username'] = username
 		props['spark.kubernetes.executor.label.hub.jupyter.org/servername'] = servername
 
-		props['spark.driver.cores'] = '1'
-		props['spark.kubernetes.driver.request.cores'] = driverCores || '100m'
-		props['spark.driver.memory'] = '1g'
-
-		props['spark.executor.cores'] = '1'
 		props['spark.kubernetes.executor.request.cores'] = executorCores || '100m'
-		props['spark.executor.memory'] = '1g'
+		props['spark.kubernetes.executor.limit.cores'] = executorCores || '100m'
+
+		props['spark.executor.cores'] = executorCores || "100m"
+		props['spark.executor.memory'] = executorMemory + "m" || '1g'
+
 
 		if (hdfsEnabled) {
 			props['spark.eventLog.enabled'] = 'true'
