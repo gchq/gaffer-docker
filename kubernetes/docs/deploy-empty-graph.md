@@ -1,6 +1,6 @@
 How to deploy a simple graph
 ==================================
-This guide will describe how to deploy a simple empty graph on with the minimum configuration.
+This guide will describe how to deploy a simple empty graph with the minimum configuration.
 
 You will need:
 1. Helm
