@@ -166,8 +166,8 @@ class SparkConfigProvisioner {
 		return response
 	}
 
-	async getPodSpecConfig(username, servername, driverServiceName, namespace, sparkContainerImage, serviceAccountName, driverCores, executorCores, hdfsEnabled, ingressHost, ingressPath) {
-		const sparkProperties = this.getSparkDefaultProperties(sparkContainerImage, namespace, username, servername, serviceAccountName, driverCores, executorCores, hdfsEnabled)
+	async getPodSpecConfig(username, servername, driverServiceName, namespace, sparkContainerImage, serviceAccountName, executorCores, executorMemory, hdfsEnabled, ingressHost, ingressPath) {
+		const sparkProperties = this.getSparkDefaultProperties(sparkContainerImage, namespace, username, servername, serviceAccountName, executorCores, executorMemory, hdfsEnabled)
 		const uiPort = sparkProperties['spark.ui.port']
 
 		const [configMap, service, ingress] = await Promise.all([
