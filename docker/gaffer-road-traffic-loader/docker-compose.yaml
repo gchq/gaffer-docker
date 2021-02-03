@@ -151,8 +151,8 @@ services:
     image: gchq/gaffer-rest:${GAFFER_VERSION}
     build:
       context: ../gaffer-rest/
-      # args:
-      #   GAFFER_VERSION: ${GAFFER_VERSION}
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
     ports:
     - 8080:8080
     volumes:

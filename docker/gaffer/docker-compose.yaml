@@ -152,7 +152,7 @@ services:
     build:
       context: ../gaffer-rest/
       args:
-        # GAFFER_VERSION: ${GAFFER_VERSION}
+        GAFFER_VERSION: ${GAFFER_VERSION}
     ports:
     - 8080:8080
     volumes:
