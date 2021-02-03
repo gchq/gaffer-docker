@@ -1,3 +1,22 @@
+Gaffer
+======
+The Docker image here is actually an Accumulo image with the Gaffer iterators bundled in. 
+When run with cocker-compose though, it will provide you a full accumulo ecosystem complete
+with [hdfs](../hdfs) and a [Gaffer REST API](../gaffer-rest)
+
+# Building
+You can build the gchq/gaffer image using docker-compose:
+
+```bash
+docker-compose build
+```
+
+## Customising the build
+
+To add your own libraries into the build, you can add files to the /files directory these will be added
+to accumulo's /opt/accumulo/lib/ext directory
+
+# Running
 
 ```
 docker-compose up

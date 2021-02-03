@@ -1,7 +1,7 @@
 # Deploying Gaffer on AWS EKS
-All the scripts found here are designed to be run from the kubernetes/gaffer folder.
+All scripts listed here are intended to be run from the kubernetes/gaffer folder
 
-First follow the [instructions here](../../docs/aws-eks-deployment.md) to provision and configure an [AWS EKS](https://aws.amazon.com/eks/) cluster that the Gaffer Helm Chart can be deployed on.
+First follow the [instructions here](../../docs/aws-eks-deployment.md) to provision and configure an [AWS EKS](https://aws.amazon.com/eks/) cluster that the Gaffer Road Traffic Helm Chart can be deployed on.
 
 ## Using ECR
 If you are hosting the container images in your AWS account, using ECR, then run the following commands to configure the Helm Chart to use them:
@@ -16,31 +16,39 @@ else
   REPO_PREFIX="${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq"
 
   EXTRA_HELM_ARGS=""
-  EXTRA_HELM_ARGS+="--set hdfs.namenode.repository=${REPO_PREFIX}/hdfs "
-  EXTRA_HELM_ARGS+="--set hdfs.datanode.repository=${REPO_PREFIX}/hdfs "
-  EXTRA_HELM_ARGS+="--set hdfs.shell.repository=${REPO_PREFIX}/hdfs "
-  EXTRA_HELM_ARGS+="--set accumulo.image.repository=${REPO_PREFIX}/gaffer "
-  EXTRA_HELM_ARGS+="--set api.image.repository=${REPO_PREFIX}/gaffer-rest "
+  EXTRA_HELM_ARGS+="--set gaffer.hdfs.namenode.repository=${REPO_PREFIX}/hdfs "
+  EXTRA_HELM_ARGS+="--set gaffer.hdfs.datanode.repository=${REPO_PREFIX}/hdfs "
+  EXTRA_HELM_ARGS+="--set gaffer.hdfs.shell.repository=${REPO_PREFIX}/hdfs "
+  EXTRA_HELM_ARGS+="--set gaffer.accumulo.image.repository=${REPO_PREFIX}/gaffer "
+  EXTRA_HELM_ARGS+="--set gaffer.api.image.repository=${REPO_PREFIX}/gaffer-rest "
+  EXTRA_HELM_ARGS+="--set gaffer.ui.image.repository=${REPO_PREFIX}/gaffer-ui "
+  EXTRA_HELM_ARGS+="--set loader.image.repository=${REPO_PREFIX}/gaffer-road-traffic-loader "
 fi
 ```
 
 ## Deploy Helm Chart
-Next you'll need to setup the passwords for the accumulo users in the values.yaml file. These are found under `accumulo.config.userManagement`.
 
-Finally, deploy the Helm Chart:
+By default the gaffer graph uses the in-memory MapStore. If you want to use an alternative store, we have a guide for that [here](../../docs/deploy-empty-graph.md)
+
+
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.13.4}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.15.0}
+export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-1.15.0}
 
+helm dependency update ../accumulo/
+helm dependency update ../gaffer/
 helm dependency update
 
 helm install gaffer . -f ./values-eks-alb.yaml \
   ${EXTRA_HELM_ARGS} \
-  --set hdfs.namenode.tag=${HADOOP_VERSION} \
-  --set hdfs.datanode.tag=${HADOOP_VERSION} \
-  --set hdfs.shell.tag=${HADOOP_VERSION} \
-  --set accumulo.image.tag=${GAFFER_VERSION} \
-  --set api.image.tag=${GAFFER_VERSION}
+  --set gaffer.accumulo.hdfs.namenode.tag=${HADOOP_VERSION} \
+  --set gaffer.accumulo.hdfs.datanode.tag=${HADOOP_VERSION} \
+  --set gaffer.accumulo.hdfs.shell.tag=${HADOOP_VERSION} \
+  --set gaffer.accumulo.image.tag=${GAFFER_VERSION} \
+  --set gaffer.api.image.tag=${GAFFER_VERSION} \
+  --set gaffer.ui.image.tag=${GAFFER_TOOLS_VERSION} \
+  --set loader.image.tag=${GAFFER_VERSION}
 
-helm test gaffer
+helm test road-traffic
 ```

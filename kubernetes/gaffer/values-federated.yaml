@@ -1,0 +1,35 @@
+graph:
+  storeProperties:
+    gaffer.store.class: uk.gov.gchq.gaffer.federatedstore.FederatedStore
+    gaffer.store.properties.class: uk.gov.gchq.gaffer.federatedstore.FederatedStoreProperties
+    gaffer.serialiser.json.modules: uk.gov.gchq.gaffer.sketches.serialisation.json.SketchesJsonModules
+
+ui:
+  config: |-
+    {
+      "gafferEndpoint": {
+        "path": "/rest"
+      },
+      "operationOptions": {
+        "visible": [
+          {
+            "key": "gaffer.federatedstore.operation.graphIds",
+            "label": "Graph Ids",
+            "multiple": true,
+            "autocomplete": {
+              "asyncOptions": {
+                "class": "GetAllGraphIds"
+              }
+            }
+          },
+          {
+            "key": "gaffer.federatedstore.operation.skipFailedFederatedStoreExecute",
+            "label": "Skip Failed Graphs",
+            "value": "false",
+            "autocomplete": {
+              "options": [ "true", "false" ]
+            }
+          }
+        ]
+      }
+    }

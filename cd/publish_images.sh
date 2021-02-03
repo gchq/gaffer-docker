@@ -45,6 +45,7 @@ ROOT_DIR="$(getRootDirectory)"
 # HADOOP_VERSION
 # GAFFER_VERSION
 # ACCUMULO_VERSION
+# GAFFER_TOOLS_VERSION
 source "${ROOT_DIR}"/docker/gaffer/.env
 
 # Log in to Dockerhub
@@ -55,6 +56,7 @@ pushTags gchq/hdfs "${HADOOP_VERSION}" "${APP_VERSION}"
 pushTags gchq/accumulo "${ACCUMULO_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-rest "${GAFFER_VERSION}" "${APP_VERSION}"
+pushTags gchq/gaffer-ui "${GAFFER_TOOLS_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-operation-runner "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-federated-store "${GAFFER_VERSION}" "${APP_VERSION}"
