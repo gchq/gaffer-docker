@@ -153,7 +153,6 @@ services:
       context: ../gaffer-rest/
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
-        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
     ports:
     - 8080:8080
     volumes:

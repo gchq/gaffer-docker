@@ -12,21 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-hdfs:
-  ingress:
-    annotations: ~
-    host: hdfs.k8s.local
-    pathPrefix: /
-
-accumulo:
-  monitor:
-    ingress:
-      annotations: ~
-      host: accumulo.k8s.local
-      pathPrefix: /
-
-api:
-  ingress:
-    annotations: ~
-    host: gaffer.k8s.local
-    pathPrefix: /
+ingress:
+  annotations: ~
+  host: gaffer.k8s.local
+  pathPrefix: 
+    api: /rest/
+    ui: /ui/

@@ -1,0 +1,33 @@
+.
+
+     |______||______||______||______||______||______||______||______||______|
+___                                                                            ___
+   |  aaaaa   cccccc  cccccc uu    uu   mmmmm mmmmm  uu    uu ll       ooooo  |  
+   |      aa cc      cc      uu    uu  mm   mmm   mm uu    uu ll      oo   oo |
+   |  aaaaaa cc      cc      uu    uu  mm    m    mm uu    uu ll      oo   oo |
+   | aa   aa cc      cc      uu    uu  mm    m    mm uu    uu ll      oo   oo |
+___|  aaaaa   cccccc  cccccc  uuuuuu   mm    m    mm  uuuuuu   llllll  ooooo  |___
+      ______  ______  ______  ______  ______  ______  ______  ______  ______  
+     |      ||      ||      ||      ||      ||      ||      ||      ||      |
+
+
+Version: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+
+
+
+{{- if or (eq (index .Values.config.accumuloSite "instance.secret") "DEFAULT") (eq .Values.config.userManagement.rootPassword "root") ( eq .Values.config.userManagement.users.tracer.password "tracer") }}
+
+!!!!! ⚠️  WARNING ⚠️  !!!!!
+{{- if eq (index .Values.config.accumuloSite "instance.secret") "DEFAULT" }}
+It looks like you are using a default value for config.accumuloSite."instance.secret" ({{ index .Values.config.accumuloSite "instance.secret" }})
+{{- end }}
+{{- if eq .Values.config.userManagement.rootPassword "root" }}
+It looks like you are using a default value for config.userManagement.rootPassword ({{ .Values.config.userManagement.rootPassword }})
+{{- end }}
+{{- if eq .Values.config.userManagement.users.tracer.password "tracer" }}
+It looks like you are using a default value for config.userManagement.users.tracer.password ({{ .Values.config.userManagement.users.tracer.password }})
+{{- end }}
+Consider setting different values to improve security.
+{{- end }}
+
+.
