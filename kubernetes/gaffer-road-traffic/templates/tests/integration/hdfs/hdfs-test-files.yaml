@@ -28,7 +28,7 @@ data:
     set -e
 
     expectedResult=$(cat ./result.json)
-    actualResult=$(curl -s -XPOST -H "Content-Type: application/json" -d "@query.json" http://{{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80/rest/v2/graph/operations/execute)
+    actualResult=$(curl -s -XPOST -H "Content-Type: application/json" -d "@query.json" http://{{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80{{ pluck "server.context-path" .Values.gaffer.graph.applicationProperties | first }}/graph/operations/execute)
 
     echo "  Expected Result:"
     echo "    ${expectedResult}"

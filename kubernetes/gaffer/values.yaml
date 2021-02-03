@@ -25,137 +25,36 @@ graph:
   storeProperties:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
+  applicationProperties:
+    server.context-path: /rest
 
-# See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
-ui: "{}"
-
-hdfs:
-  enabled: true
-  config:
-    hdfsSite:
-      dfs.datanode.synconclose: true
-  volumes:
-  - /accumulo
-  namenode:
-    hostname: "" # Only needs to be set if hdfs.enabled = false
-    ports:
-      clientRpc: 8020
-  postInstallCommands:
-  - hadoop fs -mkdir -p /accumulo
-  - hadoop fs -chown accumulo /accumulo
-  - hadoop fs -chmod 700 /accumulo
-  - hadoop fs -ls /
-
-zookeeper:
-  enabled: true
-  externalHosts: ""
-  replicaCount: 1
-
-accumulo:
-  instanceId: accumulo
-  config:
-    path: /etc/accumulo/conf
-    files: {}
-    accumuloSite:
-      instance.secret: ""
-      # trace.user: tracer
-      # trace.token.property.password: password
-      tserver.memory.maps.native.enabled: true
-      tserver.memory.maps.max: 128M
-      tserver.cache.data.size: 15M
-      tserver.cache.index.size: 40M
-      tserver.total.mutation.queue.max: 16M
-      tserver.sort.buffer.size: 50M
-      tserver.walog.max.size: 128M
-    userManagement:
-      rootPassword: ""
-      # If accumulo.config.userManagement.revoke.enabled is:
-      # true - Any users or permissions not specified below will be removed
-      # false - Only missing users and permissions will be added
-      revoke:
-        enabled: true
-      users:
-        tracer:
-          password: ""
-          permissions:
-            system:
-            - CREATE_TABLE
-            table:
-              trace:
-              - READ
-              - WRITE
-        gaffer:
-          password: ""
-          auths: []
-          permissions:
-            system:
-            - CREATE_TABLE
-            table:
-              simpleGraph:
-              - READ
-              - WRITE
-              - BULK_IMPORT
-              - ALTER_TABLE
-    postInstallCommands:
-    - users
-    - userpermissions -u gaffer
-    - getauths -u gaffer
-
+ui:
   image:
-    repository: gchq/gaffer
-    tag: 1.13.4
+    repository: gchq/gaffer-ui
+    tag: 1.15.0
     pullPolicy: IfNotPresent
     pullSecrets: []
+  # See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
+  # You need to change the REST endpoint if you're using different path prefixes 
+  config: |-
+    {
+      "gafferEndpoint": {
+        "path": "/rest"
+      }
+    }
 
-  master:
-    resources: {}
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-
-  tabletServers:
-    replicaCount: 3
-    resources: {}
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-
-  gc:
-    replicaCount: 1
-    resources: {}
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-
-  cmds:
-    resources: {}
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-
-  monitor:
-    replicaCount: 1
-    resources: {}
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-
-    ingress:
-      enabled: true
-      annotations:
-        traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
-      host: ""
-      # For Traefik:
-      #pathPrefix: /accumulo/
-      # For Nginx:
-      pathPrefix: "/accumulo/(.*)"
+  replicaCount: 1
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 api:
-  user: gaffer
+  user: gaffer # May be interpretted by stores depending on implementation
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 1.13.4
+    tag: 1.15.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -163,14 +62,13 @@ api:
   tolerations: []
   affinity: {}
 
-  ingress:
-    annotations:
-      traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
-    host: ""
-    # For Traefik:
-    #pathPrefix: /gaffer/
-    # For Nginx:
-    pathPrefix: "/gaffer/(.*)"
+ingress:
+  annotations:
+    traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
+  host: ""
+  pathPrefix:
+    ui: /ui/(.*)
+    api: /rest/(.*)
 
 waitFor:
   graphStatusOk: true
@@ -181,4 +79,31 @@ testImages:
     tag: 7.67.0
   operationRunner:
     repository: gchq/gaffer-operation-runner
-    tag: 1.13.4
+    tag: 1.15.0
+
+# Extras
+
+accumulo:
+  enabled: false
+  image:
+    repository: gchq/gaffer
+    tag: 1.15.0
+  config:
+    postInstallCommands:
+    - users
+    - userpermissions -u gaffer
+    - getauths -u gaffer
+    userManagement:
+      users:
+        gaffer:
+          password: "gaffer"
+          auths: []
+          permissions:
+            system:
+            - CREATE_TABLE
+            table:
+              simpleGraph:
+              - READ
+              - WRITE
+              - BULK_IMPORT
+              - ALTER_TABLE

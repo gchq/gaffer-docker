@@ -11,6 +11,7 @@ This repo contains Dockerfiles for building container images for:
 
 It also contains Helm Charts so that the following applications can be deployed onto Kubernetes clusters:
 * [HDFS](kubernetes/hdfs/)
+* [Accumulo](kubernetes/accumulo/)
 * [Gaffer](kubernetes/gaffer/)
 * [Example Gaffer Graph containing Road Traffic Dataset](kubernetes/gaffer-road-traffic/)
 

@@ -47,15 +47,15 @@ spec:
       volumes:
       - name: graph-config
         configMap:
-          name: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-graph-config
+          name: {{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-graph-config
           optional: false
       - name: schema
         configMap:
-          name: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-schema
+          name: {{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-schema
           optional: false
       - name: store-properties
         secret:
-          secretName: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-store-properties
+          secretName: {{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-store-properties
           optional: false
       {{- with .Values.loader.affinity }}
       affinity:

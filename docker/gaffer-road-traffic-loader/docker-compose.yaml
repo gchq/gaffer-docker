@@ -153,13 +153,22 @@ services:
       context: ../gaffer-rest/
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
-        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
     ports:
     - 8080:8080
     volumes:
     - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
     - ./config/graph/graphConfig.json:/gaffer/graph/graphConfig.json:ro
     - ./config/schema:/gaffer/schema:ro
+
+  gaffer-ui:
+    image: gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
+    build:
+      context: ../gaffer-ui
+      args:
+        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
+    ports:
+    - 5000:8080
+    volumes:
     - ./config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro
 
   data-loader:
