@@ -20,8 +20,8 @@ services:
     image: gchq/gaffer-rest:${GAFFER_VERSION}
     build:
       context: ../gaffer-rest
-      # args:
-      #   GAFFER_VERSION: ${GAFFER_VERSION}
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
     restart: always
     ports:
     - 8080:8080
@@ -30,8 +30,8 @@ services:
     image: gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
     build:
       context: .
-      # args:
-      #   GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
+      args:
+        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
     restart: always
     ports:
     - 5000:8080
