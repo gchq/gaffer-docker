@@ -13,13 +13,6 @@
 # limitations under the License.
 
 gaffer:
-  hdfs:
-    ingress:
-      annotations:
-        kubernetes.io/ingress.class: alb
-        alb.ingress.kubernetes.io/target-type: ip
-        alb.ingress.kubernetes.io/scheme: internet-facing
-      pathPrefix: /*
 
   accumulo:
     monitor:
@@ -29,11 +22,21 @@ gaffer:
           alb.ingress.kubernetes.io/target-type: ip
           alb.ingress.kubernetes.io/scheme: internet-facing
         pathPrefix: /*
+    
+    hdfs:
+      ingress:
+        annotations:
+          kubernetes.io/ingress.class: alb
+          alb.ingress.kubernetes.io/target-type: ip
+          alb.ingress.kubernetes.io/scheme: internet-facing
+        pathPrefix: /*
 
-  api:
-    ingress:
-      annotations:
-        kubernetes.io/ingress.class: alb
-        alb.ingress.kubernetes.io/target-type: ip
-        alb.ingress.kubernetes.io/scheme: internet-facing
-      pathPrefix: /*
+  
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+    pathPrefix:
+      api: /rest/*
+      ui: /ui/*

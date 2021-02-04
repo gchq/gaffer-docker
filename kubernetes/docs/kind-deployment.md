@@ -27,15 +27,17 @@ To import the images, run this from the kubernetes directory:
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.13.4}
-export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-1.13.1}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.15.0}
+export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-1.15.0}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
+docker-compose --project-directory ../docker/gaffer-ui -f ../docker/gaffer-ui/docker-compose.yaml build
 docker-compose --project-directory ../docker/gaffer-operation-runner/ -f ../docker/gaffer-operation-runner/docker-compose.yaml build
 
 kind load docker-image gchq/hdfs:${HADOOP_VERSION}
 kind load docker-image gchq/gaffer:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
 kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-operation-runner:${GAFFER_VERSION}
 ```
