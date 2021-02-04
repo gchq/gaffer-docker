@@ -162,16 +162,4 @@ services:
     - ./config/schema:/gaffer/schema:ro
     - ./config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro
 
-  data-loader:
-    depends_on:
-    - accumulo-master
-    image: gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
-    build:
-      context: .
-      args:
-        GAFFER_VERSION: ${GAFFER_VERSION}
-    restart: on-failure
-    volumes:
-    - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
-    - ./config/graph/graphConfig.json:/gaffer/graph/graphConfig.json:ro
-    - ./config/schema:/gaffer/schema:ro# Copyright 2020 Crown Copyright
+  

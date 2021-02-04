@@ -17,22 +17,15 @@
 set -e
 
 # Update store properties files to point to the location of the Accumulo store to test against:
-cd ~/store-implementation/accumulo-store/src/test/resources/
-sed -i '16 a gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties' store.properties
-sed -i 's/localhost/localhost:58630/g' store.properties
-sed -i 's/=user/=root/g' store.properties
-sed -i 's/standardInstance/instance/g' store.properties
-sed -i '16 a gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties' store2.properties
-sed -i 's/localhost/localhost:58630/g' store2.properties
-sed -i 's/=user/=root/g' store2.properties
-sed -i 's/standardInstance/instance/g' store2.properties
-sed -i 's/localhost/localhost:58630/g' accumuloStoreClassicKeys.properties
-sed -i 's/=user/=root/g' accumuloStoreClassicKeys.properties
-sed -i 's/standardInstance/instance/g' accumuloStoreClassicKeys.properties
-sed -i '16 a gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties' accumuloStoreClassicKeys.properties 
+cat ~/conf/store.properties > ~/tmp/gaffer/store-implementation/accumulo-store/src/test/resources/store.properties
+cat ~/conf/store2.properties > ~/tmp/gaffer/store-implementation/accumulo-store/src/test/resources/store2.properties
+cat ~/conf/accumuloStoreClassicKeys.properties > ~/tmp/gaffer/store-implementation/accumulo-store/src/test/resources/accumuloStoreClassicKeys.properties
+
+# Create ConfigMap
+kubectl create configmap store-properties-config --from-file=~/conf/configMap.properties
 
 # Run Integration Tests 
-cd ../../../
+cd ~/tmp/gaffer/store-implementation/accumulo-store/
 mvn clean install -pl :accumulo-store -am -Pquick
-mvn run test
+mvn run verify
 
