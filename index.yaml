@@ -11,7 +11,7 @@ entries:
       version: 2.1.5
     - condition: hdfs.enabled
       name: hdfs
-      repository: https://gchq.github.io/gaffer-docker
+      repository: https://gchq.github.io/gaffer-docker/
       version: ^0.10.0
     description: A Key-Value store containing the Gaffer iterators for rapid filtering
       and lookup
@@ -31,7 +31,7 @@ entries:
     dependencies:
     - condition: accumulo.enabled
       name: accumulo
-      repository: https://gchq.github.io/gaffer-docker
+      repository: https://gchq.github.io/gaffer-docker/
       version: ^0.10.0
     description: A large-scale entity and relation database supporting aggregation
       of properties
@@ -54,7 +54,7 @@ entries:
       version: 2.1.5
     - condition: hdfs.enabled
       name: hdfs
-      repository: https://gchq.github.io/gaffer-docker
+      repository: https://gchq.github.io/gaffer-docker/
       version: ^0.9.0
     description: A large-scale entity and relation database supporting aggregation
       of properties
@@ -77,7 +77,7 @@ entries:
       version: 2.1.5
     - condition: hdfs.enabled
       name: hdfs
-      repository: https://gchq.github.io/gaffer-docker
+      repository: https://gchq.github.io/gaffer-docker/
       version: ^0.8.1
     description: A large-scale entity and relation database supporting aggregation
       of properties
@@ -100,7 +100,7 @@ entries:
       version: 2.1.5
     - condition: hdfs.enabled
       name: hdfs
-      repository: https://gchq.github.io/gaffer-docker
+      repository: https://gchq.github.io/gaffer-docker/
       version: ^0.7.9
     description: A large-scale entity and relation database supporting aggregation
       of properties
@@ -119,7 +119,7 @@ entries:
     created: "2021-02-03T14:33:37.435198825Z"
     dependencies:
     - name: gaffer
-      repository: https://gchq.github.io/gaffer-docker
+      repository: https://gchq.github.io/gaffer-docker/
       version: ^0.10.0
     description: A Gaffer instance containing sample GB road traffic data from the
       Department of Transport
@@ -138,7 +138,7 @@ entries:
     created: "2021-01-13T14:11:41.910248358Z"
     dependencies:
     - name: gaffer
-      repository: https://gchq.github.io/gaffer-docker
+      repository: https://gchq.github.io/gaffer-docker/
       version: ^0.9.0
     description: A Gaffer instance containing sample GB road traffic data from the
       Department of Transport
@@ -157,7 +157,7 @@ entries:
     created: "2020-11-24T10:22:12.759810552Z"
     dependencies:
     - name: gaffer
-      repository: https://gchq.github.io/gaffer-docker
+      repository: https://gchq.github.io/gaffer-docker/
       version: ^0.8.1
     description: A Gaffer instance containing sample GB road traffic data from the
       Department of Transport
@@ -176,7 +176,7 @@ entries:
     created: "2020-11-16T16:54:45.292029728Z"
     dependencies:
     - name: gaffer
-      repository: https://gchq.github.io/gaffer-docker
+      repository: https://gchq.github.io/gaffer-docker/
       version: ^0.7.9
     description: A Gaffer instance containing sample GB road traffic data from the
       Department of Transport
