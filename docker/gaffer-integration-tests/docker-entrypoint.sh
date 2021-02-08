@@ -17,15 +17,23 @@
 set -e
 
 # Update store properties files to point to the location of the Accumulo store to test against:
-cat ~/conf/store.properties > ~/tmp/gaffer/store-implementation/accumulo-store/src/test/resources/store.properties
-cat ~/conf/store2.properties > ~/tmp/gaffer/store-implementation/accumulo-store/src/test/resources/store2.properties
-cat ~/conf/accumuloStoreClassicKeys.properties > ~/tmp/gaffer/store-implementation/accumulo-store/src/test/resources/accumuloStoreClassicKeys.properties
+store_class=$(cat conf/store.properties | grep store.class | sed -e 's/.*=\(.*\)/\1/')
+accumulo_instance=$(cat conf/store.properties | grep accumulo.instance | sed -e 's/.*=\(.*\)/\1/')
+accumulo_zookeepers=$(cat conf/store.properties | grep accumulo.zookeepers | sed -e 's/.*=\(.*\)/\1/')
+accumulo_user=$(cat conf/store.properties | grep accumulo.user | sed -e 's/.*=\(.*\)/\1/')
+accumulo_password=$(cat conf/store.properties | grep accumulo.password | sed -e 's/.*=\(.*\)/\1/')
+store_properties=$(find /tmp/gaffer/store-implementation/accumulo-store/src/test/resources -name *.properties)
 
-# Create ConfigMap
-kubectl create configmap store-properties-config --from-file=~/conf/configMap.properties
 
+for store in $store_properties; do
+sed -i'' -e "s/gaffer.store.class=.*/gaffer.store.class=$store_class/" $store
+sed -i'' -e "s/accumulo.instance=.*/accumulo.instance=$accumulo_instance/" $store
+sed -i'' -e "s/accumulo.zookeepers=.*/accumulo.zookeepers=$accumulo_zookeepers/" $store
+sed -i'' -e "s/accumulo.user=.*/accumulo.user=$accumulo_user/" $store
+sed -i'' -e "s/accumulo.password=.*/accumulo.password=$accumulo_password/" $store
+done
 # Run Integration Tests 
-cd ~/tmp/gaffer/store-implementation/accumulo-store/
-mvn clean install -pl :accumulo-store -am -Pquick
-mvn run verify
+cd /tmp/gaffer
+mvn -q clean install -pl :accumulo-store -am -Pquick
+mvn -q verify -pl :accumulo-store -ff
 

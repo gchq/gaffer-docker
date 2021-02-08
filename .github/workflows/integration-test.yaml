@@ -1,0 +1,50 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Integration Tests
+
+# Controls when the action will run. 
+on:
+  workflow_dispatch:
+  # Triggers the workflow to run every day at 0900
+  schedule:
+  - cron: "0 9 * * 1,4"
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    env:
+        working-directory: .docker/gaffer-integration-test/
+    steps:    
+    - uses: actions/checkout@v2
+   
+    - name: Build images
+      run: docker-compose build
+    
+    - name: Run Integration Tests
+      run: docker-compose build
+    
+
+    - name: Send success message to ms teams
+      if: ${{ success()}}
+      uses: fjogeleit/http-request-action@master
+      with:
+          url: ${{ secrets.WORKFLOW_URL}}
+          method: 'POST'
+          contentType: "application/json"
+          data: "{'message': 'gaffer succesfully deployed and integration tests run'}"  
+
+      
+    
+    - name: Send failure message to ms teams
+      if: ${{ failure()}}
+      uses: fjogeleit/http-request-action@master
+      with:
+          url: ${{ secrets.WORKFLOW_URL}}
+          method: 'POST'
+          contentType: "application/json"
+          data: "{'message': 'Running integration tests unsuccessful'}"  
+
+     
+       
+    
+      
+       
