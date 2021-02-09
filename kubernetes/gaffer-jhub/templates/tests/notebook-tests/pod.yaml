@@ -9,6 +9,13 @@ metadata:
     helm.sh/hook: test-success
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 spec:
+  initContainers:
+  - name: wait-for-jupyterhub
+    image: {{ .Values.testImages.python.repository }}:{{ .Values.testImages.python.tag}}
+    command: [
+      "/bin/sleep",
+      "15"
+    ]
   containers:
   - name: test
     image: {{ .Values.testImages.python.repository }}:{{ .Values.testImages.python.tag}}
