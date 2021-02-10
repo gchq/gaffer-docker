@@ -17,7 +17,6 @@
 set -e
 
 # Update store properties files to point to the location of the Accumulo store to test against:
-store_class=$(cat conf/store.properties | grep store.class | sed -e 's/.*=\(.*\)/\1/')
 accumulo_instance=$(cat conf/store.properties | grep accumulo.instance | sed -e 's/.*=\(.*\)/\1/')
 accumulo_zookeepers=$(cat conf/store.properties | grep accumulo.zookeepers | sed -e 's/.*=\(.*\)/\1/')
 accumulo_user=$(cat conf/store.properties | grep accumulo.user | sed -e 's/.*=\(.*\)/\1/')
@@ -26,17 +25,15 @@ store_properties=$(find /tmp/gaffer/store-implementation/accumulo-store/src/test
 
 
 for store in $store_properties; do
-echo $store
-sed -i'' -e "s/gaffer.store.class=.*/gaffer.store.class=$store_class/" $store
+sed -i'' -e "s/gaffer.store.class=\(.*)Mini\(.*\)/\1\2/" $store
 sed -i'' -e "s/accumulo.instance=.*/accumulo.instance=$accumulo_instance/" $store
 sed -i'' -e "s/accumulo.zookeepers=.*/accumulo.zookeepers=$accumulo_zookeepers/" $store
 sed -i'' -e "s/accumulo.user=.*/accumulo.user=$accumulo_user/" $store
 sed -i'' -e "s/accumulo.password=.*/accumulo.password=$accumulo_password/" $store
-cat $store
 done
 
 # Run Integration Tests 
 cd /tmp/gaffer
 mvn -q clean install -pl :accumulo-store -am -Pquick
-mvn verify -pl :accumulo-store -ff
+mvn -q verify -pl :accumulo-store -ff
 

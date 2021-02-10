@@ -73,6 +73,12 @@ ingress:
 waitFor:
   graphStatusOk: true
 
+test:
+  runIntegrationTests: false
+  images:
+    integration:
+      repository: gchq/gaffer-integration-tests
+      tag: 1.15.0
 
 testImages:
   curl:
