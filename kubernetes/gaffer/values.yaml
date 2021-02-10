@@ -73,6 +73,7 @@ ingress:
 waitFor:
   graphStatusOk: true
 
+
 testImages:
   curl:
     repository: curlimages/curl

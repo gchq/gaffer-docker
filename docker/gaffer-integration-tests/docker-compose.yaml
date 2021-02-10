@@ -146,12 +146,17 @@ services:
     volumes:
     - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
+  
 
   gaffer-integration-tests:
-    image: gchq/gaffer-integration-tests:develop
+    depends_on:
+    - accumulo-master
+    image: gchq/gaffer-integration-tests:${GAFFER_VERSION}
+    container_name: gaffer-integration-tests
     build:
       context: .
       args:
         GAFFER_VERSION: develop
+    
 
   
