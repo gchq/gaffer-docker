@@ -25,7 +25,7 @@ store_properties=$(find /tmp/gaffer/store-implementation/accumulo-store/src/test
 
 
 for store in $store_properties; do
-sed -i'' -e "s/gaffer.store.class=\(.*)Mini\(.*\)/\1\2/" $store
+sed -i'' -e "s/gaffer.store.class=\(.*\)Mini\(.*\)/gaffer.store.class=\1\2/" $store
 sed -i'' -e "s/accumulo.instance=.*/accumulo.instance=$accumulo_instance/" $store
 sed -i'' -e "s/accumulo.zookeepers=.*/accumulo.zookeepers=$accumulo_zookeepers/" $store
 sed -i'' -e "s/accumulo.user=.*/accumulo.user=$accumulo_user/" $store
@@ -35,5 +35,5 @@ done
 # Run Integration Tests 
 cd /tmp/gaffer
 mvn -q clean install -pl :accumulo-store -am -Pquick
-mvn -q verify -pl :accumulo-store -ff
+mvn -q verify -Dskip.surefire.tests -pl :accumulo-store -ff
 

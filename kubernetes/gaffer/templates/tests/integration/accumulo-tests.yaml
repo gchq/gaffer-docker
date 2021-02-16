@@ -38,6 +38,6 @@ spec:
   volumes:
   - name: store-properties
     secret:
-      name: {{ template "gaffer.fullname" . }}-store-properties
+      secretName: {{ template "gaffer.fullname" . }}-store-properties
       optional: false
 {{- end }}
