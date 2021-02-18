@@ -32,8 +32,13 @@ sed -i'' -e "s/accumulo.user=.*/accumulo.user=$accumulo_user/" $store
 sed -i'' -e "s/accumulo.password=.*/accumulo.password=$accumulo_password/" $store
 done
 
+cp /opt/hadoop/conf/core-site.xml /tmp/gaffer/store-implementation/accumulo-store/src/test/resources
+
 # Run Integration Tests 
 cd /tmp/gaffer
+echo "Running Maven Install"
 mvn -q clean install -pl :accumulo-store -am -Pquick
+
+echo "Running Maven tests"
 mvn -q verify -Dskip.surefire.tests -pl :accumulo-store -ff
 

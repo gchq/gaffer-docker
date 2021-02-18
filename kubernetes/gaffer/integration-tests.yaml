@@ -5,6 +5,9 @@ test:
   runIntegrationTests: true
 
 accumulo:
+  hdfs:
+    postInstallCommands:
+    - hadoop fs -chmod 777 /
   enabled: true
   config:
     postInstallCommands:

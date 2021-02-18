@@ -35,7 +35,14 @@ spec:
     - name: store-properties
       mountPath: /tests/conf/
       readOnly: true
+    - name: hadoop-conf
+      mountPath: /opt/hadoop/conf
+      readOnly: true
   volumes:
+  - name: hadoop-conf
+    configMap:
+      name: {{ template "gaffer.callSubChartTemplate" (list . "accumulo.hdfs" "hdfs.fullname") }}
+      optional: false
   - name: store-properties
     secret:
       secretName: {{ template "gaffer.fullname" . }}-store-properties
