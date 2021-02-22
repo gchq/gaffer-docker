@@ -33,6 +33,10 @@ data:
         <value>{{$v}}</value>
       </property>
 {{- end }}
+      <property>
+        <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+        <value>false</value>
+      </property>
     </configuration>
 
   hdfs-site.xml: |-
