@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gaffer-integration-tests.fullname" . }}
+  labels:
+    {{- include "gaffer-integration-tests.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "gaffer-integration-tests.selectorLabels" . | nindent 4 }}
