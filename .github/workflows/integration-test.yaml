@@ -31,10 +31,8 @@ jobs:
         kind load docker-image gchq/gaffer:1.15.0
         kind load docker-image gchq/gaffer-rest:1.15.0
         kind load docker-image gchq/gaffer-ui:1.15.0
-        kind load docker-image gchq/gaffer-road-traffic-loader:1.15.0
         kind load docker-image gchq/gaffer-operation-runner:1.15.0
         kind load docker-image gchq/gaffer-integration-tests:1.15.0
-        kind load docker-image gchq/accumulo:1.9.3
         helm install gaffer ./kubernetes/gaffer -f ./kubernetes/gaffer/integration-tests.yaml
       
     - name: Run Tests
