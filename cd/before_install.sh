@@ -18,13 +18,15 @@ set -e
 
 KUBERNETES_VERSION=`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`
 
+echo "Using K8s version: ${KUBERNETES_VERSION}"
+
 # Install Kubectl
 curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 
 # Install Helm
-curl -Lo ./helm.tar.gz https://get.helm.sh/helm-v3.4.1-linux-amd64.tar.gz
+curl -Lo ./helm.tar.gz https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz
 tar -zxvf helm.tar.gz
 sudo mv linux-amd64/helm /usr/local/bin/
 
