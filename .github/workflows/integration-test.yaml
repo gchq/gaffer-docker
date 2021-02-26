@@ -27,7 +27,7 @@ jobs:
       run: ./cd/install_dependencies.sh
 
     - name: Start KinD
-      run: kind create cluster --config ./cd/kind.yaml
+      run: kind create cluster
 
     - name: Debug SA
       run: kubectl get sa
