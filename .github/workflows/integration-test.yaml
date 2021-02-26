@@ -20,6 +20,8 @@ jobs:
     - name: Install KinD
       run: ./cd/before_install.sh
    
+      # todo Use an input parameter to set the Gaffer version for all the images rather
+      # than always using the images in Docker Hub
     - name: Build test image
       run: docker build -t gchq/gaffer-integration-tests:1.15.0 ./docker/gaffer-integration-tests
     
@@ -30,11 +32,20 @@ jobs:
       run: |
         kind create cluster --config ./cd/kind.yaml
         kind load docker-image gchq/gaffer-integration-tests:1.15.0
-        kubectl get sa
         
       
     - name: Deploy Gaffer
       run: helm install gaffer ./kubernetes/gaffer -f ./kubernetes/gaffer/integration-tests.yaml --timeout=10m --set gaffer.accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
+
+    - name: Print pods
+      if: ${{ failure() }}
+      run: kubectl get pods
+
+
+    - name: Print logs from post install postInstallCommands
+      if: ${{ failure() }}
+      # todo rename this
+      run: kubectl logs pods/gaffer-accumulo-accumulo-post-install-cmds
 
     - name: Run Integration Tests
       run: helm test gaffer --timeout=40m
@@ -48,7 +59,9 @@ jobs:
     #       contentType: "application/json"
     #       data: "{'message': 'gaffer succesfully deployed and integration tests run'}"  
 
-      
+    - name: Print logs from Integration tests
+      if: ${{ failure() }}
+      run: kubectl logs pods/gaffer-integration-tests
     
     # - name: Send failure message to ms teams
     #   if: ${{ failure()}}
