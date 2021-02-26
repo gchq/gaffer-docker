@@ -28,7 +28,7 @@ jobs:
 
     - name: Start KinD
       run: |
-        kind create cluster --image=kindest/node:1.19.1
+        kind create cluster --image=kindest/node:v1.19.1
         kubectl version
         kubectl get serviceaccounts
       
