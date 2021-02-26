@@ -21,7 +21,7 @@ jobs:
       run: ./cd/before_install.sh
    
     - name: Build test image
-      run: docker-compose build -t gchq/gaffer-integration-tests:1.15.0 ./docker/gaffer-integration-tests
+      run: docker build -t gchq/gaffer-integration-tests:1.15.0 ./docker/gaffer-integration-tests
     
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
