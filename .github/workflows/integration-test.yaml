@@ -42,7 +42,7 @@ jobs:
       run: kubectl get pods
 
 
-    - name: Print logs from post install postInstallCommands
+    - name: Print logs from postInstallCommands
       if: ${{ failure() }}
       # todo rename this
       run: kubectl logs pods/gaffer-accumulo-accumulo-post-install-cmds
