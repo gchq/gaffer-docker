@@ -4,10 +4,13 @@ name: Integration Tests
 
 # Controls when the action will run. 
 on:
-  workflow_dispatch:
-  # Triggers the workflow to run every day at 0900
-  schedule:
-  - cron: "0 9 * * 1,4"
+  push:
+    branches:
+    - fix-GSE-77
+  # workflow_dispatch:
+  # # Triggers the workflow to run every day at 0900
+  # schedule:
+  # - cron: "0 9 * * 1,4"
 jobs:
   Build:
     runs-on: ubuntu-latest
