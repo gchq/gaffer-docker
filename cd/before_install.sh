@@ -18,8 +18,6 @@ set -e
 
 KUBERNETES_VERSION=`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`
 
-echo "Using K8s version: ${KUBERNETES_VERSION}"
-
 # Install Kubectl
 curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl
 chmod +x kubectl
@@ -30,7 +28,6 @@ curl -Lo ./helm.tar.gz https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz
 tar -zxvf helm.tar.gz
 sudo mv linux-amd64/helm /usr/local/bin/
 
-helm version
 
 # Install Kind
 curl -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.10.0/kind-$(uname)-amd64
