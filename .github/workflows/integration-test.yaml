@@ -20,18 +20,20 @@ jobs:
     - name: Install KinD
       run: ./cd/before_install.sh
    
-    - name: Build test image
-      run: docker build -t gchq/gaffer-integration-tests:1.15.0 ./docker/gaffer-integration-tests
+    # - name: Build test image
+    #   run: docker build -t gchq/gaffer-integration-tests:1.15.0 ./docker/gaffer-integration-tests
     
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
 
     - name: Start KinD
-      run: kind create cluster --quiet --config ./cd/kind.yaml
+      run: kind create cluster --config ./cd/kind.yaml
 
+    - name: Debug SA
+      run: kubectl get sa
+      
     - name: Deploy Gaffer
       run: helm install gaffer ./kubernetes/gaffer -f ./kubernetes/gaffer/integration-tests.yaml --timeout=10m --set gaffer.accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
-
     
     - name: Add Test image to K8s
       run: kind load docker-image gchq/gaffer-integration-tests:1.15.0
