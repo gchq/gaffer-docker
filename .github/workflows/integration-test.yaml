@@ -30,7 +30,8 @@ jobs:
       run: kind create cluster --quiet --config ./cd/kind.yaml
 
     - name: Deploy Gaffer
-      run: helm install gaffer ./kubernetes/gaffer -f ./kubernetes/gaffer/integration-tests.yaml --timeout=10m
+      run: helm install gaffer ./kubernetes/gaffer -f ./kubernetes/gaffer/integration-tests.yaml --timeout=10m --set gaffer.accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
+
     
     - name: Add Test image to K8s
       run: kind load docker-image gchq/gaffer-integration-tests:1.15.0
