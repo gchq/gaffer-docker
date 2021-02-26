@@ -26,6 +26,9 @@ jobs:
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
 
+    - name: Start KinD
+      run: kind create cluster --quiet --config ./cd/kind.yaml
+
     - name: Deploy Gaffer
       run: helm install gaffer ./kubernetes/gaffer -f ./kubernetes/gaffer/integration-tests.yaml --timeout=10m
     
