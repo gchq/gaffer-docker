@@ -70,10 +70,5 @@ jobs:
     #       url: ${{ secrets.WORKFLOW_URL}}
     #       method: 'POST'
     #       contentType: "application/json"
-    #       data: "{'message': 'Running integration tests unsuccessful'}"  
-
-     
-       
-    
-      
+    #       data: "{'message': 'Running integration tests unsuccessful'}"   
        
