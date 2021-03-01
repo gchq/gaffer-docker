@@ -42,3 +42,4 @@ mvn -q clean install -pl :accumulo-store -am -Pquick
 echo "Running Maven tests"
 mvn -q verify -Dskip.surefire.tests -pl :accumulo-store -ff
 
+
