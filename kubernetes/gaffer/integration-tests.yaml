@@ -18,8 +18,5 @@ accumulo:
   config:
     userManagement:
       rootPassword: "root"
-      users:
-        tracer:
-          password: "tracer"
     postInstallCommands:
     - setauths -u root -s vis1,vis2,publicVisibility,privateVisibility,public,private
