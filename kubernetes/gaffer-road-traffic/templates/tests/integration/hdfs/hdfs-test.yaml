@@ -53,7 +53,7 @@ spec:
       readOnly: true
 
   - name: add-elements-from-hdfs
-    image: {{ .Values.gaffer.testImages.operationRunner.repository }}:{{ .Values.gaffer.testImages.operationRunner.tag }}
+    image: {{ .Values.gaffer.test.images.operationRunner.repository }}:{{ .Values.gaffer.test.images.operationRunner.tag }}
     args:
     - {{ .Values.gaffer.graph.config.graphId }}
     env:
@@ -93,7 +93,7 @@ spec:
       readOnly: true
   containers:
   - name: hdfs-test
-    image: {{ .Values.gaffer.testImages.curl.repository }}:{{ .Values.gaffer.testImages.curl.tag }}
+    image: {{ .Values.gaffer.test.images.curl.repository }}:{{ .Values.gaffer.test.images.curl.tag }}
     workingDir: /gaffer/tests/
     command:
     - /bin/sh

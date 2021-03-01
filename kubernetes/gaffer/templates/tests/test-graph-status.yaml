@@ -25,7 +25,7 @@ metadata:
 spec:
   containers:
   - name: curl
-    image: {{ .Values.testImages.curl.repository }}:{{ .Values.testImages.curl.tag}}
+    image: {{ .Values.test.images.curl.repository }}:{{ .Values.test.images.curl.tag}}
     args:
     - -D-
     - -f

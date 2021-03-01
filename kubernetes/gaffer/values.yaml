@@ -78,15 +78,11 @@ test:
   images:
     integration:
       repository: gchq/gaffer-integration-tests
-      tag: 1.15.0
-
-testImages:
-  curl:
-    repository: curlimages/curl
-    tag: 7.67.0
-  operationRunner:
-    repository: gchq/gaffer-operation-runner
-    tag: 1.15.0
+      tag: develop
+    curl:
+      repository: curlimages/curl
+      tag: 7.67.0
+  
 
 # Extras
 

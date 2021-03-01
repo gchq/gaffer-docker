@@ -1,10 +1,23 @@
 api:
   user: root
+  image:
+    tag: develop
 
 test:
   runIntegrationTests: true
+  images:
+    operationRunner:
+      image:
+        tag: develop
+
+ui:
+  image:
+    tag: develop
+
 
 accumulo:
+  image:
+    tag: develop
   hdfs:
     postInstallCommands:
     - hadoop fs -mkdir -p /accumulo

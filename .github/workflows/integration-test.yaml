@@ -22,8 +22,12 @@ jobs:
    
       # todo Use an input parameter to set the Gaffer version for all the images rather
       # than always using the images in Docker Hub
-    - name: Build test image
-      run: docker build -t gchq/gaffer-integration-tests:1.15.0 ./docker/gaffer-integration-tests
+    - name: Build images
+      run: |
+        docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
+        docker-compose --build-arg GAFFER_VERSION=develop -- --build-arg GAFFER_TOOLS_VERSION=develop --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build
+        docker-compose --project-directory --build-arg GAFFER_VERSION=develop --build-arg GAFFER_TOOLS_VERSION=develop ./docker/gaffer-operation-runner/ -f ./docker/gaffer-operation-runner/docker-compose.yaml build
+        docker build -t gchq/gaffer-integration-tests:develop ./docker/gaffer-integration-tests
     
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
@@ -31,21 +35,13 @@ jobs:
     - name: Start KinD
       run: |
         kind create cluster --config ./cd/kind.yaml
-        kind load docker-image gchq/gaffer-integration-tests:1.15.0
-        
+        kind load docker-image gchq/gaffer:develop
+        kind load docker-image gchq/gaffer-ui:develop
+        kind load docker-image gchq/gaffer-rest:develop
+        kind load docker-image gchq/gaffer-integration-tests:develop
       
     - name: Deploy Gaffer
       run: helm install gaffer ./kubernetes/gaffer --timeout=6m -f ./kubernetes/gaffer/integration-tests.yaml --set accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
-
-    - name: Print pods
-      if: ${{ failure() }}
-      run: kubectl get pods
-
-
-    - name: Print logs from postInstallCommands
-      if: ${{ failure() }}
-      # todo rename this
-      run: kubectl logs pods/gaffer-accumulo-accumulo-post-install-cmds
 
     - name: Run Integration Tests
       run: helm test gaffer --timeout=40m
@@ -61,7 +57,7 @@ jobs:
 
     - name: Print logs from Integration tests
       if: ${{ failure() }}
-      run: kubectl logs pods/gaffer-integration-tests
+      run: kubectl logs pods/gaffer-accumulo-integration-tests
     
     # - name: Send failure message to ms teams
     #   if: ${{ failure()}}
