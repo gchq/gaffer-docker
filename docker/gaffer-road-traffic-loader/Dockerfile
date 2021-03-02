@@ -60,7 +60,7 @@ RUN	allFilesDownloaded="TRUE" && \
 		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
 		cd /tmp/gaffer && \
 		git checkout ${GAFFER_VERSION} && \
-		mvn clean package -Pquick --also-make -pl example/road-traffic/road-traffic-generators && \
+		mvn clean package -Pquick --also-make -pl :road-traffic-generators && \
 		if [ ! -f "./road-traffic-generators-${GAFFER_VERSION}-utility.jar" ]; then \
 			cp ./example/road-traffic/road-traffic-generators/target/road-traffic-generators-*-utility.jar /gaffer/; \
 		fi && \
