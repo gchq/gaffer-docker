@@ -23,10 +23,10 @@ jobs:
       # todo Use an input parameter to set the Gaffer version for all the images rather
       # than always using the images in Docker Hub
     - name: Build images
-      run: ./cd/build_images.sh --build-arg GAFFER_VERSION=develop --build-arg GAFFER_TOOLS_VERSION=develop
-      
-    - name: Build Testing Image
-      run: docker build -t gchq/gaffer-integration-tests:develop ./docker/gaffer-integration-tests
+      run: |
+        docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build --build-arg GAFFER_TOOLS_VERSION=develop
+        docker-compose --project-directory ./docker/gaffer-operation-runner/ -f ./docker/gaffer-operation-runner/docker-compose.yaml build $@ --build-arg GAFFER_VERSION=develop
+        docker build -t gchq/gaffer-integration-tests:develop ./docker/gaffer-integration-tests
     
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
