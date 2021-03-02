@@ -22,10 +22,11 @@ jobs:
    
       # todo Use an input parameter to set the Gaffer version for all the images rather
       # than always using the images in Docker Hub
+      # See issue #153 for why building Gaffer seperately
     - name: Build images
       run: |
         docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build --build-arg GAFFER_TOOLS_VERSION=develop
-        docker-compose --project-directory ./docker/gaffer-operation-runner/ -f ./docker/gaffer-operation-runner/docker-compose.yaml build $@ --build-arg GAFFER_VERSION=develop
+        docker build -t gchq/gaffer:develop --build-arg GAFFER_VERSION=develop ./docker/gaffer
         docker build -t gchq/gaffer-integration-tests:develop ./docker/gaffer-integration-tests
     
     - name: Install Helm charts
@@ -35,12 +36,13 @@ jobs:
       run: |
         kind create cluster --config ./cd/kind.yaml
         kind load docker-image gchq/gaffer:develop
-        kind load docker-image gchq/gaffer-ui:develop
-        kind load docker-image gchq/gaffer-rest:develop
         kind load docker-image gchq/gaffer-integration-tests:develop
       
     - name: Deploy Gaffer
-      run: helm install gaffer ./kubernetes/gaffer --timeout=6m -f ./kubernetes/gaffer/integration-tests.yaml --set accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
+      run: |
+        helm install gaffer ./kubernetes/gaffer --timeout=6m -f ./kubernetes/gaffer/integration-tests.yaml \
+          --set accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false \
+          --set accumulo.image.tag=develop
 
     - name: Run Integration Tests
       run: helm test gaffer --timeout=40m
