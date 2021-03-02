@@ -58,7 +58,7 @@ RUN	allFilesDownloaded="TRUE" && \
 	fi && \
 	if [ "${allFilesDownloaded}" = "FALSE" ]; then \
 		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
-		pushd /tmp/gaffer && \
+		cd /tmp/gaffer && \
 		git checkout ${GAFFER_VERSION} && \
 		mvn clean package -Pquick --also-make -pl example/road-traffic/road-traffic-generators && \
 		if [ ! -f "./road-traffic-generators-${GAFFER_VERSION}-utility.jar" ]; then \
@@ -66,8 +66,7 @@ RUN	allFilesDownloaded="TRUE" && \
 		fi && \
 		if [ ! -f "./accumulo-store-${GAFFER_VERSION}-utility.jar" ]; then \
 			cp ./store-implementation/accumulo-store/target/accumulo-store-*-utility.jar /gaffer/; \
-		fi && \
-		popd; \
+		fi; \
 	fi
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
