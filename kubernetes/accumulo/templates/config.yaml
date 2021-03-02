@@ -124,7 +124,7 @@ instance.zookeepers={{ include "accumulo.zookeepers" . }}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "accumulo.fullname" . }}-accumulo-config
+  name: {{ include "accumulo.fullname" . }}-config
   labels:
     {{- include "accumulo.labels" . | nindent 4 }}
     app.kubernetes.io/component: accumulo-config

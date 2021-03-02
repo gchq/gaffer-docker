@@ -49,11 +49,11 @@ spec:
   volumes:
   - name: config
     secret:
-      secretName: {{ include "accumulo.fullname" . }}-accumulo-config
+      secretName: {{ include "accumulo.fullname" . }}-config
       optional: false
   - name: cmds
     secret:
-      secretName: {{ include "accumulo.fullname" . }}-accumulo-cmds
+      secretName: {{ include "accumulo.fullname" . }}-cmds
       optional: false
   {{- with .Values.cmds.affinity }}
   affinity:
