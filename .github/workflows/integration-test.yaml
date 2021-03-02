@@ -44,25 +44,25 @@ jobs:
     - name: Run Integration Tests
       run: helm test gaffer --timeout=40m
 
-    # - name: Send success message to ms teams
-    #   if: ${{ success()}}
-    #   uses: fjogeleit/http-request-action@master
-    #   with:
-    #       url: ${{ secrets.WORKFLOW_URL}}
-    #       method: 'POST'
-    #       contentType: "application/json"
-    #       data: "{'message': 'gaffer succesfully deployed and integration tests run'}"  
+    - name: Send success message to ms teams
+      if: ${{ success()}}
+      uses: fjogeleit/http-request-action@master
+      with:
+          url: ${{ secrets.WORKFLOW_URL}}
+          method: 'POST'
+          contentType: "application/json"
+          data: "{'message': 'gaffer succesfully deployed and integration tests run'}"  
 
     - name: Print logs from Integration tests
       if: ${{ failure() }}
       run: kubectl logs pods/gaffer-accumulo-integration-tests
     
-    # - name: Send failure message to ms teams
-    #   if: ${{ failure()}}
-    #   uses: fjogeleit/http-request-action@master
-    #   with:
-    #       url: ${{ secrets.WORKFLOW_URL}}
-    #       method: 'POST'
-    #       contentType: "application/json"
-    #       data: "{'message': 'Running integration tests unsuccessful'}"   
+    - name: Send failure message to ms teams
+      if: ${{ failure()}}
+      uses: fjogeleit/http-request-action@master
+      with:
+          url: ${{ secrets.WORKFLOW_URL}}
+          method: 'POST'
+          contentType: "application/json"
+          data: "{'message': 'Running integration tests unsuccessful'}"   
        
