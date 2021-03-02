@@ -27,7 +27,7 @@ jobs:
       run: |
         docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build --build-arg GAFFER_TOOLS_VERSION=develop
         docker build -t gchq/gaffer:develop --build-arg GAFFER_VERSION=develop ./docker/gaffer
-        docker build -t gchq/gaffer-integration-tests:develop ./docker/gaffer-integration-tests
+        docker build -t gchq/gaffer-integration-tests:develop ./docker/gaffer-integration-tests --build-arg GAFFER_VERSION=rename-split-points-test
     
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
