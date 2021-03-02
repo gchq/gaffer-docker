@@ -4,13 +4,10 @@ name: Integration Tests
 
 # Controls when the action will run. 
 on:
-  push:
-    branches:
-    - fix-GSE-77
-  # workflow_dispatch:
-  # # Triggers the workflow to run every day at 0900
-  # schedule:
-  # - cron: "0 9 * * 1,4"
+  workflow_dispatch:
+  # Triggers the workflow to run every day at 0900
+  schedule:
+  - cron: "0 9 * * 1,4"
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -21,13 +18,13 @@ jobs:
       run: ./cd/before_install.sh
    
       # todo Use an input parameter to set the Gaffer version for all the images rather
-      # than always using the images in Docker Hub
-      # See issue #153 for why building Gaffer seperately
+      # than always using develop
+      # See issue #153 for why Gaffer image is not using docker-compose
     - name: Build images
       run: |
         docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build --build-arg GAFFER_TOOLS_VERSION=develop
         docker build -t gchq/gaffer:develop --build-arg GAFFER_VERSION=develop ./docker/gaffer
-        docker build -t gchq/gaffer-integration-tests:develop ./docker/gaffer-integration-tests --build-arg GAFFER_VERSION=rename-split-points-test
+        docker build -t gchq/gaffer-integration-tests:develop ./docker/gaffer-integration-tests
     
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
