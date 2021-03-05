@@ -19,7 +19,7 @@ Version: {{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
 === store.properties ===
 {{ include "gaffer.storeProperties" . }}
 
-REST API: http://{{ default "<default-ingress-host>" .Values.ingress.host }}{{ .Values.ingress.pathPrefix.rest }}
+REST API: http://{{ default "<default-ingress-host>" .Values.ingress.host }}{{ .Values.ingress.pathPrefix.api }}
 UI: http://{{ default "<default-ingress-host>" .Values.ingress.host }}{{ .Values.ingress.pathPrefix.ui }}
 
 {{- if .Values.accumulo.enabled }}

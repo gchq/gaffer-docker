@@ -51,7 +51,7 @@ spec:
       volumes:
       - name: config
         secret:
-          secretName: {{ include "accumulo.fullname" . }}-accumulo-config
+          secretName: {{ include "accumulo.fullname" . }}-config
           optional: false
       {{- with .Values.gc.affinity }}
       affinity:
