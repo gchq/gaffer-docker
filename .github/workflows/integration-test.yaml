@@ -23,9 +23,9 @@ jobs:
       # See issue #153 for why Gaffer image is not using docker-compose
     - name: Build images
       run: |
-        docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build --build-arg GAFFER_TOOLS_VERSION=env.GAFFER_TOOLS_VERSION
-        docker build -t gchq/gaffer:env.GAFFER_VERSION --build-arg GAFFER_VERSION=env.GAFFER_VERSION ./docker/gaffer
-        docker build -t gchq/gaffer-integration-tests:env.GAFFER_VERSION ./docker/gaffer-integration-tests
+        docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build --build-arg GAFFER_TOOLS_VERSION=$GAFFER_TOOLS_VERSION
+        docker build -t gchq/gaffer:$GAFFER_VERSION --build-arg GAFFER_VERSION=$GAFFER_VERSION ./docker/gaffer
+        docker build -t gchq/gaffer-integration-tests:$GAFFER_VERSION ./docker/gaffer-integration-tests
     
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
@@ -33,8 +33,8 @@ jobs:
     - name: Start KinD
       run: |
         kind create cluster --config ./cd/kind.yaml
-        kind load docker-image gchq/gaffer:env.GAFFER_VERSION
-        kind load docker-image gchq/gaffer-integration-tests:env.GAFFER_VERSION
+        kind load docker-image gchq/gaffer:$GAFFER_VERSION
+        kind load docker-image gchq/gaffer-integration-tests:$GAFFER_VERSION
       
     - name: Deploy Gaffer
       run: |
