@@ -122,5 +122,4 @@ postInstallCommands: []
 # - hadoop fs -ls /
 
 networkPolicy:
-  ## Specifies whether a NetworkPolicies should be created
   enabled: true
