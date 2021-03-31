@@ -63,6 +63,7 @@ api:
   affinity: {}
 
 ingress:
+  enabled: true
   annotations:
     traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
   host: ""
