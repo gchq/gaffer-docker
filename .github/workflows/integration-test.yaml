@@ -47,8 +47,7 @@ jobs:
       with:
           url: ${{ secrets.WORKFLOW_URL}}
           method: 'POST'
-          contentType: "application/json"
-          data: "{'message': 'Gaffer succesfully deployed and integration tests run'}"  
+          data: '{"@context": "https://schema.org/extensions","@type": "MessageCard","title": "GitHub Actions Message","text": "Gaffer succesfully deployed and Integration Tests passing \n\n Click [here](https://github.com/gchq/gaffer-docker/actions) for workflow overview and logs"}'
 
     - name: Print logs from Integration tests
       if: ${{ failure() }}
@@ -60,6 +59,5 @@ jobs:
       with:
           url: ${{ secrets.WORKFLOW_URL}}
           method: 'POST'
-          contentType: "application/json"
-          data: "{'message': 'Integration tests unsuccessful'}"   
+          data: '{"@context": "https://schema.org/extensions","@type": "MessageCard","title": "GitHub Actions Message","text": "Gaffer Integration Tests Unsuccessful \n\n Click [here](https://github.com/gchq/gaffer-docker/actions) for workflow overview and logs"}'  
        
