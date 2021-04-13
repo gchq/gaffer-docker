@@ -1,0 +1,63 @@
+name: Integration Tests
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: "0 9 * * 1,4"
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    env:
+      GAFFER_VERSION: develop
+      GAFFER_TOOLS_VERSION: develop
+    steps:    
+    - uses: actions/checkout@v2
+
+    - name: Install KinD
+      run: ./cd/before_install.sh
+   
+      # See issue #153 for why Gaffer image is not using docker-compose
+    - name: Build images
+      run: |
+        docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build --build-arg GAFFER_TOOLS_VERSION=$GAFFER_TOOLS_VERSION
+        docker build -t gchq/gaffer:$GAFFER_VERSION --build-arg GAFFER_VERSION=$GAFFER_VERSION ./docker/gaffer
+        docker build -t gchq/gaffer-integration-tests:$GAFFER_VERSION ./docker/gaffer-integration-tests
+    
+    - name: Install Helm charts
+      run: ./cd/install_dependencies.sh
+
+    - name: Start KinD
+      run: |
+        kind create cluster --config ./cd/kind.yaml
+        kind load docker-image gchq/gaffer:$GAFFER_VERSION
+        kind load docker-image gchq/gaffer-integration-tests:$GAFFER_VERSION
+      
+    - name: Deploy Gaffer
+      run: |
+        helm install gaffer ./kubernetes/gaffer --timeout=6m -f ./kubernetes/gaffer/integration-tests.yaml \
+          --set accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false \
+          --set accumulo.image.tag=develop
+
+    - name: Run Integration Tests
+      run: helm test gaffer --timeout=40m
+
+    - name: Send success message to ms teams
+      if: ${{ success()}}
+      uses: fjogeleit/http-request-action@master
+      with:
+          url: ${{ secrets.WORKFLOW_URL}}
+          method: 'POST'
+          data: '{"@context": "https://schema.org/extensions","@type": "MessageCard","title": "GitHub Actions Message","text": "Gaffer succesfully deployed and Integration Tests passing \n\n Click [here](https://github.com/gchq/gaffer-docker/actions) for workflow overview and logs"}'
+
+    - name: Print logs from Integration tests
+      if: ${{ failure() }}
+      run: kubectl logs pods/gaffer-accumulo-integration-tests
+    
+    - name: Send failure message to ms teams
+      if: ${{ failure()}}
+      uses: fjogeleit/http-request-action@master
+      with:
+          url: ${{ secrets.WORKFLOW_URL}}
+          method: 'POST'
+          data: '{"@context": "https://schema.org/extensions","@type": "MessageCard","title": "GitHub Actions Message","text": "Gaffer Integration Tests Unsuccessful \n\n Click [here](https://github.com/gchq/gaffer-docker/actions) for workflow overview and logs"}'  
+       

@@ -118,8 +118,3 @@ monitor:
     #pathPrefix: /accumulo/
     # For Nginx:
     pathPrefix: "/accumulo/(.*)"
-
-testImages:
-  curl:
-    repository: curlimages/curl
-    tag: 7.67.0

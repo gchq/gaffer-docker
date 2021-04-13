@@ -31,5 +31,5 @@ kind load docker-image gchq/gaffer-operation-runner:1.15.0
 # Deploy containers onto Kind
 # Hostname check is disabled for CI
 echo "Starting helm install"
-helm install gaffer . \
+helm install gaffer . --timeout=10m \
 --set gaffer.accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
