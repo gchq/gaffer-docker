@@ -46,6 +46,7 @@ namenode:
       resources:
         requests:
           storage: 10Gi
+  env: {}
 
 datanode:
   nodeCount: 3
@@ -76,6 +77,7 @@ datanode:
       resources:
         requests:
           storage: 10Gi
+  env: {}
 
 shell:
   enabled: true
