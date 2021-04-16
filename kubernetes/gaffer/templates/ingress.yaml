@@ -23,7 +23,7 @@ metadata:
   name: {{ include "gaffer.fullname" . }}-app
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
-    app.kubernetes.io/component: ui
+    app.kubernetes.io/component: gaffer-app
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
