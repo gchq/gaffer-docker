@@ -46,6 +46,10 @@ namenode:
       resources:
         requests:
           storage: 10Gi
+  extraEnvVars: {}
+    # Example usage:
+    # HADOOP_HEAPSIZE_MIN: 128m
+    # hadoop.heapsize.min: 128m
 
 datanode:
   nodeCount: 3
@@ -76,6 +80,10 @@ datanode:
       resources:
         requests:
           storage: 10Gi
+  extraEnvVars: {}
+    # Example usage:
+    # HADOOP_HEAPSIZE_MIN: 128m
+    # hadoop.heapsize.min: 128m
 
 shell:
   enabled: true
