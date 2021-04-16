@@ -61,7 +61,7 @@ spec:
         env:
         - name: HADOOP_CONF_DIR
           value: {{ .Values.config.path }}
-        {{- range $key, $value := .Values.datanode.env }}
+        {{- range $key, $value := .Values.datanode.extraEnvVars }}
         - name: {{ $key | upper | replace "." "_" }}
           value: {{ $value | quote }}
         {{- end }}
