@@ -128,3 +128,6 @@ postInstallCommands: []
 # - hadoop fs -chown accumulo /accumulo
 # - hadoop fs -chmod 700 /accumulo
 # - hadoop fs -ls /
+
+networkPolicy:
+  enabled: true

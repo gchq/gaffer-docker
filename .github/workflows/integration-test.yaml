@@ -1,11 +1,7 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Integration Tests
 
-# Controls when the action will run. 
 on:
   workflow_dispatch:
-  # Triggers the workflow to run every day at 0900
   schedule:
   - cron: "0 9 * * 1,4"
 jobs:
@@ -23,9 +19,9 @@ jobs:
       # See issue #153 for why Gaffer image is not using docker-compose
     - name: Build images
       run: |
-        docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build --build-arg GAFFER_TOOLS_VERSION=env.GAFFER_TOOLS_VERSION
-        docker build -t gchq/gaffer:env.GAFFER_VERSION --build-arg GAFFER_VERSION=env.GAFFER_VERSION ./docker/gaffer
-        docker build -t gchq/gaffer-integration-tests:env.GAFFER_VERSION ./docker/gaffer-integration-tests
+        docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build --build-arg GAFFER_TOOLS_VERSION=$GAFFER_TOOLS_VERSION
+        docker build -t gchq/gaffer:$GAFFER_VERSION --build-arg GAFFER_VERSION=$GAFFER_VERSION ./docker/gaffer
+        docker build -t gchq/gaffer-integration-tests:$GAFFER_VERSION ./docker/gaffer-integration-tests
     
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
@@ -33,8 +29,8 @@ jobs:
     - name: Start KinD
       run: |
         kind create cluster --config ./cd/kind.yaml
-        kind load docker-image gchq/gaffer:env.GAFFER_VERSION
-        kind load docker-image gchq/gaffer-integration-tests:env.GAFFER_VERSION
+        kind load docker-image gchq/gaffer:$GAFFER_VERSION
+        kind load docker-image gchq/gaffer-integration-tests:$GAFFER_VERSION
       
     - name: Deploy Gaffer
       run: |
@@ -51,8 +47,7 @@ jobs:
       with:
           url: ${{ secrets.WORKFLOW_URL}}
           method: 'POST'
-          contentType: "application/json"
-          data: "{'message': 'Gaffer succesfully deployed and integration tests run'}"  
+          data: '{"@context": "https://schema.org/extensions","@type": "MessageCard","title": "GitHub Actions Message","text": "Gaffer succesfully deployed and Integration Tests passing \n\n Click [here](https://github.com/gchq/gaffer-docker/actions) for workflow overview and logs"}'
 
     - name: Print logs from Integration tests
       if: ${{ failure() }}
@@ -64,6 +59,5 @@ jobs:
       with:
           url: ${{ secrets.WORKFLOW_URL}}
           method: 'POST'
-          contentType: "application/json"
-          data: "{'message': 'Integration tests unsuccessful'}"   
+          data: '{"@context": "https://schema.org/extensions","@type": "MessageCard","title": "GitHub Actions Message","text": "Gaffer Integration Tests Unsuccessful \n\n Click [here](https://github.com/gchq/gaffer-docker/actions) for workflow overview and logs"}'  
        
