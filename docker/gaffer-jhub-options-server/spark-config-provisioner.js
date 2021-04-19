@@ -60,8 +60,7 @@ class SparkConfigProvisioner {
 		props['spark.kubernetes.executor.limit.cores'] = executorCores || '100m'
 
 		props['spark.executor.cores'] = executorCores || "100m"
-		props['spark.executor.memory'] = executorMemory + "m" || '1g'
-
+		props['spark.executor.memory'] = executorMemory ? executorMemory + 'm' : '1g'
 
 		if (hdfsEnabled) {
 			props['spark.eventLog.enabled'] = 'true'
