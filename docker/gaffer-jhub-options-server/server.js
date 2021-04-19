@@ -277,6 +277,10 @@ const prespawn = async (username, server_name, pod_name, default_namespace, user
 				renderTemplate(profile.spark_ingress_host, {
 					USERNAME: username,
 					SERVERNAME: server_name || 'default'
+				}),
+				profile.spark_ingress_path == null ? null : renderTemplate(profile.spark_ingress_path, {
+					USERNAME: username,
+					SERVERNAME: server_name || 'default'
 				})
 			)
 			mergeObjects(config, podSpec)
