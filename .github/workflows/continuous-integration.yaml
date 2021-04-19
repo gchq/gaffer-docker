@@ -8,7 +8,7 @@ jobs:
     steps:
 
     - name: Maximize build space
-      uses: easimon/maximize-build-space@v2
+      uses: easimon/maximize-build-space@v4
       with:
         remove-dotnet: 'true'
 
