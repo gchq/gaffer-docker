@@ -11,6 +11,7 @@ jobs:
       uses: easimon/maximize-build-space@v4
       with:
         remove-dotnet: 'true'
+        overprovision-lvm: 'true'
 
     - uses: actions/checkout@v2
 
