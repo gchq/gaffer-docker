@@ -31,7 +31,7 @@ graph:
 ui:
   image:
     repository: gchq/gaffer-ui
-    tag: 1.15.0
+    tag: 1.16.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   # See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
@@ -54,7 +54,7 @@ api:
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 1.15.0
+    tag: 1.16.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -63,6 +63,7 @@ api:
   affinity: {}
 
 ingress:
+  enabled: true
   annotations:
     traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
   host: ""
@@ -73,13 +74,16 @@ ingress:
 waitFor:
   graphStatusOk: true
 
-testImages:
-  curl:
-    repository: curlimages/curl
-    tag: 7.67.0
-  operationRunner:
-    repository: gchq/gaffer-operation-runner
-    tag: 1.15.0
+test:
+  runIntegrationTests: false
+  images:
+    integration:
+      repository: gchq/gaffer-integration-tests
+      tag: develop
+    curl:
+      repository: curlimages/curl
+      tag: 7.67.0
+  
 
 # Extras
 
@@ -87,7 +91,7 @@ accumulo:
   enabled: false
   image:
     repository: gchq/gaffer
-    tag: 1.15.0
+    tag: 1.16.0
   config:
     postInstallCommands:
     - users

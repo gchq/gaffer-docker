@@ -19,7 +19,7 @@ limitations under the License.
 apiVersion: v1
 kind: Pod
 metadata:
-  name: {{ include "accumulo.fullname" . }}-accumulo-post-install-cmds
+  name: {{ include "accumulo.fullname" . }}-post-install-cmds
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: hook-succeeded
@@ -49,11 +49,11 @@ spec:
   volumes:
   - name: config
     secret:
-      secretName: {{ include "accumulo.fullname" . }}-accumulo-config
+      secretName: {{ include "accumulo.fullname" . }}-config
       optional: false
   - name: cmds
     secret:
-      secretName: {{ include "accumulo.fullname" . }}-accumulo-cmds
+      secretName: {{ include "accumulo.fullname" . }}-cmds
       optional: false
   {{- with .Values.cmds.affinity }}
   affinity:
