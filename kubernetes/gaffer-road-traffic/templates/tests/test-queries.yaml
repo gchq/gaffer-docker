@@ -26,7 +26,7 @@ spec:
   restartPolicy: Never
   containers:
   - name: tests
-    image: {{ .Values.gaffer.testImages.curl.repository }}:{{ .Values.gaffer.testImages.curl.tag }}
+    image: {{ .Values.gaffer.test.images.curl.repository }}:{{ .Values.gaffer.test.images.curl.tag }}
     workingDir: /gaffer/tests/
     command:
     - /bin/sh

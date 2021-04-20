@@ -27,6 +27,7 @@ helm repo add gaffer-docker https://gchq.github.io/gaffer-docker
 We have a number of [guides](./kubernetes/docs/guides.md) to help you deploy Gaffer on Kubernetes.
 
 ## Versioning
+
 Each of our images will be tagged in DockerHub with the version of the software they represent. Every release,
 we update the image for that tag and add a new release which has the corresponding git tag.
 
@@ -44,6 +45,10 @@ ensure that your image will never change when doing a pull from docker, make sur
 build metadata.
 
 This process is automated by Github actions.
+
+## Known Compatible Docker Versions
+
+* 20.10.5
 
 ## Contributing
 
