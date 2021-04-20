@@ -16,13 +16,13 @@ apiVersion: v2
 name: gaffer
 description: A large-scale entity and relation database supporting aggregation of properties
 type: application
-version: 0.10.0 # managed version
+version: 0.11.0 # managed version
 appVersion: 1.16.0
 home: https://github.com/gchq/Gaffer
 sources:
 - https://github.com/gchq/gaffer-docker
 dependencies:
 - name: accumulo
-  version: ^0.10.0 # managed version
+  version: ^0.11.0 # managed version
   repository: file://../accumulo/
   condition: accumulo.enabled
