@@ -129,10 +129,6 @@ optionsServer:
       spark.kubernetes.driver.label.app.kubernetes.io/component: notebook-spark-config
       spark.kubernetes.executor.label.app.kubernetes.io/name: gaffer-jhub
       spark.kubernetes.executor.label.app.kubernetes.io/component: notebook-spark-config
-      spark.driver.cores: 1
-      spark.driver.memory: 1g
-      spark.executor.cores: 1
-      spark.executor.memory: 1g
       spark.dynamicAllocation.enabled: true
       spark.dynamicAllocation.shuffleTracking.enabled: true
       spark.dynamicAllocation.executorIdleTimeout: 60s

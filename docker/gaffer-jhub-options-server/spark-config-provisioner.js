@@ -56,10 +56,9 @@ class SparkConfigProvisioner {
 		props['spark.kubernetes.executor.label.hub.jupyter.org/username'] = username
 		props['spark.kubernetes.executor.label.hub.jupyter.org/servername'] = servername
 
-		props['spark.kubernetes.executor.request.cores'] = executorCores || '100m'
-		props['spark.kubernetes.executor.limit.cores'] = executorCores || '100m'
+		props['spark.kubernetes.executor.request.cores'] = executorCores || '250m'
+		props['spark.kubernetes.executor.limit.cores'] = executorCores || '250m'
 
-		props['spark.executor.cores'] = executorCores || "100m"
 		props['spark.executor.memory'] = executorMemory ? executorMemory + 'm' : '1g'
 
 		if (hdfsEnabled) {
