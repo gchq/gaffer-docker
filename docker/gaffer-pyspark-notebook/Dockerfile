@@ -54,7 +54,7 @@ RUN cd /opt/hadoop/share/hadoop/tools/lib && \
 	sed -i -E "s|aws-java-sdk-bundle-[0-9\.]+\.jar|aws-java-sdk-bundle-${AWS_JAVA_SDK_VERSION}\.jar|g" shellprofile.d/hadoop-aws.sh && \
 	sed -i -E "s|aws-java-sdk-bundle-[0-9\.]+\.jar|aws-java-sdk-bundle-${AWS_JAVA_SDK_VERSION}\.jar|g" tools/hadoop-aws.sh
 
-ARG SPARK_VERSION=3.0.0
+ARG SPARK_VERSION=3.0.1
 ARG SPARK_DOWNLOAD_URL=https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-without-hadoop.tgz
 
 RUN cd /opt && \

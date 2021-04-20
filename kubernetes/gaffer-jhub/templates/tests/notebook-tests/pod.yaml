@@ -9,6 +9,19 @@ metadata:
     helm.sh/hook: test-success
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 spec:
+  initContainers:
+  - name: wait-for-jupyterhub
+    image: {{ .Values.testImages.python.repository }}:{{ .Values.testImages.python.tag}}
+    args:
+    - bash
+    - /scripts/wait_for_jupyterhub.sh
+    env:
+    - name: HUB_API_URL
+      value: http://proxy-public/hub/api
+    volumeMounts:
+    - name: scripts
+      mountPath: /scripts
+      readOnly: true
   containers:
   - name: test
     image: {{ .Values.testImages.python.repository }}:{{ .Values.testImages.python.tag}}
