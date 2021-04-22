@@ -5,7 +5,7 @@ const yaml = require('js-yaml')
 const K8sWatcher = require('./k8s-watcher')
 const K8sUtils = require('./k8s-utils.js')
 
-const DEFAULT_STATIC_CONFIG_FILE_PATH = '../conf/graphs.yaml'
+const DEFAULT_STATIC_CONFIG_FILE_PATH = __dirname + '/../conf/graphs.yaml'
 const DEFAULT_REST_API_URL_ENVIRONMENT_VARIABLE_NAME = 'GAFFER_REST_API_URL'
 const DEFAULT_SCHEMA_MOUNT_PATH = '/etc/gaffer/schema/'
 const DEFAULT_STORE_PROPERTIES_MOUNT_PATH = '/etc/gaffer/store/'

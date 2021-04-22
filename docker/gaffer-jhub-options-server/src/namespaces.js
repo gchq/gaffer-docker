@@ -4,7 +4,7 @@ const yaml = require('js-yaml')
 const pug = require('pug')
 const k8s = require('@kubernetes/client-node')
 
-const DEFAULT_CONFIG_FILE = '../conf/namespaces.yaml'
+const DEFAULT_CONFIG_FILE = __dirname + '/../conf/namespaces.yaml'
 
 class NamespaceLookup {
 

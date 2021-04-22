@@ -4,9 +4,9 @@ const yaml = require('js-yaml')
 const K8sWatcher = require('./k8s-watcher')
 const K8sUtils = require('./k8s-utils.js')
 
-const DEFAULT_STATIC_CONFIG_FILE_PATH = '../conf/hdfs.yaml'
+const DEFAULT_STATIC_CONFIG_FILE_PATH = __dirname + '/../conf/hdfs.yaml'
 const DEFAULT_HADOOP_CONF_MOUNT_PATH = '/etc/hadoop/conf'
-const DEFAULT_HADOOP_CONF_TEMPLATES_DIR = '../templates/hadoop/'
+const DEFAULT_HADOOP_CONF_TEMPLATES_DIR = __dirname + '/../templates/hadoop/'
 
 class HdfsInstanceDirectory {
 

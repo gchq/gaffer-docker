@@ -4,8 +4,8 @@ const fs = require('fs')
 const yaml = require('js-yaml')
 const K8sUtils = require('./k8s-utils.js')
 
-const DEFAULT_STATIC_SPARK_PROPERTIES_FILE_PATH = '../conf/spark-defaults.yaml'
-const DEFAULT_NOTEBOOK_CONFIG_TEMPLATES_DIRECTORY = '../templates/spark/notebook/'
+const DEFAULT_STATIC_SPARK_PROPERTIES_FILE_PATH = __dirname + '/../conf/spark-defaults.yaml'
+const DEFAULT_NOTEBOOK_CONFIG_TEMPLATES_DIRECTORY = __dirname + '/../templates/spark/notebook/'
 const DEFAULT_NOTEBOOK_CONFIG_MOUNT_PATH = '/opt/spark/conf'
 const DEFAULT_UI_PORT = 4040
 
