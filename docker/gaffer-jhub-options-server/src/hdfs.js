@@ -4,9 +4,9 @@ const yaml = require('js-yaml')
 const K8sWatcher = require('./k8s-watcher')
 const K8sUtils = require('./k8s-utils.js')
 
-const DEFAULT_STATIC_CONFIG_FILE_PATH = 'conf/hdfs.yaml'
+const DEFAULT_STATIC_CONFIG_FILE_PATH = '../conf/hdfs.yaml'
 const DEFAULT_HADOOP_CONF_MOUNT_PATH = '/etc/hadoop/conf'
-const DEFAULT_HADOOP_CONF_TEMPLATES_DIR = './templates/hadoop/'
+const DEFAULT_HADOOP_CONF_TEMPLATES_DIR = '../templates/hadoop/'
 
 class HdfsInstanceDirectory {
 
@@ -90,7 +90,7 @@ class HdfsInstanceDirectory {
 		configMap.metadata.labels['app.kubernetes.io/component'] = 'hadoop-config'
 		configMap.metadata.labels['app.kubernetes.io/instance'] = instance.name
 
-		const appInfo = require('./package.json')
+		const appInfo = require('../package.json')
 		configMap.metadata.labels['app.kubernetes.io/managed-by'] = appInfo.name
 		configMap.metadata.labels['app.kubernetes.io/version'] = appInfo.version
 

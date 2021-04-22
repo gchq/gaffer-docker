@@ -2,7 +2,7 @@
 const fs = require('fs')
 const yaml = require('js-yaml')
 
-const DEFAULT_CONFIG_FILE_PATH = 'conf/profiles.yaml'
+const DEFAULT_CONFIG_FILE_PATH = '../conf/profiles.yaml'
 
 class ProfileList {
 

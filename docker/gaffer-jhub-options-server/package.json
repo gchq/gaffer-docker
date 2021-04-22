@@ -2,7 +2,7 @@
   "name": "gaffer-jhub-options-server",
   "version": "1.0.0",
   "description": "Monitors the HDFS and Gaffer instances deployed in the Kubernetes cluster and updates the config for a Jupyter Notebook so that it can easily interact with them",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "mocha"
   },

@@ -27,8 +27,8 @@ const gafferGraphs = new GafferGraphDirectory(kubeConfig)
 const sparkConfigProvisioner = new SparkConfigProvisioner(kubeConfig)
 const profiles = new ProfileDirectory()
 
-const profileListTemplate = pug.compileFile('./templates/profile_list.pug')
-const profileFormScript = fs.readFileSync('./templates/profile_form.js', 'utf8')
+const profileListTemplate = pug.compileFile('../templates/profile_list.pug')
+const profileFormScript = fs.readFileSync('../templates/profile_form.js', 'utf8')
 
 function logRequest (req) {
 	console.log(JSON.stringify({
