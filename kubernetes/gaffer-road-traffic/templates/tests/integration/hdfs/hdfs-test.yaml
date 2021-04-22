@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 */ -}}
-{{- if .Values.gaffer.hdfs.enabled }}
+{{- if and .Values.gaffer.accumulo.enabled .Values.gaffer.accumulo.hdfs.enabled }}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -30,8 +30,8 @@ spec:
   restartPolicy: Never
   initContainers:
   - name: populate-hdfs
-    image: {{ .Values.gaffer.hdfs.shell.repository }}:{{ .Values.gaffer.hdfs.shell.tag }}
-    imagePullPolicy: {{ .Values.gaffer.hdfs.shell.imagePullPolicy }}
+    image: {{ .Values.gaffer.accumulo.hdfs.shell.repository }}:{{ .Values.gaffer.accumulo.hdfs.shell.tag }}
+    imagePullPolicy: {{ .Values.gaffer.accumulo.hdfs.shell.imagePullPolicy }}
     workingDir: /setup
     command: [
       "/bin/bash",
@@ -40,20 +40,20 @@ spec:
     ]
     env:
     - name: HADOOP_CONF_DIR
-      value: {{ .Values.gaffer.hdfs.config.path }}
+      value: {{ .Values.gaffer.accumulo.hdfs.config.path }}
     volumeMounts:
     - name: hdfs-setup-files
       mountPath: /setup
       readOnly: true
     - name: hdfs-config
-      mountPath: {{ .Values.gaffer.hdfs.config.path }}
+      mountPath: {{ .Values.gaffer.accumulo.hdfs.config.path }}
       readOnly: true
     - name: hdfs-secrets
-      mountPath: {{ .Values.gaffer.hdfs.secrets.path }}
+      mountPath: {{ .Values.gaffer.accumulo.hdfs.secrets.path }}
       readOnly: true
 
   - name: add-elements-from-hdfs
-    image: {{ .Values.gaffer.testImages.operationRunner.repository }}:{{ .Values.gaffer.testImages.operationRunner.tag }}
+    image: {{ .Values.gaffer.test.images.operationRunner.repository }}:{{ .Values.gaffer.test.images.operationRunner.tag }}
     args:
     - {{ .Values.gaffer.graph.config.graphId }}
     env:
@@ -93,7 +93,7 @@ spec:
       readOnly: true
   containers:
   - name: hdfs-test
-    image: {{ .Values.gaffer.testImages.curl.repository }}:{{ .Values.gaffer.testImages.curl.tag }}
+    image: {{ .Values.gaffer.test.images.curl.repository }}:{{ .Values.gaffer.test.images.curl.tag }}
     workingDir: /gaffer/tests/
     command:
     - /bin/sh
@@ -114,22 +114,22 @@ spec:
       optional: false
   - name: store-properties
     secret:
-      secretName: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-store-properties
+      secretName: {{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-store-properties
       optional: false
   - name: schema
     configMap:
-      name: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-schema
+      name: {{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-schema
       optional: false
   - name: accumulo-config
     secret:
-      secretName: {{ template "callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-accumulo-config
+      secretName: {{ template "traffic.callSubChartTemplate" (list . "gaffer.accumulo" "accumulo.fullname") }}-config
       optional: false
   - name: hdfs-config
     configMap:
-      name: {{ template "callSubChartTemplate" (list . "gaffer.hdfs"  "hdfs.fullname") }}
+      name: {{ template "traffic.callSubChartTemplate" (list . "gaffer.accumulo.hdfs"  "hdfs.fullname") }}
       optional: false
   - name: hdfs-secrets
     secret:
-      secretName: {{ template "callSubChartTemplate" (list . "gaffer.hdfs"  "hdfs.fullname") }}
+      secretName: {{ template "traffic.callSubChartTemplate" (list . "gaffer.accumulo.hdfs"  "hdfs.fullname") }}
       optional: false
 {{- end}}

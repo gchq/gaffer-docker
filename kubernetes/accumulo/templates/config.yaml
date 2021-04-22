@@ -1,0 +1,145 @@
+{{- /*
+
+Copyright 2020 Crown Copyright
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+*/ -}}
+{{- define "accumulo.accumuloSite" -}}
+{{- $hdfsUri := print "hdfs://" ( include "accumulo.hdfsNamenodeHostname" . ) -}}
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>instance.volumes</name>
+    <value>{{ $hdfsUri }}{{ join (print "," $hdfsUri) .Values.hdfs.volumes }}</value>
+  </property>
+  <property>
+    <name>instance.zookeeper.host</name>
+    <value>{{ include "accumulo.zookeepers" . }}</value>
+  </property>
+  <property>
+    <name>general.classpaths</name>
+    <value>
+      <!-- Accumulo requirements -->
+      $ACCUMULO_HOME/lib/accumulo-server.jar,
+      $ACCUMULO_HOME/lib/accumulo-core.jar,
+      $ACCUMULO_HOME/lib/accumulo-start.jar,
+      $ACCUMULO_HOME/lib/accumulo-fate.jar,
+      $ACCUMULO_HOME/lib/accumulo-proxy.jar,
+      $ACCUMULO_HOME/lib/[^.].*.jar,
+      <!-- ZooKeeper requirements -->
+      $ZOOKEEPER_HOME/lib/zookeeper[^.].*.jar,
+      <!-- Common Hadoop requirements -->
+      $HADOOP_CONF_DIR,
+      <!-- Hadoop 3 requirements -->
+      $HADOOP_PREFIX/share/hadoop/client/[^.].*.jar,
+      $HADOOP_PREFIX/share/hadoop/common/lib/(?!slf4j)[^.].*.jar,
+    </value>
+  </property>
+
+  {{- $traceUser := default "tracer" (index .Values.config.accumuloSite "trace.user") }}
+  {{- if not (hasKey .Values.config.accumuloSite "trace.user") }}
+  <property>
+    <name>trace.user</name>
+    <value>{{ $traceUser }}</value>
+  </property>
+  {{- end }}
+
+  {{- $tracePassword := required "Please set root password at: accumulo.config.userManagement.rootPassword" .Values.config.userManagement.rootPassword }}
+  {{- $traceTable := default "trace" (index .Values.config.accumuloSite "trace.table") }}
+
+  {{- if ne $traceUser "root" }}
+    {{- /* If a non-root user will be used for tracing, make sure that it will be created */}}
+    {{- if not (hasKey .Values.config.userManagement.users $traceUser) }}
+      {{ fail (print "Trace user called " $traceUser " needs to be defined in accumulo.config.userManagement.users") }}
+    {{- end }}
+
+    {{- $traceUserInfo := index .Values.config.userManagement.users $traceUser }}
+    {{- $tracePassword = required (print "Password required for Accumulo Trace User: " $traceUser ". Please set: accumulo.config.userManagement.users." $traceUser ".password") $traceUserInfo.password }}
+
+    {{- /* Make sure the user used for tracing will have the right permissions */}}
+    {{- if not (hasKey $traceUserInfo "permissions") }}
+      {{- fail (print "Accumulo Trace User: " $traceUser " needs to have WRITE permission to the " $traceTable " table!") }}
+    {{- else if not (hasKey $traceUserInfo.permissions "table") }}
+      {{- fail (print "Accumulo Trace User: " $traceUser " needs to have WRITE permission to the " $traceTable " table!") }}
+    {{- else }}
+      {{- $traceUserTraceTablePermissions := required (print "Accumulo Trace User: " $traceUser " needs to have WRITE permission to the " $traceTable " table!") (index $traceUserInfo.permissions.table $traceTable) }}
+      {{- if not (has "WRITE" $traceUserTraceTablePermissions) }}
+        {{- fail (print "Accumulo Trace User: " $traceUser " needs to have WRITE permission to the " $traceTable " table!") }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
+  {{- /* Check for inconsistency between the password that will be set for the tracing user and the password that is present in config file */}}
+  {{- if hasKey .Values.config.accumuloSite "trace.token.property.password" }}
+    {{- if ne $tracePassword (index .Values.config.accumuloSite "trace.token.property.password") }}
+      {{- if eq $traceUser "root" }}
+        {{ fail "accumulo.config.accumuloSite.\"trace.token.property.password\" does not match accumulo.config.userManagement.rootPassword" }}
+      {{- else }}
+        {{ fail (print "accumulo.config.accumuloSite.\"trace.token.property.password\" does not match .accumulo.config.userManagement.users." $traceUser ".password") }}
+      {{- end }}
+    {{- end }}
+  {{- else }}
+  <property>
+    <name>trace.token.property.password</name>
+    <value>{{ $tracePassword }}</value>
+  </property>
+  {{- end }}
+
+  {{- if not (hasKey .Values.config.accumuloSite "instance.secret") }}
+    {{- fail "accumulo.config.accumuloSite.\"instance.secret\" must be set!" }}
+  {{- end }}
+
+  {{- range $k, $v := .Values.config.accumuloSite }}
+  <property>
+    <name>{{ $k }}</name>
+    <value>{{ required (print "accumulo.config.accumuloSite.\"" $k "\" should have a non-empty value") $v }}</value>
+  </property>
+  {{- end }}
+</configuration>
+{{- end -}}
+
+{{- define "accumulo.accumuloClient" -}}
+auth.type=password
+auth.principal=root
+auth.token={{ required "Please set root password at: config.userManagement.rootPassword" .Values.config.userManagement.rootPassword }}
+instance.name={{ .Values.instanceId }}
+# For Accumulo <2.0.0
+instance.zookeeper.host={{ include "accumulo.zookeepers" . }}
+# For Accumulo >=2.0.0
+instance.zookeepers={{ include "accumulo.zookeepers" . }}
+{{- end -}}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "accumulo.fullname" . }}-config
+  labels:
+    {{- include "accumulo.labels" . | nindent 4 }}
+    app.kubernetes.io/component: accumulo-config
+data:
+  accumulo-site.xml: {{ include "accumulo.accumuloSite" . | b64enc | quote }}
+  client.conf: {{ include "accumulo.accumuloClient" . | b64enc | quote }}
+
+  {{- /* User supplied Accumulo config files */}}
+  {{- range $path, $contents := .Values.config.files }}
+  {{ $path }}: {{ $contents | b64enc | quote }}
+  {{- end }}
+
+  {{- /* Default Accumulo config files */}}
+  {{- range $path, $_ := .Files.Glob "config/*" }}
+    {{- if not (hasKey $.Values.config.files (base $path)) }}
+      {{- base $path | nindent 2 }}: {{ $.Files.Get $path | b64enc | quote }}
+    {{- end }}
+  {{- end }}

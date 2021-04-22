@@ -8,8 +8,9 @@ After the cluster is provisioned, update the values.yaml with the passwords for 
 Once that's done, run this to deploy and test the Road Traffic Graph. 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.13.4}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.16.0}
 
+helm dependency update ../accumulo/
 helm dependency update ../gaffer/
 helm dependency update
 

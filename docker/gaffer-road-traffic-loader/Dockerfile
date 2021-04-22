@@ -20,7 +20,7 @@ ARG BASE_IMAGE_TAG=8u242-jre-slim-buster
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
-ARG GAFFER_VERSION=1.13.4
+ARG GAFFER_VERSION=1.16.0
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 
@@ -58,16 +58,15 @@ RUN	allFilesDownloaded="TRUE" && \
 	fi && \
 	if [ "${allFilesDownloaded}" = "FALSE" ]; then \
 		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
-		pushd /tmp/gaffer && \
+		cd /tmp/gaffer && \
 		git checkout ${GAFFER_VERSION} && \
-		mvn clean package -Pquick --also-make -pl example/road-traffic/road-traffic-generators && \
+		mvn clean package -Pquick --also-make -pl :road-traffic-generators && \
 		if [ ! -f "./road-traffic-generators-${GAFFER_VERSION}-utility.jar" ]; then \
 			cp ./example/road-traffic/road-traffic-generators/target/road-traffic-generators-*-utility.jar /gaffer/; \
 		fi && \
 		if [ ! -f "./accumulo-store-${GAFFER_VERSION}-utility.jar" ]; then \
 			cp ./store-implementation/accumulo-store/target/accumulo-store-*-utility.jar /gaffer/; \
-		fi && \
-		popd; \
+		fi; \
 	fi
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}

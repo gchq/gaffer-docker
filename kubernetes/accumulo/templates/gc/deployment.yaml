@@ -1,0 +1,73 @@
+# Copyright 2020 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "accumulo.fullname" . }}-gc
+  labels:
+    {{- include "accumulo.labels" . | nindent 4 }}
+    app.kubernetes.io/component: gc
+spec:
+  replicas: {{ .Values.gc.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "accumulo.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: gc
+  template:
+    metadata:
+      labels:
+        {{- include "accumulo.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: gc
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+    spec:
+      containers:
+      - name: accumulo-gc
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args:
+        - gc
+        env:
+        - name: ACCUMULO_CONF_DIR
+          value: {{ .Values.config.path }}
+        volumeMounts:
+        - name: config
+          mountPath: {{ .Values.config.path }}
+          readOnly: true
+        resources:
+          {{- toYaml .Values.gc.resources | nindent 10 }}
+      volumes:
+      - name: config
+        secret:
+          secretName: {{ include "accumulo.fullname" . }}-config
+          optional: false
+      {{- with .Values.gc.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.gc.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.gc.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range . }}
+      - name: {{ . }}
+      {{- end }}
+      {{- end }}

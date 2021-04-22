@@ -16,17 +16,13 @@ apiVersion: v2
 name: gaffer
 description: A large-scale entity and relation database supporting aggregation of properties
 type: application
-version: 0.8.1 # managed version
-appVersion: 1.13.4
+version: 0.11.0 # managed version
+appVersion: 1.16.0
 home: https://github.com/gchq/Gaffer
 sources:
 - https://github.com/gchq/gaffer-docker
 dependencies:
-- name: zookeeper
-  version: 2.1.5
-  repository: https://charts.helm.sh/incubator/
-  condition: zookeeper.enabled
-- name: hdfs
-  version: ^0.8.1 # managed version
-  repository: file://../hdfs/
-  condition: hdfs.enabled
+- name: accumulo
+  version: ^0.11.0 # managed version
+  repository: file://../accumulo/
+  condition: accumulo.enabled

@@ -20,8 +20,8 @@ root_directory="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 cd $root_directory
 
 docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
+docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build
 docker-compose --project-directory ./docker/gaffer-operation-runner/ -f ./docker/gaffer-operation-runner/docker-compose.yaml build
-docker-compose --project-directory ./docker/gaffer-federated-store/ -f ./docker/gaffer-federated-store/docker-compose.yaml build
 docker-compose --project-directory ./docker/gaffer-pyspark-notebook/ -f ./docker/gaffer-pyspark-notebook/docker-compose.yaml build notebook
 docker-compose --project-directory ./docker/spark-py/ -f ./docker/spark-py/docker-compose.yaml build
 

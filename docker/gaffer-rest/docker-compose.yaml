@@ -20,11 +20,8 @@ services:
     image: gchq/gaffer-rest:${GAFFER_VERSION}
     build:
       context: .
-      args:
-        GAFFER_VERSION: ${GAFFER_VERSION}
-        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
+      # args:
+      #   GAFFER_VERSION: ${GAFFER_VERSION} # Use this when exec jar is released
     restart: always
     ports:
     - 8080:8080
-    volumes:
-    - ./config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro

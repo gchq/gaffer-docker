@@ -17,7 +17,7 @@
 set -e
 
 # Resolve dependencies of these charts in order
-charts_to_resolve="gaffer gaffer-road-traffic gaffer-jhub"
+charts_to_resolve="accumulo gaffer gaffer-road-traffic gaffer-jhub"
 
 project_root="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 cd ${project_root}/kubernetes

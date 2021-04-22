@@ -121,6 +121,7 @@ jobs:
       matrix:
         chart:
         - hdfs
+        - accumulo
         - gaffer
         - gaffer-road-traffic
         - gaffer-jhub

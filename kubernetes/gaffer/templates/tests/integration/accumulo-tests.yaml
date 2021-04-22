@@ -1,0 +1,50 @@
+{{- /*
+
+Copyright 2020 Crown Copyright
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+*/ -}}
+{{- if and .Values.accumulo.enabled .Values.test.runIntegrationTests }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "gaffer.fullname" . }}-accumulo-integration-tests"
+  labels:
+    {{- include "gaffer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: test
+  annotations:
+    helm.sh/hook: test-success
+    helm.sh/hook-delete-policy: hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+  - name: integration-tests
+    image: {{ .Values.test.images.integration.repository }}:{{ .Values.test.images.integration.tag }}
+    volumeMounts:
+    - name: store-properties
+      mountPath: /tests/conf/
+      readOnly: true
+    - name: hadoop-conf
+      mountPath: /opt/hadoop/conf
+      readOnly: true
+  volumes:
+  - name: hadoop-conf
+    configMap:
+      name: {{ template "gaffer.callSubChartTemplate" (list . "accumulo.hdfs" "hdfs.fullname") }}
+      optional: false
+  - name: store-properties
+    secret:
+      secretName: {{ template "gaffer.fullname" . }}-store-properties
+      optional: false
+{{- end }}
