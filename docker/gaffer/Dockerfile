@@ -32,11 +32,11 @@ COPY ./files/ .
 # Try to download required version from Maven Central, otherwise build from source
 RUN	allFilesDownloaded="TRUE" && \
 	if [ ! -f "./accumulo-store-${GAFFER_VERSION}-iterators.jar" ]; then \
-		wget -q "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-iterators.jar" || allFilesDownloaded="FALSE"; \
+		wget -nv "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-iterators.jar" || allFilesDownloaded="FALSE"; \
 	fi && \
 	for lib in $(echo ${GAFFER_LIBS} | tr , ' '); do \
 		if [ ! -f "./${lib}-${GAFFER_VERSION}-deploy.jar" ]; then \
-			wget -q "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/${lib}/${GAFFER_VERSION}/${lib}-${GAFFER_VERSION}-deploy.jar" || allFilesDownloaded="FALSE"; \
+			wget -nv "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/${lib}/${GAFFER_VERSION}/${lib}-${GAFFER_VERSION}-deploy.jar" || allFilesDownloaded="FALSE"; \
 		fi \
 	done && \
 	if [ "${allFilesDownloaded}" = "FALSE" ]; then \

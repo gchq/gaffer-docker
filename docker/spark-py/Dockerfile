@@ -20,7 +20,8 @@ FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 ARG SPARK_UID=185
 ARG SPARK_HOME=/opt/spark
 ARG SPARK_VERSION=3.0.1
-ARG SPARK_DOWNLOAD_URL=https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz
+ARG SPARK_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz"
+ARG SPARK_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz"
 
 RUN mkdir -p /usr/share/man/man1 && \
 	apt-get -qq update && \
@@ -32,9 +33,9 @@ RUN mkdir -p /usr/share/man/man1 && \
 	&& echo "${SPARK_UID}:x:${SPARK_UID}:0:spark uid:${SPARK_HOME}:/bin/false" >> /etc/passwd
 
 RUN cd /opt && \
-	wget -q ${SPARK_DOWNLOAD_URL} && \
-	tar -xf ./spark-${SPARK_VERSION}-*.tgz && \
-	rm ./spark-${SPARK_VERSION}-*.tgz && \
+	(wget -nv -O ./spark-${SPARK_VERSION}.tgz ${SPARK_DOWNLOAD_URL} || wget -nv -O ./spark-${SPARK_VERSION}.tgz ${SPARK_BACKUP_DOWNLOAD_URL}) && \
+	tar -xf ./spark-${SPARK_VERSION}.tgz && \
+	rm ./spark-${SPARK_VERSION}.tgz && \
 	ln -s ./spark-${SPARK_VERSION}-*/ ${SPARK_HOME}
 
 ENV SPARK_HOME=${SPARK_HOME} \

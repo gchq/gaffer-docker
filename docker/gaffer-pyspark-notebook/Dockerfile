@@ -32,10 +32,11 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 	rm -rf ./aws ./awscliv2.zip
 
 ARG HADOOP_VERSION=3.3.0
-ARG HADOOP_DOWNLOAD_URL=https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz
+ARG HADOOP_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
+ARG HADOOP_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
 
 RUN cd /opt && \
-	wget -q ${HADOOP_DOWNLOAD_URL} && \
+	(wget -nv -O ./hadoop-${HADOOP_VERSION}.tar.gz ${HADOOP_DOWNLOAD_URL} || wget -nv -O ./hadoop-${HADOOP_VERSION}.tar.gz ${HADOOP_BACKUP_DOWNLOAD_URL}) && \
 	tar -xf ./hadoop-${HADOOP_VERSION}.tar.gz && \
 	rm ./hadoop-${HADOOP_VERSION}.tar.gz && \
 	ln -s ./hadoop-${HADOOP_VERSION} ./hadoop && \
@@ -49,18 +50,19 @@ ARG AWS_JAVA_SDK_VERSION=1.11.834
 
 RUN cd /opt/hadoop/share/hadoop/tools/lib && \
 	rm -f aws-java-sdk-bundle-*.jar && \
-	wget -q https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/${AWS_JAVA_SDK_VERSION}/aws-java-sdk-bundle-${AWS_JAVA_SDK_VERSION}.jar && \
+	wget -nv https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/${AWS_JAVA_SDK_VERSION}/aws-java-sdk-bundle-${AWS_JAVA_SDK_VERSION}.jar && \
 	cd /opt/hadoop/libexec/ && \
 	sed -i -E "s|aws-java-sdk-bundle-[0-9\.]+\.jar|aws-java-sdk-bundle-${AWS_JAVA_SDK_VERSION}\.jar|g" shellprofile.d/hadoop-aws.sh && \
 	sed -i -E "s|aws-java-sdk-bundle-[0-9\.]+\.jar|aws-java-sdk-bundle-${AWS_JAVA_SDK_VERSION}\.jar|g" tools/hadoop-aws.sh
 
 ARG SPARK_VERSION=3.0.1
-ARG SPARK_DOWNLOAD_URL=https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-without-hadoop.tgz
+ARG SPARK_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-without-hadoop.tgz"
+ARG SPARK_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-without-hadoop.tgz"
 
 RUN cd /opt && \
-	wget -q ${SPARK_DOWNLOAD_URL} && \
-	tar -xf ./spark-${SPARK_VERSION}-*.tgz && \
-	rm ./spark-${SPARK_VERSION}-*.tgz && \
+	(wget -nv -O ./spark-${SPARK_VERSION}.tgz ${SPARK_DOWNLOAD_URL} || wget -nv -O ./spark-${SPARK_VERSION}.tgz ${SPARK_BACKUP_DOWNLOAD_URL}) && \
+	tar -xf ./spark-${SPARK_VERSION}.tgz && \
+	rm ./spark-${SPARK_VERSION}.tgz && \
 	ln -s ./spark-${SPARK_VERSION}-*/ ./spark
 
 ARG FINDSPARK_VERSION=1.4.2
