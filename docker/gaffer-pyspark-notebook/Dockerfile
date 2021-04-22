@@ -73,7 +73,7 @@ ARG KUBECTL_VERSION=1.20.0
 RUN curl -fLo /bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
 	chmod +x /bin/kubectl
 
-ARG GAFFER_PYTHON_SHELL_VERSION=gaffer-tools-1.13.1
+ARG GAFFER_PYTHON_SHELL_VERSION=gaffer-tools-1.16.0
 RUN git clone -b ${GAFFER_PYTHON_SHELL_VERSION} --depth 1 https://github.com/gchq/gaffer-tools && \
 	pushd gaffer-tools/python-shell && \
 	python setup.py install && \
