@@ -4,6 +4,7 @@
   "description": "Monitors the HDFS and Gaffer instances deployed in the Kubernetes cluster and updates the config for a Jupyter Notebook so that it can easily interact with them",
   "main": "src/server.js",
   "scripts": {
+    "start": "node src/server.js",
     "test": "mocha"
   },
   "author": "",
