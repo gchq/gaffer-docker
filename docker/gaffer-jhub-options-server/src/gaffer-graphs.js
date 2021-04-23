@@ -145,7 +145,7 @@ class GafferGraphDirectory {
 		const id = service.metadata.namespace + ':' + instanceName
 
 		const httpPort = service.spec.ports.filter(port => port.name == 'http').map(port => ':' + port.port).pop()
-		const restApiUrl = 'http://' + service.metadata.name + '.' + service.metadata.namespace + '.svc' + (httpPort || '') + '/rest/latest'
+		const restApiUrl = 'http://' + service.metadata.name + '.' + service.metadata.namespace + '.svc' + (httpPort || '') + '/rest'
 
 		console.log('Adding REST API URL for Gaffer Graph: ' + id + ' = ' + restApiUrl)
 		this.restApis.set(id, {
