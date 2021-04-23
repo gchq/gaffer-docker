@@ -11,3 +11,10 @@ This chart adds the following additional properties to [`jupyterhub.singleuser.p
 | `enable_spark` | If true, the options server will provision a ConfigMap, that will be mounted into the notebook pod at `/opt/spark/conf`, containing Spark configuration that causes Executors to be deployed as Pods inside the Kubernetes cluster. Users will be allowed to specify the amount of resources (cpu, mem) that each Spark executor should request when they are spawning a new notebook. | `false` |
 | `spark_image` | Sets the container image to be used for Spark Executors. Required if `enable_spark == true`. | nil |
 | `spark_ingress_host` | If set, the options server will provision an Ingress resource for this host that allows external access to the Spark web UI. The value can contain the following template variables: `{{USERNAME}}` `{{SERVERNAME}}` | nil |
+
+
+## Deployment
+
+There are guides for deploying this chart on:
+* a local Kubernetes cluster, [using kind (Kubernetes IN Docker)](docs/kind-deployment.md)
+
