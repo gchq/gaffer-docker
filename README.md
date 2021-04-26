@@ -5,15 +5,21 @@ This repo contains Dockerfiles for building container images for:
 * [HDFS](docker/hdfs/)
 * [Accumulo](docker/accumulo/)
 * [Gaffer](docker/gaffer/)
-* Gaffer's [REST API and Web UI](docker/gaffer-rest/)
+* Gaffer's [REST API](docker/gaffer-rest/)
+* Gaffer's [Web UI](docker/gaffer-ui/)
 * Gaffer's [Road Traffic Data Loader](docker/gaffer-road-traffic-loader/)
 * Gaffer's [Operation Runner](docker/gaffer-operation-runner/)
+* Gaffer [Integration Test Runner](docker/gaffer-integration-tests/)
+* [gafferpy Jupyter Notebook](docker/gaffer-pyspark-notebook/)
+* Gaffer [options server for JupyterHub](docker/gaffer-jhub-options-server/)
+* [Spark](docker/spark-py/)
 
 It also contains Helm Charts so that the following applications can be deployed onto Kubernetes clusters:
 * [HDFS](kubernetes/hdfs/)
 * [Accumulo](kubernetes/accumulo/)
 * [Gaffer](kubernetes/gaffer/)
 * [Example Gaffer Graph containing Road Traffic Dataset](kubernetes/gaffer-road-traffic/)
+* [JupyterHub with Gaffer integrations](kubernetes/gaffer-jhub/)
 
 These charts can be accessed by cloning our repository or by using our Helm repo hosted on our [Github Pages Site](https://gchq.github.io/gaffer-docker)
 

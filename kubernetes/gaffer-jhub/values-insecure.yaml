@@ -1,0 +1,9 @@
+
+jupyterhub:
+  proxy:
+    secretToken: superSecretToken
+  hub:
+    services:
+      test:
+        admin: true
+        apiToken: apiTokenForTesting

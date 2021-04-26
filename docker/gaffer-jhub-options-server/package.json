@@ -1,0 +1,24 @@
+{
+  "name": "gaffer-jhub-options-server",
+  "version": "1.0.0",
+  "description": "Monitors the HDFS and Gaffer instances deployed in the Kubernetes cluster and updates the config for a Jupyter Notebook so that it can easily interact with them",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@kubernetes/client-node": "^0.12.2",
+    "aws-arn-parser": "^1.0.1",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "js-yaml": "^3.14.0",
+    "pug": "^3.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1"
+  }
+}

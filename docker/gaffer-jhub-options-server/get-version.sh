@@ -14,13 +14,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
-
-# Resolve dependencies of these charts in order
-charts_to_resolve="accumulo gaffer gaffer-road-traffic gaffer-jhub"
-
-project_root="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
-cd ${project_root}/kubernetes
-for chart in ${charts_to_resolve}; do	
-    helm dependency update ${chart}	
-done
+root_directory="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+export JHUB_OPTIONS_SERVER_VERSION=$(node -p "require('${root_directory}/package.json').version")
