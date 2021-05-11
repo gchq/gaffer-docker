@@ -33,7 +33,7 @@ checkIfModuleHasChart(){
     fi    
 }
 
-#identifies and retains only those dependent modules that have dependcies themselves 
+#identifies and retains only those dependent modules that have dependencies themselves 
 fetchAndVerifyDependencies(){
     dependencies=$(getDependencies)
     for dependency in $dependencies ; do
