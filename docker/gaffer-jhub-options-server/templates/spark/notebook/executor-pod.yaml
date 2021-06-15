@@ -4,3 +4,6 @@ spec:
   # Required so that the mounted EKS IAM web credentials can be accessed
   securityContext:
     fsGroup: 65534
+  containers:
+    - name: spark-kubernetes-executor
+      workingDir: /tmp
