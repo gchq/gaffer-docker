@@ -20,7 +20,7 @@ ARG BASE_IMAGE_TAG=1.9.3
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
-ARG GAFFER_VERSION=1.16.1
+ARG GAFFER_VERSION=1.17.0
 ARG GAFFER_LIBS=bitmap-library,sketches-library,time-library
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
