@@ -18,7 +18,7 @@ fullnameOverride: ""
 loader:
   image:
     repository: gchq/gaffer-road-traffic-loader
-    tag: 1.16.1
+    tag: 1.17.1
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -393,4 +393,4 @@ gaffer:
     images:
       operationRunner:
         repository: gchq/gaffer-operation-runner
-        tag: 1.16.1
+        tag: 1.17.1
