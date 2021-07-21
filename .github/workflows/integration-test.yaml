@@ -13,9 +13,6 @@ jobs:
     steps:    
     - uses: actions/checkout@v2
 
-    - name: Install KinD
-      run: ./cd/before_install.sh
-   
       # See issue #153 for why Gaffer image is not using docker-compose
     - name: Build images
       run: |
