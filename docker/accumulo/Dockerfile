@@ -28,17 +28,22 @@ ARG ACCUMULO_VERSION
 ARG HADOOP_VERSION
 ARG ZOOKEEPER_VERSION
 
-ARG ACCUMULO_DOWNLOAD_URL=https://archive.apache.org/dist/accumulo/${ACCUMULO_VERSION}/accumulo-${ACCUMULO_VERSION}-bin.tar.gz
-ARG HADOOP_DOWNLOAD_URL=https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz
-ARG ZOOKEEPER_DOWNLOAD_URL=https://archive.apache.org/dist/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz
+ARG HADOOP_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
+ARG HADOOP_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
+
+ARG ACCUMULO_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=accumulo/${ACCUMULO_VERSION}/accumulo-${ACCUMULO_VERSION}-bin.tar.gz"
+ARG ACCUMULO_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/accumulo/${ACCUMULO_VERSION}/accumulo-${ACCUMULO_VERSION}-bin.tar.gz"
+
+ARG ZOOKEEPER_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz"
+ARG ZOOKEEPER_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz"
 
 RUN mkdir -p /usr/share/man/man1 && \
 	apt -qq update && \
 	apt -qq install -y \
-		curl \
 		g++ \
 		make \
 		openjdk-8-jdk-headless \
+		wget \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
@@ -47,13 +52,13 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 COPY ./files/ .
 # Otherwise, download official distributions
 RUN if [ ! -f "./accumulo-${ACCUMULO_VERSION}-bin.tar.gz" ]; then \
-		curl -s -fLO ${ACCUMULO_DOWNLOAD_URL}; \
+		(wget -nv -O ./accumulo-${ACCUMULO_VERSION}-bin.tar.gz ${ACCUMULO_DOWNLOAD_URL} || wget -nv -O ./accumulo-${ACCUMULO_VERSION}-bin.tar.gz ${ACCUMULO_BACKUP_DOWNLOAD_URL}); \
 	fi && \
 	if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then \
-		curl -s -fLO ${HADOOP_DOWNLOAD_URL}; \
+		(wget -nv -O ./hadoop-${HADOOP_VERSION}.tar.gz ${HADOOP_DOWNLOAD_URL} || wget -nv -O ./hadoop-${HADOOP_VERSION}.tar.gz ${HADOOP_BACKUP_DOWNLOAD_URL}); \
 	fi && \
 	if [ ! -f "./apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz" ]; then \
-		curl -s -fLO ${ZOOKEEPER_DOWNLOAD_URL}; \
+		(wget -nv -O ./apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz ${ZOOKEEPER_DOWNLOAD_URL} || wget -nv -O ./apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz ${ZOOKEEPER_BACKUP_DOWNLOAD_URL}); \
 	fi
 
 # Extract required files
