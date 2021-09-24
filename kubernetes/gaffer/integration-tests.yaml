@@ -10,6 +10,8 @@ ui:
 
 
 accumulo:
+  image:
+    tag: develop
   hdfs:
     postInstallCommands:
     - hadoop fs -mkdir -p /accumulo
