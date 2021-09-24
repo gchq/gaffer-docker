@@ -10,16 +10,17 @@ jobs:
     env:
       GAFFER_VERSION: develop
       GAFFER_TOOLS_VERSION: develop
+      ACCUMULO_VERSION: develop
     steps:    
     - uses: actions/checkout@v2
 
-      # See issue #153 for why Gaffer image is not using docker-compose
     - name: Build images
       run: |
-        docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build --build-arg GAFFER_TOOLS_VERSION=$GAFFER_TOOLS_VERSION
-        docker build -t gchq/gaffer:$GAFFER_VERSION --build-arg GAFFER_VERSION=$GAFFER_VERSION ./docker/gaffer
+        docker build -t gchq/accumulo:$ACCUMULO_VERSION ./docker/accumulo
+        docker-compose --project-directory ./docker/gaffer/ -f ./docker/gaffer/docker-compose.yaml build
+        docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build
         docker build -t gchq/gaffer-integration-tests:$GAFFER_VERSION ./docker/gaffer-integration-tests
-    
+
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
 
@@ -32,9 +33,8 @@ jobs:
     - name: Deploy Gaffer
       run: |
         helm install gaffer ./kubernetes/gaffer --timeout=6m -f ./kubernetes/gaffer/integration-tests.yaml \
-          --set accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false \
-          --set accumulo.image.tag=develop
-
+          --set accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false 
+        
     - name: Run Integration Tests
       run: helm test gaffer --timeout=40m
 
