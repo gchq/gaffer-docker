@@ -16,7 +16,8 @@
 
 
 test -z "${HADOOP_VERSION}" && HADOOP_VERSION=3.2.1
-test -z "${HADOOP_DOWNLOAD_URL}" && HADOOP_DOWNLOAD_URL=https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz
+test -z "${HADOOP_DOWNLOAD_URL}" && HADOOP_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
+test -z "${HADOOP_BACKUP_DOWNLOAD_URL}" && HADOOP_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
 test -z "${HADOOP_APPLY_PATCHES}" && HADOOP_APPLY_PATCHES=false
 test -z "${PROTOBUF_VERSION}" && PROTOBUF_VERSION=2.5.0
 
@@ -28,7 +29,7 @@ if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 
 	# Download official Hadoop Distribution Tarball
 	if [ ! -d "/patches/${HADOOP_VERSION}/" ] || [ "${HADOOP_APPLY_PATCHES}" != "true" ]; then
-		wget -q ${HADOOP_DOWNLOAD_URL}
+		wget -nv -O ./hadoop-${HADOOP_VERSION}.tar.gz ${HADOOP_DOWNLOAD_URL} || wget -nv -O ./hadoop-${HADOOP_VERSION}.tar.gz ${HADOOP_BACKUP_DOWNLOAD_URL}
 	else
 		# Build our own HDFS Distribution Tarball with patches applied
 		apt -qq install -y \
@@ -51,7 +52,7 @@ if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 
 		export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
 
-		wget -q https://github.com/google/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-${PROTOBUF_VERSION}.tar.gz
+		wget -nv https://github.com/google/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-${PROTOBUF_VERSION}.tar.gz
 		tar -xf protobuf-${PROTOBUF_VERSION}.tar.gz
 		cd protobuf-${PROTOBUF_VERSION}
 		./configure --prefix=/opt/protobuf/

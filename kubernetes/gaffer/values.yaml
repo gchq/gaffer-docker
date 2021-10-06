@@ -31,11 +31,11 @@ graph:
 ui:
   image:
     repository: gchq/gaffer-ui
-    tag: 1.16.0
+    tag: 1.19.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   # See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
-  # You need to change the REST endpoint if you're using different path prefixes 
+  # You need to change the REST endpoint if you're using different path prefixes
   config: |-
     {
       "gafferEndpoint": {
@@ -54,7 +54,7 @@ api:
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 1.16.0
+    tag: 1.19.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -83,7 +83,7 @@ test:
     curl:
       repository: curlimages/curl
       tag: 7.67.0
-  
+
 
 # Extras
 
@@ -91,7 +91,7 @@ accumulo:
   enabled: false
   image:
     repository: gchq/gaffer
-    tag: 1.16.0
+    tag: 1.19.0
   config:
     postInstallCommands:
     - users

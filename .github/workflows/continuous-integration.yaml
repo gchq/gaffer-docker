@@ -15,9 +15,6 @@ jobs:
 
     - uses: actions/checkout@v2
 
-    - name: Install Kubernetes
-      run: ./cd/before_install.sh
-
     - name: Build Images
       run: ./cd/build_images.sh
 

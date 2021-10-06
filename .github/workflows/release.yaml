@@ -131,9 +131,6 @@ jobs:
       with:
         ref: develop
     
-    - name: Install helm
-      run: ./cd/before_install.sh
-
     - name: Install dependencies
       run: ./cd/install_dependencies.sh
     
@@ -178,9 +175,6 @@ jobs:
         git config user.name Gaffer
         git config user.email github-actions@github.com
 
-    - name: Install helm
-      run: ./cd/before_install.sh
-    
     - name: Download packaged charts
       uses: actions/download-artifact@v2
       with:
