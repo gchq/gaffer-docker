@@ -16,7 +16,6 @@
 
 set -e
 
-
 project_root="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 cd ${project_root}/kubernetes
 
@@ -34,51 +33,52 @@ checkIfModuleHasChart(){
     fi    
 }
 
-#identifies and retains only those dependent modules that have dependencies themselves 
+# Identifies and retains only those dependent modules that have dependencies themselves
 fetchAndVerifyDependencies(){
     dependencies=$(getDependencies)
     for dependency in $dependencies ; do
-        if [[ $kubernetesComponents = *$dependency* ]]; then
-            cd ../$dependency 
+        if [[ $kubernetesComponents == *$dependency* ]]; then
+            cd ../$dependency
             if [[ $(checkIfModuleHasChart) == "false" ]]; then
-                dependencies=${dependencies//$dependency/} 
-            fi    
+                dependencies=${dependencies//$dependency/}
+            fi
         else
-            dependencies=${dependencies//$dependency/}    
+            dependencies=${dependencies//$dependency/}
         fi 
     done
     echo "$dependencies" 
 }
 
-#checks for overlaping dependencies between elements in the array, merging them where they exist
+# checks for overlapping dependencies between elements in the array, merging them where they exist
 orderAndCompileDependencies(){
     IFS='/' read -a arr <<< "$1" 
     list=()
     for i in "${arr[@]}"; do
-        firstWord=`echo "$i" | awk '{print $1}'` 
-        for (( idx=${#arr[@]}-1 ; idx>=0 ; idx-- )) ; do
-            lastWord=`echo "${arr[idx]}" | awk '{print $NF}'`
-            if [[ "$i" == "${arr[idx]}" ]]; then 
-                continue
-            else    
-                if [[ "$firstWord" == "$lastWord" ]]; then
-                    list=("${arr[idx]}" "${list[@]}")
-                else
-                    continue
-                fi
-            fi        
-        done 
-    done                   
-    for chart in "${list[@]}"; do
-        charts_to_resolve+="$chart "
+      words=( $i )
+      if ((${#words[@]} == 1)); then
+        list+=("$i")
+      fi
+      firstWord=`echo "$i" | awk '{print $1}'`
+      for (( idx=${#arr[@]}-1 ; idx>=0 ; idx-- )) ; do
+         lastWord=`echo "${arr[idx]}" | awk '{print $NF}'`
+          if [[ "$i" == "${arr[idx]}" ]]; then
+              continue
+          else
+              if [[ "$firstWord" == "$lastWord" ]]; then
+                  list=("${arr[idx]}" "${list[@]}")
+              else
+                  continue
+              fi
+          fi
+      done
     done
-    echo "$charts_to_resolve"
+    echo "${list[@]}"
 }
 
 buildStringContainingDependencies(){
     dependencies+=$1 
     dependencies+=" "
-    dependencies+=$(fetchAndVerifyDependencies)
+    dependencies+="$(fetchAndVerifyDependencies)"
     dependencies+="/"
     echo "$dependencies"
 }
@@ -91,15 +91,20 @@ resolveDependencies(){
             cd ..
             continue
         fi 
-        dependencyList+="$(buildStringContainingDependencies $chart)"   
+        dependencyList+="$(buildStringContainingDependencies $chart)"
         cd ..
-    done 
+    done
+
+    dependencyList="${dependencyList}"|tr '\n' ' '
+
     charts_to_resolve="$(orderAndCompileDependencies "$dependencyList")"
-    echo "$charts_to_resolve" | xargs -n1 | sort -u | xargs
+    echo "$charts_to_resolve"  | awk '{for (i=1;i<=NF;i++) if (!a[$i]++) printf("%s%s",$i,FS)}{printf("\n")}' | tac -s ' '
 }
 
 
 # Resolve dependencies of these charts in order
-for chart in $(resolveDependencies); do	
+
+ for chart in $(resolveDependencies); do
     helm dependency update ${chart}
-done
+ done
+
