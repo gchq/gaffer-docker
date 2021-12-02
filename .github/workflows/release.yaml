@@ -44,7 +44,8 @@ jobs:
       id: branch
       run: echo "::set-output name=branch_name::$BRANCH_NAME"
 
-    - id: develop_branch
+    - name: Output develop branch name
+      id: develop_branch
       run: echo "::set-output name=develop_name::$DEVELOP_BRANCH"
 
     - name: Fail if no branch found
