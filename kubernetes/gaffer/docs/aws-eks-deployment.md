@@ -33,8 +33,8 @@ By default the gaffer graph uses the in-memory MapStore. If you want to use an a
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.20.0}
-export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-1.20.0}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.21.1}
+export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-1.21.2}
 
 helm dependency update ../accumulo/
 helm dependency update ../gaffer/
