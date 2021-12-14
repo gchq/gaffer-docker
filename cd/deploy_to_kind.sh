@@ -22,11 +22,11 @@ cd ./kubernetes/gaffer-road-traffic
 
 # Deploy Images to Kind
 kind load docker-image gchq/hdfs:3.2.1
-kind load docker-image gchq/gaffer:1.20.0
-kind load docker-image gchq/gaffer-rest:1.20.0
-kind load docker-image gchq/gaffer-ui:1.20.0
-kind load docker-image gchq/gaffer-road-traffic-loader:1.20.0
-kind load docker-image gchq/gaffer-operation-runner:1.20.0
+kind load docker-image gchq/gaffer:1.21.1
+kind load docker-image gchq/gaffer-rest:1.21.1
+kind load docker-image gchq/gaffer-ui:1.21.1
+kind load docker-image gchq/gaffer-road-traffic-loader:1.21.1
+kind load docker-image gchq/gaffer-operation-runner:1.21.1
 
 # Deploy containers onto Kind
 # Hostname check is disabled for CI
