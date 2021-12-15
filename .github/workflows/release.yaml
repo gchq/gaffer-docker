@@ -6,30 +6,77 @@ on:
     - closed
 
 jobs:
-  create-git-tag:
+  create-release-tag:
     runs-on: ubuntu-latest
+
+    outputs:
+      branch_name: ${{ steps.branch.outputs.branch_name }}
+      develop_name: ${{ steps.develop_branch.outputs.develop_name }}
+
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout master
+      uses: actions/checkout@v2
       with:
-        ref: develop
+        ref: master
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+        fetch-depth: 0
     
     - name: Set up Github credentials
       run: |
         git config user.name Gaffer
         git config user.email github-actions@github.com
     
-    - name: Set version
+    - name: Set release version
       run: echo "RELEASE_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
-    
-    - name: Update version
-      run: ./cd/update_app_version.sh ${RELEASE_VERSION}
+
+    - name: Set branch name
+      run: echo "BRANCH_NAME=$(git branch -a | grep $RELEASE_VERSION | tail -n 1 | cut -c 18-)" >> $GITHUB_ENV
+
+    - name: Set develop branch
+      if: ${{ !startsWith( env.BRANCH_NAME , 'alpha') }}
+      run: echo "DEVELOP_BRANCH=develop" >> $GITHUB_ENV
+
+    - name: Set v2-alpha branch
+      if: ${{ startsWith( env.BRANCH_NAME , 'alpha') }}
+      run: echo "DEVELOP_BRANCH=v2-alpha" >> $GITHUB_ENV
+
+    - name: Output branch name
+      id: branch
+      run: echo "::set-output name=branch_name::$BRANCH_NAME"
+
+    - name: Output develop branch name
+      id: develop_branch
+      run: echo "::set-output name=develop_name::$DEVELOP_BRANCH"
+
+    - name: Fail if no branch found
+      if: ${{ !env.BRANCH_NAME }}
+      run: exit 1
+
+    - name: Set alpha master branch
+      if: ${{ startsWith( env.BRANCH_NAME , 'alpha') }}
+      run: echo "MASTER_BRANCH=v2-alpha" >> $GITHUB_ENV
+
+    - name: Set master branch
+      if: ${{ !startsWith( env.BRANCH_NAME , 'alpha') }}
+      run: echo "MASTER_BRANCH=master" >> $GITHUB_ENV
+
+    - name: Checkout master
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ env.MASTER_BRANCH }}
+        token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: Merge release into master
+      run: |
+        git checkout ${{ env.BRANCH_NAME }}
+        git checkout ${{ env.MASTER_BRANCH }}
+        git merge ${{ env.BRANCH_NAME }}
 
     - name: Push changes
       run: |
-        git commit -a -m "Release v${RELEASE_VERSION}"
         git tag v${RELEASE_VERSION}
-        git push origin --tags
+        git push origin v${RELEASE_VERSION}
         git push
 
   update-branches:
@@ -37,38 +84,41 @@ jobs:
     strategy:
       matrix:
         branch:
-        - master
+        - develop
         - gh-pages
     needs:
-    - create-git-tag
+    - create-release-tag
+
     steps:
     - uses: actions/checkout@v2
       with:
         ref: ${{ matrix.branch }}
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+        fetch-depth: 0
     
     - name: Set up Github credentials
       run: |
         git config user.name Gaffer
         git config user.email github-actions@github.com
   
-    - name: Update branch
+    # Skip develop if alpha release
+    - name: Merge release into branch
+      if: ${{ !((startsWith( needs.create-release-tag.outputs.branch_name , 'alpha')) && (matrix.branch == 'develop')) }}
       run: |
-        git remote set-branches --add origin develop
-        git pull
-        git merge origin/develop --strategy recursive --strategy-option theirs --allow-unrelated-histories 
+        git checkout ${{ needs.create-release-tag.outputs.branch_name }}
+        git checkout ${{ matrix.branch }}
+        git merge ${{ needs.create-release-tag.outputs.branch_name }} --strategy-option theirs
+        git push
 
-    - name: Push changes
-      run: git push
-  
   publish-images-to-dockerhub:
     runs-on: ubuntu-latest
     needs:
-    - create-git-tag
+    - create-release-tag
+
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: develop
+        ref: ${{ needs.create-release-tag.outputs.develop_name }}
         
     - name: Build images
       run: ./cd/build_images.sh
@@ -85,14 +135,15 @@ jobs:
   create-release-notes:
     runs-on: ubuntu-latest
     needs:
-    - create-git-tag
+    - create-release-tag
+
     outputs:
       release_upload_url: ${{ steps.upload_notes.outputs.upload_url }}
+
     steps:
-    - name: Checkout develop
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
       with:
-        ref: develop
+        ref: ${{ needs.create-release-tag.outputs.develop_name }}
     
     - name: Create Release Notes
       id: create_release_notes
@@ -102,17 +153,18 @@ jobs:
 
     - name: Set version
       run: echo "RELEASE_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
-      
+
     - name: Upload notes
       id: upload_notes
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ env.RELEASE_VERSION }}
-        release_name: Gaffer Docker ${{ env.RELEASE_VERSION }}
+        name: Gaffer Docker ${{ env.RELEASE_VERSION }}
         body_path: release_file.md
-  
+        prerelease: ${{ startsWith( needs.create-release-tag.outputs.branch_name , 'alpha') }}
+
   upload-release-artifacts:
     runs-on: ubuntu-latest
     needs:
@@ -124,11 +176,11 @@ jobs:
         - accumulo
         - gaffer
         - gaffer-road-traffic
+
     steps:
-    - name: Checkout develop
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
       with:
-        ref: develop
+        ref: ${{ needs.create-release-tag.outputs.develop_name }}
     
     - name: Install dependencies
       run: ./cd/install_dependencies.sh
@@ -162,6 +214,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
     - upload-release-artifacts
+
     steps:
     - name: Checkout gh-pages
       uses: actions/checkout@v2
