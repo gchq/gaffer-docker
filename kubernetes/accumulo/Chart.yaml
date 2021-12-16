@@ -16,7 +16,7 @@ apiVersion: v2
 name: accumulo
 description: A Key-Value store containing the Gaffer iterators for rapid filtering and lookup
 type: application
-version: 0.17.0 # managed version
+version: 0.17.1 # managed version
 appVersion: 1.9.3
 home: https://github.com/gchq/Gaffer
 sources:
@@ -27,6 +27,6 @@ dependencies:
   repository: https://charts.helm.sh/incubator/
   condition: zookeeper.enabled
 - name: hdfs
-  version: ^0.17.0 # managed version
+  version: ^0.17.1 # managed version
   repository: file://../hdfs/
   condition: hdfs.enabled
