@@ -3,6 +3,29 @@ entries:
   accumulo:
   - apiVersion: v2
     appVersion: 1.9.3
+    created: "2021-12-16T11:14:09.207450668Z"
+    dependencies:
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://charts.helm.sh/incubator/
+      version: 2.1.5
+    - condition: hdfs.enabled
+      name: hdfs
+      repository: https://gchq.github.io/gaffer-docker
+      version: ^0.17.0
+    description: A Key-Value store containing the Gaffer iterators for rapid filtering
+      and lookup
+    digest: 5c4a0649369b22aa30c02fa1ffcedda81cfbb3ea938a9b95e34510201b901741
+    home: https://github.com/gchq/Gaffer
+    name: accumulo
+    sources:
+    - https://github.com/gchq/gaffer-docker
+    type: application
+    urls:
+    - https://github.com/gchq/gaffer-docker/releases/download/v0.17.1/accumulo-0.17.0.tgz
+    version: 0.17.0
+  - apiVersion: v2
+    appVersion: 1.9.3
     created: "2021-12-15T11:05:36.559445309Z"
     dependencies:
     - condition: zookeeper.enabled
@@ -163,6 +186,25 @@ entries:
     - https://github.com/gchq/gaffer-docker/releases/download/v0.10.0/accumulo-0.10.0.tgz
     version: 0.10.0
   gaffer:
+  - apiVersion: v2
+    appVersion: 1.21.1
+    created: "2021-12-16T11:14:09.211679129Z"
+    dependencies:
+    - condition: accumulo.enabled
+      name: accumulo
+      repository: https://gchq.github.io/gaffer-docker
+      version: ^0.17.0
+    description: A large-scale entity and relation database supporting aggregation
+      of properties
+    digest: 278664839cecc6fb42d6760a10fc498dd1d6c6e32117ebabf10d7c8df66a33c8
+    home: https://github.com/gchq/Gaffer
+    name: gaffer
+    sources:
+    - https://github.com/gchq/gaffer-docker
+    type: application
+    urls:
+    - https://github.com/gchq/gaffer-docker/releases/download/v0.17.1/gaffer-0.17.0.tgz
+    version: 0.17.0
   - apiVersion: v2
     appVersion: 1.21.1
     created: "2021-12-15T11:05:36.572825415Z"
@@ -368,6 +410,25 @@ entries:
   gaffer-road-traffic:
   - apiVersion: v2
     appVersion: 1.21.1
+    created: "2021-12-16T11:14:09.227208455Z"
+    dependencies:
+    - name: gaffer
+      repository: https://gchq.github.io/gaffer-docker
+      version: ^0.17.0
+    description: A Gaffer instance containing sample GB road traffic data from the
+      Department of Transport
+    digest: 561af6a7e2309dde510b3393194bf59cfc765d0ad812034c108510b412708387
+    home: https://github.com/gchq/Gaffer
+    name: gaffer-road-traffic
+    sources:
+    - https://github.com/gchq/gaffer-docker
+    - https://data.gov.uk/dataset/208c0e7b-353f-4e2d-8b7a-1a7118467acc/gb-road-traffic-counts
+    type: application
+    urls:
+    - https://github.com/gchq/gaffer-docker/releases/download/v0.17.1/gaffer-road-traffic-0.17.0.tgz
+    version: 0.17.0
+  - apiVersion: v2
+    appVersion: 1.21.1
     created: "2021-12-15T11:05:36.578469618Z"
     dependencies:
     - name: gaffer
@@ -559,6 +620,16 @@ entries:
   hdfs:
   - apiVersion: v2
     appVersion: 3.2.1
+    created: "2021-12-16T11:14:09.228326471Z"
+    description: Deploys the Hadoop Distributed File System (HDFS)
+    digest: 30d00040cc01356b10acd0aca4acb3a44edf894240775122820d838e1197d3b4
+    name: hdfs
+    type: application
+    urls:
+    - https://github.com/gchq/gaffer-docker/releases/download/v0.17.1/hdfs-0.17.0.tgz
+    version: 0.17.0
+  - apiVersion: v2
+    appVersion: 3.2.1
     created: "2021-12-15T11:05:36.579285219Z"
     description: Deploys the Hadoop Distributed File System (HDFS)
     digest: 971b51cbba63bf2cbd8c91c47aed441c23a560336dd9f4406bddbed72d797bdc
@@ -657,4 +728,4 @@ entries:
     urls:
     - https://github.com/gchq/gaffer-docker/releases/download/v0.7.9/hdfs-0.7.9.tgz
     version: 0.7.9
-generated: "2021-12-15T11:05:36.539326799Z"
+generated: "2021-12-16T11:14:09.191603038Z"
