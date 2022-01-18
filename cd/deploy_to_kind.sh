@@ -38,6 +38,7 @@ kind load docker-image gchq/gaffer-pyspark-notebook:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-jhub-options-server:${JHUB_OPTIONS_SERVER_VERSION}
 kind load docker-image gchq/spark-py:${SPARK_VERSION}
 
+
 # Deploy containers onto Kind
 # Hostname check is disabled for CI
 echo "Starting helm install for gaffer-road-traffic"

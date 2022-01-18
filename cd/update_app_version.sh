@@ -30,7 +30,7 @@ getCommand() {
 findAndReplace() {
     # Replace version marked with # managed version in the Chart.yaml files
     managed_version_tag='# managed version'
-    find "$(getRootDirectory)" -iname Chart.y*ml -exec sed -i'' -e "s:[0-9]*\.[0-9]*\.[0-9]* ${managed_version_tag}:$1 ${managed_version_tag}:g" {} +
+    find "$(getRootDirectory)" -iname Chart.y*ml -exec sed -i'' -e "s:[0-9]*\.[0-9]*\.[0-9]*.* ${managed_version_tag}:$1 ${managed_version_tag}:g" {} +
 }
 
 if [ $# -ne 1 ]; then
