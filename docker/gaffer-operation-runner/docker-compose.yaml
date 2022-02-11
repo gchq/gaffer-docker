@@ -17,7 +17,7 @@ version: "3.7"
 services:
 
   zookeeper:
-    image: zookeeper:3.5.6
+    image: zookeeper:${ZOOKEEPER_VERSION}
     container_name: zookeeper
     hostname: zookeeper
     environment:
@@ -183,7 +183,7 @@ services:
       context: .
       args:
         BASE_IMAGE_NAME: gchq/gaffer
-        BASE_IMAGE_TAG: ${GAFFER_VERSION}  
+        BASE_IMAGE_TAG: ${GAFFER_VERSION}
     restart: on-failure
     environment:
     - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BASE_IMAGE_NAME=jupyter/scipy-notebook
-ARG BASE_IMAGE_TAG=399cbb986c6b
+ARG BASE_IMAGE_TAG=c26bf69c148d
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
@@ -42,20 +42,7 @@ RUN cd /opt && \
 	ln -s ./hadoop-${HADOOP_VERSION} ./hadoop && \
 	rm -rf ./hadoop/share/doc
 
-# AWS Auth via K8s Service Accounts is only supported in AWS Java SDK 1.11.704+
-# @see https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts-minimum-sdk.html
-# Hadoop 3.3.0 ships with aws-java-sdk-bundle-1.11.563.jar :(
-
-ARG AWS_JAVA_SDK_VERSION=1.11.834
-
-RUN cd /opt/hadoop/share/hadoop/tools/lib && \
-	rm -f aws-java-sdk-bundle-*.jar && \
-	wget -nv https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/${AWS_JAVA_SDK_VERSION}/aws-java-sdk-bundle-${AWS_JAVA_SDK_VERSION}.jar && \
-	cd /opt/hadoop/libexec/ && \
-	sed -i -E "s|aws-java-sdk-bundle-[0-9\.]+\.jar|aws-java-sdk-bundle-${AWS_JAVA_SDK_VERSION}\.jar|g" shellprofile.d/hadoop-aws.sh && \
-	sed -i -E "s|aws-java-sdk-bundle-[0-9\.]+\.jar|aws-java-sdk-bundle-${AWS_JAVA_SDK_VERSION}\.jar|g" tools/hadoop-aws.sh
-
-ARG SPARK_VERSION=3.0.1
+ARG SPARK_VERSION=3.2.1
 ARG SPARK_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-without-hadoop.tgz"
 ARG SPARK_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-without-hadoop.tgz"
 
@@ -65,22 +52,22 @@ RUN cd /opt && \
 	rm ./spark-${SPARK_VERSION}.tgz && \
 	ln -s ./spark-${SPARK_VERSION}-*/ ./spark
 
-ARG FINDSPARK_VERSION=1.4.2
-RUN pip install findspark==${FINDSPARK_VERSION} kubernetes
+ARG FINDSPARK_VERSION=2.0.0
+ARG KUBERNETES_PYTHON_VERSION=21.7.0
+RUN pip install findspark==${FINDSPARK_VERSION} kubernetes==${KUBERNETES_PYTHON_VERSION}
 
-ARG KUBECTL_VERSION=1.20.0
-
+ARG KUBECTL_VERSION=1.23.0
 RUN curl -fLo /bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
 	chmod +x /bin/kubectl
 
-ARG GAFFER_PYTHON_SHELL_VERSION=gaffer-tools-1.16.0
+ARG GAFFER_PYTHON_SHELL_VERSION=gaffer-tools-1.21.1
 RUN git clone -b ${GAFFER_PYTHON_SHELL_VERSION} --depth 1 https://github.com/gchq/gaffer-tools && \
 	pushd gaffer-tools/python-shell && \
 	python setup.py install && \
 	popd && \
 	rm -rf gaffer-tools
 
-RUN jupyter labextension install jupyterlab-plotly@4.10.0 && \
+RUN jupyter labextension install jupyterlab-plotly@5.5.0 && \
 	rm -rf "/home/${NB_USER}/.cache/yarn"
 
 COPY ./examples /examples

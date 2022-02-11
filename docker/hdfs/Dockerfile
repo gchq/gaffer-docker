@@ -13,10 +13,10 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=debian
-ARG BUILDER_IMAGE_TAG=stretch-20200224-slim
+ARG BUILDER_IMAGE_TAG=stretch-20220125-slim
 
 ARG BASE_IMAGE_NAME=debian
-ARG BASE_IMAGE_TAG=stretch-20200224-slim
+ARG BASE_IMAGE_TAG=stretch-20220125-slim
 
 ARG HADOOP_VERSION=3.2.1
 
@@ -33,8 +33,7 @@ ARG HADOOP_VERSION
 ARG USER=hadoop
 ARG GROUP=hadoop
 
-RUN mkdir -p /usr/share/man/man1 && \
-	apt -qq update && \
+RUN apt -qq update && \
 	apt -qq install -y \
 		dumb-init \
 		openjdk-8-jre-headless \

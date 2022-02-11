@@ -13,13 +13,13 @@
 # limitations under the License.
 
 ARG BASE_IMAGE_NAME=python
-ARG BASE_IMAGE_TAG=3.8.6-slim
+ARG BASE_IMAGE_TAG=3.9.7-slim
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
 ARG SPARK_UID=185
 ARG SPARK_HOME=/opt/spark
-ARG SPARK_VERSION=3.0.1
+ARG SPARK_VERSION=3.2.1
 ARG SPARK_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz"
 ARG SPARK_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz"
 
