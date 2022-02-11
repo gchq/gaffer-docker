@@ -47,11 +47,11 @@ ui:
   replicaCount: 1
   resources:
     requests:
-      memory: "300Mi"
-      cpu: "200m"
+      memory: "400Mi"
+      cpu: "100m"
     limits:
-      memory: "300Mi"
-      cpu: "200m"
+      memory: "400Mi"
+      cpu: "100m"
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -66,11 +66,11 @@ api:
     pullSecrets: []
   resources:
     requests:
-      memory: "700Mi"
-      cpu: "700m"
+      memory: "400Mi"
+      cpu: "300m"
     limits:
-      memory: "700Mi"
-      cpu: "700m"
+      memory: "400Mi"
+      cpu: "900m"
   nodeSelector: {}
   tolerations: []
   affinity: {}
