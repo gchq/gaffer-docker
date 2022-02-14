@@ -69,7 +69,7 @@ spec:
           httpGet:
             path: {{ pluck "server.context-path" .Values.graph.applicationProperties | first }}
             port: http
-          failureThreshold: 6
+          failureThreshold: 30
           periodSeconds: 10
         resources:
           {{- toYaml .Values.api.resources | nindent 10 }}
