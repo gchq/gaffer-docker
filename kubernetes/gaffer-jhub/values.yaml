@@ -10,8 +10,6 @@ jupyterhub:
   cull:
     enabled: true
     removeNamedServers: true
-  rbac:
-    enabled: true
   proxy:
     secretToken: ""
     service:
@@ -27,9 +25,6 @@ jupyterhub:
     continuous:
       enabled: false
   hub:
-    image:
-      name: jupyterhub/k8s-hub
-      tag: 0.10.6
     allowNamedServers: true
     extraVolumes:
     - name: gaffer-docker-scripts

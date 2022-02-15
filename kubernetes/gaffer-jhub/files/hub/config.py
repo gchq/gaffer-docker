@@ -8,6 +8,7 @@ from tornado.httpclient import AsyncHTTPClient, HTTPError as ClientHTTPError
 from tornado.web import HTTPError as WebHTTPError
 from traitlets import default
 from z2jh import get_config
+from kubespawner.reflector import ResourceReflector
 
 AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
@@ -30,8 +31,16 @@ class KubeSpawnerWithNamespacedReflectors(KubeSpawner):
 				self._start_watching_events()
 			return self.__class__.reflectors['events'][self.namespace]
 
-	def _start_reflector(self, key, ReflectorClass, replace=False, **kwargs):
+	def _start_reflector(
+		self,
+		kind=None,
+		reflector_class=ResourceReflector,
+		replace=False,
+		**kwargs,
+	):
 		main_loop = IOLoop.current()
+		key = kind
+		ReflectorClass = reflector_class
 
 		def on_reflector_failure():
 			self.log.critical("%s reflector failed, halting Hub.", key.title())
