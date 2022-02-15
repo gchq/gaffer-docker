@@ -87,7 +87,7 @@ class SparkConfigProvisioner {
 		return response
 	}
 
-	async provisionDriverService(name, namespace, username, port) {
+	async provisionDriverService(name, namespace, username, servername, port) {
 		const svc = {
 			apiVersion: 'v1',
 			kind: 'Service',
@@ -100,7 +100,8 @@ class SparkConfigProvisioner {
 					'app.kubernetes.io/managed-by': appInfo.name,
 					'app.kubernetes.io/version': appInfo.version,
 					'hub.jupyter.org/username': username,
-					'hub.jupyter.org/servername': name
+					'hub.jupyter.org/servername': servername,
+					'hub.jupyter.org/servicename': name
 				}
 			},
 			spec: {
@@ -108,7 +109,9 @@ class SparkConfigProvisioner {
 				clusterIP: 'None',
 				selector: {
 					'app.kubernetes.io/component': 'jhub-notebook',
-					'hub.jupyter.org/servername': name
+					'hub.jupyter.org/username': username,
+					'hub.jupyter.org/servername': servername,
+					'hub.jupyter.org/servicename': name
 				},
 				ports: [{
 					name: 'http',
@@ -170,7 +173,7 @@ class SparkConfigProvisioner {
 
 		const [configMap, service, ingress] = await Promise.all([
 			this.provisionNotebookConfig('jhub-spark-config-' + username + (servername ? '-' + servername : ''), namespace, username, servername, sparkProperties),
-			this.provisionDriverService(driverServiceName, namespace, username, uiPort),
+			this.provisionDriverService(driverServiceName, namespace, username, servername, uiPort),
 			this.provisionDriverIngress(driverServiceName + '-spark-ui', namespace, ingressHost, ingressPath, driverServiceName, uiPort, username, servername)
 		])
 
