@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-test -z "${HADOOP_VERSION}" && HADOOP_VERSION=3.2.1
+test -z "${HADOOP_VERSION}" && HADOOP_VERSION=3.3.1
 test -z "${HADOOP_DOWNLOAD_URL}" && HADOOP_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
 test -z "${HADOOP_BACKUP_DOWNLOAD_URL}" && HADOOP_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
 test -z "${HADOOP_APPLY_PATCHES}" && HADOOP_APPLY_PATCHES=false
-test -z "${PROTOBUF_VERSION}" && PROTOBUF_VERSION=2.5.0
+test -z "${PROTOBUF_VERSION}" && PROTOBUF_VERSION=3.7.1
 test -z "${ISAL_VERSION}" && ISAL_VERSION=v2.30.0
 
 # Allow users to provide their own Hadoop Distribution Tarball
@@ -45,19 +45,19 @@ if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 			libprotoc-dev \
 			libsasl2-dev \
 			libsnappy-dev \
-			libssl1.0-dev \
+			libssl-dev \
 			libtool \
 			libzstd-dev \
 			maven \
 			nasm \
-			openjdk-8-jdk \
+			openjdk-11-jdk \
 			pkg-config \
 			yasm \
 			zlib1g-dev
 
-		export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
+		export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64/
 
-		wget -nv -O protobuf.tar.gz https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-${PROTOBUF_VERSION}.tar.gz
+		wget -nv -O protobuf.tar.gz https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-java-${PROTOBUF_VERSION}.tar.gz
 		tar -xf protobuf.tar.gz
 		cd protobuf-${PROTOBUF_VERSION}
 		./configure --prefix=/opt/protobuf/
@@ -81,9 +81,11 @@ if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 		cd hadoop
 		git checkout rel/release-${HADOOP_VERSION}
 
-		for patch in /patches/${HADOOP_VERSION}/*.patch; do
-			git apply $patch
-		done
+		if [ -d "/patches/${HADOOP_VERSION}/" ]; then
+			for patch in /patches/${HADOOP_VERSION}/*.patch; do
+				git apply $patch
+			done
+		fi
 
 		mvn install \
 			-P dist,native \
@@ -96,7 +98,8 @@ if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 			-Disal.prefix=/usr \
 			-Disal.lib=/usr/lib \
 			-Dbundle.isal=true \
-			-DskipTests
+			-DskipTests \
+			-Dmaven.javadoc.skip=true
 
 		mv hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz ../
 		cd ..
