@@ -23,8 +23,7 @@ ARG SPARK_VERSION=3.2.1
 ARG SPARK_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz"
 ARG SPARK_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz"
 
-RUN mkdir -p /usr/share/man/man1 && \
-	apt-get -qq update && \
+RUN apt-get -qq update && \
 	apt-get -qq install -y --no-install-recommends \
 		dumb-init \
 		openjdk-11-jre-headless \
