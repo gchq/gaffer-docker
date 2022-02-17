@@ -139,7 +139,8 @@ def test_jhub_profiles(username, servername, namespace, service_account_name):
 		server_options = {
 			'profile': [profile['slug']],
 			'k8s_namespace': [namespace],
-			'k8s_service_account': [service_account_id]
+			'k8s_service_account': [service_account_id],
+			'resources_mem': [1024]
 		}
 		if 'hdfs' in options and len(options['hdfs']) > 0:
 			server_options['hdfs'] = [options['hdfs'][0]['id']]
