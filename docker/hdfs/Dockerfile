@@ -13,12 +13,12 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=debian
-ARG BUILDER_IMAGE_TAG=bullseye-20220125-slim
+ARG BUILDER_IMAGE_TAG=stretch-20220125-slim
 
 ARG BASE_IMAGE_NAME=debian
-ARG BASE_IMAGE_TAG=bullseye-20220125-slim
+ARG BASE_IMAGE_TAG=stretch-20220125-slim
 
-ARG HADOOP_VERSION=3.3.1
+ARG HADOOP_VERSION=3.2.2
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 ARG HADOOP_VERSION
@@ -36,7 +36,7 @@ ARG GROUP=hadoop
 RUN apt -qq update && \
 	apt -qq install -y \
 		dumb-init \
-		openjdk-11-jre-headless \
+		openjdk-8-jre-headless \
 		libsnappy1v5 \
 		libssl-dev \
 		libzstd1 \
@@ -61,7 +61,7 @@ RUN for i in $(seq 1 8); do mkdir -p -m 750 /data${i} && chown ${USER}:${GROUP} 
 VOLUME /data1 /data2 /data3 /data4 /data5 /data6 /data7 /data8
 
 USER ${USER}
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64/
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre/
 ENV HADOOP_HOME /opt/hadoop
 ENV HADOOP_LOG_DIR /var/log/hadoop
 ENV PATH $HADOOP_HOME/bin:$PATH

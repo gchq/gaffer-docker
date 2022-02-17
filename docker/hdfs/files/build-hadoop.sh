@@ -15,7 +15,7 @@
 # limitations under the License.
 
 
-test -z "${HADOOP_VERSION}" && HADOOP_VERSION=3.3.1
+test -z "${HADOOP_VERSION}" && HADOOP_VERSION=3.2.2
 test -z "${HADOOP_DOWNLOAD_URL}" && HADOOP_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
 test -z "${HADOOP_BACKUP_DOWNLOAD_URL}" && HADOOP_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
 test -z "${HADOOP_APPLY_PATCHES}" && HADOOP_APPLY_PATCHES=false
@@ -50,12 +50,12 @@ if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 			libzstd-dev \
 			maven \
 			nasm \
-			openjdk-11-jdk \
+			openjdk-8-jdk \
 			pkg-config \
 			yasm \
 			zlib1g-dev
 
-		export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64/
+		export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
 
 		wget -nv -O protobuf.tar.gz https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-java-${PROTOBUF_VERSION}.tar.gz
 		tar -xf protobuf.tar.gz
