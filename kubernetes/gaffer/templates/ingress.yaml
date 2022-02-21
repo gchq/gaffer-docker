@@ -39,7 +39,7 @@ spec:
           service:
             name: {{ include "gaffer.fullname" . }}-api
             port:
-              number: 80
+              name: http
 {{- else }}
         backend:
           serviceName: {{ include "gaffer.fullname" . }}-api
@@ -52,7 +52,7 @@ spec:
           service:
             name: {{ include "gaffer.fullname" . }}-ui
             port:
-              number: 80
+              name: http
 {{- else }}
         backend:
           serviceName: {{ include "gaffer.fullname" . }}-ui
