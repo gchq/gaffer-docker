@@ -18,8 +18,10 @@ metadata:
   name: {{ include "gaffer.fullname" . }}-api
   labels:
     {{- include "gaffer.labels" . | nindent 4 }}
-    creator: {{.Values.creator}}
     app.kubernetes.io/component: api
+    {{- if .Values.labels }}
+    {{- toYaml .Values.labels | nindent 4 }}
+    {{ end }}
 spec:
   replicas: {{ .Values.api.replicaCount }}
   selector:

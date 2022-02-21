@@ -25,7 +25,7 @@ spec:
     app.kubernetes.io/component: api
   type: ClusterIP
   ports:
-  - name: https
+  - name: http
     protocol: TCP
-    port: 443
+    port: 80
     targetPort: http

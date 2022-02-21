@@ -14,7 +14,7 @@
 
 nameOverride: ""
 fullnameOverride: ""
-creator: "undefined"
+labels: {}
 
 graph:
   config:
@@ -45,13 +45,7 @@ ui:
     }
 
   replicaCount: 1
-  resources:
-    requests:
-      memory: "400Mi"
-      cpu: "100m"
-    limits:
-      memory: "400Mi"
-      cpu: "100m"
+  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -64,13 +58,7 @@ api:
     tag: 1.21.1
     pullPolicy: IfNotPresent
     pullSecrets: []
-  resources:
-    requests:
-      memory: "400Mi"
-      cpu: "400m"
-    limits:
-      memory: "400Mi"
-      cpu: "400m"
+  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -79,8 +67,6 @@ ingress:
   enabled: true
   annotations:
     traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
-    route.openshift.io/termination: edge
-    haproxy.router.openshift.io/hsts_header: max-age=31536000;includeSubDomains;preload
   host: ""
   pathPrefix:
     ui: /ui/(.*)
