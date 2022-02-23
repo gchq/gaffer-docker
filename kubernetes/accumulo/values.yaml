@@ -14,6 +14,7 @@
 
 nameOverride: ""
 fullnameOverride: ""
+labels: {}
 
 hdfs:
   enabled: true

@@ -112,6 +112,7 @@ secrets:
 
 nameOverride: ""
 fullnameOverride: ""
+labels: {}
 
 ingress:
   enabled: true

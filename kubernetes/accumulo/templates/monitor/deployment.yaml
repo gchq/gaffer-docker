@@ -28,7 +28,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "accumulo.selectorLabels" . | nindent 8 }}
+        {{- include "accumulo.labels" . | nindent 8 }}
         app.kubernetes.io/component: monitor
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
