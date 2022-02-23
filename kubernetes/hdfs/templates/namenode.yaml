@@ -31,6 +31,8 @@ spec:
 {{- range $k, $v := until (int .Values.namenode.dataVolumes.count) }}
   - metadata:
       name: data{{$v}}
+      labels:
+        {{- include "hdfs.labels" $ | nindent 8 }}
     spec:
       {{- toYaml $.Values.namenode.dataVolumes.pvcTemplateSpec | nindent 6 }}
 {{- end }}
