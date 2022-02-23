@@ -28,7 +28,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "gaffer.selectorLabels" . | nindent 8 }}
+        {{- include "gaffer.labels" . | nindent 8 }}
         app.kubernetes.io/component: ui
       annotations:
         checksum/ui-config: {{ include (print $.Template.BasePath "/ui/ui-config.yaml") . | sha256sum }}
