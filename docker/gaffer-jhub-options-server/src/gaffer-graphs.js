@@ -62,7 +62,6 @@ class GafferGraphDirectory {
 	loadConfigFile(configFile) {
 		if (fs.existsSync(configFile)) {
 			const config = yaml.safeLoad(fs.readFileSync(configFile, 'utf8'))
-			// console.log(JSON.stringify(config, null, 2))
 			config.forEach(graph => {
 				console.log('Loaded static Gaffer Graph config from', configFile, ':', JSON.stringify(graph))
 				this.static.set(graph.id, graph)

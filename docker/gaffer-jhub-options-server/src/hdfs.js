@@ -34,7 +34,6 @@ class HdfsInstanceDirectory {
 	loadConfigFile(configFile) {
 		if (fs.existsSync(configFile)) {
 			const config = yaml.safeLoad(fs.readFileSync(configFile, 'utf8'))
-			// console.log(JSON.stringify(config, null, 2))
 			config.forEach(instance => {
 				console.log('Loaded static HDFS instance config from', configFile, ':', JSON.stringify(instance))
 				this.static.set(instance.id, instance)

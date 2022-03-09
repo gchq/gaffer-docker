@@ -15,7 +15,6 @@ class ProfileList {
 	loadConfigFile(filePath) {
 		if (fs.existsSync(filePath)) {
 			const config = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
-			// console.log(JSON.stringify(config, null, 2))
 
 			this.list = config
 			config.forEach(profile => {

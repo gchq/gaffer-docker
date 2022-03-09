@@ -24,7 +24,6 @@ class SparkConfigProvisioner {
 	loadSparkPropertiesFromFile(configFilePath) {
 		if (fs.existsSync(configFilePath)) {
 			const config = yaml.safeLoad(fs.readFileSync(configFilePath, 'utf8'))
-			// console.log(JSON.stringify(config, null, 2))
 
 			Object.keys(config).forEach(propertyName => {
 				const propertyValue = config[propertyName]
