@@ -31,6 +31,8 @@ spec:
 {{- range $k, $v := until (int .Values.datanode.dataVolumes.count) }}
   - metadata:
       name: data{{$v}}
+      labels:
+        {{- include "hdfs.labels" $ | nindent 8 }}
     spec:
       {{- toYaml $.Values.datanode.dataVolumes.pvcTemplateSpec | nindent 6 }}
 {{- end }}
@@ -40,7 +42,7 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
         checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
       labels:
-        {{- include "hdfs.selectorLabels" . | nindent 8 }}
+        {{- include "hdfs.labels" . | nindent 8 }}
         app.kubernetes.io/component: datanode
     spec:
       initContainers:

@@ -38,7 +38,7 @@ spec:
         backend:
           service:
             name: {{ include "gaffer.fullname" . }}-api
-            port: 
+            port:
               name: http
 {{- else }}
         backend:
@@ -51,7 +51,7 @@ spec:
         backend:
           service:
             name: {{ include "gaffer.fullname" . }}-ui
-            port: 
+            port:
               name: http
 {{- else }}
         backend:

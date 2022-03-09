@@ -28,7 +28,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "gaffer.selectorLabels" . | nindent 8 }}
+        {{- include "gaffer.labels" . | nindent 8 }}
         app.kubernetes.io/component: ui
       annotations:
         checksum/ui-config: {{ include (print $.Template.BasePath "/ui/ui-config.yaml") . | sha256sum }}
@@ -54,6 +54,12 @@ spec:
           httpGet:
             path: /ui/#!/graph
             port: http
+        startupProbe:
+         httpGet:
+           path: /ui/
+           port: http
+         failureThreshold: 30
+         periodSeconds: 10
         resources:
           {{- toYaml .Values.ui.resources | nindent 10 }}
       {{- with .Values.ui.affinity }}
