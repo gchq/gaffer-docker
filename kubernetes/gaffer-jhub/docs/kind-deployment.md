@@ -47,3 +47,11 @@ http://localhost:8080
 
 By default, JupyterHub's Dummy Authenticator is used so you can login using any username and password.
 
+
+## Accessing example notebooks
+
+There are some example notebooks that demonstrate how to interact with HDFS, Gaffer and Spark. Copy them into your working directory, to make them easier to view and execute, by starting a Terminal tab and submitting the following command:
+```bash
+$ cp -r /examples .
+```
+
