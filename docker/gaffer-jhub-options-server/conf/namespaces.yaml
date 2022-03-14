@@ -1,0 +1,7 @@
+templated:
+- "user-#{username}"
+static:
+  jhub:
+  - user1
+  kube-system:
+  - admin

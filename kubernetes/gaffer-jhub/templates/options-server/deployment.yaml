@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gaffer-jhub.fullname" . }}-options-server
+  labels:
+    {{- include "gaffer-jhub.labels" . | nindent 4 }}
+    app.kubernetes.io/component: options-server
+spec:
+  replicas: {{ .Values.optionsServer.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "gaffer-jhub.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: options-server
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/options-server/configmap.yaml") . | sha256sum }}
+        {{- with .Values.optionsServer.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "gaffer-jhub.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: options-server
+    spec:
+      {{- with .Values.optionsServer.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "gaffer-jhub.optionsServerServiceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.optionsServer.podSecurityContext | nindent 8 }}
+      containers:
+      - name: gaffer-jhub-options-server
+        securityContext:
+          {{- toYaml .Values.optionsServer.securityContext | nindent 10 }}
+        image: "{{ .Values.optionsServer.image.repository }}:{{ .Values.optionsServer.image.tag | default .Chart.Version }}"
+        imagePullPolicy: {{ .Values.optionsServer.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        resources:
+          {{- toYaml .Values.optionsServer.resources | nindent 10 }}
+        volumeMounts:
+        - name: config
+          mountPath: /srv/app/conf/
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "gaffer-jhub.fullname" . }}-options-server
+      {{- with .Values.optionsServer.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.optionsServer.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.optionsServer.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

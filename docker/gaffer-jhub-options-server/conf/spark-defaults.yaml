@@ -1,0 +1,18 @@
+spark.master: k8s://https://kubernetes.default.svc
+spark.submit.deployMode: client
+
+spark.authenticate: true
+spark.ui.killEnabled: false
+spark.serializer': org.apache.spark.serializer.KryoSerializer
+
+spark.kubernetes.driver.label.name: jhub-notebook-config
+spark.kubernetes.driver.label.component: notebook-spark-config
+
+spark.kubernetes.executor.label.name: jhub-notebook-config
+spark.kubernetes.executor.label.component: notebook-spark-config
+
+spark.driver.cores: 1
+spark.driver.memory: 1g
+
+spark.executor.cores: 1
+spark.executor.memory: 1g

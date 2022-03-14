@@ -12,6 +12,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@v4
+      with:
+        remove-dotnet: 'true'
+        overprovision-lvm: 'true'
+
     - uses: actions/checkout@v2
 
     - name: Build Images
@@ -26,5 +33,8 @@ jobs:
     - name: Deploy to Kubernetes
       run: ./cd/deploy_to_kind.sh
   
-    - name: Run Tests
-      run: helm test gaffer
+    - name: Run gaffer-road-traffic Tests
+      run: helm test gaffer || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)
+
+    - name: Run gaffer-jhub Tests
+      run: helm test jhub || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)

@@ -17,4 +17,4 @@ name: hdfs
 description: Deploys the Hadoop Distributed File System (HDFS)
 type: application
 version: 0.17.1 # managed version
-appVersion: 3.2.1
+appVersion: 3.2.2

@@ -13,10 +13,10 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=maven
-ARG BUILDER_IMAGE_TAG=3.6.3-jdk-8
+ARG BUILDER_IMAGE_TAG=3.8.4-jdk-8
 
 ARG BASE_IMAGE_NAME=openjdk
-ARG BASE_IMAGE_TAG=8u242-jre-slim-buster
+ARG BASE_IMAGE_TAG=8u322-jre-slim-bullseye
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
