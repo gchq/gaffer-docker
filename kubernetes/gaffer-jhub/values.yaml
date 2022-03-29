@@ -25,14 +25,14 @@ jupyterhub:
   hub:
     allowNamedServers: true
     extraVolumes:
-      - name: gaffer-docker-scripts
-        configMap:
-          name: gaffer-docker-scripts
-          optional: false
+    - name: gaffer-docker-scripts
+      configMap:
+        name: gaffer-docker-scripts
+        optional: false
     extraVolumeMounts:
-      - name: gaffer-docker-scripts
-        mountPath: /scripts
-        readOnly: true
+    - name: gaffer-docker-scripts
+      mountPath: /scripts
+      readOnly: true
     extraConfig:
       scripts: |
         from glob import glob
@@ -80,32 +80,32 @@ optionsServer:
     name: ""
   podAnnotations: {}
   podSecurityContext: {}
-  # fsGroup: 2000
+    # fsGroup: 2000
   securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
   resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}
   config:
     namespaces:
       templated:
-        - "user-#{username}"
+      - "user-#{username}"
       static:
         # namespace: list of users
         default: []

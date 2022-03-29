@@ -377,10 +377,10 @@ gaffer:
             permissions:
               table:
                 roadTraffic:
-                  - READ
-                  - WRITE
-                  - BULK_IMPORT
-                  - ALTER_TABLE
+                - READ
+                - WRITE
+                - BULK_IMPORT
+                - ALTER_TABLE
   waitFor:
     graphStatusOk: true
     dataLoad: true

@@ -41,7 +41,7 @@ namenode:
     pvcTemplateSpec:
       storageClassName: null
       accessModes:
-        - ReadWriteOnce
+      - ReadWriteOnce
       resources:
         requests:
           storage: 10Gi
@@ -75,7 +75,7 @@ datanode:
     pvcTemplateSpec:
       storageClassName: null
       accessModes:
-        - ReadWriteOnce
+      - ReadWriteOnce
       resources:
         requests:
           storage: 10Gi
