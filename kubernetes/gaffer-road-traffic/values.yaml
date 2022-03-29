@@ -11,11 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 nameOverride: ""
 fullnameOverride: ""
 labels: {}
-
 loader:
   image:
     repository: gchq/gaffer-road-traffic-loader
@@ -229,7 +227,6 @@ gaffer:
             }
           }
         }
-
   ui:
     config: |-
       {
@@ -377,14 +374,13 @@ gaffer:
             permissions:
               table:
                 roadTraffic:
-                - READ
-                - WRITE
-                - BULK_IMPORT
-                - ALTER_TABLE
+                  - READ
+                  - WRITE
+                  - BULK_IMPORT
+                  - ALTER_TABLE
   waitFor:
     graphStatusOk: true
     dataLoad: true
-
   test:
     images:
       operationRunner:

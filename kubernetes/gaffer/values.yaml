@@ -11,24 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 nameOverride: ""
 fullnameOverride: ""
 labels: {}
-
 graph:
   config:
     graphId: "simpleGraph"
     description: "A graph for demo purposes"
     hooks: []
   schema: {}
-    # elements.json: "{}"
+  # elements.json: "{}"
   storeProperties:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
   applicationProperties:
     server.context-path: /rest
-
 ui:
   image:
     repository: gchq/gaffer-ui
@@ -43,13 +40,11 @@ ui:
         "path": "/rest"
       }
     }
-
   replicaCount: 1
   resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
 api:
   user: gaffer # May be interpretted by stores depending on implementation
   replicaCount: 1
@@ -62,7 +57,6 @@ api:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
 ingress:
   enabled: true
   annotations:
@@ -71,10 +65,8 @@ ingress:
   pathPrefix:
     ui: /ui/(.*)
     api: /rest/(.*)
-
 waitFor:
   graphStatusOk: true
-
 test:
   runIntegrationTests: false
   images:
@@ -84,10 +76,7 @@ test:
     curl:
       repository: curlimages/curl
       tag: 7.67.0
-
-
 # Extras
-
 accumulo:
   enabled: false
   image:
@@ -95,9 +84,9 @@ accumulo:
     tag: 1.21.1 # managed version
   config:
     postInstallCommands:
-    - users
-    - userpermissions -u gaffer
-    - getauths -u gaffer
+      - users
+      - userpermissions -u gaffer
+      - getauths -u gaffer
     userManagement:
       users:
         gaffer:
@@ -105,10 +94,13 @@ accumulo:
           auths: []
           permissions:
             system:
-            - CREATE_TABLE
+              - CREATE_TABLE
             table:
               simpleGraph:
-              - READ
-              - WRITE
-              - BULK_IMPORT
-              - ALTER_TABLE
+                - READ
+                - WRITE
+                - BULK_IMPORT
+                - ALTER_TABLE
+testImages:
+  operationRunner:
+    tag: 1.21.1

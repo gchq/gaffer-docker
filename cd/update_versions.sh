@@ -38,7 +38,7 @@ yq eval ".shell.tag = \"${HADOOP_VERSION}\"" -i ./kubernetes/hdfs/values.yaml
 # gaffer
 [ ! -z "${APP_VERSION}" ] && yq eval ".version = \"${APP_VERSION}\"" -i ./kubernetes/gaffer/Chart.yaml
 yq eval ".appVersion = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/Chart.yaml
-[ ! -z "${APP_VERSION}" ] && yq eval ".dependencies[1].version = \"^${APP_VERSION}\"" -i ./kubernetes/gaffer/Chart.yaml
+[ ! -z "${APP_VERSION}" ] && yq eval ".dependencies[0].version = \"^${APP_VERSION}\"" -i ./kubernetes/gaffer/Chart.yaml
 
 yq eval ".accumulo.image.tag = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
 yq eval ".api.image.tag = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/values.yaml

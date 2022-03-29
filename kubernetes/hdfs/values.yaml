@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 alpine:
   repository: alpine
   tag: 3.10.2
@@ -41,15 +40,14 @@ namenode:
     pvcTemplateSpec:
       storageClassName: null
       accessModes:
-      - ReadWriteOnce
+        - ReadWriteOnce
       resources:
         requests:
           storage: 10Gi
   extraEnvVars: {}
-    # Example usage:
-    # HADOOP_HEAPSIZE_MIN: 128m
-    # hadoop.heapsize.min: 128m
-
+  # Example usage:
+  # HADOOP_HEAPSIZE_MIN: 128m
+  # hadoop.heapsize.min: 128m
 datanode:
   nodeCount: 3
   repository: gchq/hdfs
@@ -75,15 +73,14 @@ datanode:
     pvcTemplateSpec:
       storageClassName: null
       accessModes:
-      - ReadWriteOnce
+        - ReadWriteOnce
       resources:
         requests:
           storage: 10Gi
   extraEnvVars: {}
-    # Example usage:
-    # HADOOP_HEAPSIZE_MIN: 128m
-    # hadoop.heapsize.min: 128m
-
+  # Example usage:
+  # HADOOP_HEAPSIZE_MIN: 128m
+  # hadoop.heapsize.min: 128m
 shell:
   enabled: true
   repository: gchq/hdfs
@@ -109,7 +106,6 @@ secrets:
 nameOverride: ""
 fullnameOverride: ""
 labels: {}
-
 ingress:
   enabled: true
   annotations:
