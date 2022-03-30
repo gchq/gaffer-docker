@@ -35,6 +35,12 @@ yq eval ".namenode.tag = \"${HADOOP_VERSION}\"" -i ./kubernetes/hdfs/values.yaml
 yq eval ".datanode.tag = \"${HADOOP_VERSION}\"" -i ./kubernetes/hdfs/values.yaml
 yq eval ".shell.tag = \"${HADOOP_VERSION}\"" -i ./kubernetes/hdfs/values.yaml
 
+# accumulo
+[ ! -z "${APP_VERSION}" ] && yq eval ".version = \"${APP_VERSION}\"" -i ./kubernetes/accumulo/Chart.yaml
+[ ! -z "${APP_VERSION}" ] && yq eval ".dependencies[1].version = \"^${APP_VERSION}\"" -i ./kubernetes/accumulo/Chart.yaml
+yq eval ".appVersion = \"${ACCUMULO_VERSION}\"" -i ./kubernetes/accumulo/Chart.yaml
+yq eval ".image.tag = \"${ACCUMULO_VERSION}\"" -i ./kubernetes/accumulo/values.yaml
+
 # gaffer
 [ ! -z "${APP_VERSION}" ] && yq eval ".version = \"${APP_VERSION}\"" -i ./kubernetes/gaffer/Chart.yaml
 yq eval ".appVersion = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/Chart.yaml
