@@ -60,7 +60,7 @@ yq eval ".loader.image.tag = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer-road-
 # gaffer-jhub
 [ ! -z "${APP_VERSION}" ] && yq eval ".version = \"${APP_VERSION}\"" -i ./kubernetes/gaffer-jhub/Chart.yaml
 
-yq eval ".jupyterhub.singleuser.profileList[1].description = \"Python 3, Hadoop ${HADOOP_VERSION}, Spark ${SPARK_VERSION}, AWS CLI 2, kubectl 1.20.0, gafferpy ${GAFFER_TOOLS_VERSION}\"" -i ./kubernetes/gaffer-jhub/values.yaml
+yq eval ".jupyterhub.singleuser.profileList[1].description = \"Python 3, Hadoop ${HADOOP_VERSION}, Spark ${SPARK_VERSION}, AWS CLI 2, kubectl ${KUBECTL_VERSION}, gafferpy ${GAFFER_TOOLS_VERSION}\"" -i ./kubernetes/gaffer-jhub/values.yaml
 yq eval ".jupyterhub.singleuser.profileList[1].spark_image = \"gchq/spark-py:${SPARK_VERSION}\"" -i ./kubernetes/gaffer-jhub/values.yaml
 yq eval ".jupyterhub.singleuser.profileList[1].kubespawner_override.image = \"gchq/gaffer-pyspark-notebook:${GAFFER_VERSION}\"" -i ./kubernetes/gaffer-jhub/values.yaml
 yq eval ".optionsServer.image.tag = \"${JHUB_OPTIONS_SERVER_VERSION}\"" -i ./kubernetes/gaffer-jhub/values.yaml

@@ -52,7 +52,7 @@ jupyterhub:
         kubespawner_override:
           image: jupyter/minimal-notebook:399cbb986c6b
       - display_name: "Gaffer pySpark Notebook"
-        description: "Python 3, Hadoop 3.2.2, Spark 3.1.2, AWS CLI 2, kubectl 1.20.0, gafferpy 1.21.1" # managed
+        description: "Python 3, Hadoop 3.2.2, Spark 3.1.2, AWS CLI 2, kubectl 1.23.0, gafferpy 1.21.1" # managed
         slug: "gaffer-pyspark"
         default: true
         enable_hdfs: true

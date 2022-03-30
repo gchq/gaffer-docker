@@ -197,6 +197,7 @@ services:
         HADOOP_VERSION: ${HADOOP_VERSION}
         SPARK_VERSION: ${SPARK_VERSION}
         GAFFER_PYTHON_SHELL_VERSION: gaffer-tools-${GAFFER_TOOLS_VERSION}
+        KUBECTL_VERSION: ${KUBECTL_VERSION}
     ports:
     - 8888:8888
     volumes:
