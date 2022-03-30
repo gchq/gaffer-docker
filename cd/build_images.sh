@@ -19,6 +19,14 @@ set -e
 root_directory="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 cd $root_directory
 
+# The following command sets:
+# HADOOP_VERSION
+# GAFFER_VERSION
+# GAFFER_TOOLS_VERSION
+# ACCUMULO_VERSION
+# SPARK_VERSION
+source ./docker/gaffer-pyspark-notebook/.env
+
 docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
 docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build
 docker-compose --project-directory ./docker/gaffer-operation-runner/ -f ./docker/gaffer-operation-runner/docker-compose.yaml build
