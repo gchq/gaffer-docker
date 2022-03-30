@@ -101,6 +101,3 @@ accumulo:
                 - WRITE
                 - BULK_IMPORT
                 - ALTER_TABLE
-testImages:
-  operationRunner:
-    tag: 1.21.1
