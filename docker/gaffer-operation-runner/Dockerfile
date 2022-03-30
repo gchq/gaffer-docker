@@ -23,9 +23,10 @@ FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 COPY ./operation-runner/ /operation-runner/
 WORKDIR /gaffer
 COPY ./files/ .
+ARG GAFFER_VERSION=1.21.1
 RUN if [ ! -f "jars/operation-runner-*.jar" ]; then \
         cd /operation-runner/ && \
-        mvn -q clean package && \
+        mvn -q clean package -Dgaffer.version=${GAFFER_VERSION} && \
         cp target/operation-runner-*-with-dependencies.jar ${OLDPWD}/jars/ && \
         cd ${OLDPWD}; \
     fi

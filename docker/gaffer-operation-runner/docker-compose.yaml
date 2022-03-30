@@ -184,6 +184,7 @@ services:
       args:
         BASE_IMAGE_NAME: gchq/gaffer
         BASE_IMAGE_TAG: ${GAFFER_VERSION}
+        GAFFER_VERSION: ${GAFFER_VERSION}
     restart: on-failure
     environment:
     - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
