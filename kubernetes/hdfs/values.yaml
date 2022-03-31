@@ -11,15 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 alpine:
   repository: alpine
   tag: 3.10.2
   imagePullPolicy: IfNotPresent
-
 namenode:
   repository: gchq/hdfs
-  tag: 3.2.2
+  tag: 3.2.2 # managed version
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
@@ -42,19 +40,18 @@ namenode:
     pvcTemplateSpec:
       storageClassName: null
       accessModes:
-      - ReadWriteOnce
+        - ReadWriteOnce
       resources:
         requests:
           storage: 10Gi
   extraEnvVars: {}
-    # Example usage:
-    # HADOOP_HEAPSIZE_MIN: 128m
-    # hadoop.heapsize.min: 128m
-
+  # Example usage:
+  # HADOOP_HEAPSIZE_MIN: 128m
+  # hadoop.heapsize.min: 128m
 datanode:
   nodeCount: 3
   repository: gchq/hdfs
-  tag: 3.2.2
+  tag: 3.2.2 # managed version
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
@@ -76,26 +73,24 @@ datanode:
     pvcTemplateSpec:
       storageClassName: null
       accessModes:
-      - ReadWriteOnce
+        - ReadWriteOnce
       resources:
         requests:
           storage: 10Gi
   extraEnvVars: {}
-    # Example usage:
-    # HADOOP_HEAPSIZE_MIN: 128m
-    # hadoop.heapsize.min: 128m
-
+  # Example usage:
+  # HADOOP_HEAPSIZE_MIN: 128m
+  # hadoop.heapsize.min: 128m
 shell:
   enabled: true
   repository: gchq/hdfs
-  tag: 3.2.2
+  tag: 3.2.2 # managed version
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
 config:
   path: /etc/hadoop/conf
   coreSite: {}
@@ -105,15 +100,12 @@ config:
   rackAwareness:
     serviceAccountName:
     nodeTopologyLabel: topology.kubernetes.io/zone
-
 secrets:
   path: /etc/hadoop/secrets
   files: {}
-
 nameOverride: ""
 fullnameOverride: ""
 labels: {}
-
 ingress:
   enabled: true
   annotations:
@@ -123,7 +115,6 @@ ingress:
   # pathPrefix: /hdfs/
   # For Nginx:
   pathPrefix: "/hdfs/(.*)"
-
 postInstallCommands: []
 # - hadoop fs -mkdir -p /accumulo
 # - hadoop fs -chown accumulo /accumulo

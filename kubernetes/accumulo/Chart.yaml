@@ -20,13 +20,13 @@ version: 0.17.1 # managed version
 appVersion: 1.9.3
 home: https://github.com/gchq/Gaffer
 sources:
-- https://github.com/gchq/gaffer-docker
+  - https://github.com/gchq/gaffer-docker
 dependencies:
-- name: zookeeper
-  version: 2.1.5
-  repository: https://charts.helm.sh/incubator/
-  condition: zookeeper.enabled
-- name: hdfs
-  version: ^0.17.1 # managed version
-  repository: file://../hdfs/
-  condition: hdfs.enabled
+  - name: zookeeper
+    version: 2.1.5
+    repository: https://charts.helm.sh/incubator/
+    condition: zookeeper.enabled
+  - name: hdfs
+    version: ^0.17.1 # managed version
+    repository: file://../hdfs/
+    condition: hdfs.enabled

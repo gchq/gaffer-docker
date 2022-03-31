@@ -10,15 +10,14 @@ jobs:
     env:
       GAFFER_VERSION: develop
       GAFFER_TOOLS_VERSION: develop
-      ACCUMULO_VERSION: develop
     steps:    
     - uses: actions/checkout@v2
 
     - name: Build images
       run: |
-        docker build -t gchq/accumulo:$ACCUMULO_VERSION ./docker/accumulo
+        source ./docker/accumulo/.env
+        docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
         docker-compose --project-directory ./docker/gaffer/ -f ./docker/gaffer/docker-compose.yaml build
-        docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build
         docker build -t gchq/gaffer-integration-tests:$GAFFER_VERSION ./docker/gaffer-integration-tests
 
     - name: Install Helm charts
@@ -26,10 +25,14 @@ jobs:
 
     - name: Start KinD
       run: |
+        source ./docker/accumulo/.env
         kind create cluster --config ./cd/kind.yaml
+        kind load docker-image gchq/hdfs:$HADOOP_VERSION
         kind load docker-image gchq/gaffer:$GAFFER_VERSION
+        kind load docker-image gchq/gaffer-rest:$GAFFER_VERSION
+        kind load docker-image gchq/gaffer-ui:$GAFFER_TOOLS_VERSION
         kind load docker-image gchq/gaffer-integration-tests:$GAFFER_VERSION
-      
+
     - name: Deploy Gaffer
       run: |
         helm install gaffer ./kubernetes/gaffer --timeout=6m -f ./kubernetes/gaffer/integration-tests.yaml \

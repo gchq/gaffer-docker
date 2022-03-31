@@ -2,11 +2,11 @@ apiVersion: v2
 name: gaffer-jhub
 description: A Jupyter Hub instance, with Gaffer integrations
 type: application
-version: 0.8.1 # managed version
+version: 0.17.1 # managed version
 home: https://github.com/gchq/Gaffer
 sources:
-- https://github.com/gchq/gaffer-docker
+  - https://github.com/gchq/gaffer-docker
 dependencies:
-- name: jupyterhub
-  version: 1.2.0
-  repository: https://jupyterhub.github.io/helm-chart/
+  - name: jupyterhub
+    version: 1.2.0
+    repository: https://jupyterhub.github.io/helm-chart/

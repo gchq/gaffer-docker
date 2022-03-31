@@ -1,5 +1,7 @@
 api:
   user: root
+  image:
+    tag: develop
 
 test:
   runIntegrationTests: true

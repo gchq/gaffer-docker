@@ -20,7 +20,7 @@ project_root="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 cd ${project_root}/kubernetes
 
 getDependencies(){
-    cat Chart.yaml | sed -e '1,/dependencies/d' | grep name | sed 's/^.\{8\}//' 
+    cat Chart.yaml | sed -e '1,/dependencies/d' | grep name | sed 's/^.\{10\}//'
 }
 
 checkIfModuleHasChart(){
