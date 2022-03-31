@@ -29,7 +29,7 @@ graph:
 ui:
   image:
     repository: gchq/gaffer-ui
-    tag: 1.21.1 # managed version
+    tag: 1.22.0 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   # See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
@@ -50,7 +50,7 @@ api:
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 1.21.1 # managed version
+    tag: 1.22.0 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -81,7 +81,7 @@ accumulo:
   enabled: false
   image:
     repository: gchq/gaffer
-    tag: 1.21.1 # managed version
+    tag: 1.22.0 # managed version
   config:
     postInstallCommands:
       - users
