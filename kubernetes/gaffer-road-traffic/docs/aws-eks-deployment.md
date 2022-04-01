@@ -33,7 +33,7 @@ Finally, deploy the Helm Chart by running this from the kubernetes/gaffer-road-t
 
 ```
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.22.0}
+export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.1}
 
 helm dependency update ../accumulo/
 helm dependency update ../gaffer/
