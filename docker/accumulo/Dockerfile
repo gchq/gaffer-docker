@@ -13,14 +13,14 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=debian
-ARG BUILDER_IMAGE_TAG=stretch-20200224-slim
+ARG BUILDER_IMAGE_TAG=stretch-20220125-slim
 
 ARG BASE_IMAGE_NAME=debian
-ARG BASE_IMAGE_TAG=stretch-20200224-slim
+ARG BASE_IMAGE_TAG=stretch-20220125-slim
 
 ARG ACCUMULO_VERSION=1.9.3
-ARG HADOOP_VERSION=3.2.1
-ARG ZOOKEEPER_VERSION=3.6.0
+ARG HADOOP_VERSION=3.2.2
+ARG ZOOKEEPER_VERSION=3.7.0
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
@@ -37,8 +37,7 @@ ARG ACCUMULO_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/accumulo/${ACC
 ARG ZOOKEEPER_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz"
 ARG ZOOKEEPER_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz"
 
-RUN mkdir -p /usr/share/man/man1 && \
-	apt -qq update && \
+RUN	apt -qq update && \
 	apt -qq install -y \
 		g++ \
 		make \
@@ -85,8 +84,7 @@ ARG ZOOKEEPER_VERSION
 ARG USER=accumulo
 ARG GROUP=accumulo
 
-RUN mkdir -p /usr/share/man/man1 && \
-	apt -qq update && \
+RUN apt -qq update && \
 	apt -qq install -y \
 		dumb-init \
 		openjdk-8-jre-headless \

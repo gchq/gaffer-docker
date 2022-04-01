@@ -13,19 +13,20 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=maven
-ARG BUILDER_IMAGE_TAG=3.6.3-jdk-8
+ARG BUILDER_IMAGE_TAG=3.8.4-jdk-8
 
 ARG BASE_IMAGE_NAME=gchq/gaffer
-ARG BASE_IMAGE_TAG=1.21.1
+ARG BASE_IMAGE_TAG=1.22.0
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
 COPY ./operation-runner/ /operation-runner/
 WORKDIR /gaffer
 COPY ./files/ .
+ARG GAFFER_VERSION=1.22.0
 RUN if [ ! -f "jars/operation-runner-*.jar" ]; then \
         cd /operation-runner/ && \
-        mvn -q clean package && \
+        mvn -q clean package -Dgaffer.version=${GAFFER_VERSION} && \
         cp target/operation-runner-*-with-dependencies.jar ${OLDPWD}/jars/ && \
         cd ${OLDPWD}; \
     fi

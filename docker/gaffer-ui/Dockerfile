@@ -13,14 +13,14 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=maven
-ARG BUILDER_IMAGE_TAG=3.6.3-jdk-8
+ARG BUILDER_IMAGE_TAG=3.8.4-jdk-8
 
 ARG BASE_IMAGE_NAME=jboss/wildfly
-ARG BASE_IMAGE_TAG=10.1.0.Final
+ARG BASE_IMAGE_TAG=25.0.0.Final
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
-ARG GAFFER_TOOLS_VERSION=1.21.1
+ARG GAFFER_TOOLS_VERSION=1.22.0
 ARG GAFFER_TOOLS_GIT_REPO=https://github.com/gchq/gaffer-tools.git
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 

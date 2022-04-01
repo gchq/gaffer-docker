@@ -24,7 +24,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "gaffer-road-traffic.selectorLabels" . | nindent 8 }}
+        {{- include "gaffer-road-traffic.labels" . | nindent 8 }}
         app.kubernetes.io/component: loader
     spec:
       restartPolicy: OnFailure

@@ -13,14 +13,14 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=maven
-ARG BUILDER_IMAGE_TAG=3.6.3-jdk-8
+ARG BUILDER_IMAGE_TAG=3.8.4-jdk-8
 
 ARG BASE_IMAGE_NAME=gchq/accumulo
 ARG BASE_IMAGE_TAG=1.9.3
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
-ARG GAFFER_VERSION=1.21.1
+ARG GAFFER_VERSION=1.22.0
 ARG GAFFER_LIBS=bitmap-library,sketches-library,time-library
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
@@ -32,11 +32,11 @@ COPY ./files/ .
 # Try to download required version from Maven Central, otherwise build from source
 RUN	allFilesDownloaded="TRUE" && \
 	if [ ! -f "./accumulo-store-${GAFFER_VERSION}-iterators.jar" ]; then \
-		wget -q "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-iterators.jar" || allFilesDownloaded="FALSE"; \
+		wget -nv "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-iterators.jar" || allFilesDownloaded="FALSE"; \
 	fi && \
 	for lib in $(echo ${GAFFER_LIBS} | tr , ' '); do \
 		if [ ! -f "./${lib}-${GAFFER_VERSION}-deploy.jar" ]; then \
-			wget -q "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/${lib}/${GAFFER_VERSION}/${lib}-${GAFFER_VERSION}-deploy.jar" || allFilesDownloaded="FALSE"; \
+			wget -nv "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/${lib}/${GAFFER_VERSION}/${lib}-${GAFFER_VERSION}-deploy.jar" || allFilesDownloaded="FALSE"; \
 		fi \
 	done && \
 	if [ "${allFilesDownloaded}" = "FALSE" ]; then \

@@ -176,6 +176,7 @@ jobs:
         - accumulo
         - gaffer
         - gaffer-road-traffic
+        - gaffer-jhub
 
     steps:
     - uses: actions/checkout@v2

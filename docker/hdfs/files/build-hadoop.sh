@@ -15,15 +15,15 @@
 # limitations under the License.
 
 
-test -z "${HADOOP_VERSION}" && HADOOP_VERSION=3.2.1
+test -z "${HADOOP_VERSION}" && HADOOP_VERSION=3.2.2
 test -z "${HADOOP_DOWNLOAD_URL}" && HADOOP_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
 test -z "${HADOOP_BACKUP_DOWNLOAD_URL}" && HADOOP_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
 test -z "${HADOOP_APPLY_PATCHES}" && HADOOP_APPLY_PATCHES=false
-test -z "${PROTOBUF_VERSION}" && PROTOBUF_VERSION=2.5.0
+test -z "${PROTOBUF_VERSION}" && PROTOBUF_VERSION=3.7.1
+test -z "${ISAL_VERSION}" && ISAL_VERSION=v2.30.0
 
 # Allow users to provide their own Hadoop Distribution Tarball
 if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
-	mkdir -p /usr/share/man/man1
 	apt -qq update
 	apt -qq install -y wget
 
@@ -35,16 +35,21 @@ if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 		apt -qq install -y \
 			automake \
 			build-essential \
+			clang \
 			cmake \
 			g++ \
 			git \
+			libbcprov-java \
 			libbz2-dev \
-			libsnappy-dev \
+			libprotobuf-dev \
+			libprotoc-dev \
 			libsasl2-dev \
+			libsnappy-dev \
 			libssl-dev \
 			libtool \
 			libzstd-dev \
 			maven \
+			nasm \
 			openjdk-8-jdk \
 			pkg-config \
 			yasm \
@@ -52,18 +57,18 @@ if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 
 		export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
 
-		wget -nv https://github.com/google/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-${PROTOBUF_VERSION}.tar.gz
-		tar -xf protobuf-${PROTOBUF_VERSION}.tar.gz
+		wget -nv -O protobuf.tar.gz https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-java-${PROTOBUF_VERSION}.tar.gz
+		tar -xf protobuf.tar.gz
 		cd protobuf-${PROTOBUF_VERSION}
 		./configure --prefix=/opt/protobuf/
 		make
 		make install
 		cd ..
-		rm -rf protobuf-${PROTOBUF_VERSION}.tar.gz protobuf-${PROTOBUF_VERSION}/
+		rm -rf protobuf.tar.gz protobuf-${PROTOBUF_VERSION}/
 		export PROTOBUF_HOME=/opt/protobuf
 		export PATH=${PROTOBUF_HOME}/bin:${PATH}
 
-		git clone https://github.com/01org/isa-l.git
+		git clone -b ${ISAL_VERSION} https://github.com/intel/isa-l.git
 		cd isa-l
 		./autogen.sh
 		./configure
@@ -76,9 +81,11 @@ if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 		cd hadoop
 		git checkout rel/release-${HADOOP_VERSION}
 
-		for patch in /patches/${HADOOP_VERSION}/*.patch; do
-			git apply $patch
-		done
+		if [ -d "/patches/${HADOOP_VERSION}/" ]; then
+			for patch in /patches/${HADOOP_VERSION}/*.patch; do
+				git apply $patch
+			done
+		fi
 
 		mvn install \
 			-P dist,native \
@@ -91,7 +98,8 @@ if [ ! -f "./hadoop-${HADOOP_VERSION}.tar.gz" ]; then
 			-Disal.prefix=/usr \
 			-Disal.lib=/usr/lib \
 			-Dbundle.isal=true \
-			-DskipTests
+			-DskipTests \
+			-Dmaven.javadoc.skip=true
 
 		mv hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz ../
 		cd ..
