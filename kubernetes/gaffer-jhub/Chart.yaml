@@ -2,7 +2,7 @@ apiVersion: v2
 name: gaffer-jhub
 description: A Jupyter Hub instance, with Gaffer integrations
 type: application
-version: 0.17.1 # managed version
+version: 1.0.0 # managed version
 home: https://github.com/gchq/Gaffer
 sources:
   - https://github.com/gchq/gaffer-docker
