@@ -16,7 +16,7 @@ name: gaffer-road-traffic
 description: A Gaffer instance containing sample GB road traffic data from the Department of Transport
 type: application
 version: 1.0.0 # managed version
-appVersion: 1.22.0 # managed version
+appVersion: 2.0.0-alpha-0.1 # managed version
 home: https://github.com/gchq/Gaffer
 sources:
   - https://github.com/gchq/gaffer-docker
