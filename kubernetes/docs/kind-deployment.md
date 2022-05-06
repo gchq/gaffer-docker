@@ -15,7 +15,7 @@ The following instructions will guide you through provisioning and configuring a
 
 Simply run the following command to spin up a local Kubernetes cluster, running inside a Docker container:
 ```
-kind create cluster
+kind create cluster --image kindest/node:v1.21.10
 ```
 
 
@@ -27,8 +27,8 @@ To import the images, run this from the kubernetes directory:
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.22.0}
-export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-1.22.0}
+export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.1}
+export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-2.0.0-alpha-0.1}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
 docker-compose --project-directory ../docker/gaffer-ui -f ../docker/gaffer-ui/docker-compose.yaml build
