@@ -128,9 +128,14 @@ class SparkConfigProvisioner {
 		if (!host && !path) return null
 
 		const ingressPath = {
+            pathType: 'ImplementationSpecific',
 			backend: {
-				serviceName: serviceName,
-				servicePort: servicePort
+                service: {
+                    name: serviceName,
+                    port: {
+                        number: servicePort
+                    }
+                }
 			}
 		}
 		if (path) ingressPath.path = path
@@ -143,7 +148,7 @@ class SparkConfigProvisioner {
 		if (host) rule.host = host
 
 		const ingress = {
-			apiVersion: 'extensions/v1beta1',
+			apiVersion: 'networking.k8s.io/v1',
 			kind: 'Ingress',
 			metadata: {
 				name: name,
