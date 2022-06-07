@@ -59,15 +59,15 @@ spec:
           containerPort: 8080
         livenessProbe:
           httpGet:
-            path: {{ pluck "server.context-path" .Values.graph.applicationProperties | first }}
+            path: {{ pluck "server.servlet.context-path" .Values.graph.applicationProperties | first }}
             port: http
         readinessProbe:
           httpGet:
-            path: {{ pluck "server.context-path" .Values.graph.applicationProperties | first }}/graph/status
+            path: {{ pluck "server.servlet.context-path" .Values.graph.applicationProperties | first }}/graph/status
             port: http
         startupProbe:
           httpGet:
-            path: {{ pluck "server.context-path" .Values.graph.applicationProperties | first }}
+            path: {{ pluck "server.servlet.context-path" .Values.graph.applicationProperties | first }}
             port: http
           failureThreshold: 30
           periodSeconds: 10

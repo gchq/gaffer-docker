@@ -25,7 +25,7 @@ graph:
     gaffer.cache.service.class: uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
     gaffer.store.job.tracker.enabled: true
   applicationProperties:
-    server.context-path: /rest
+    server.servlet.context-path: /rest
 ui:
   image:
     repository: gchq/gaffer-ui
