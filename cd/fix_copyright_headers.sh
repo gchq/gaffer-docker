@@ -55,7 +55,7 @@ else
   exit 1
 fi
 
-# Return error code if changes are needed (used by CI)
+# Return error code if manual changes are needed
 if [ -n "$error" ]
 then
   echo "Found files(s) where Copyright Header(s) must be added manually"
