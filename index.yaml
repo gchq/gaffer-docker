@@ -45,7 +45,7 @@ entries:
     - https://github.com/gchq/gaffer-docker
     type: application
     urls:
-    - https://github.com/gchq/gaffer-docker/releases/download/v2.0.0-alpha-0.1/accumulo-1.0.0.tgz
+    - https://github.com/gchq/gaffer-docker/releases/download/v1.0.0/accumulo-1.0.0.tgz
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.9.3
@@ -291,7 +291,7 @@ entries:
     - https://github.com/gchq/gaffer-docker
     type: application
     urls:
-    - https://github.com/gchq/gaffer-docker/releases/download/v2.0.0-alpha-0.1/gaffer-1.0.0.tgz
+    - https://github.com/gchq/gaffer-docker/releases/download/v1.0.0/gaffer-1.0.0.tgz
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.22.0
@@ -564,7 +564,7 @@ entries:
     - https://github.com/gchq/gaffer-docker
     type: application
     urls:
-    - https://github.com/gchq/gaffer-docker/releases/download/v2.0.0-alpha-0.1/gaffer-jhub-1.0.0.tgz
+    - https://github.com/gchq/gaffer-docker/releases/download/v1.0.0/gaffer-jhub-1.0.0.tgz
     version: 1.0.0
   gaffer-road-traffic:
   - apiVersion: v2
@@ -603,7 +603,7 @@ entries:
     - https://data.gov.uk/dataset/208c0e7b-353f-4e2d-8b7a-1a7118467acc/gb-road-traffic-counts
     type: application
     urls:
-    - https://github.com/gchq/gaffer-docker/releases/download/v2.0.0-alpha-0.1/gaffer-road-traffic-1.0.0.tgz
+    - https://github.com/gchq/gaffer-docker/releases/download/v1.0.0/gaffer-road-traffic-1.0.0.tgz
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.22.0
@@ -852,7 +852,7 @@ entries:
     name: hdfs
     type: application
     urls:
-    - https://github.com/gchq/gaffer-docker/releases/download/v2.0.0-alpha-0.1/hdfs-1.0.0.tgz
+    - https://github.com/gchq/gaffer-docker/releases/download/v1.0.0/hdfs-1.0.0.tgz
     version: 1.0.0
   - apiVersion: v2
     appVersion: 3.2.2
