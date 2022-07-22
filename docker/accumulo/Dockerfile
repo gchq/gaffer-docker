@@ -18,9 +18,9 @@ ARG BUILDER_IMAGE_TAG=stretch-20220125-slim
 ARG BASE_IMAGE_NAME=debian
 ARG BASE_IMAGE_TAG=stretch-20220125-slim
 
-ARG ACCUMULO_VERSION=1.9.3
-ARG HADOOP_VERSION=3.2.2
-ARG ZOOKEEPER_VERSION=3.7.0
+ARG ACCUMULO_VERSION=2.0.1
+ARG HADOOP_VERSION=3.3.3
+ARG ZOOKEEPER_VERSION=3.7.1
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
@@ -63,7 +63,7 @@ RUN if [ ! -f "./accumulo-${ACCUMULO_VERSION}-bin.tar.gz" ]; then \
 # Extract required files
 RUN tar -xf ./accumulo-${ACCUMULO_VERSION}-bin.tar.gz accumulo-${ACCUMULO_VERSION}/bin/ accumulo-${ACCUMULO_VERSION}/lib/ && \
 	rm -f ./accumulo-${ACCUMULO_VERSION}-bin.tar.gz && \
-	./accumulo-${ACCUMULO_VERSION}/bin/build_native_library.sh && \
+	#./accumulo-${ACCUMULO_VERSION}/bin/build_native_library.sh && \
 	tar -xf ./hadoop-${HADOOP_VERSION}.tar.gz \
 		hadoop-${HADOOP_VERSION}/lib/native/ \
 		hadoop-${HADOOP_VERSION}/share/hadoop/client/ \

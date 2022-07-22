@@ -66,7 +66,7 @@ services:
     - hdfs-namenode
     - hdfs-datanode
     - zookeeper
-    image: gchq/accumulo:${ACCUMULO_VERSION}
+    image: accumulo-test:${ACCUMULO_VERSION}
     build:
       context: .
       args:
@@ -91,7 +91,7 @@ services:
   accumulo-tserver:
     depends_on:
     - accumulo-master
-    image: gchq/accumulo:${ACCUMULO_VERSION}
+    image: accumulo-test:${ACCUMULO_VERSION}
     command: tserver
     restart: on-failure
     container_name: accumulo-tserver
@@ -110,7 +110,7 @@ services:
   accumulo-monitor:
     depends_on:
     - accumulo-master
-    image: gchq/accumulo:${ACCUMULO_VERSION}
+    image: accumulo-test:${ACCUMULO_VERSION}
     command: monitor
     restart: on-failure
     container_name: accumulo-monitor
@@ -131,7 +131,7 @@ services:
   accumulo-gc:
     depends_on:
     - accumulo-master
-    image: gchq/accumulo:${ACCUMULO_VERSION}
+    image: accumulo-test:${ACCUMULO_VERSION}
     command: gc
     restart: on-failure
     container_name: accumulo-gc
