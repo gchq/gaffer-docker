@@ -21,12 +21,18 @@ networks:
 services:
 
   kdc-server:
-    build: ./kdc
+    image: gchq/kdc:0.1-alpha
+    build:
+      context: ./kdc
     container_name: kdc-server
     hostname: kdc-server
     environment:
       - HADOOP_PRINCIPLE=${HADOOP_PRINCIPLE}
       - HADOOP_KRB_PASSWORD=${HADOOP_KRB_PASSWORD}
+      - ZOOKEEPER_PRINCIPLE=${ZOOKEEPER_PRINCIPLE}
+      - ZOOKEEPER_KRB_PASSWORD=${ZOOKEEPER_KRB_PASSWORD}
+      - ACCUMULO_PRINCIPLE=${ACCUMULO_PRINCIPLE}
+      - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
       - REALM=${REALM}
     volumes:
       - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
@@ -34,7 +40,14 @@ services:
       - /var/log/krb5
 
   hdfs-namenode:
-    build: ./hdfs-krb
+    depends_on:
+      - kdc-server
+    image: gchq/hdfs-krb:${HADOOP_VERSION}
+    build:
+      context: ./hdfs-krb
+      args:
+        BASE_IMAGE_NAME: gchq/hdfs
+        BASE_IMAGE_TAG: ${HADOOP_VERSION}
     command: namenode
     container_name: hdfs-namenode
     hostname: hdfs-namenode
@@ -45,8 +58,8 @@ services:
       - REALM=${REALM}
       - DEBUG=${DEBUG}
     ports:
-      - "9870:9870"
-      - "9000:9000"
+      - 9870:9870
+      - 9000:9000
     volumes:
       - ./hdfs-krb/conf:${HADOOP_CONF_DIR}:ro
       - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
@@ -57,7 +70,12 @@ services:
   hdfs-datanode:
     depends_on:
       - hdfs-namenode
-    build: ./hdfs-krb
+    image: gchq/hdfs-krb:${HADOOP_VERSION}
+    build:
+      context: ./hdfs-krb
+      args:
+        BASE_IMAGE_NAME: gchq/hdfs
+        BASE_IMAGE_TAG: ${HADOOP_VERSION}
     command: datanode
     container_name: hdfs-datanode
     hostname: hdfs-datanode
@@ -68,8 +86,8 @@ services:
       - REALM=${REALM}
       - DEBUG=${DEBUG}
     ports:
-      - "1004:1004"
-      - "1006:1006"
+      - 1004:1004
+      - 1006:1006
     volumes:
       - ./hdfs-krb/conf:${HADOOP_CONF_DIR}:ro
       - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
@@ -77,16 +95,29 @@ services:
       - /data1
       - /data2
 
-#  zookeeper:
-#    image: zookeeper:${ZOOKEEPER_VERSION}
-#    container_name: zookeeper
-#    hostname: zookeeper
-#    environment:
-#      - ZOO_SERVERS=server.1=zookeeper:2888:3888;2181
-#      - ZOO_4LW_COMMANDS_WHITELIST=*
-#    volumes:
-#      - /data
-#      - /datalog
+  zookeeper:
+    depends_on:
+      - kdc-server
+    image: zookeeper:${ZOOKEEPER_VERSION}-krb
+    build:
+      context: ./zookeeper
+      args:
+        BASE_IMAGE_NAME: zookeeper
+        BASE_IMAGE_TAG: ${ZOOKEEPER_VERSION}
+    container_name: zookeeper
+    hostname: zookeeper
+    environment:
+      - ZOO_SERVERS=server.1=zookeeper:2888:3888;2181
+      - ZOO_4LW_COMMANDS_WHITELIST=*
+      - ZOOKEEPER_PRINCIPLE=${ZOOKEEPER_PRINCIPLE}
+      - ZOOKEEPER_KRB_PASSWORD=${ZOOKEEPER_KRB_PASSWORD}
+    volumes:
+      - ./zookeeper/conf/jaas.conf:/conf/jaas.conf:ro
+      - ./zookeeper/conf/zoo.cfg:/conf/zoo.cfg:ro
+      - ./zookeeper/conf/java.env:/conf/java.env:ro
+      - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /data
+      - /datalog
 
 #  accumulo-master:
 #    depends_on:
