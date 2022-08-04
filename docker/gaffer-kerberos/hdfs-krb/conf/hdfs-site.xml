@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+	<property><name>dfs.namenode.name.dir</name><value>/data1/dfs/name,/data2/dfs/name</value></property>
+	<property><name>dfs.datanode.data.dir</name><value>/data1/dfs/data,/data2/dfs/data</value></property>
+	<property><name>dfs.replication</name><value>1</value></property>
+
+	<property><name>gaffer.kerberos.keytab</name><value>/opt/hadoop/etc/hadoop/hadoop.keytab</value></property>
+
+	<property><name>dfs.namenode.kerberos.principal</name><value>hadoop/hdfs-namenode.gaffer@GAFFER.DOCKER</value></property>
+	<property><name>dfs.namenode.kerberos.internal.spnego.principal</name><value>${dfs.namenode.kerberos.principal}</value></property>
+	<property><name>dfs.namenode.keytab.file</name><value>${gaffer.kerberos.keytab}</value></property>
+	<property><name>dfs.web.authentication.kerberos.principal</name><value>${dfs.namenode.kerberos.principal}</value></property>
+	<property><name>dfs.web.authentication.kerberos.keytab</name><value>${gaffer.kerberos.keytab}</value></property>
+
+	<property><name>dfs.block.access.token.enable</name><value>true</value></property>
+	<property><name>dfs.encrypt.data.transfer</name><value>true</value></property>
+
+	<property><name>dfs.datanode.kerberos.principal</name><value>hadoop/hdfs-datanode.gaffer@GAFFER.DOCKER</value></property>
+	<property><name>dfs.datanode.keytab.file</name><value>${gaffer.kerberos.keytab}</value></property>
+	<property><name>dfs.datanode.address</name><value>0.0.0.0:1004</value></property>
+	<property><name>dfs.datanode.http.address</name><value>0.0.0.0:1006</value></property>
+
+	<property><name>ignore.secure.ports.for.testing</name><value>true</value></property>
+</configuration>
