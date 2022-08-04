@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+echo "====================== Starting KDC ================================="
+
 # Create KDC Database
 kdb5_util create -s -r GAFFER.DOCKER -P `shuf -erz -n200  {A..z}`
 
