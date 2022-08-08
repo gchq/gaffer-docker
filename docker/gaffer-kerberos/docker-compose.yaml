@@ -24,6 +24,9 @@ services:
     image: gchq/kdc:0.1-alpha
     healthcheck:
       test: bash -c 'until kadmin.local list_principals $HADOOP_PRINCIPLE*; do sleep 5; done; echo KDC is up;'
+      retries: 3
+      interval: 5s
+      timeout: 5s
     build:
       context: ./kdc
     container_name: kdc-server
@@ -100,7 +103,14 @@ services:
 
   zookeeper:
     depends_on:
-      - kdc-server
+      kdc-server:
+        condition: service_healthy
+    healthcheck:
+      test: nc -z localhost 2181 || exit -1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     image: zookeeper:${ZOOKEEPER_VERSION}-krb
     build:
       context: ./zookeeper
