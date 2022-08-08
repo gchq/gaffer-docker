@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2020 Crown Copyright
+# Copyright 2022 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,6 +22,12 @@ kdb5_util create -s -r GAFFER.DOCKER -P `shuf -erz -n200  {A..z}`
 # Add Principals (users)
 kadmin.local -q "addprinc -pw $HADOOP_KRB_PASSWORD $HADOOP_PRINCIPLE/hdfs-namenode.gaffer@$REALM"
 kadmin.local -q "addprinc -pw $HADOOP_KRB_PASSWORD $HADOOP_PRINCIPLE/hdfs-datanode.gaffer@$REALM"
+
+kadmin.local -q "addprinc -pw $ZOOKEEPER_KRB_PASSWORD $ZOOKEEPER_PRINCIPLE/zookeeper.gaffer@$REALM"
+
+kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-master.gaffer@$REALM"
+kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-tserver.gaffer@$REALM"
+kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-gc.gaffer@$REALM"
 
 krb5kdc
 kadmind -nofork

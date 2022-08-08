@@ -1,3 +1,17 @@
+# Copyright 2022 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 version: "3.7"
 
 networks:
@@ -37,8 +51,6 @@ services:
     command: namenode
     container_name: hdfs-namenode
     hostname: hdfs-namenode
-#    depends_on:
-#    - kdc-server
     depends_on:
       kdc-server:
         condition: service_healthy
@@ -86,29 +98,29 @@ services:
       - /data1
       - /data2
 
-#  zookeeper:
-#    depends_on:
-#      - kdc-server
-#    image: zookeeper:${ZOOKEEPER_VERSION}-krb
-#    build:
-#      context: ./zookeeper
-#      args:
-#        BASE_IMAGE_NAME: zookeeper
-#        BASE_IMAGE_TAG: ${ZOOKEEPER_VERSION}
-#    container_name: zookeeper
-#    hostname: zookeeper
-#    environment:
-#      - ZOO_SERVERS=server.1=zookeeper:2888:3888;2181
-#      - ZOO_4LW_COMMANDS_WHITELIST=*
-#      - ZOOKEEPER_PRINCIPLE=${ZOOKEEPER_PRINCIPLE}
-#      - ZOOKEEPER_KRB_PASSWORD=${ZOOKEEPER_KRB_PASSWORD}
-#    volumes:
-#      - ./zookeeper/conf/jaas.conf:/conf/jaas.conf:ro
-#      - ./zookeeper/conf/zoo.cfg:/conf/zoo.cfg:ro
-#      - ./zookeeper/conf/java.env:/conf/java.env:ro
-#      - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
-#      - /data
-#      - /datalog
+  zookeeper:
+    depends_on:
+      - kdc-server
+    image: zookeeper:${ZOOKEEPER_VERSION}-krb
+    build:
+      context: ./zookeeper
+      args:
+        BASE_IMAGE_NAME: zookeeper
+        BASE_IMAGE_TAG: ${ZOOKEEPER_VERSION}
+    container_name: zookeeper
+    hostname: zookeeper
+    environment:
+      - ZOO_SERVERS=server.1=zookeeper:2888:3888;2181
+      - ZOO_4LW_COMMANDS_WHITELIST=*
+      - ZOOKEEPER_PRINCIPLE=${ZOOKEEPER_PRINCIPLE}
+      - ZOOKEEPER_KRB_PASSWORD=${ZOOKEEPER_KRB_PASSWORD}
+    volumes:
+      - ./zookeeper/conf/jaas.conf:/conf/jaas.conf:ro
+      - ./zookeeper/conf/zoo.cfg:/conf/zoo.cfg:ro
+      - ./zookeeper/conf/java.env:/conf/java.env:ro
+      - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /data
+      - /datalog
 
 #  accumulo-master:
 #    depends_on:

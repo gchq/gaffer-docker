@@ -14,22 +14,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-KEYTAB_PATH=/opt/hadoop/etc/hadoop/hadoop.keytab
-PRINCIPLE=$HADOOP_PRINCIPLE/$(hostname).gaffer
+KEYTAB_PATH=/conf/zookeeper.keytab
+PRINCIPLE=$ZOOKEEPER_PRINCIPLE/$(hostname).gaffer
 
-if [ "$DEBUG" -eq 1 ]; then
-  export HADOOP_JAAS_DEBUG=true
-  export HADOOP_OPTS="-Djava.net.preferIPv4Stack=true -Dsun.security.krb5.debug=true -Dsun.security.spnego.debug"
-  echo "Hadoop Kerberos Debugging flags enabled (DEBUG=$DEBUG)"
-fi
+# TODO - Use a healthcheck and compose dependency on the KDC to be ready, instead of sleeping
+sleep 3
 
 {
 echo "add_entry -password -p $PRINCIPLE -k 1 -e aes256-cts"; sleep 0.2
-echo $HADOOP_KRB_PASSWORD; sleep 0.2
+echo $ZOOKEEPER_KRB_PASSWORD; sleep 0.2
 echo list; sleep 0.2
 echo "write_kt $KEYTAB_PATH"; sleep 0.2
 echo exit
 } | ktutil
 
-# Call original HDFS entrypoint
-#exec /entrypoint.sh "$@"
+# Zookeeper switches user to its own user, which needs to own the keytab
+chown zookeeper:zookeeper $KEYTAB_PATH
+
+
+# Call original Zookeeper entrypoint
+exec /docker-entrypoint.sh "$@"
