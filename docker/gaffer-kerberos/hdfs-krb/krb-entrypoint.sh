@@ -32,4 +32,4 @@ echo exit
 } | ktutil
 
 # Call original HDFS entrypoint
-#exec /entrypoint.sh "$@"
+exec /entrypoint.sh "$@"
