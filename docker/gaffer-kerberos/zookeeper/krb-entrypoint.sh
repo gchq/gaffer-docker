@@ -17,9 +17,6 @@
 KEYTAB_PATH=/conf/zookeeper.keytab
 PRINCIPLE=$ZOOKEEPER_PRINCIPLE/$(hostname).gaffer
 
-# TODO - Use a healthcheck and compose dependency on the KDC to be ready, instead of sleeping
-sleep 3
-
 {
 echo "add_entry -password -p $PRINCIPLE -k 1 -e aes256-cts"; sleep 0.2
 echo $ZOOKEEPER_KRB_PASSWORD; sleep 0.2
@@ -30,7 +27,6 @@ echo exit
 
 # Zookeeper switches user to its own user, which needs to own the keytab
 chown zookeeper:zookeeper $KEYTAB_PATH
-
 
 # Call original Zookeeper entrypoint
 exec /docker-entrypoint.sh "$@"
