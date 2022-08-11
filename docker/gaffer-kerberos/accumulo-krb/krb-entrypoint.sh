@@ -37,9 +37,6 @@ cp $ACCUMULO_CONF_DIR/generic/* $ACCUMULO_CONF_DIR
 # Edit the site-config in place to set the principal for this node
 xmlstarlet ed --inplace -u "/configuration/property/name[text()='general.kerberos.principal']/../value" -v $FULL_PRINCIPLE $ACCUMULO_CONF_DIR/accumulo-site.xml
 
-# TODO Replace with healthcheck on HDFS to ensure it is available
-sleep 6
-
 # Below is a modified version of the standard Accumulo docker entrypoint.sh
 # This cannot be called directly and reused because it is designed specifically for password auth
 

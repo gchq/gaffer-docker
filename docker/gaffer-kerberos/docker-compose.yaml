@@ -46,6 +46,11 @@ services:
 
   hdfs-namenode:
     image: gchq/hdfs-krb:${HADOOP_VERSION}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9870 || exit 1"]
+      retries: 5
+      interval: 1s
+      timeout: 5s
     build:
       context: ./hdfs-krb
       args:
@@ -75,7 +80,8 @@ services:
 
   hdfs-datanode:
     depends_on:
-      - hdfs-namenode
+      hdfs-namenode:
+        condition: service_healthy
     image: gchq/hdfs-krb:${HADOOP_VERSION}
     build:
       context: ./hdfs-krb
@@ -134,11 +140,8 @@ services:
 
   accumulo-master:
     depends_on:
-      - hdfs-namenode
-      - zookeeper
-    depends_on:
       hdfs-namenode:
-        condition: service_started
+        condition: service_healthy
       zookeeper:
         condition: service_healthy
     image: gchq/accumulo-krb:${ACCUMULO_VERSION}
