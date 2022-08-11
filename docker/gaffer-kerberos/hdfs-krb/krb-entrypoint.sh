@@ -15,7 +15,7 @@
 # limitations under the License.
 
 KEYTAB_PATH=/opt/hadoop/etc/hadoop/hadoop.keytab
-PRINCIPLE=$HADOOP_PRINCIPLE/$(hostname).gaffer
+PRINCIPLE=$HADOOP_PRINCIPLE/$(hostname)
 
 if [ "$DEBUG" -eq 1 ]; then
   export HADOOP_JAAS_DEBUG=true

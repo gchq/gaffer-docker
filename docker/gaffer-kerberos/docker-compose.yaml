@@ -53,7 +53,7 @@ services:
         BASE_IMAGE_TAG: ${HADOOP_VERSION}
     command: namenode
     container_name: hdfs-namenode
-    hostname: hdfs-namenode
+    hostname: hdfs-namenode.gaffer
     depends_on:
       kdc-server:
         condition: service_healthy
@@ -84,7 +84,7 @@ services:
         BASE_IMAGE_TAG: ${HADOOP_VERSION}
     command: datanode
     container_name: hdfs-datanode
-    hostname: hdfs-datanode
+    hostname: hdfs-datanode.gaffer
     environment:
       - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
       - HADOOP_PRINCIPLE=${HADOOP_PRINCIPLE}
