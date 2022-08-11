@@ -64,8 +64,7 @@ services:
       - REALM=${REALM}
       - DEBUG=${DEBUG}
     ports:
-      - "9870:9870"
-      - "9000:9000"
+      - 9870:9870
     volumes:
       - ./hdfs-krb/conf:${HADOOP_CONF_DIR}:ro
       - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
@@ -91,9 +90,6 @@ services:
       - HADOOP_KRB_PASSWORD=${HADOOP_KRB_PASSWORD}
       - REALM=${REALM}
       - DEBUG=${DEBUG}
-    ports:
-      - "1004:1004"
-      - "1006:1006"
     volumes:
       - ./hdfs-krb/conf:${HADOOP_CONF_DIR}:ro
       - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
