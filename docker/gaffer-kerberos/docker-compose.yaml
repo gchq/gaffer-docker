@@ -132,91 +132,121 @@ services:
       - /data
       - /datalog
 
-#  accumulo-master:
-#    depends_on:
-#      - hdfs-namenode
-#      - hdfs-datanode
-#      - zookeeper
-#    image: gchq/gaffer:${GAFFER_VERSION}
-#    build:
-#      context: .
-#      args:
-#        GAFFER_VERSION: ${GAFFER_VERSION}
-#        BASE_IMAGE_NAME: gchq/accumulo
-#        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
-#    command: master
-#    restart: on-failure
-#    container_name: accumulo-master
-#    hostname: accumulo-master
-#    environment:
-#      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
-#      # There doesn't seem to be an easy way (with docker-compose) to init our
-#      # HDFS instance with the right permissions so that Accumulo can create the
-#      # file structure it needs. Using the following workaround to allow
-#      # accumulo to "auth" with HDFS as the super user so that it can:
-#      - HADOOP_USER_NAME=hadoop
-#    volumes:
-#      - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
-#      - /var/log/accumulo
-#
-#  accumulo-tserver:
-#    depends_on:
-#      - accumulo-master
-#    image: gchq/gaffer:${GAFFER_VERSION}
-#    command: tserver
-#    restart: on-failure
-#    container_name: accumulo-tserver
-#    hostname: accumulo-tserver
-#    environment:
-#      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
-#      # There doesn't seem to be an easy way (with docker-compose) to init our
-#      # HDFS instance with the right permissions so that Accumulo can create the
-#      # file structure it needs. Using the following workaround to allow
-#      # accumulo to "auth" with HDFS as the super user so that it can:
-#      - HADOOP_USER_NAME=hadoop
-#    volumes:
-#      - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
-#      - /var/log/accumulo
-#
-#  accumulo-monitor:
-#    depends_on:
-#      - accumulo-master
-#    image: gchq/gaffer:${GAFFER_VERSION}
-#    command: monitor
-#    restart: on-failure
-#    container_name: accumulo-monitor
-#    hostname: accumulo-monitor
-#    environment:
-#      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
-#      # There doesn't seem to be an easy way (with docker-compose) to init our
-#      # HDFS instance with the right permissions so that Accumulo can create the
-#      # file structure it needs. Using the following workaround to allow
-#      # accumulo to "auth" with HDFS as the super user so that it can:
-#      - HADOOP_USER_NAME=hadoop
-#    ports:
-#      - 9995:9995
-#    volumes:
-#      - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
-#      - /var/log/accumulo
-#
-#  accumulo-gc:
-#    depends_on:
-#      - accumulo-master
-#    image: gchq/gaffer:${GAFFER_VERSION}
-#    command: gc
-#    restart: on-failure
-#    container_name: accumulo-gc
-#    hostname: accumulo-gc
-#    environment:
-#      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
-#      # There doesn't seem to be an easy way (with docker-compose) to init our
-#      # HDFS instance with the right permissions so that Accumulo can create the
-#      # file structure it needs. Using the following workaround to allow
-#      # accumulo to "auth" with HDFS as the super user so that it can:
-#      - HADOOP_USER_NAME=hadoop
-#    volumes:
-#      - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
-#      - /var/log/accumulo
+  accumulo-master:
+    depends_on:
+      - hdfs-namenode
+      - zookeeper
+    depends_on:
+      hdfs-namenode:
+        condition: service_started
+      zookeeper:
+        condition: service_healthy
+    image: gchq/accumulo-krb:${ACCUMULO_VERSION}
+    build:
+      context: ./accumulo-krb
+      args:
+        BASE_IMAGE_NAME: gchq/accumulo
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
+    command: master
+    restart: always
+    container_name: accumulo-master
+    hostname: accumulo-master.gaffer
+    environment:
+      - ACCUMULO_PRINCIPLE=${ACCUMULO_PRINCIPLE}
+      - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
+      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+      - DEBUG=${DEBUG}
+    volumes:
+      - ./accumulo-krb/conf:${ACCUMULO_CONF_DIR}/generic:ro
+      - ../accumulo/conf/monitor_logger.properties:${ACCUMULO_CONF_DIR}/monitor_logger.properties:ro
+      - ../accumulo/conf/generic_logger.properties:${ACCUMULO_CONF_DIR}/generic_logger.properties:ro
+      - ../accumulo/conf/log4j.properties:${ACCUMULO_CONF_DIR}/log4j.properties:ro
+      - ../accumulo/conf/accumulo-env.sh:${ACCUMULO_CONF_DIR}/accumulo-env.sh:ro
+      - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /var/log/accumulo
+
+  accumulo-tserver:
+    depends_on:
+      - accumulo-master
+    image: gchq/accumulo-krb:${ACCUMULO_VERSION}
+    build:
+      context: ./accumulo-krb
+      args:
+        BASE_IMAGE_NAME: gchq/accumulo
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
+    command: tserver
+    restart: always
+    container_name: accumulo-tserver
+    hostname: accumulo-tserver.gaffer
+    environment:
+      - ACCUMULO_PRINCIPLE=${ACCUMULO_PRINCIPLE}
+      - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
+      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+      - DEBUG=${DEBUG}
+    volumes:
+      - ./accumulo-krb/conf:${ACCUMULO_CONF_DIR}/generic:ro
+      - ../accumulo/conf/monitor_logger.properties:${ACCUMULO_CONF_DIR}/monitor_logger.properties:ro
+      - ../accumulo/conf/generic_logger.properties:${ACCUMULO_CONF_DIR}/generic_logger.properties:ro
+      - ../accumulo/conf/log4j.properties:${ACCUMULO_CONF_DIR}/log4j.properties:ro
+      - ../accumulo/conf/accumulo-env.sh:${ACCUMULO_CONF_DIR}/accumulo-env.sh:ro
+      - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /var/log/accumulo
+
+  accumulo-monitor:
+    depends_on:
+      - accumulo-master
+    image: gchq/accumulo-krb:${ACCUMULO_VERSION}
+    build:
+      context: ./accumulo-krb
+      args:
+        BASE_IMAGE_NAME: gchq/accumulo
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
+    command: monitor
+    restart: on-failure
+    container_name: accumulo-monitor
+    hostname: accumulo-monitor.gaffer
+    environment:
+      - ACCUMULO_PRINCIPLE=${ACCUMULO_PRINCIPLE}
+      - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
+      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+      - DEBUG=${DEBUG}
+    ports:
+      - 9995:9995
+    volumes:
+      - ./accumulo-krb/conf:${ACCUMULO_CONF_DIR}/generic:ro
+      - ../accumulo/conf/monitor_logger.properties:${ACCUMULO_CONF_DIR}/monitor_logger.properties:ro
+      - ../accumulo/conf/generic_logger.properties:${ACCUMULO_CONF_DIR}/generic_logger.properties:ro
+      - ../accumulo/conf/log4j.properties:${ACCUMULO_CONF_DIR}/log4j.properties:ro
+      - ../accumulo/conf/accumulo-env.sh:${ACCUMULO_CONF_DIR}/accumulo-env.sh:ro
+      - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /var/log/accumulo
+
+  accumulo-gc:
+    depends_on:
+      - accumulo-master
+    image: gchq/gaffer-krb:${GAFFER_VERSION}
+    build:
+      context: ./accumulo-krb
+      args:
+        BASE_IMAGE_NAME: gchq/accumulo
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
+    command: gc
+    restart: on-failure
+    container_name: accumulo-gc
+    hostname: accumulo-gc.gaffer
+    environment:
+      - ACCUMULO_PRINCIPLE=${ACCUMULO_PRINCIPLE}
+      - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
+      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+      - DEBUG=${DEBUG}
+    volumes:
+      - ./accumulo-krb/conf:${ACCUMULO_CONF_DIR}/generic:ro
+      - ../accumulo/conf/monitor_logger.properties:${ACCUMULO_CONF_DIR}/monitor_logger.properties:ro
+      - ../accumulo/conf/generic_logger.properties:${ACCUMULO_CONF_DIR}/generic_logger.properties:ro
+      - ../accumulo/conf/log4j.properties:${ACCUMULO_CONF_DIR}/log4j.properties:ro
+      - ../accumulo/conf/accumulo-env.sh:${ACCUMULO_CONF_DIR}/accumulo-env.sh:ro
+      - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /var/log/accumulo
 #
 #  gaffer-rest:
 #    image: gchq/gaffer-rest:${GAFFER_VERSION}

@@ -27,6 +27,7 @@ kadmin.local -q "addprinc -pw $ZOOKEEPER_KRB_PASSWORD $ZOOKEEPER_PRINCIPLE/zooke
 
 kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-master.gaffer@$REALM"
 kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-tserver.gaffer@$REALM"
+kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-monitor.gaffer@$REALM"
 kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-gc.gaffer@$REALM"
 
 krb5kdc

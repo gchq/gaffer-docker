@@ -12,27 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_IMAGE_NAME=gchq/hdfs
-ARG BASE_IMAGE_TAG=3.2.2
+ARG BASE_IMAGE_NAME=gchq/accumulo
+ARG BASE_IMAGE_TAG=1.9.3
 
-ARG USER=hadoop
-ARG GROUP=hadoop
+ARG USER=accumulo
+ARG GROUP=accumulo
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
 USER root
 RUN apt -qq update && \
 	apt -qq install -y \
-		krb5-user \
-        jsvc && \
+		krb5-user && \
     apt -qq clean \
 	&& rm -rf /var/lib/apt/lists/*
 
-RUN chown -R ${USER}:${GROUP} /opt/hadoop/etc/hadoop && \
-    echo "export HDFS_DATANODE_SECURE_USER=hadoop" >> /opt/hadoop/etc/hadoop/hadoop-env.sh && \
-    echo "export JSVC_HOME=/usr/bin" >> /opt/hadoop/etc/hadoop/hadoop-env.sh
+RUN mkdir /etc/accumulo && \
+    chown -R ${USER}:${GROUP} /etc/accumulo
 
 COPY ./krb-entrypoint.sh /
-ENTRYPOINT ["/krb-entrypoint.sh", "hdfs"]
+ENTRYPOINT ["/krb-entrypoint.sh", "accumulo"]
 
 USER ${USER}
