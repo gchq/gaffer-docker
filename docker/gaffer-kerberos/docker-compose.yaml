@@ -48,7 +48,7 @@ services:
     image: gchq/hdfs-krb:${HADOOP_VERSION}
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9870 || exit 1"]
-      retries: 5
+      retries: 10
       interval: 1s
       timeout: 5s
     build:
