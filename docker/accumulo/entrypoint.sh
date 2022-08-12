@@ -19,16 +19,26 @@ test -z "${ACCUMULO_INSTANCE_NAME}" && ACCUMULO_INSTANCE_NAME="accumulo"
 
 if [ "$1" = "accumulo" ] && [ "$2" = "master" ]; then
 	# Try to find desired root password from trace config
-	TRACE_USER=$(xmlstarlet sel -t -v "/configuration/property[name='trace.user']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
-	if [ "${TRACE_USER}" = "root" ]; then
-		PASSWORD=$(xmlstarlet sel -t -v "/configuration/property[name='trace.token.property.password']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
-	fi
+    if [ -f "${ACCUMULO_CONF_DIR}/accumulo-site.xml" ]; then
+        TRACE_USER=$(xmlstarlet sel -t -v "/configuration/property[name='trace.user']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
+        if [ "${TRACE_USER}" = "root" ]; then
+            PASSWORD=$(xmlstarlet sel -t -v "/configuration/property[name='trace.token.property.password']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
+        fi
+    fi
 
 	# Try to find desired root password from client config
 	if [ -f "${ACCUMULO_CONF_DIR}/client.conf" ]; then
 		CLIENT_USERNAME=$(cat ${ACCUMULO_CONF_DIR}/client.conf | grep "auth.principal" | grep -v "^#" | cut -d= -f2)
 		if [ "${CLIENT_USERNAME}" = "root" ]; then
 			PASSWORD=$(cat ${ACCUMULO_CONF_DIR}/client.conf | grep "auth.token" | grep -v "^#" | cut -d= -f2)
+		fi
+	fi
+
+    # Try to find desired root password from accumulo.properties (accumulo 2)
+	if [ -f "${ACCUMULO_CONF_DIR}/accumulo.properties" ]; then
+		TRACE_USER=$(cat ${ACCUMULO_CONF_DIR}/accumulo.properties | grep "trace.user" | grep -v "^#" | cut -d= -f2)
+		if [ "${TRACE_USER}" = "root" ]; then
+			PASSWORD=$(cat ${ACCUMULO_CONF_DIR}/accumulo.properties | grep "trace.token.property.password" | grep -v "^#" | cut -d= -f2)
 		fi
 	fi
 

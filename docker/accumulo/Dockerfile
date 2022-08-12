@@ -63,8 +63,8 @@ RUN if [ ! -f "./accumulo-${ACCUMULO_VERSION}-bin.tar.gz" ]; then \
 # Extract required files
 RUN tar -xf ./accumulo-${ACCUMULO_VERSION}-bin.tar.gz accumulo-${ACCUMULO_VERSION}/bin/ accumulo-${ACCUMULO_VERSION}/lib/ && \
 	rm -f ./accumulo-${ACCUMULO_VERSION}-bin.tar.gz && \
-	#./accumulo-${ACCUMULO_VERSION}/bin/build_native_library.sh && \
-    ./accumulo-${ACCUMULO_VERSION}/bin/accumulo-util build-native && \
+    # Build command dependent on ACCUMULO_VERSION
+    if echo "$ACCUMULO_VERSION" | grep -q "^2.*$"; then ./accumulo-${ACCUMULO_VERSION}/bin/accumulo-util build-native; else ./accumulo-${ACCUMULO_VERSION}/bin/build_native_library.sh; fi && \
 	tar -xf ./hadoop-${HADOOP_VERSION}.tar.gz \
 		hadoop-${HADOOP_VERSION}/lib/native/ \
 		hadoop-${HADOOP_VERSION}/share/hadoop/client/ \
@@ -93,7 +93,7 @@ RUN apt -qq update && \
 	&& rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder --chown=root:root /accumulo-${ACCUMULO_VERSION} /opt/accumulo-${ACCUMULO_VERSION}/
-COPY ./conf /opt/accumulo-${ACCUMULO_VERSION}/conf
+COPY ./conf-${ACCUMULO_VERSION} /opt/accumulo-${ACCUMULO_VERSION}/conf
 COPY --from=builder --chown=root:root /hadoop-${HADOOP_VERSION} /opt/hadoop-${HADOOP_VERSION}/
 COPY --from=builder --chown=root:root /apache-zookeeper-${ZOOKEEPER_VERSION}-bin /opt/zookeeper-${ZOOKEEPER_VERSION}/
 
@@ -112,6 +112,8 @@ ENV ACCUMULO_HOME /opt/accumulo
 ENV ACCUMULO_CONF_DIR ${ACCUMULO_HOME}/conf
 ENV ACCUMULO_LOG_DIR /var/log/accumulo
 ENV HADOOP_HOME /opt/hadoop
+ENV HADOOP_CONF_DIR $HADOOP_HOME/etc/hadoop
+ENV ZOOKEEPER_HOME /opt/zookeeper
 ENV PATH $ACCUMULO_HOME/bin:$PATH
 
 COPY ./entrypoint.sh /
