@@ -23,7 +23,7 @@ services:
   kdc-server:
     image: gchq/kdc:0.1-alpha
     healthcheck:
-      test: stat /proc/17/stat
+      test: stat /proc/19/stat
       retries: 5
       interval: 1s
       timeout: 5s
