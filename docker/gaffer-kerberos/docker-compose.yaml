@@ -69,7 +69,7 @@ services:
       - REALM=${REALM}
       - DEBUG=${DEBUG}
     ports:
-      - 9870:9870
+      - "9870:9870"
     volumes:
       - ./hdfs-krb/conf:${HADOOP_CONF_DIR}:ro
       - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
@@ -210,7 +210,7 @@ services:
       - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
       - DEBUG=${DEBUG}
     ports:
-      - 9995:9995
+      - "9995:9995"
     volumes:
       - ./accumulo-krb/conf:${ACCUMULO_CONF_DIR}/generic:ro
       - ../accumulo/conf/monitor_logger.properties:${ACCUMULO_CONF_DIR}/monitor_logger.properties:ro
