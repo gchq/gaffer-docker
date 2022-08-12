@@ -20,7 +20,8 @@ FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 RUN apt -qq update && \
 	apt -qq install -y \
 		krb5-kdc \
-		krb5-admin-server && \
+		krb5-admin-server \
+		procps && \
     apt -qq clean \
     && rm -rf /var/lib/apt/lists/*
 

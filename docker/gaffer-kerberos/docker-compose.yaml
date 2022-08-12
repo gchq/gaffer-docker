@@ -23,7 +23,7 @@ services:
   kdc-server:
     image: gchq/kdc:0.1-alpha
     healthcheck:
-      test: stat /proc/19/stat
+      test: ps -aux | grep krb5kdc
       retries: 5
       interval: 1s
       timeout: 5s
@@ -47,9 +47,9 @@ services:
   hdfs-namenode:
     image: gchq/hdfs-krb:${HADOOP_VERSION}
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9870 || exit 1"]
+      test: curl -f http://localhost:9870 || exit 1
       retries: 10
-      interval: 1s
+      interval: 3s
       timeout: 5s
     build:
       context: ./hdfs-krb
@@ -141,6 +141,12 @@ services:
       zookeeper:
         condition: service_healthy
     image: gchq/accumulo-krb:${ACCUMULO_VERSION}
+    healthcheck:
+      test: ss -pltn | grep 9999
+      retries: 15
+      interval: 2s
+      timeout: 5s
+      start_period: 10s
     build:
       context: ./accumulo-krb
       args:
@@ -166,7 +172,8 @@ services:
 
   accumulo-tserver:
     depends_on:
-      - accumulo-master
+      accumulo-master:
+        condition: service_healthy
     image: gchq/accumulo-krb:${ACCUMULO_VERSION}
     build:
       context: ./accumulo-krb
@@ -193,7 +200,8 @@ services:
 
   accumulo-monitor:
     depends_on:
-      - accumulo-master
+      accumulo-master:
+        condition: service_healthy
     image: gchq/accumulo-krb:${ACCUMULO_VERSION}
     build:
       context: ./accumulo-krb
@@ -222,7 +230,8 @@ services:
 
   accumulo-gc:
     depends_on:
-      - accumulo-master
+      accumulo-master:
+        condition: service_healthy
     image: gchq/gaffer-krb:${GAFFER_VERSION}
     build:
       context: ./accumulo-krb

@@ -23,8 +23,9 @@ FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 USER root
 RUN apt -qq update && \
 	apt -qq install -y \
-		krb5-user && \
-    apt -qq clean \
+		krb5-user \
+		iproute2 && \
+	apt -qq clean \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /etc/accumulo && \

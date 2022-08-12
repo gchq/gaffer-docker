@@ -30,5 +30,4 @@ kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumul
 kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-monitor.gaffer@$REALM"
 kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-gc.gaffer@$REALM"
 
-krb5kdc
-kadmind -nofork
+krb5kdc -n
