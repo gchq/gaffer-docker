@@ -58,7 +58,7 @@ services:
         BASE_IMAGE_TAG: ${HADOOP_VERSION}
     command: namenode
     container_name: hdfs-namenode
-    hostname: hdfs-namenode
+    hostname: hdfs-namenode.gaffer
     depends_on:
       kdc-server:
         condition: service_healthy
@@ -69,8 +69,7 @@ services:
       - REALM=${REALM}
       - DEBUG=${DEBUG}
     ports:
-      - "9870:9870"
-      - "9000:9000"
+      - 9870:9870
     volumes:
       - ./hdfs-krb/conf:${HADOOP_CONF_DIR}:ro
       - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
@@ -90,16 +89,13 @@ services:
         BASE_IMAGE_TAG: ${HADOOP_VERSION}
     command: datanode
     container_name: hdfs-datanode
-    hostname: hdfs-datanode
+    hostname: hdfs-datanode.gaffer
     environment:
       - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
       - HADOOP_PRINCIPLE=${HADOOP_PRINCIPLE}
       - HADOOP_KRB_PASSWORD=${HADOOP_KRB_PASSWORD}
       - REALM=${REALM}
       - DEBUG=${DEBUG}
-    ports:
-      - "1004:1004"
-      - "1006:1006"
     volumes:
       - ./hdfs-krb/conf:${HADOOP_CONF_DIR}:ro
       - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
