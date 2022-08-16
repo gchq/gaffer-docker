@@ -31,11 +31,12 @@ WORKDIR /jars
 COPY ./files/ .
 # Try to download required version from Maven Central, otherwise build from source
 RUN	allFilesDownloaded="TRUE" && \
-	if [ ! -f "./accumulo-store-${GAFFER_VERSION}-iterators.jar" ]; then \
+    if echo "$BASE_IMAGE_TAG" | grep -q "^1.*$"; then allFilesDownloaded="FALSE"; fi && \
+	if [ ! -f "./accumulo-store-${GAFFER_VERSION}-iterators.jar" ] && [ "${allFilesDownloaded}" = "TRUE" ]; then \
 		wget -nv "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/accumulo-store/${GAFFER_VERSION}/accumulo-store-${GAFFER_VERSION}-iterators.jar" || allFilesDownloaded="FALSE"; \
 	fi && \
 	for lib in $(echo ${GAFFER_LIBS} | tr , ' '); do \
-		if [ ! -f "./${lib}-${GAFFER_VERSION}-deploy.jar" ]; then \
+		if [ ! -f "./${lib}-${GAFFER_VERSION}-deploy.jar" ] && [ "${allFilesDownloaded}" = "TRUE" ]; then \
 			wget -nv "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/${lib}/${GAFFER_VERSION}/${lib}-${GAFFER_VERSION}-deploy.jar" || allFilesDownloaded="FALSE"; \
 		fi \
 	done && \
@@ -45,7 +46,9 @@ RUN	allFilesDownloaded="TRUE" && \
 		git checkout ${GAFFER_VERSION} && \
 		for dir in library/*; do if [ -f "${dir}/pom.xml" ]; then echo "${dir}"; fi done | \
 		paste -sd, | \
-		xargs mvn clean package -q -Pquick --also-make -pl store-implementation/accumulo-store/ -pl && \
+        # Set legacy option based on BASE_IMAGE_TAG (Accumulo version)
+        if echo "$BASE_IMAGE_TAG" | grep -q "^2.*$"; then LEGACY=false; else LEGACY=true; fi && \
+		xargs mvn clean package -Dlegacy=$LEGACY -q -Pquick --also-make -pl store-implementation/accumulo-store/ -pl && \
 		if [ ! -f "/jars/accumulo-store-${GAFFER_VERSION}-iterators.jar" ]; then \
 			cp ./store-implementation/accumulo-store/target/accumulo-store-*-iterators.jar /jars; \
 		fi && \

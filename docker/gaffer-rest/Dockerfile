@@ -6,7 +6,8 @@ ARG BASE_IMAGE_TAG=8-jre-alpine
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
-ARG GAFFER_VERSION=2.0.0-alpha-0.1
+ARG ACCUMULO_VERSION=2.0.1
+ARG GAFFER_VERSION=2.0.0-alpha-0.3
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 
@@ -16,15 +17,16 @@ WORKDIR /jars
 # If users want to provide their own utility jars they can do that within jars/lib
 COPY ./jars/ .
 
-RUN	if [ ! -f "./rest.jar" ]; then \
+RUN	if echo "$ACCUMULO_VERSION" | grep -q "^2.*$"; then LEGACY=false; else LEGACY=true; fi && \
+    if [ ! -f "./rest.jar" ] && [ "$LEGACY" = false ]; then \
 		curl -sfLo rest.jar "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/spring-rest/${GAFFER_VERSION}/spring-rest-${GAFFER_VERSION}-exec.jar" || true; \
 	fi && \
     if [ ! -f "./rest.jar" ]; then \
 		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
 		cd /tmp/gaffer && \
-		git checkout ${GAFFER_VERSION} && \
-		mvn clean package -q -Pquick --also-make -pl :spring-rest && \
-		cp ./rest-api/spring-rest/target/spring-rest-*-exec.jar /jars/rest.jar && \
+		git checkout ${GAFFER_VERSION} || git checkout gaffer2-${GAFFER_VERSION} && \
+		mvn clean package -Dlegacy=$LEGACY -q -Pquick --also-make -pl :spring-rest && \
+		cp ./rest-api/spring-rest/target/spring-rest-*-exec*.jar /jars/rest.jar && \
 		cd /jars/; \
 	fi
 
