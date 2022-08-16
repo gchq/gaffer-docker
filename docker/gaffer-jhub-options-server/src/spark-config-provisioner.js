@@ -127,43 +127,16 @@ class SparkConfigProvisioner {
 	async provisionDriverIngress(name, namespace, host, path, serviceName, servicePort, username, servername) {
 		if (!host && !path) return null
 
-		const ingressPath = {
-			backend: {
-				serviceName: serviceName,
-				servicePort: servicePort
-			}
-		}
-		if (path) ingressPath.path = path
-
-		const rule = {
-			http: {
-				paths: [ingressPath]
-			}
-		}
-		if (host) rule.host = host
-
-		const ingress = {
-			apiVersion: 'extensions/v1beta1',
-			kind: 'Ingress',
-			metadata: {
-				name: name,
-				namespace: namespace,
-				labels: {
-					'app.kubernetes.io/name': 'jhub-notebook-config',
-					'app.kubernetes.io/component': 'spark-ui-ingress',
-					'app.kubernetes.io/managed-by': appInfo.name,
-					'app.kubernetes.io/version': appInfo.version,
-					'hub.jupyter.org/username': username,
-					'hub.jupyter.org/servername': servername
-				}
-			},
-			spec: {
-				rules: [rule]
-			}
+		const labels = {
+			'app.kubernetes.io/name': 'jhub-notebook-config',
+			'app.kubernetes.io/component': 'spark-ui-ingress',
+			'app.kubernetes.io/managed-by': appInfo.name,
+			'app.kubernetes.io/version': appInfo.version,
+			'hub.jupyter.org/username': username,
+			'hub.jupyter.org/servername': servername
 		}
 
-		const response = await this.utils.applySpec(ingress)
-		return response
+		return this.utils.createIngress(name, namespace, labels, host, path, serviceName, servicePort)
 	}
 
 	async getPodSpecConfig(username, servername, driverServiceName, namespace, sparkContainerImage, serviceAccountName, executorCores, executorMemory, hdfsEnabled, ingressHost, ingressPath) {
