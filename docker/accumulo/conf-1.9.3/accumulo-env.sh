@@ -22,10 +22,10 @@ else
 	unset HADOOP_HOME
 fi
 
-# test -z "$HADOOP_CONF_DIR"       && export HADOOP_CONF_DIR="$HADOOP_PREFIX/etc/hadoop"
-# test -z "$JAVA_HOME"             && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/
-# test -z "$ZOOKEEPER_HOME"        && export ZOOKEEPER_HOME=/opt/zookeeper
-# test -z "$ACCUMULO_LOG_DIR"      && export ACCUMULO_LOG_DIR=$ACCUMULO_HOME/logs
+test -z "$HADOOP_CONF_DIR"       && export HADOOP_CONF_DIR="$HADOOP_PREFIX/etc/hadoop"
+test -z "$JAVA_HOME"             && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/
+test -z "$ZOOKEEPER_HOME"        && export ZOOKEEPER_HOME=/opt/zookeeper
+test -z "$ACCUMULO_LOG_DIR"      && export ACCUMULO_LOG_DIR=$ACCUMULO_HOME/logs
 
 if [[ -f ${ACCUMULO_CONF_DIR}/accumulo.policy ]]; then
 	POLICY="-Djava.security.manager -Djava.security.policy=${ACCUMULO_CONF_DIR}/accumulo.policy"
