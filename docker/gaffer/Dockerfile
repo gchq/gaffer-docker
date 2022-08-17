@@ -20,6 +20,7 @@ ARG BASE_IMAGE_TAG=2.0.1
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
+ARG BASE_IMAGE_TAG
 ARG GAFFER_VERSION=2.0.0-alpha-0.3
 ARG GAFFER_LIBS=bitmap-library,sketches-library,time-library
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
@@ -41,16 +42,16 @@ RUN	allFilesDownloaded="TRUE" && \
 		fi \
 	done && \
 	if [ "${allFilesDownloaded}" = "FALSE" ]; then \
-		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
-		cd /tmp/gaffer && \
-		git checkout ${GAFFER_VERSION} && \
-		for dir in library/*; do if [ -f "${dir}/pom.xml" ]; then echo "${dir}"; fi done | \
-		paste -sd, | \
         # Set legacy option based on BASE_IMAGE_TAG (Accumulo version)
         if echo "$BASE_IMAGE_TAG" | grep -q "^2.*$"; then LEGACY=false; else LEGACY=true; fi && \
+		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
+		cd /tmp/gaffer && \
+		git checkout ${GAFFER_VERSION} || git checkout gaffer2-${GAFFER_VERSION} && \
+		for dir in library/*; do if [ -f "${dir}/pom.xml" ]; then echo "${dir}"; fi done | \
+		paste -sd, | \
 		xargs mvn clean package -Dlegacy=$LEGACY -q -Pquick --also-make -pl store-implementation/accumulo-store/ -pl && \
 		if [ ! -f "/jars/accumulo-store-${GAFFER_VERSION}-iterators.jar" ]; then \
-			cp ./store-implementation/accumulo-store/target/accumulo-store-*-iterators.jar /jars; \
+			cp ./store-implementation/accumulo-store/target/accumulo-store-*-iterators*.jar /jars; \
 		fi && \
 		for lib in $(echo ${GAFFER_LIBS} | tr , ' '); do \
 			if [ ! -f "/jars/${lib}-${GAFFER_VERSION}-deploy.jar" ]; then \
