@@ -8,7 +8,7 @@ Values from these will be copied accross to the src/tests/resources store proper
 
 To Build the Docker image, use:
 ```bash
-docker build -t gchq/gaffer-integration-tests:2.0.0-alpha-0.1 .
+docker build -t gchq/gaffer-integration-tests:2.0.0-alpha-0.3 .
 ```
 
 If you want to build a different branch or release version, you can provide a build arg:

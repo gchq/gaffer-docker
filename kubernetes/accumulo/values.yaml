@@ -67,7 +67,7 @@ config:
   postInstallCommands: []
 image:
   repository: gchq/accumulo
-  tag: 1.9.3
+  tag: 2.0.1
   pullPolicy: IfNotPresent
   pullSecrets: []
 master:

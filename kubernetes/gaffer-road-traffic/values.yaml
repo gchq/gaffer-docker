@@ -17,7 +17,7 @@ labels: {}
 loader:
   image:
     repository: gchq/gaffer-road-traffic-loader
-    tag: 2.0.0-alpha-0.1 # managed version
+    tag: 2.0.0-alpha-0.3 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -385,4 +385,4 @@ gaffer:
     images:
       operationRunner:
         repository: gchq/gaffer-operation-runner
-        tag: 2.0.0-alpha-0.1
+        tag: 2.0.0-alpha-0.3
