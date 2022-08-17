@@ -15,7 +15,7 @@ The following instructions will guide you through provisioning and configuring a
 
 Simply run the following command to spin up a local Kubernetes cluster, running inside a Docker container:
 ```
-kind create cluster --image kindest/node:v1.21.10
+kind create cluster
 ```
 
 
