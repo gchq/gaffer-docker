@@ -66,12 +66,12 @@ services:
     - hdfs-namenode
     - hdfs-datanode
     - zookeeper
-    image: gaffer-test:${GAFFER_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}
     build:
       context: .
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
-        BASE_IMAGE_NAME: accumulo-test
+        BASE_IMAGE_NAME: gchq/accumulo
         BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: master
     restart: on-failure
@@ -91,7 +91,7 @@ services:
   accumulo-tserver:
     depends_on:
     - accumulo-master
-    image: gaffer-test:${GAFFER_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}
     command: tserver
     restart: on-failure
     container_name: accumulo-tserver
@@ -110,7 +110,7 @@ services:
   accumulo-monitor:
     depends_on:
     - accumulo-master
-    image: gaffer-test:${GAFFER_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}
     command: monitor
     restart: on-failure
     container_name: accumulo-monitor
@@ -131,7 +131,7 @@ services:
   accumulo-gc:
     depends_on:
     - accumulo-master
-    image: gaffer-test:${GAFFER_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}
     command: gc
     restart: on-failure
     container_name: accumulo-gc
