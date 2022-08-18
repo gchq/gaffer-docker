@@ -70,10 +70,7 @@ trace.token.property.password={{ $tracePassword }}
 {{- end }}
 
 {{- range $k, $v := .Values.config.accumuloSite }}
-<property>
-<name>{{ $k }}</name>
-<value>{{ required (print "accumulo.config.accumuloSite.\"" $k "\" should have a non-empty value") $v }}</value>
-</property>
+{{ $k }}={{ required (print "accumulo.config.accumuloSite.\"" $k "\" should have a non-empty value") $v }}
 {{- end }}
 
 {{- end -}}
