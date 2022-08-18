@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 */ -}}
+{{- hasPrefix .Values.image.tag "2" }}
 {{- define "accumulo.accumuloSite" -}}
 {{- $hdfsUri := print "hdfs://" ( include "accumulo.hdfsNamenodeHostname" . ) -}}
 instance.volumes={{ $hdfsUri }}{{ join (print "," $hdfsUri) .Values.hdfs.volumes }}
@@ -108,3 +109,4 @@ data:
       {{- base $path | nindent 2 }}: {{ $.Files.Get $path | b64enc | quote }}
     {{- end }}
   {{- end }}
+{{- end }}
