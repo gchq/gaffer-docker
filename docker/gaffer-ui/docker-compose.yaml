@@ -22,6 +22,7 @@ services:
       context: ../gaffer-rest
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
+        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
     restart: always
     ports:
     - 8080:8080

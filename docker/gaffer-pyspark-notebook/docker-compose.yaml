@@ -156,6 +156,7 @@ services:
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
         GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
+        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
     ports:
     - 8080:8080
     volumes:
