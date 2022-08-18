@@ -118,7 +118,7 @@ instance.name={{ .Values.instanceId }}
 instance.zookeeper.host={{ include "accumulo.zookeepers" . }}
 {{- end -}}
 
-{{- if (semverCompare "<2.0.0" (.Values.image.tag | quote) ) }}
+{{- if (hasPrefix "1" (.Values.image.tag | quote) ) }}
 apiVersion: v1
 kind: Secret
 metadata:
