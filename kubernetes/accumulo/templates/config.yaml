@@ -86,7 +86,7 @@ instance.name={{ .Values.instanceId }}
 instance.zookeepers={{ include "accumulo.zookeepers" . }}
 {{- end -}}
 
-{{- if (hasPrefix "2" (.Values.image.tag | quote) ) }}
+{{- if (hasPrefix "2" .Values.image.tag ) }}
 apiVersion: v1
 kind: Secret
 metadata:
