@@ -34,6 +34,14 @@ if [ "$1" = "accumulo" ] && [ "$2" = "master" ]; then
 		fi
 	fi
 
+	# Try to find desired root password from client config (accumulo 2)
+	if [ -f "${ACCUMULO_CONF_DIR}/client.conf" ]; then
+		CLIENT_USERNAME=$(cat ${ACCUMULO_CONF_DIR}/accumulo-client.properties | grep "auth.principal" | grep -v "^#" | cut -d= -f2)
+		if [ "${CLIENT_USERNAME}" = "root" ]; then
+			PASSWORD=$(cat ${ACCUMULO_CONF_DIR}/client.conf | grep "auth.token" | grep -v "^#" | cut -d= -f2)
+		fi
+	fi
+
     # Try to find desired root password from accumulo.properties (accumulo 2)
 	if [ -f "${ACCUMULO_CONF_DIR}/accumulo.properties" ]; then
 		TRACE_USER=$(cat ${ACCUMULO_CONF_DIR}/accumulo.properties | grep "trace.user" | grep -v "^#" | cut -d= -f2)
