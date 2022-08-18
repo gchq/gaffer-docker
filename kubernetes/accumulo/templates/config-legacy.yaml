@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 */ -}}
-{{- define "accumulo.accumuloSite" -}}
+{{- define "accumulo.accumuloSite-legacy" -}}
 {{- $hdfsUri := print "hdfs://" ( include "accumulo.hdfsNamenodeHostname" . ) -}}
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
@@ -110,7 +110,7 @@ limitations under the License.
 </configuration>
 {{- end -}}
 
-{{- define "accumulo.accumuloClient" -}}
+{{- define "accumulo.accumuloClient-legacy" -}}
 auth.type=password
 auth.principal=root
 auth.token={{ required "Please set root password at: config.userManagement.rootPassword" .Values.config.userManagement.rootPassword }}
@@ -127,8 +127,8 @@ metadata:
     {{- include "accumulo.labels" . | nindent 4 }}
     app.kubernetes.io/component: accumulo-config
 data:
-  accumulo-site.xml: {{ include "accumulo.accumuloSite" . | b64enc | quote }}
-  client.conf: {{ include "accumulo.accumuloClient" . | b64enc | quote }}
+  accumulo-site.xml: {{ include "accumulo.accumuloSite-legacy" . | b64enc | quote }}
+  client.conf: {{ include "accumulo.accumuloClient-legacy" . | b64enc | quote }}
 
   {{- /* User supplied Accumulo config files */}}
   {{- range $path, $contents := .Values.config.files }}
