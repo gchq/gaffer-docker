@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 */ -}}
-{{- hasPrefix .Values.image.tag "2" }}
 {{- define "accumulo.accumuloSite" -}}
 {{- $hdfsUri := print "hdfs://" ( include "accumulo.hdfsNamenodeHostname" . ) -}}
 instance.volumes={{ $hdfsUri }}{{ join (print "," $hdfsUri) .Values.hdfs.volumes }}
@@ -87,6 +86,7 @@ instance.name={{ .Values.instanceId }}
 instance.zookeepers={{ include "accumulo.zookeepers" . }}
 {{- end -}}
 
+{{- if hasPrefix "2" .Values.image.tag }}
 apiVersion: v1
 kind: Secret
 metadata:
