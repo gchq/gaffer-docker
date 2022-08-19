@@ -63,7 +63,8 @@ if [ "$1" = "accumulo" ] && [ "$2" = "master" ]; then
 	fi
 
 	# If possible, wait until all the HDFS instances that Accumulo will be using are available i.e. not in Safe Mode and directory is writeable
-	ACCUMULO_VOLUMES=$(xmlstarlet sel -t -v "/configuration/property[name='instance.volumes']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
+	[ -f "${ACCUMULO_CONF_DIR}/accumulo.properties" ] && ACCUMULO_VOLUMES=$(grep instance.volumes ${ACCUMULO_CONF_DIR}/accumulo.properties | cut -d= -f2)
+	[[ -z "${ACCUMULO_VOLUMES}" && -f "${ACCUMULO_CONF_DIR}/accumulo-site.xml" ]] && ACCUMULO_VOLUMES=$(xmlstarlet sel -t -v "/configuration/property[name='instance.volumes']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
 	if [ ! -z "${ACCUMULO_VOLUMES}" ]; then
 		HADOOP_CLASSPATH="${ACCUMULO_CONF_DIR}:${HADOOP_HOME}/share/hadoop/hdfs/*:${HADOOP_HOME}/share/hadoop/client/*:${HADOOP_HOME}/share/hadoop/common/lib/*"
 
