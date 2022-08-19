@@ -26,7 +26,7 @@ If the versions of the container images you would like to deploy are not availab
 To import the images, run this from the kubernetes directory:
 
 ```bash
-export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
+export HADOOP_VERSION=${HADOOP_VERSION:-3.2.2}
 export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3}
 export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-2.0.0-alpha-0.3}
 

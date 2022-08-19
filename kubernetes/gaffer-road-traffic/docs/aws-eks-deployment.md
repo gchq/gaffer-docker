@@ -32,7 +32,7 @@ The last thing before deploying is to set the passwords for the various accumulo
 Finally, deploy the Helm Chart by running this from the kubernetes/gaffer-road-traffic folder:
 
 ```
-export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
+export HADOOP_VERSION=${HADOOP_VERSION:-3.2.2}
 export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3}
 
 helm dependency update ../accumulo/

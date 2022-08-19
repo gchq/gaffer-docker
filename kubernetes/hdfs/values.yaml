@@ -17,7 +17,7 @@ alpine:
   imagePullPolicy: IfNotPresent
 namenode:
   repository: gchq/hdfs
-  tag: 3.3.3 # managed version
+  tag: 3.2.2 # managed version
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
@@ -51,7 +51,7 @@ namenode:
 datanode:
   nodeCount: 3
   repository: gchq/hdfs
-  tag: 3.3.3 # managed version
+  tag: 3.2.2 # managed version
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
@@ -84,7 +84,7 @@ datanode:
 shell:
   enabled: true
   repository: gchq/hdfs
-  tag: 3.3.3 # managed version
+  tag: 3.2.2 # managed version
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}

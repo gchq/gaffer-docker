@@ -20,7 +20,7 @@ The following instructions build all the container images and host them in AWS E
 
 
 ```bash
-export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
+export HADOOP_VERSION=${HADOOP_VERSION:-3.2.2}
 export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3}
 export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-2.0.0-alpha-0.3}
 
