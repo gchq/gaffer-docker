@@ -15,7 +15,7 @@
 # limitations under the License.
 
 KEYTAB_PATH=/opt/hadoop/etc/hadoop/hadoop.keytab
-PRINCIPLE=$HADOOP_PRINCIPLE/$(hostname)
+PRINCIPAL=$HADOOP_PRINCIPAL/$(hostname)
 
 if [ "$DEBUG" -eq 1 ]; then
   export HADOOP_JAAS_DEBUG=true
@@ -24,7 +24,7 @@ if [ "$DEBUG" -eq 1 ]; then
 fi
 
 {
-echo "add_entry -password -p $PRINCIPLE -k 1 -e aes256-cts"; sleep 0.2
+echo "add_entry -password -p $PRINCIPAL -k 1 -e aes256-cts"; sleep 0.2
 echo $HADOOP_KRB_PASSWORD; sleep 0.2
 echo list; sleep 0.2
 echo "write_kt $KEYTAB_PATH"; sleep 0.2

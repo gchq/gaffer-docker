@@ -20,14 +20,16 @@ echo "====================== Starting KDC ================================="
 kdb5_util create -s -r GAFFER.DOCKER -P `shuf -erz -n200  {A..z}`
 
 # Add Principals (users)
-kadmin.local -q "addprinc -pw $HADOOP_KRB_PASSWORD $HADOOP_PRINCIPLE/hdfs-namenode.gaffer@$REALM"
-kadmin.local -q "addprinc -pw $HADOOP_KRB_PASSWORD $HADOOP_PRINCIPLE/hdfs-datanode.gaffer@$REALM"
+kadmin.local -q "addprinc -pw $HADOOP_KRB_PASSWORD $HADOOP_PRINCIPAL/hdfs-namenode.gaffer@$REALM"
+kadmin.local -q "addprinc -pw $HADOOP_KRB_PASSWORD $HADOOP_PRINCIPAL/hdfs-datanode.gaffer@$REALM"
 
-kadmin.local -q "addprinc -pw $ZOOKEEPER_KRB_PASSWORD $ZOOKEEPER_PRINCIPLE/zookeeper.gaffer@$REALM"
+kadmin.local -q "addprinc -pw $ZOOKEEPER_KRB_PASSWORD $ZOOKEEPER_PRINCIPAL/zookeeper.gaffer@$REALM"
 
-kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-master.gaffer@$REALM"
-kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-tserver.gaffer@$REALM"
-kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-monitor.gaffer@$REALM"
-kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPLE/accumulo-gc.gaffer@$REALM"
+kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPAL/accumulo-master.gaffer@$REALM"
+kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPAL/accumulo-tserver.gaffer@$REALM"
+kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPAL/accumulo-monitor.gaffer@$REALM"
+kadmin.local -q "addprinc -pw $ACCUMULO_KRB_PASSWORD $ACCUMULO_PRINCIPAL/accumulo-gc.gaffer@$REALM"
+
+kadmin.local -q "addprinc -pw $GAFFER_KRB_PASSWORD $GAFFER_PRINCIPAL/gaffer-rest.gaffer@$REALM"
 
 krb5kdc -n

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Copyright 2022 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,26 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_IMAGE_NAME=gchq/accumulo
-ARG BASE_IMAGE_TAG=1.9.3
+KEYTAB_PATH=/conf/zookeeper.keytab
+PRINCIPAL=$ZOOKEEPER_PRINCIPAL/$(hostname).gaffer
 
-ARG USER=accumulo
-ARG GROUP=accumulo
+{
+echo "add_entry -password -p $PRINCIPAL -k 1 -e aes256-cts"; sleep 0.2
+echo $ZOOKEEPER_KRB_PASSWORD; sleep 0.2
+echo list; sleep 0.2
+echo "write_kt $KEYTAB_PATH"; sleep 0.2
+echo exit
+} | ktutil
 
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+# Zookeeper switches user to its own user, which needs to own the keytab
+chown zookeeper:zookeeper $KEYTAB_PATH
 
-USER root
-RUN apt -qq update && \
-	apt -qq install -y \
-		krb5-user \
-		iproute2 && \
-	apt -qq clean \
-	&& rm -rf /var/lib/apt/lists/*
-
-RUN mkdir /etc/accumulo && \
-    chown -R ${USER}:${GROUP} /etc/accumulo
-
-COPY ./krb-entrypoint.sh /
-ENTRYPOINT ["/krb-entrypoint.sh", "accumulo"]
-
-USER ${USER}
+# Call original Zookeeper entrypoint
+exec /docker-entrypoint.sh "$@"

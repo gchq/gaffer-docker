@@ -15,8 +15,9 @@
 # limitations under the License.
 
 KEYTAB_PATH=$ACCUMULO_CONF_DIR/accumulo.keytab
-PRINCIPLE=$ACCUMULO_PRINCIPLE/$(hostname)
-FULL_PRINCIPLE=$ACCUMULO_PRINCIPLE/$(hostname)@GAFFER.DOCKER
+PRINCIPAL=$ACCUMULO_PRINCIPAL/$(hostname)
+FULL_PRINCIPAL=$PRINCIPAL@GAFFER.DOCKER
+GAFFER_FULL_PRINCIPAL=$GAFFER_PRINCIPAL/$GAFFER_HOSTNAME@GAFFER.DOCKER
 
 if [ "$DEBUG" -eq 1 ]; then
   export ACCUMULO_GENERAL_OPTS="-Dsun.security.krb5.debug=true -Dsun.security.spnego.debug -Djava.security.debug=gssloginconfig,configfile,configparser,logincontext"
@@ -24,7 +25,7 @@ if [ "$DEBUG" -eq 1 ]; then
 fi
 
 {
-echo "add_entry -password -p $PRINCIPLE -k 1 -e aes256-cts"; sleep 0.2
+echo "add_entry -password -p $PRINCIPAL -k 1 -e aes256-cts"; sleep 0.2
 echo $ACCUMULO_KRB_PASSWORD; sleep 0.2
 echo list; sleep 0.2
 echo "write_kt $KEYTAB_PATH"; sleep 0.2
@@ -35,7 +36,7 @@ echo exit
 # Copy generic config for all nodes into the config folder (cannot edit in place because it is read-only)
 cp $ACCUMULO_CONF_DIR/generic/* $ACCUMULO_CONF_DIR
 # Edit the site-config in place to set the principal for this node
-xmlstarlet ed --inplace -u "/configuration/property/name[text()='general.kerberos.principal']/../value" -v $FULL_PRINCIPLE $ACCUMULO_CONF_DIR/accumulo-site.xml
+xmlstarlet ed --inplace -u "/configuration/property/name[text()='general.kerberos.principal']/../value" -v $FULL_PRINCIPAL $ACCUMULO_CONF_DIR/accumulo-site.xml
 
 # Below is a modified version of the standard Accumulo docker entrypoint.sh
 # This cannot be called directly and reused because it is designed specifically for password auth
@@ -44,7 +45,10 @@ test -z "${ACCUMULO_INSTANCE_NAME}" && ACCUMULO_INSTANCE_NAME="accumulo"
 
 if [ "$1" = "accumulo" ] && [ "$2" = "master" ]; then
 	echo "\nInitializing Accumulo..."
-	accumulo init --instance-name ${ACCUMULO_INSTANCE_NAME} --user $PRINCIPLE
+	# '--user' sets the root user which had admin rights by default, this is set to the
+	# principal used by gaffer-rest for convenience, as otherwise permissions would need
+	# to be added separately using an accumulo shell.
+	accumulo init --instance-name ${ACCUMULO_INSTANCE_NAME} --user $GAFFER_FULL_PRINCIPAL
 fi
 
 echo "\nRunning command: $@"

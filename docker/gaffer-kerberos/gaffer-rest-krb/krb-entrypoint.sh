@@ -14,19 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-KEYTAB_PATH=/conf/zookeeper.keytab
-PRINCIPLE=$ZOOKEEPER_PRINCIPLE/$(hostname).gaffer
+KEYTAB_PATH=/gaffer/config/gaffer.keytab
+PRINCIPAL=$GAFFER_PRINCIPAL/$(hostname)
+FULL_PRINCIPAL=$GAFFER_PRINCIPAL/$(hostname)@GAFFER.DOCKER
+
 
 {
-echo "add_entry -password -p $PRINCIPLE -k 1 -e aes256-cts"; sleep 0.2
-echo $ZOOKEEPER_KRB_PASSWORD; sleep 0.2
+echo "add_entry -password -p $PRINCIPAL -k 1 -e aes256-cts"; sleep 0.2
+echo $GAFFER_KRB_PASSWORD; sleep 0.2
 echo list; sleep 0.2
 echo "write_kt $KEYTAB_PATH"; sleep 0.2
 echo exit
 } | ktutil
 
-# Zookeeper switches user to its own user, which needs to own the keytab
-chown zookeeper:zookeeper $KEYTAB_PATH
-
-# Call original Zookeeper entrypoint
-exec /docker-entrypoint.sh "$@"
+exec java -Dloader.path=/gaffer/jars/lib -jar jars/rest.jar
