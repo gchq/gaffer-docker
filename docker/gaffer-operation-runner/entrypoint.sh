@@ -22,5 +22,5 @@ if [ -z $graph_id ]; then
 fi
 echo "Using Graph Id: ${graph_id}"
 
-export CLASSPATH=/gaffer/jars/*
+export CLASSPATH=/gaffer/jars/*:/opt/accumulo/lib/ext/*
 accumulo uk.gov.gchq.gaffer.docker.App /gaffer/operation/operation.json /gaffer/schema /gaffer/store/store.properties "${graph_id}"
