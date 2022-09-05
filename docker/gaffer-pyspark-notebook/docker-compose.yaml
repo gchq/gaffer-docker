@@ -149,6 +149,7 @@ services:
 
   gaffer-rest:
     image: gchq/gaffer-rest:${GAFFER_VERSION}
+    restart: on-failure
     container_name: gaffer-rest
     hostname: gaffer-rest
     build:
