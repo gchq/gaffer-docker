@@ -57,7 +57,7 @@ jobs:
       run: ./cd/deploy_to_kind.sh
   
     - name: Run gaffer-road-traffic Tests
-      run: helm test gaffer || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)
+      run: helm test gaffer || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && kubectl logs gaffer-gaffer-road-traffic-hdfs-integration-test -c add-elements-from-hdfs && df -h && false)
 
     - name: Run gaffer-jhub Tests
       run: helm test jhub || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)
