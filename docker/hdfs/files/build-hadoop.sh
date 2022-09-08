@@ -15,7 +15,7 @@
 # limitations under the License.
 
 
-test -z "${HADOOP_VERSION}" && HADOOP_VERSION=3.2.2
+test -z "${HADOOP_VERSION}" && HADOOP_VERSION=3.3.3
 test -z "${HADOOP_DOWNLOAD_URL}" && HADOOP_DOWNLOAD_URL="https://www.apache.org/dyn/closer.cgi?action=download&filename=hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
 test -z "${HADOOP_BACKUP_DOWNLOAD_URL}" && HADOOP_BACKUP_DOWNLOAD_URL="https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz"
 test -z "${HADOOP_APPLY_PATCHES}" && HADOOP_APPLY_PATCHES=false

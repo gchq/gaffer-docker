@@ -8,7 +8,7 @@ First follow the [instructions here](../../docs/kind-deployment.md) to provision
 The standard Gaffer deployment will give you an in-memory store. To change this see [our comprehensive guide](../../docs/deploy-empty-graph.md) to change the store type.
 
 ```bash
-export HADOOP_VERSION=${HADOOP_VERSION:-3.2.2}
+export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
 export GAFFER_VERSION=${GAFFER_VERSION:-1.13.4}
 
 helm dependency update
