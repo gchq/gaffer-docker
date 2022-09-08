@@ -68,6 +68,12 @@
                 </transformer>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
               </transformers>
+              <relocations>
+                <relocation>
+                  <pattern>com.fasterxml.jackson</pattern>
+                  <shadedPattern>hidden.com.fasterxml.jackson</shadedPattern>
+                </relocation>
+              </relocations>
             </configuration>
           </execution>
         </executions>
