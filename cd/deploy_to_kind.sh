@@ -16,7 +16,7 @@
 
 set -e
 
-kind create cluster --quiet --config ./cd/kind.yaml
+kind create cluster --quiet --config ./cd/kind.yaml --image kindest/node:v1.24.4
 
 # This sets the values for:
 # HADOOP_VERSION
