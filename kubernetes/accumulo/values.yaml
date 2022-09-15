@@ -65,6 +65,7 @@ config:
               - READ
               - WRITE
   postInstallCommands: []
+majorVersion: "2"
 image:
   repository: gchq/accumulo
   tag: 2.0.1

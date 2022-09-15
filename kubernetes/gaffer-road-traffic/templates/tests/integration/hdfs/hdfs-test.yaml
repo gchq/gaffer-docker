@@ -65,7 +65,7 @@ spec:
     - name: hdfs-setup-files
       mountPath: /gaffer/operation
       readOnly: true
-{{- if (hasPrefix "2" .Values.gaffer.accumulo.image.tag) }}
+{{- if (hasPrefix "2" .Values.gaffer.accumulo.majorVersion) }}
     - name: accumulo-config
       mountPath: {{ .Values.gaffer.accumulo.config.path }}/accumulo.properties
       readOnly: true

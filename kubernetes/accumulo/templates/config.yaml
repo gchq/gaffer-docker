@@ -83,7 +83,7 @@ instance.name={{ .Values.instanceId }}
 instance.zookeepers={{ include "accumulo.zookeepers" . }}
 {{- end -}}
 
-{{- if (hasPrefix "2" .Chart.AppVersion ) }}
+{{- if (hasPrefix "2" .Values.majorVersion ) }}
 apiVersion: v1
 kind: Secret
 metadata:
