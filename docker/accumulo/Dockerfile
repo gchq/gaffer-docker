@@ -64,7 +64,7 @@ RUN if [ ! -f "./accumulo-${ACCUMULO_VERSION}-bin.tar.gz" ]; then \
 RUN tar -xf ./accumulo-${ACCUMULO_VERSION}-bin.tar.gz accumulo-${ACCUMULO_VERSION}/bin/ accumulo-${ACCUMULO_VERSION}/lib/ && \
 	rm -f ./accumulo-${ACCUMULO_VERSION}-bin.tar.gz && \
     # Build command dependent on ACCUMULO_VERSION
-    if echo "$ACCUMULO_VERSION" | grep -q "^1.*$"; then ./accumulo-${ACCUMULO_VERSION}/bin/accumulo-util build-native; else ./accumulo-${ACCUMULO_VERSION}/bin/build_native_library.sh; fi && \
+    if echo "$ACCUMULO_VERSION" | grep -q "^2.*$"; then ./accumulo-${ACCUMULO_VERSION}/bin/accumulo-util build-native; else ./accumulo-${ACCUMULO_VERSION}/bin/build_native_library.sh; fi && \
 	tar -xf ./hadoop-${HADOOP_VERSION}.tar.gz \
 		hadoop-${HADOOP_VERSION}/lib/native/ \
 		hadoop-${HADOOP_VERSION}/share/hadoop/client/ \
