@@ -25,7 +25,7 @@ fi
 ## Deploy Helm chart
 
 ```bash
-export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
+export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
 
 helm install hdfs . -f ./values-eks-alb.yaml \
   ${EXTRA_HELM_ARGS} \

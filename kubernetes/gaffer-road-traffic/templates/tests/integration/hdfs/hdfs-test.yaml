@@ -1,6 +1,6 @@
 {{- /*
 
-Copyright 2020 Crown Copyright
+Copyright 2020-2022 Crown Copyright
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -65,6 +65,16 @@ spec:
     - name: hdfs-setup-files
       mountPath: /gaffer/operation
       readOnly: true
+{{- if (hasPrefix "2" .Values.gaffer.accumulo.majorVersion) }}
+    - name: accumulo-config
+      mountPath: {{ .Values.gaffer.accumulo.config.path }}/accumulo.properties
+      readOnly: true
+      subPath: accumulo.properties
+    - name: accumulo-config
+      mountPath: {{ .Values.gaffer.accumulo.config.path }}/accumulo-client.properties
+      readOnly: true
+      subPath: accumulo-client.properties
+{{- else }}
     - name: accumulo-config
       mountPath: {{ .Values.gaffer.accumulo.config.path }}/accumulo-site.xml
       readOnly: true
@@ -73,6 +83,7 @@ spec:
       mountPath: {{ .Values.gaffer.accumulo.config.path }}/client.conf
       readOnly: true
       subPath: client.conf
+{{- end }}
     - name: accumulo-config
       mountPath: {{ .Values.gaffer.accumulo.config.path }}/accumulo-env.sh
       readOnly: true

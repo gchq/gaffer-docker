@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2022 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,9 +19,11 @@ test -z "${ACCUMULO_INSTANCE_NAME}" && ACCUMULO_INSTANCE_NAME="accumulo"
 
 if [ "$1" = "accumulo" ] && [ "$2" = "master" ]; then
 	# Try to find desired root password from trace config
-	TRACE_USER=$(xmlstarlet sel -t -v "/configuration/property[name='trace.user']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
-	if [ "${TRACE_USER}" = "root" ]; then
-		PASSWORD=$(xmlstarlet sel -t -v "/configuration/property[name='trace.token.property.password']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
+	if [ -f "${ACCUMULO_CONF_DIR}/accumulo-site.xml" ]; then
+		TRACE_USER=$(xmlstarlet sel -t -v "/configuration/property[name='trace.user']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
+		if [ "${TRACE_USER}" = "root" ]; then
+			PASSWORD=$(xmlstarlet sel -t -v "/configuration/property[name='trace.token.property.password']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
+		fi
 	fi
 
 	# Try to find desired root password from client config
@@ -29,6 +31,22 @@ if [ "$1" = "accumulo" ] && [ "$2" = "master" ]; then
 		CLIENT_USERNAME=$(cat ${ACCUMULO_CONF_DIR}/client.conf | grep "auth.principal" | grep -v "^#" | cut -d= -f2)
 		if [ "${CLIENT_USERNAME}" = "root" ]; then
 			PASSWORD=$(cat ${ACCUMULO_CONF_DIR}/client.conf | grep "auth.token" | grep -v "^#" | cut -d= -f2)
+		fi
+	fi
+
+	# Try to find desired root password from client config (accumulo 2)
+	if [ -f "${ACCUMULO_CONF_DIR}/accumulo-client.properties" ]; then
+		CLIENT_USERNAME=$(cat ${ACCUMULO_CONF_DIR}/accumulo-client.properties | grep "auth.principal" | grep -v "^#" | cut -d= -f2)
+		if [ "${CLIENT_USERNAME}" = "root" ]; then
+			PASSWORD=$(cat ${ACCUMULO_CONF_DIR}/accumulo-client.properties | grep "auth.token" | grep -v "^#" | cut -d= -f2)
+		fi
+	fi
+
+	# Try to find desired root password from accumulo.properties (accumulo 2)
+	if [ -f "${ACCUMULO_CONF_DIR}/accumulo.properties" ]; then
+		TRACE_USER=$(cat ${ACCUMULO_CONF_DIR}/accumulo.properties | grep "trace.user" | grep -v "^#" | cut -d= -f2)
+		if [ "${TRACE_USER}" = "root" ]; then
+			PASSWORD=$(cat ${ACCUMULO_CONF_DIR}/accumulo.properties | grep "trace.token.property.password" | grep -v "^#" | cut -d= -f2)
 		fi
 	fi
 
@@ -45,7 +63,8 @@ if [ "$1" = "accumulo" ] && [ "$2" = "master" ]; then
 	fi
 
 	# If possible, wait until all the HDFS instances that Accumulo will be using are available i.e. not in Safe Mode and directory is writeable
-	ACCUMULO_VOLUMES=$(xmlstarlet sel -t -v "/configuration/property[name='instance.volumes']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
+	[ -f "${ACCUMULO_CONF_DIR}/accumulo.properties" ] && ACCUMULO_VOLUMES=$(grep instance.volumes ${ACCUMULO_CONF_DIR}/accumulo.properties | cut -d= -f2)
+	[[ -z "${ACCUMULO_VOLUMES}" && -f "${ACCUMULO_CONF_DIR}/accumulo-site.xml" ]] && ACCUMULO_VOLUMES=$(xmlstarlet sel -t -v "/configuration/property[name='instance.volumes']/value" ${ACCUMULO_CONF_DIR}/accumulo-site.xml)
 	if [ ! -z "${ACCUMULO_VOLUMES}" ]; then
 		HADOOP_CLASSPATH="${ACCUMULO_CONF_DIR}:${HADOOP_HOME}/share/hadoop/hdfs/*:${HADOOP_HOME}/share/hadoop/client/*:${HADOOP_HOME}/share/hadoop/common/lib/*"
 

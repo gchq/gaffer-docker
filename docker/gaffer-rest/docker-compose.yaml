@@ -1,4 +1,4 @@
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2022 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,8 +20,9 @@ services:
     image: gchq/gaffer-rest:${GAFFER_VERSION}
     build:
       context: .
-      # args:
-      #   GAFFER_VERSION: ${GAFFER_VERSION} # Use this when exec jar is released
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
     restart: always
     ports:
     - 8080:8080

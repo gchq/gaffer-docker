@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2022 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 set -e
 
-kind create cluster --quiet --config ./cd/kind.yaml --image kindest/node:v1.21.10
+kind create cluster --quiet --config ./cd/kind.yaml --image kindest/node:v1.24.4
 
 # This sets the values for:
 # HADOOP_VERSION

@@ -6,7 +6,7 @@ First follow the [instructions here](../../docs/kind-deployment.md) to provision
 ## Deploying Helm charts
 
 ```bash
-export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
+export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
 
 helm install hdfs . \
   --set hdfs.namenode.tag=${HADOOP_VERSION} \
