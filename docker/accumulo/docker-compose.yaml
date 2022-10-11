@@ -1,4 +1,4 @@
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2022 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -85,7 +85,7 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ./conf:${ACCUMULO_CONF_DIR}:ro
+    - ./conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-tserver:
@@ -104,7 +104,7 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ./conf:${ACCUMULO_CONF_DIR}:ro
+    - ./conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-monitor:
@@ -125,7 +125,7 @@ services:
     ports:
     - 9995:9995
     volumes:
-    - ./conf:${ACCUMULO_CONF_DIR}:ro
+    - ./conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-gc:
@@ -144,5 +144,5 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ./conf:${ACCUMULO_CONF_DIR}:ro
+    - ./conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo

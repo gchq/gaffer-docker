@@ -1,4 +1,4 @@
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2022 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@ ARG BUILDER_IMAGE_NAME=maven
 ARG BUILDER_IMAGE_TAG=3.8.4-jdk-8
 
 ARG BASE_IMAGE_NAME=gchq/gaffer
-ARG BASE_IMAGE_TAG=2.0.0-alpha-0.1
+ARG BASE_IMAGE_TAG=2.0.0-alpha-0.3
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
 COPY ./operation-runner/ /operation-runner/
 WORKDIR /gaffer
 COPY ./files/ .
-ARG GAFFER_VERSION=2.0.0-alpha-0.1
+ARG GAFFER_VERSION=2.0.0-alpha-0.3
 RUN if [ ! -f "jars/operation-runner-*.jar" ]; then \
         cd /operation-runner/ && \
         mvn -q clean package -Dgaffer.version=${GAFFER_VERSION} && \
