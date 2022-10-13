@@ -17,6 +17,12 @@ version: "3.7"
 services:
 
   zookeeper:
+    healthcheck:
+      test: echo ruok | nc 127.0.0.1 2181 | grep imok
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
     image: zookeeper:${ZOOKEEPER_VERSION}
     container_name: zookeeper
     hostname: zookeeper
@@ -36,6 +42,11 @@ services:
     command: namenode
     container_name: hdfs-namenode
     hostname: hdfs-namenode
+    healthcheck:
+      test: curl -f http://localhost:9870 || exit 1
+      retries: 10
+      interval: 3s
+      timeout: 5s
     environment:
     - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
     ports:
@@ -48,7 +59,8 @@ services:
 
   hdfs-datanode:
     depends_on:
-    - hdfs-namenode
+      hdfs-namenode:
+        condition: service_healthy
     image: gchq/hdfs:${HADOOP_VERSION}
     command: datanode
     container_name: hdfs-datanode
@@ -62,10 +74,17 @@ services:
     - /data2
 
   accumulo-master:
+    # healthcheck:
+    #   test: ss -pltn | grep 9999
+    #   retries: 15
+    #   interval: 2s
+    #   timeout: 5s
+    #   start_period: 10s
     depends_on:
-    - hdfs-namenode
-    - hdfs-datanode
-    - zookeeper
+      hdfs-namenode:
+        condition: service_healthy
+      zookeeper:
+        condition: service_healthy
     image: gchq/gaffer:${GAFFER_VERSION}
     build:
       context: .
@@ -89,8 +108,16 @@ services:
     - /var/log/accumulo
 
   accumulo-tserver:
+    # healthcheck:
+    #   test: ss -pltn | grep 9997
+    #   retries: 5
+    #   interval: 2s
+    #   timeout: 5s
+    #   start_period: 10s
     depends_on:
     - accumulo-master
+      # accumulo-master:
+      #   condition: service_healthy
     image: gchq/gaffer:${GAFFER_VERSION}
     command: tserver
     restart: on-failure
@@ -110,6 +137,8 @@ services:
   accumulo-monitor:
     depends_on:
     - accumulo-master
+      # accumulo-master:
+      #   condition: service_healthy
     image: gchq/gaffer:${GAFFER_VERSION}
     command: monitor
     restart: on-failure
@@ -131,6 +160,8 @@ services:
   accumulo-gc:
     depends_on:
     - accumulo-master
+      # accumulo-master:
+      #   condition: service_healthy
     image: gchq/gaffer:${GAFFER_VERSION}
     command: gc
     restart: on-failure
