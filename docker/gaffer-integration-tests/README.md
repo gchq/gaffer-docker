@@ -1,12 +1,14 @@
 Gaffer Integration Tests
-==========================
+=========================
+In this folder you can find the required dockerfile for running integration tests against an Accumulo cluster.
+This is used by the [Helm Scripts](kubernetes/gaffer/templates/tests/integration/accumulo-tests.yaml), and cannot be used to run the integration tests in Docker alone.
 
-This image contains and runs the Accumulo integration tests against an Accumulo cluster.
 To run it you need to provide the store properties at /tests/conf/store.properties.
 
-Values from these will be copied accross to the src/tests/resources store properties and will be used by the tests
+Values from these will automatically be copied across to the src/tests/resources store properties and will be used by the tests.
 
-To Build the Docker image, use:
+## Building the images
+If you do want to build the images you can, by running the following from this directory:
 ```bash
 docker build -t gchq/gaffer-integration-tests:2.0.0-alpha-0.3 .
 ```

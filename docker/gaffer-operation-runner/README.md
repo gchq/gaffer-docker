@@ -1,21 +1,18 @@
 Gaffer Operation Runner
-===========================
+========================
+In this folder you can find the required files for running a Gaffer operation directly on the Gaffer instance (bypassing the REST service).
 
-Runs a Gaffer operation directly on the Gaffer instance (bypassing the REST service).
-
-The operation that is executed must be specified in the files/operation/operation.json file
+The operation that is executed must be specified in the files/operation/operation.json file.
 By default, the runner counts all the elements in the graph.
 
 ## Source code
-The Operation Runner runs a Java program, the source code for which is located in the operation-runner directory. This is only a temporary measure as we aim to move this utility into Gaffer itself (under ticket [GAFFER-2266](https://github.com/gchq/Gaffer/issues/2266))
+The Operation Runner runs a Java program, the source code for which is located in the operation-runner directory. )
 
-To overwrite the Jar used to run an operation, place the jar in
-files/jars.
+To overwrite the Jar used to run an operation, place the jar in 'files/jars'.
 
 ## Custom Jars
 To add Custom Jars to your deployment, add them to the files/jars directory. They will automatically get added to the classpath when the operation is run.
-
-Then rebuild the container
+You will then need to rebuild the container for the changes to take effect.
 
 ## Deployment
 
