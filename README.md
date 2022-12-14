@@ -1,20 +1,16 @@
- Gaffer Docker
+Gaffer Docker
 ================
 
-This repo contains Dockerfiles for building container images for:
-* [HDFS](docker/hdfs/)
-* [Accumulo](docker/accumulo/)
-* [Gaffer](docker/gaffer/)
-* Gaffer's [REST API](docker/gaffer-rest/)
-* Gaffer's [Web UI](docker/gaffer-ui/)
-* Gaffer's [Road Traffic Data Loader](docker/gaffer-road-traffic-loader/)
-* Gaffer's [Operation Runner](docker/gaffer-operation-runner/)
-* Gaffer [Integration Test Runner](docker/gaffer-integration-tests/)
-* [gafferpy Jupyter Notebook](docker/gaffer-pyspark-notebook/)
-* Gaffer [options server for JupyterHub](docker/gaffer-jhub-options-server/)
-* [Spark](docker/spark-py/)
+This repo contains the code needed to run Gaffer using Docker or Kubernetes. 
+There are two main sub-folders, 'docker' and 'Kubernetes' which contain the project files you need for starting Gaffer using those services.
 
-It also contains Helm Charts so that the following applications can be deployed onto Kubernetes clusters:
+## Running Gaffer Using Docker
+For information on how to run Gaffer using Docker containers, please see the README in the docker directory: [Gaffer Docker README](docker/README.md)
+
+
+## Running Gaffer Using Kubernetes
+Kubernetes Helm Charts can be found in the 'kubernetes' folder.
+These to deploy the following applications onto Kubernetes clusters:
 * [HDFS](kubernetes/hdfs/)
 * [Accumulo](kubernetes/accumulo/)
 * [Gaffer](kubernetes/gaffer/)
