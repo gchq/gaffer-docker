@@ -12,7 +12,13 @@ docker-compose up
 ## Containers that are started:
 * Zookeeper
 * HDFS
+    * Datanode
+    * Namenode
 * Accumulo
+    * Monitor
+    * GC
+    * tserver
+    * Master
 * Gaffer REST
 * Gaffer UI
 

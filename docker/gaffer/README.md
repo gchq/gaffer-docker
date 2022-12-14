@@ -18,7 +18,13 @@ accumulo's /opt/accumulo/lib/ext directory when you bring the containers up.
 ## Containers that are started:
 * Zookeeper
 * HDFS
+    * Datanode
+    * Namenode
 * Accumulo
+    * Monitor
+    * GC
+    * tserver
+    * Master
 * Gaffer REST
 * Gaffer UI
 

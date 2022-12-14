@@ -14,7 +14,13 @@ docker-compose up
 ## Containers that are started:
 * Zookeeper
 * HDFS
+    * Datanode
+    * Namenode
 * Accumulo
+    * Monitor
+    * GC
+    * tserver
+    * Master
 
 Access the HDFS NameNode web UI at: http://localhost:9870
 Access the Accumulo Monitor UI at: http://localhost:9995
