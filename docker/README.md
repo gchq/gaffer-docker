@@ -1,5 +1,5 @@
 Docker
-================
+=======
 
 In this directory you can find the Dockerfiles and docker-compose files for building container images for:
 * [Gaffer](gaffer/)

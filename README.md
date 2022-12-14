@@ -7,29 +7,10 @@ There are two main sub-folders, 'docker' and 'Kubernetes' which contain the proj
 ## Running Gaffer Using Docker
 For information on how to run Gaffer using Docker containers, please see the README in the docker directory: [Gaffer Docker README](docker/README.md)
 
-
 ## Running Gaffer Using Kubernetes
-Kubernetes Helm Charts can be found in the 'kubernetes' folder.
-These to deploy the following applications onto Kubernetes clusters:
-* [HDFS](kubernetes/hdfs/)
-* [Accumulo](kubernetes/accumulo/)
-* [Gaffer](kubernetes/gaffer/)
-* [Example Gaffer Graph containing Road Traffic Dataset](kubernetes/gaffer-road-traffic/)
-* [JupyterHub with Gaffer integrations](kubernetes/gaffer-jhub/)
-
-These charts can be accessed by cloning our repository or by using our Helm repo hosted on our [Github Pages Site](https://gchq.github.io/gaffer-docker)
-
-To use this repo, run:
-```bash
-helm repo add gaffer-docker https://gchq.github.io/gaffer-docker
-```
-
-## Kubernetes How-to Guides
-
-We have a number of [guides](./kubernetes/docs/guides.md) to help you deploy Gaffer on Kubernetes.
+For information on how to run Gaffer using Kubernetes, please see the README in the kubernetes directory: [Kubernetes README](kubernetes/README.md)
 
 ## Versioning
-
 Each of our images will be tagged in DockerHub with the version of the software they represent. Every release,
 we update the image for that tag and add a new release which has the corresponding git tag.
 
@@ -46,7 +27,7 @@ Note that we maintain mutable versions of latest, as well as the major, minor an
 ensure that your image will never change when doing a pull from docker, make sure to use the version with the git tag in the
 build metadata.
 
-This process is automated by Github actions.
+This process is automated by GitHub actions.
 
 ## Known Compatible Docker Versions
 
