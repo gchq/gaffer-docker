@@ -1,14 +1,21 @@
 Gaffer UI
 ==========
+In this folder you can find the required files for building and running the Gaffer UI in Docker containers.
 
-The Gaffer UI contains the Gaffer UI which resides in [Gaffer Tools](https://github.com/gchq/gaffer-tools).
+The code for the Gaffer UI resides in [Gaffer Tools](https://github.com/gchq/gaffer-tools).
 
-### Build
+# Running Locally
+The easiest way to build and run these services is to use docker-compose, by running the following from this directory:
+```bash
+docker-compose up
+```
 
-To build the Gaffer UI as well as the Gaffer REST service, use `docker-compose build`
-
+## Customising the build
 You can provide your own ui.war file by putting it in the wars directory. This will be copied into the image.
 
-### Run
+## Containers that are started:
+* Gaffer REST
+* Gaffer UI
 
-To run the Gaffer UI against an example REST API, use `docker-compose up`
+Access the Gaffer Web UI at: http://localhost:5000/ui/
+Access the Gaffer REST API at: http://localhost:8080/rest/
