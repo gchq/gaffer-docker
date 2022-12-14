@@ -6,7 +6,7 @@ The operation that is executed must be specified in the files/operation/operatio
 By default, the runner counts all the elements in the graph.
 
 ## Source code
-The Operation Runner runs a Java program, the source code for which is located in the operation-runner directory. )
+The Operation Runner runs a Java program, the source code for which is located in the operation-runner directory.
 
 To overwrite the Jar used to run an operation, place the jar in 'files/jars'.
 
@@ -31,3 +31,15 @@ And to re-run the operation after changing it, use:
 ```bash
 docker-compose up --build operation-runner
 ```
+
+## Containers that are started:
+* Zookeeper
+* HDFS
+* Accumulo
+* Gaffer REST
+* Gaffer UI
+
+Access the HDFS NameNode web UI at: http://localhost:9870
+Access the Accumulo Monitor UI at: http://localhost:9995
+Access the Gaffer Web UI at: http://localhost:5000/ui/
+Access the Gaffer REST API at: http://localhost:8080/rest/
