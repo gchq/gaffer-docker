@@ -10,7 +10,7 @@ If you want more libraries than this (either one of ours of one of your own) you
 
 You will need a basic Gaffer instance deployed on Kubernetes. Here is [how to do that](./deploy-empty-graph.md).
 
-### Overwrite the REST war file
+# Overwrite the REST war file
 At the moment, Gaffer uses a runnable jar file located at /gaffer/jars. When it runs it includes the /gaffer/jars/lib on the classpath. There is nothing in there by default because all the dependencies are bundled in to the JAR. However, if you wanted to add your own jars, you can do it like this:
 ```Dockerfile
 FROM gchq/gaffer-rest:latest
@@ -22,8 +22,8 @@ Build the image using:
 docker build -t custom-rest:latest .
 ```
 
-### Add the extra libraries to the Accumulo image
-Gaffer's Accumulo image includes support for the following gaffer libraries:
+# Add the extra libraries to the Accumulo image
+Gaffers Accumulo image includes support for the following gaffer libraries:
 * The Bitmap Library
 * The Sketches Library
 * The Time Library
@@ -38,7 +38,7 @@ Then build the image
 docker build -t custom-gaffer-accumulo:latest .
 ```
 
-### Switch the images in the deployment
+# Switch the images in the deployment
 You will need a way of making the custom images visible to the kubernetes cluster. With EKS, you can do this by uploading the images to ECR. There is an example for how to do that in one of our [other guides](./aws-eks-deployment.md#Container+Images). With KinD, you just run `kind load docker-image <image:tag>`.
 
 Once visible you can switch them out. Create a `custom-images.yaml` file with the following contents:
@@ -59,5 +59,5 @@ To switch them run:
 helm upgrade my-graph gaffer-docker/gaffer -f custom-images.yaml --reuse-values
 ```
 
-### What next?
+# What next?
 See our [guides](./guides.md) for other things you can do with Gaffer on Kubernetes.

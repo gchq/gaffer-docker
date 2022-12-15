@@ -6,7 +6,7 @@ The first thing you will need to do is deploy a simple graph. We have a guide fo
 
 Once you have that deployed, we can change the schema.
 
-### Edit the schema
+# Edit the schema
 If you run a GetSchema operation against the graph, you will notice that the count property is of type `java.lang.Integer` - change that property to be of type `java.lang.Long`.
 
 The easiest way to deploy a schema file is to use helms `--set-file` option which lets you set a value from the contents of a file.
@@ -53,7 +53,7 @@ Example of a `schema.json` file:
 }
 ```
 
-### Update deployment with the new schema
+# Update deployment with the new schema
 For our deployment to pick up the changes, we need to run a helm upgrade:
 ```bash
 helm upgrade my-graph gaffer-docker/gaffer --set-file graph.schema."schema\.json"=./schema.json --reuse-values
@@ -63,5 +63,5 @@ The `--reuse-values` argument tells helm to re-use the passwords that we defined
 Now if we inspect the schema, you will see that the `count` property has changed to a Long.
 
 
-### What next?
+# What next?
 See our [guides](./guides.md) for other things you can do with Gaffer on Kubernetes.

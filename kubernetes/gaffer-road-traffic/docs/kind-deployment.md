@@ -1,9 +1,9 @@
 # Deploying Road Traffic Gaffer Graph using kind
-All scripts listed here are intended to be run from the kubernetes/gaffer-road-traffic folder
+All scripts listed here are intended to be run from the kubernetes/gaffer-road-traffic folder.
 
 First follow the [instructions here](../../docs/kind-deployment.md) to provision and configure a local Kubernetes cluster, using [kind](https://kind.sigs.k8s.io/) (Kubernetes IN Docker), that the Gaffer Road Traffic Helm Chart can be deployed on.
 
-After the cluster is provisioned, update the values.yaml with the passwords for the various accumulo users. These are found under `accumulo.config.userManagement`.
+After the cluster is provisioned, update the values.yaml with the passwords for the various Accumulo users. These are found under `accumulo.config.userManagement`.
 
 Once that's done, run this to deploy and test the Road Traffic Graph. 
 ```bash

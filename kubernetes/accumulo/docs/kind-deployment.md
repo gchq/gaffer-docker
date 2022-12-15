@@ -20,17 +20,13 @@ helm install accumulo . \
 helm test accumulo
 ```
 
-
-## Accessing Web UIs (via `kubectl port-forward`)
-
+# Accessing Web UIs (via `kubectl port-forward`)
 | Component   | Command                                                          | URL                         |
 | ----------- | ---------------------------------------------------------------- | --------------------------- |
 | Accumulo    | `kubectl port-forward svc/road-traffic-gaffer-monitor 9995:80`   | http://localhost:9995/      |
 
 
-
-## Accessing Web UIs (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
-
+# Accessing Web UIs (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
 Register the FQDNs for each component in DNS e.g.
 ```
 echo "127.0.0.1 gaffer.k8s.local accumulo.k8s.local hdfs.k8s.local" | sudo tee -a /etc/hosts

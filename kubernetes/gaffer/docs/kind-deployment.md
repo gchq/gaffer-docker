@@ -1,5 +1,5 @@
 Deploying Gaffer using kind
-=================================
+============================
 
 All the scripts found here are designed to be run from the kubernetes/gaffer folder.
 
@@ -24,7 +24,7 @@ helm test gaffer
 ```
 
 
-## Accessing Web UIs (via `kubectl port-forward`)
+# Accessing Web UIs (via `kubectl port-forward`)
 
 | Component   | Command                                                    | URL                         |
 | ----------- | ---------------------------------------------------------- | --------------------------- |
@@ -33,7 +33,7 @@ helm test gaffer
 Note that the Gaffer UI requires you to set up an ingress by default.
 
 
-## Accessing Web UIs (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
+# Accessing Web UIs (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
 
 Register the FQDNs for each component in DNS e.g.
 ```
