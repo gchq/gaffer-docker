@@ -30,9 +30,7 @@ build metadata.
 This process is automated by GitHub actions.
 
 ## Known Compatible Docker Versions
-
 * 20.10.5
 
 ## Contributing
-
 If you would like to make a Contribution, we have all the details for doing that [here](CONTRIBUTING.md)

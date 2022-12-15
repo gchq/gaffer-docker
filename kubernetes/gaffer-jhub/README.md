@@ -1,4 +1,5 @@
-# JupyterHub with Gaffer integrations
+JupyterHub with Gaffer integrations
+===================================
 
 This Helm Chart deploys Gaffer's [JupyterHub Options Server](../../docker/gaffer-jhub-options-server/) alongside the [JupyterHub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) Chart. The 'options server' works in cooperation with Jupyter Hub to allow pre-configured notebook instances to be provisioned for users so that they can easily interact with HDFS and Gaffer instances.
 
