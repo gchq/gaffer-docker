@@ -1,7 +1,8 @@
 JupyterHub with Gaffer integrations
 ===================================
 
-This Helm Chart deploys Gaffer's [JupyterHub Options Server](../../docker/gaffer-jhub-options-server/) alongside the [JupyterHub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) Chart. The 'options server' works in cooperation with Jupyter Hub to allow pre-configured notebook instances to be provisioned for users so that they can easily interact with HDFS and Gaffer instances.
+In this directory you can find the Helm charts required to deploy Gaffer's [JupyterHub Options Server](../../docker/gaffer-jhub-options-server/) alongside the [JupyterHub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) Chart. 
+The 'options server' works in cooperation with Jupyter Hub to allow pre-configured notebook instances to be provisioned for users so that they can easily interact with HDFS and Gaffer instances.
 
 This chart adds the following additional properties to [`jupyterhub.singleuser.profileList`](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-profilelist):
 
@@ -14,8 +15,11 @@ This chart adds the following additional properties to [`jupyterhub.singleuser.p
 | `spark_ingress_host` | If set, the options server will provision an Ingress resource for this host that allows external access to the Spark web UI. The value can contain the following template variables: `{{USERNAME}}` `{{SERVERNAME}}` | nil |
 
 
-## Deployment
+# Deployment
 
 There are guides for deploying this chart on:
-* a local Kubernetes cluster, [using kind (Kubernetes IN Docker)](docs/kind-deployment.md)
+There are guides for deploying this chart on, they should be read in the following order:
+* [Provision and configure a local Kubernetes cluster](../docs/kind-deployment.md)
+* [Deploy JupyterHub with Gaffer on a Kubernetes cluster](./docs/kind-deployment.md)
+
 

@@ -13,7 +13,7 @@
 # limitations under the License.
 apiVersion: v2
 name: accumulo
-description: A Key-Value store containing the Gaffer iterators for rapid filtering and lookup
+description: A Key-Value Accumulo store
 type: application
 version: 2.0.0-alpha-0.3 # managed version
 appVersion: 2.0.1
