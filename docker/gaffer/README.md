@@ -29,6 +29,9 @@ accumulo's /opt/accumulo/lib/ext directory when you bring the containers up.
 * Gaffer UI
 
 Access the HDFS NameNode web UI at: http://localhost:9870
+
 Access the Accumulo Monitor UI at: http://localhost:9995
+
 Access the Gaffer Web UI at: http://localhost:5000/ui/
+
 Access the Gaffer REST API at: http://localhost:8080/rest/

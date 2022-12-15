@@ -2,15 +2,15 @@ Gaffer Docker
 ================
 
 This repo contains the code needed to run Gaffer using Docker or Kubernetes. 
-There are two main sub-folders, 'docker' and 'Kubernetes' which contain the project files you need for starting Gaffer using those services.
+There are two main sub-folders, 'docker' and 'kubernetes' which contain the project files you need for starting Gaffer using those services.
 
-## Running Gaffer Using Docker
+# Running Gaffer Using Docker
 For information on how to run Gaffer using Docker containers, please see the README in the docker directory: [Gaffer Docker README](docker/README.md)
 
-## Running Gaffer Using Kubernetes
+# Running Gaffer Using Kubernetes
 For information on how to run Gaffer using Kubernetes, please see the README in the kubernetes directory: [Kubernetes README](kubernetes/README.md)
 
-## Versioning
+# Versioning
 Each of our images will be tagged in DockerHub with the version of the software they represent. Every release,
 we update the image for that tag and add a new release which has the corresponding git tag.
 
@@ -29,8 +29,8 @@ build metadata.
 
 This process is automated by GitHub actions.
 
-## Known Compatible Docker Versions
+# Known Compatible Docker Versions
 * 20.10.5
 
-## Contributing
+# Contributing
 If you would like to make a Contribution, we have all the details for doing that [here](CONTRIBUTING.md)

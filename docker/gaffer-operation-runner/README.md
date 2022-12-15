@@ -1,6 +1,6 @@
 Gaffer Operation Runner
 ========================
-In this folder you can find the required files for running a Gaffer operation directly on the Gaffer instance (bypassing the REST service).
+In this folder you can find the required files for running a Gaffer operation directly on the Gaffer instance. This means that it bypasses the REST service.
 
 The operation that is executed must be specified in the files/operation/operation.json file.
 By default, the runner counts all the elements in the graph.
@@ -46,6 +46,9 @@ docker-compose up --build operation-runner
 * Gaffer UI
 
 Access the HDFS NameNode web UI at: http://localhost:9870
+
 Access the Accumulo Monitor UI at: http://localhost:9995
+
 Access the Gaffer Web UI at: http://localhost:5000/ui/
+
 Access the Gaffer REST API at: http://localhost:8080/rest/

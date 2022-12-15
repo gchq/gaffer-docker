@@ -18,4 +18,5 @@ You can provide your own ui.war file by putting it in the wars directory. This w
 * Gaffer UI
 
 Access the Gaffer Web UI at: http://localhost:5000/ui/
+
 Access the Gaffer REST API at: http://localhost:8080/rest/

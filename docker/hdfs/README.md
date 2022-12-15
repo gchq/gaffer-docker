@@ -7,7 +7,7 @@ The easiest way to build and run these services is to use docker-compose, by run
 ```bash
 docker-compose up
 ```
-
+properly
 ## Containers that are started:
 * HDFS
     * Datanode

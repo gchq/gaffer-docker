@@ -1,7 +1,7 @@
 # spark-py
 In this folder you can find the required files for building and running an executor container image for [Spark's official Kubernetes support](http://spark.apache.org/docs/latest/running-on-kubernetes.html).
 
-This is used by `kubernetes/gaffer-jhub/` but can be built and run independantly.
+This is used by `kubernetes/gaffer-jhub/` but can be built and run independently.
 
 To use this image, update your Spark configuration (e.g. `spark-defaults.conf`) to include:
 
@@ -22,6 +22,6 @@ You can start build and run the container as well, by running the following from
 ```bash
 docker-compose up
 ```
-However, the container will stop once it has run through the entrypoint.sh script.
+The container will stop once it has run through the entrypoint.sh script.
 
 

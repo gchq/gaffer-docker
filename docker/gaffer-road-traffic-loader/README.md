@@ -1,5 +1,5 @@
 Gaffer Road Traffic Example
-======
+===========================
 
 In this folder you can find the required files for building and running the Gaffer Road Traffic example inside of Docker containers.
 
@@ -23,7 +23,11 @@ docker-compose up
 * Gaffer UI
 
 Access the HDFS NameNode web UI at: http://localhost:9870
+
 Access the Accumulo Monitor UI at: http://localhost:9995
+
 Access the Gaffer Web UI at: http://localhost:5000/ui/
+
 Access the Gaffer REST API at: http://localhost:8080/rest/
+
 Access the HDFS NameNode web UI at: http://localhost:9870

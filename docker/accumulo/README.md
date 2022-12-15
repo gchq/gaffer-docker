@@ -23,6 +23,7 @@ docker-compose up
     * Master
 
 Access the HDFS NameNode web UI at: http://localhost:9870
+
 Access the Accumulo Monitor UI at: http://localhost:9995
 
 ## Change Accumulo minor version
