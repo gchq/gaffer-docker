@@ -23,7 +23,7 @@ docker build -t custom-rest:latest .
 ```
 
 # Add the extra libraries to the Accumulo image
-Gaffers Accumulo image includes support for the following gaffer libraries:
+Gaffer's Accumulo image includes support for the following Gaffer libraries:
 * The Bitmap Library
 * The Sketches Library
 * The Time Library

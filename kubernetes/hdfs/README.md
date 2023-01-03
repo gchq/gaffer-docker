@@ -1,4 +1,5 @@
-# HDFS Helm Chart
+HDFS Helm Chart
+===============
 
 The Hadoop Distributed File System (HDFS) is a distributed file system designed to run on commodity hardware. This Helm Chart can be used to deploy a HDFS instance onto a Kubernetes cluster.
 

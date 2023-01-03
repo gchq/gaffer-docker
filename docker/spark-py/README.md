@@ -1,4 +1,6 @@
-# spark-py
+spark-py
+=========
+
 In this folder you can find the required files for building and running an executor container image for [Spark's official Kubernetes support](http://spark.apache.org/docs/latest/running-on-kubernetes.html).
 
 This is used by `kubernetes/gaffer-jhub/` but can be built and run independently.

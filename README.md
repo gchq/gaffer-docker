@@ -14,7 +14,7 @@ For information on how to run Gaffer using Kubernetes, please see the README in 
 Each of our images will be tagged in DockerHub with the version of the software they represent. Every release,
 we update the image for that tag and add a new release which has the corresponding git tag.
 
-So if we tag this code in git as 1.0.0 and publish the resulting gaffer image at gaffer version 1.11.0, the following
+So if we tag this code in git as 1.0.0 and publish the resulting Gaffer image at Gaffer version 1.11.0, the following
 images would be pushed to Docker Hub:
 
 * gchq/gaffer:latest
