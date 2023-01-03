@@ -84,7 +84,7 @@ buildStringContainingDependencies(){
 }
 
 resolveDependencies(){
-    kubernetesComponents=$(ls)
+    kubernetesComponents=$(ls -d */)
     for chart in $kubernetesComponents; do
         cd $chart
         if [[ $(checkIfModuleHasChart) == "false" ]]; then
