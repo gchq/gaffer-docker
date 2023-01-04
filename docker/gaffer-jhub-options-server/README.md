@@ -1,4 +1,6 @@
-# Gaffer Options Server for JupyterHub
+Gaffer Options Server for JupyterHub
+====================================
+This folder contains the files required to create a JupyterHub Options Server. This is used by Helm and will not work properly without being run using the helm charts in [kubernetes/gaffer-jhub](../../kubernetes/gaffer-jhub/).
 
 This 'options server' works in cooperation with JupyterHub to allow pre-configured notebook instances to be provisioned for users so that they can easily interact with HDFS and Gaffer instances.
 
@@ -21,3 +23,9 @@ Once the user has completed the form, the custom KubeSpawner should submit their
 * resource requests and/or limits to set
 * extra environment variables
 * additional ConfigMaps and Secrets to mount
+
+## Running Locally
+If you do want to run these containers using Docker you can, by running the following from this directory:
+```bash
+docker-compose up
+```
