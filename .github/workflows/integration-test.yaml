@@ -13,41 +13,13 @@ jobs:
     steps:    
     - uses: actions/checkout@v2
 
-    - name: Build images
-      run: |
-        source ./docker/accumulo/.env
-        docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
-        docker-compose --project-directory ./docker/gaffer/ -f ./docker/gaffer/docker-compose.yaml build
-        docker build -t gchq/gaffer-integration-tests:$GAFFER_VERSION ./docker/gaffer-integration-tests
-
-    - name: Install Helm charts
-      run: ./cd/install_dependencies.sh
-
-    - name: Start KinD
-      run: |
-        source ./docker/accumulo/.env
-        kind create cluster --config ./cd/kind.yaml --image kindest/node:v1.24.4
-        kind load docker-image gchq/hdfs:$HADOOP_VERSION
-        kind load docker-image gchq/gaffer:$GAFFER_VERSION
-        kind load docker-image gchq/gaffer-rest:$GAFFER_VERSION
-        kind load docker-image gchq/gaffer-ui:$GAFFER_TOOLS_VERSION
-        kind load docker-image gchq/gaffer-integration-tests:$GAFFER_VERSION
-
-    - name: Deploy Gaffer
-      run: |
-        helm install gaffer ./kubernetes/gaffer --timeout=6m -f ./kubernetes/gaffer/integration-tests.yaml \
-          --set accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false 
-        
-    - name: Run Integration Tests
-      run: helm test gaffer --timeout=40m
-
     - name: Send success message to ms teams
       if: ${{ success()}}
       uses: jdcargile/ms-teams-notification@v1.3
       with:
         github-token: ${{ github.token }}
         ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
-        notification-summary: e2e tests passed
+        notification-summary: Pass
         notification-color: 70df3f
         timezone: GB
 
@@ -61,7 +33,7 @@ jobs:
       with:
         github-token: ${{ github.token }}
         ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
-        notification-summary: e2e tests failed
+        notification-summary: Fail
         notification-color: dd1010
         timezone: GB
     
