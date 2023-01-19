@@ -43,21 +43,23 @@ jobs:
 
     - name: Send success message to ms teams
       if: ${{ success()}}
-      uses: fjogeleit/http-request-action@master
+      uses: jdcargile/ms-teams-notification@v1.3
       with:
-          url: ${{ secrets.WORKFLOW_URL}}
-          method: 'POST'
-          data: '{"@context": "https://schema.org/extensions","@type": "MessageCard","title": "GitHub Actions Message","text": "Gaffer succesfully deployed and Integration Tests passing \n\n Click [here](https://github.com/gchq/gaffer-docker/actions) for workflow overview and logs"}'
+        ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+        notification-summary: e2e tests passed
+        notification-color: 70df3f
+        timezone: GB
 
     - name: Print logs from Integration tests
       if: ${{ failure() }}
       run: kubectl logs pods/gaffer-accumulo-integration-tests
-    
+
     - name: Send failure message to ms teams
       if: ${{ failure()}}
-      uses: fjogeleit/http-request-action@master
+      uses: jdcargile/ms-teams-notification@v1.3
       with:
-          url: ${{ secrets.WORKFLOW_URL}}
-          method: 'POST'
-          data: '{"@context": "https://schema.org/extensions","@type": "MessageCard","title": "GitHub Actions Message","text": "Gaffer Integration Tests Unsuccessful \n\n Click [here](https://github.com/gchq/gaffer-docker/actions) for workflow overview and logs"}'  
-       
+        ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+        notification-summary: e2e tests failed
+        notification-color: dd1010
+        timezone: GB
+    
