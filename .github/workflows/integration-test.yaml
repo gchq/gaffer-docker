@@ -45,6 +45,7 @@ jobs:
       if: ${{ success()}}
       uses: jdcargile/ms-teams-notification@v1.3
       with:
+        github-token: ${{ github.token }}
         ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
         notification-summary: e2e tests passed
         notification-color: 70df3f
@@ -58,6 +59,7 @@ jobs:
       if: ${{ failure()}}
       uses: jdcargile/ms-teams-notification@v1.3
       with:
+        github-token: ${{ github.token }}
         ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
         notification-summary: e2e tests failed
         notification-color: dd1010
