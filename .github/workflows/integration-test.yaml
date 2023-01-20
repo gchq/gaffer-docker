@@ -28,7 +28,7 @@ jobs:
       run: kubectl logs pods/gaffer-accumulo-integration-tests
 
     - name: Send failure message to ms teams
-      if: ${{ failure()}}
+      if: ${{ success()}}
       uses: jdcargile/ms-teams-notification@v1.3
       with:
         github-token: ${{ github.token }}
