@@ -22,10 +22,9 @@ export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3}
 export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-2.0.0-alpha-0.3}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
-docker-compose --project-directory ../docker/gaffer-operation-runner/ -f ../docker/gaffer-operation-runner/docker-compose.yaml build 
 
 HADOOP_IMAGES="hdfs"
-GAFFER_IMAGES="gaffer gaffer-rest gaffer-road-traffic-loader gaffer-operation-runner"
+GAFFER_IMAGES="gaffer gaffer-rest gaffer-road-traffic-loader"
 GAFFER_TOOLS_IMAGES="gaffer-ui"
 
 ACCOUNT=$(aws sts get-caller-identity --query Account --output text)

@@ -381,8 +381,3 @@ gaffer:
   waitFor:
     graphStatusOk: true
     dataLoad: true
-  test:
-    images:
-      operationRunner:
-        repository: gchq/gaffer-operation-runner
-        tag: 2.0.0-alpha-0.3

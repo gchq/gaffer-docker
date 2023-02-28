@@ -33,7 +33,6 @@ kind load docker-image gchq/gaffer:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
 kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
-kind load docker-image gchq/gaffer-operation-runner:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-pyspark-notebook:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-jhub-options-server:${JHUB_OPTIONS_SERVER_VERSION}
 kind load docker-image gchq/spark-py:${SPARK_VERSION}

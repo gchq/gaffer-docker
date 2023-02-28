@@ -28,14 +28,12 @@ export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-2.0.0-alpha-0.3}
 
 docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
 docker-compose --project-directory ../docker/gaffer-ui -f ../docker/gaffer-ui/docker-compose.yaml build
-docker-compose --project-directory ../docker/gaffer-operation-runner/ -f ../docker/gaffer-operation-runner/docker-compose.yaml build
 
 kind load docker-image gchq/hdfs:${HADOOP_VERSION}
 kind load docker-image gchq/gaffer:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
 kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
-kind load docker-image gchq/gaffer-operation-runner:${GAFFER_VERSION}
 ```
 
 From here you should be able to follow the respective kind-deployment files for the services you would like to run.

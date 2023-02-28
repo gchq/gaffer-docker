@@ -102,6 +102,18 @@ spec:
     - name: schema
       mountPath: /gaffer/schema/
       readOnly: true
+
+  - name: curl-add-elements-from-hdfs
+    image: {{ .Values.gaffer.test.images.curl.repository }}:{{ .Values.gaffer.test.images.curl.tag }}
+    command:
+    - /bin/sh
+    - -c
+    - . ./run-operation.sh
+    volumeMounts:
+    - name: hdfs-setup-files
+      mountPath: /gaffer/operation
+      readOnly: true
+
   containers:
   - name: hdfs-test
     image: {{ .Values.gaffer.test.images.curl.repository }}:{{ .Values.gaffer.test.images.curl.tag }}
