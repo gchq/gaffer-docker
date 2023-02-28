@@ -29,6 +29,7 @@ source ./docker/gaffer-pyspark-notebook/.env
 
 docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
 docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build
+docker-compose --project-directory ./docker/gaffer/ -f ./docker/gaffer/docker-compose.yaml build
 docker-compose --project-directory ./docker/gaffer-pyspark-notebook/ -f ./docker/gaffer-pyspark-notebook/docker-compose.yaml build notebook
 docker-compose --project-directory ./docker/spark-py/ -f ./docker/spark-py/docker-compose.yaml build
 
