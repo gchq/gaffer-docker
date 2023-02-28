@@ -79,17 +79,12 @@ services:
         BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     # Before calling entrypoint, create a delayed background process that
     # will correctly setup auths so that tests can run
-    entrypoint: bash -c '{ sleep 120; ./opt/accumulo/bin/accumulo shell -u root -p secret -e "setauths -u root -s vis1,vis2,publicVisibility,privateVisibility,public,private"; } & /entrypoint.sh accumulo master'
+    entrypoint: bash -c '{ sleep 150; ./opt/accumulo/bin/accumulo shell -u root -p secret -e "setauths -u root -s vis1,vis2,publicVisibility,privateVisibility,public,private"; } & /entrypoint.sh accumulo master'
     restart: on-failure
     container_name: accumulo-master
     hostname: accumulo-master
     environment:
     - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
-    # There doesn't seem to be an easy way (with docker-compose) to init our
-    # HDFS instance with the right permissions so that Accumulo can create the
-    # file structure it needs. Using the following workaround to allow
-    # accumulo to "auth" with HDFS as the super user so that it can:
-    - HADOOP_USER_NAME=hadoop
     volumes:
     - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
@@ -104,11 +99,6 @@ services:
     hostname: accumulo-tserver
     environment:
     - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
-    # There doesn't seem to be an easy way (with docker-compose) to init our
-    # HDFS instance with the right permissions so that Accumulo can create the
-    # file structure it needs. Using the following workaround to allow
-    # accumulo to "auth" with HDFS as the super user so that it can:
-    - HADOOP_USER_NAME=hadoop
     volumes:
     - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
@@ -123,11 +113,6 @@ services:
     hostname: accumulo-monitor
     environment:
     - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
-    # There doesn't seem to be an easy way (with docker-compose) to init our
-    # HDFS instance with the right permissions so that Accumulo can create the
-    # file structure it needs. Using the following workaround to allow
-    # accumulo to "auth" with HDFS as the super user so that it can:
-    - HADOOP_USER_NAME=hadoop
     ports:
     - 9995:9995
     volumes:
@@ -144,11 +129,6 @@ services:
     hostname: accumulo-gc
     environment:
     - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
-    # There doesn't seem to be an easy way (with docker-compose) to init our
-    # HDFS instance with the right permissions so that Accumulo can create the
-    # file structure it needs. Using the following workaround to allow
-    # accumulo to "auth" with HDFS as the super user so that it can:
-    - HADOOP_USER_NAME=hadoop
     volumes:
     - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
