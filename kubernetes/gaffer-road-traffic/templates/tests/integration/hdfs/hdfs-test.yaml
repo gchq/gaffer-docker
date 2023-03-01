@@ -54,13 +54,14 @@ spec:
 
   - name: add-elements-from-hdfs
     image: {{ .Values.gaffer.test.images.curl.repository }}:{{ .Values.gaffer.test.images.curl.tag }}
+    workingDir: /setup
     command:
     - /bin/sh
     - -c
     - . ./run-operation.sh
     volumeMounts:
     - name: hdfs-setup-files
-      mountPath: /gaffer/operation
+      mountPath: /setup
       readOnly: true
 
   containers:
