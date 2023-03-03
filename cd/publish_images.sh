@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,7 +61,6 @@ pushTags gchq/gaffer "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-rest "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-ui "${GAFFER_TOOLS_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}" "${APP_VERSION}"
-pushTags gchq/gaffer-operation-runner "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-pyspark-notebook "${GAFFER_VERSION}" "${APP_VERSION}"
 pushTags gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}" "${APP_VERSION}"
 pushTags gchq/spark-py "${SPARK_VERSION}" "${APP_VERSION}"

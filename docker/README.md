@@ -8,7 +8,6 @@ In this directory you can find the Dockerfiles and docker-compose files for buil
 * Gaffer's [Road Traffic Data Loader](gaffer-road-traffic-loader/) 
 * [HDFS](hdfs/)
 * [Accumulo](accumulo/)
-* Gaffer's [Operation Runner](gaffer-operation-runner/)
 * Gaffer [Integration Test Runner](gaffer-integration-tests/)
 * [gafferpy Jupyter Notebook](gaffer-pyspark-notebook/)
 * Gaffer [options server for JupyterHub](gaffer-jhub-options-server/)
