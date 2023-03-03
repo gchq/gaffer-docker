@@ -1,4 +1,4 @@
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,3 +42,9 @@ data:
     hadoop fs -chown -R accumulo /test
     hadoop fs -chmod -R u+rwX,g+rwX,o-rwx /test
     echo "Elements successfully added to HDFS"
+
+  run-operation.sh: |
+    #!/bin/bash
+    set -e
+
+    curl -s -XPOST -H "Content-Type: application/json" -d "@operation.json" http://{{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.fullname") }}-api:80{{ pluck "server.context-path" .Values.gaffer.graph.applicationProperties | first }}/graph/operations/execute

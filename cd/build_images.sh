@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ source ./docker/gaffer-pyspark-notebook/.env
 
 docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
 docker-compose --project-directory ./docker/gaffer-ui/ -f ./docker/gaffer-ui/docker-compose.yaml build
-docker-compose --project-directory ./docker/gaffer-operation-runner/ -f ./docker/gaffer-operation-runner/docker-compose.yaml build
+docker-compose --project-directory ./docker/gaffer-road-traffic-loader/ -f ./docker/gaffer-road-traffic-loader/docker-compose.yaml build
 docker-compose --project-directory ./docker/gaffer-pyspark-notebook/ -f ./docker/gaffer-pyspark-notebook/docker-compose.yaml build notebook
 docker-compose --project-directory ./docker/spark-py/ -f ./docker/spark-py/docker-compose.yaml build
 
