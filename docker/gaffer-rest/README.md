@@ -24,9 +24,9 @@ This is a spring concept and is used to change the context root and any properti
 provided at /gaffer/config/application.properties
 
 # Running Locally
-The easiest way to build and run these services is to use docker-compose, by running the following from this directory:
+The easiest way to build and run these services is to use docker compose, by running the following from this directory:
 ```bash
-docker-compose up
+docker compose up
 ```
 
 ## Customising your builds
@@ -37,7 +37,7 @@ The order it will check is:
 2. official release
 3. branch
 
-To use a release or branch, set the GAFFER_VERSION property in env before running the `docker-compose build` command.
+To use a release or branch, set the GAFFER_VERSION property in env before running the `docker compose build` command.
 
 We also provide the option to include custom libraries in the /jars/lib directory. These will be added to the classpath
 at runtime.

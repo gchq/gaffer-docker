@@ -3,7 +3,7 @@ Deploying Gaffer on AWS EKS
 The following instructions will guide you through provisioning and configuring an [AWS EKS](https://aws.amazon.com/eks/) cluster that our Helm Charts can be deployed on.
 
 # Install CLI Tools
-* [docker-compose](https://github.com/docker/compose/releases/latest)
+* [docker compose](https://github.com/docker/compose/releases/latest)
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [helm](https://github.com/helm/helm/releases)
 * [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
@@ -21,8 +21,8 @@ export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
 export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3}
 export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-2.0.0-alpha-0.3}
 
-docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
-docker-compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../docker/gaffer-road-traffic-loader/docker-compose.yaml build
+docker compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
+docker compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../docker/gaffer-road-traffic-loader/docker-compose.yaml build
 
 HADOOP_IMAGES="hdfs"
 GAFFER_IMAGES="gaffer gaffer-rest gaffer-road-traffic-loader"

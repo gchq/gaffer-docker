@@ -4,9 +4,9 @@ Gaffer Road Traffic Example
 In this folder you can find the required files for building and running the Gaffer Road Traffic example inside of Docker containers.
 
 # Running Locally
-The easiest way to build and run these services is to use docker-compose, by running the following from this directory:
+The easiest way to build and run these services is to use docker compose, by running the following from this directory:
 ```bash
-docker-compose up
+docker compose up
 ```
 
 ## Containers that are started:

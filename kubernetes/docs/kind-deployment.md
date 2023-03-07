@@ -3,7 +3,7 @@ How to deploy a Kubernetes cluster using Kind
 The following instructions will guide you through provisioning and configuring a local Kubernetes cluster, using [kind](https://kind.sigs.k8s.io/) (Kubernetes IN Docker), that our Helm Charts can be deployed on.
 
 # Install CLI Tools
-* [docker-compose](https://github.com/docker/compose/releases/latest)
+* [docker compose](https://github.com/docker/compose/releases/latest)
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [helm](https://github.com/helm/helm/releases)
 * [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
@@ -26,9 +26,8 @@ export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
 export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3}
 export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-2.0.0-alpha-0.3}
 
-docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
-docker-compose --project-directory ../docker/gaffer-ui -f ../docker/gaffer-ui/docker-compose.yaml build
-docker-compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../docker/gaffer-road-traffic-loader/docker-compose.yaml build
+docker compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
+docker compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../docker/gaffer-road-traffic-loader/docker-compose.yaml build
 
 kind load docker-image gchq/hdfs:${HADOOP_VERSION}
 kind load docker-image gchq/gaffer:${GAFFER_VERSION}

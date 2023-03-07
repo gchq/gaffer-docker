@@ -24,6 +24,5 @@ We have a number of [guides](./docs/guides.md) to help you deploy Gaffer on Kube
 Before you can deploy any of these applications you need to have installed Kubernetes.
 * [Installing Kubernetes](https://kubernetes.io/docs/setup/)
 
-You will also need to install Docker and docker-compose.
+You will also need to install Docker and the compose plugin.
 * [installing docker](https://docs.docker.com/get-docker/)
-* [installing docker-compose](https://docs.docker.com/compose/install/)

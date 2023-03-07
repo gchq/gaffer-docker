@@ -12,9 +12,9 @@ spark.kubernetes.container.image gchq/spark-py:latest
 ```
 
 # Building Locally
-The easiest way to build this service is to use docker-compose, by running the following from this directory:
+The easiest way to build this service is to use docker compose, by running the following from this directory:
 ```bash
-docker-compose build
+docker compose build
 ```
 ## Images that are built:
 * Spark
@@ -22,8 +22,6 @@ docker-compose build
 ## Running Locally
 You can start build and run the container as well, by running the following from this directory:
 ```bash
-docker-compose up
+docker compose up
 ```
 The container will stop once it has run through the entrypoint.sh script.
-
-
