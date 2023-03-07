@@ -1,17 +1,17 @@
 Gaffer Integration Tests
 =========================
 In this folder you can find the required Dockerfile for running integration tests against an Accumulo cluster.
-This is used by the [Helm scripts](kubernetes/gaffer/templates/tests/integration/accumulo-tests.yaml), as well as the docker-compose file provided.
+This is used by the [Helm scripts](kubernetes/gaffer/templates/tests/integration/accumulo-tests.yaml), as well as the docker compose file provided.
 
 # Running Locally
-The easiest way to build and run these services is to use docker-compose, by running the following from this directory:
+The easiest way to build and run these services is to use docker compose, by running the following from this directory:
 ```bash
-docker-compose up
+docker compose up
 ```
 
 ## Customising the build
 You can customise the store properties that will get used by the tests by providing some at `/tests/conf/store.properties`.  
-If you are using the docker-compose, these can be found in [conf/store.properties](conf/store.properties).
+If you are using the docker compose, these can be found in [conf/store.properties](conf/store.properties).
 
 Additionally, you can change the various versions with the following environment variables (found in [.env](.env)):
 - Hadoop: `HADOOP_VERSION`

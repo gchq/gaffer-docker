@@ -27,5 +27,5 @@ Once the user has completed the form, the custom KubeSpawner should submit their
 ## Running Locally
 If you do want to run these containers using Docker you can, by running the following from this directory:
 ```bash
-docker-compose up
+docker compose up
 ```

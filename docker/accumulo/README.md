@@ -6,9 +6,9 @@ Note: this does not bring up an instance of Gaffer.
 
 # Running Locally
 
-The easiest way to build and run these services is to use docker-compose, by running the following from this directory:
+The easiest way to build and run these services is to use docker compose, by running the following from this directory:
 ```bash
-docker-compose up
+docker compose up
 ```
 
 ## Containers that are started:

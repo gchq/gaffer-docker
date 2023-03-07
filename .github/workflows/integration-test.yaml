@@ -30,9 +30,9 @@ jobs:
     - name: Build images
       run: |
         source ./docker/accumulo/.env
-        docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
-        docker-compose --project-directory ./docker/gaffer/ -f ./docker/gaffer/docker-compose.yaml build
-        docker build -t gchq/gaffer-integration-tests:$GAFFER_VERSION ./docker/gaffer-integration-tests
+        docker compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
+        docker compose --project-directory ./docker/gaffer/ -f ./docker/gaffer/docker-compose.yaml build
+        docker compose --project-directory ./docker/gaffer-integration-tests/ -f ./docker/gaffer-integration-tests/docker-compose.yaml build
 
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh

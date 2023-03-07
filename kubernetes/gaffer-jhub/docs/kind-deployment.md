@@ -14,9 +14,9 @@ source ../../docker/gaffer-pyspark-notebook/.env
 source ../../docker/gaffer-jhub-options-server/get-version.sh
 
 # Build Container Images
-docker-compose --project-directory ../../docker/gaffer-pyspark-notebook/ -f ../../docker/gaffer-pyspark-notebook/docker-compose.yaml build notebook
-docker-compose --project-directory ../../docker/spark-py/ -f ../../docker/spark-py/docker-compose.yaml build
-docker-compose --project-directory ../../docker/gaffer-jhub-options-server/ -f ../../docker/gaffer-jhub-options-server/docker-compose.yaml build
+docker compose --project-directory ../../docker/gaffer-pyspark-notebook/ -f ../../docker/gaffer-pyspark-notebook/docker-compose.yaml build notebook
+docker compose --project-directory ../../docker/spark-py/ -f ../../docker/spark-py/docker-compose.yaml build
+docker compose --project-directory ../../docker/gaffer-jhub-options-server/ -f ../../docker/gaffer-jhub-options-server/docker-compose.yaml build
 
 # Deploy Images to Kind
 kind load docker-image gchq/gaffer-pyspark-notebook:${GAFFER_VERSION}
