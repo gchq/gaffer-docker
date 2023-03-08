@@ -151,7 +151,6 @@ services:
         BASE_IMAGE_NAME: gchq/gaffer
         BASE_IMAGE_TAG: ${GAFFER_VERSION}-${ACCUMULO_VERSION}
     command: master
-    restart: always
     container_name: accumulo-master
     hostname: accumulo-master.gaffer
     environment:
@@ -181,7 +180,6 @@ services:
       retries: 3
       start_period: 10s
     command: tserver
-    restart: always
     container_name: accumulo-tserver
     hostname: accumulo-tserver.gaffer
     environment:
@@ -203,7 +201,6 @@ services:
         condition: service_healthy
     image: gchq/gaffer-krb:${GAFFER_VERSION}-${ACCUMULO_VERSION}
     command: monitor
-    restart: on-failure
     container_name: accumulo-monitor
     hostname: accumulo-monitor.gaffer
     environment:
@@ -227,7 +224,6 @@ services:
         condition: service_healthy
     image: gchq/gaffer-krb:${GAFFER_VERSION}-${ACCUMULO_VERSION}
     command: gc
-    restart: on-failure
     container_name: accumulo-gc
     hostname: accumulo-gc.gaffer
     environment:
@@ -260,10 +256,8 @@ services:
     environment:
       - GAFFER_PRINCIPAL=${GAFFER_PRINCIPAL}
       - GAFFER_KRB_PASSWORD=${GAFFER_KRB_PASSWORD}
-      # Below path is only good for 1.9.3 - need a way to switch out automatically for 2.0.1
-      - ACCUMULO_CLIENT_CONF_PATH=/gaffer/client.conf
     volumes:
       - ./gaffer-rest-krb/conf/store.properties:/gaffer/store/store.properties:ro
-      # Below path is only good for 1.9.3 - need a way to switch out automatically for 2.0.1
-      - ./gaffer-krb/conf-${ACCUMULO_VERSION}/client.conf:/gaffer/client.conf
+      - ./gaffer-krb/conf-1.9.3/client.conf:/etc/accumulo/client.conf:ro
+      - ./gaffer-krb/conf-2.0.1/accumulo-client.properties:/etc/accumulo/accumulo-client.properties:ro
       - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro

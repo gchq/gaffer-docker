@@ -26,6 +26,7 @@ esac
 
 if [ "$DEBUG" -eq 1 ]; then
   export ACCUMULO_GENERAL_OPTS="-Dsun.security.krb5.debug=true -Dsun.security.spnego.debug -Djava.security.debug=gssloginconfig,configfile,configparser,logincontext"
+  export ACCUMULO_JAVA_OPTS='-Dsun.security.krb5.debug=true'
   echo "Accumulo Kerberos Debugging flags enabled (DEBUG=$DEBUG)"
 fi
 
@@ -50,9 +51,12 @@ if echo "$ACCUMULO_VERSION" | grep -q "^1.*$"; then
   cp $ACCUMULO_CONF_DIR/non-krb/*_logger.properties $ACCUMULO_CONF_DIR
 else
   # Edit the Accumulo config properties in place to set the principal for this node
-  sed -E -i '' -e "s/^(general.kerberos.principal=)(.*)$/\1$FULL_PRINCIPAL/g" $ACCUMULO_CONF_DIR/accumulo.properties
+  sed -E -i '' -e "s|^(general.kerberos.principal=)(.*)$|\1$FULL_PRINCIPAL|g" $ACCUMULO_CONF_DIR/accumulo.properties
   # Copy required logging config from non-krb folder into the config folder
   cp $ACCUMULO_CONF_DIR/non-krb/log4j*properties $ACCUMULO_CONF_DIR
+  # Suppress error messages which appear to be a bug relating to Kerberos in Accumulo 2.0.1
+  echo "\nlog4j.logger.org.apache.thrift.server.TThreadPoolServer=FATAL" >> $ACCUMULO_CONF_DIR/log4j-service.properties
+  echo "\nlog4j.logger.org.apache.thrift.server.TThreadPoolServer=FATAL" >> $ACCUMULO_CONF_DIR/log4j-monitor.properties
 fi
 
 
@@ -73,6 +77,13 @@ if [ "$1" = "accumulo" ] && [ "$2" = "master" ]; then
 	# permissions can then be added separately using an accumulo shell from
 	# the master container.
 	accumulo init --instance-name ${ACCUMULO_INSTANCE_NAME} --user $ROOT_PRINCIPAL
+fi
+
+# Accumulo 2 does not recognise Kerberos configuration when running 'accumulo $COMMAND'
+# (other than 'accumulo init') When kinit is run first it is recognised. May be a bug
+# in Accumulo or caused by unsupported direct use of Accumulo commands with Kerberos.
+if echo "$ACCUMULO_VERSION" | grep -q "^2.*$"; then
+  kinit -k -t /etc/accumulo/conf/accumulo.keytab $FULL_PRINCIPAL
 fi
 
 echo "\nRunning command: $@"

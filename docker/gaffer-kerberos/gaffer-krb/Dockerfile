@@ -27,13 +27,7 @@ RUN apt -qq update && \
 		iproute2 && \
 	apt -qq clean \
 	&& rm -rf /var/lib/apt/lists/*
-
-#RUN mkdir /etc/accumulo && \
-#    chown -R ${USER}:${GROUP} /etc/accumulo
 USER ${USER}
-
-# Add Gaffer 2.0-alpha-3 SNAPSHOT Iterators - this will not be required once 3.1 is released
-#COPY --chown=${USER}:${GROUP} accumulo-store-2.0.0-alpha-1.3-SNAPSHOT-iterators-legacy.jar /opt/accumulo/lib/ext/
 
 COPY ./krb-entrypoint.sh /
 ENTRYPOINT ["/krb-entrypoint.sh", "accumulo"]
