@@ -1,0 +1,39 @@
+# Copyright 2023 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+ARG BASE_IMAGE_NAME=gchq/gaffer
+ARG BASE_IMAGE_TAG=2.0.0-alpha-0.3.1
+
+ARG USER=accumulo
+ARG GROUP=accumulo
+
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+
+USER root
+RUN apt -qq update && \
+	apt -qq install -y \
+		krb5-user \
+		iproute2 && \
+	apt -qq clean \
+	&& rm -rf /var/lib/apt/lists/*
+
+#RUN mkdir /etc/accumulo && \
+#    chown -R ${USER}:${GROUP} /etc/accumulo
+USER ${USER}
+
+# Add Gaffer 2.0-alpha-3 SNAPSHOT Iterators - this will not be required once 3.1 is released
+#COPY --chown=${USER}:${GROUP} accumulo-store-2.0.0-alpha-1.3-SNAPSHOT-iterators-legacy.jar /opt/accumulo/lib/ext/
+
+COPY ./krb-entrypoint.sh /
+ENTRYPOINT ["/krb-entrypoint.sh", "accumulo"]
