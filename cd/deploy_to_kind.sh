@@ -29,8 +29,8 @@ source ./docker/gaffer-jhub-options-server/get-version.sh
 
 # Deploy Images to Kind
 kind load docker-image gchq/hdfs:${HADOOP_VERSION}
-kind load docker-image gchq/gaffer:${GAFFER_VERSION}
-kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
 kind load docker-image gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
 kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-pyspark-notebook:${GAFFER_VERSION}

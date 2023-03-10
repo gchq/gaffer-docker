@@ -50,7 +50,7 @@ api:
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 2.0.0-alpha-0.3 # managed version
+    tag: 2.0.0-alpha-0.3-accumulo-2.0.1 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -81,7 +81,7 @@ accumulo:
   enabled: false
   image:
     repository: gchq/gaffer
-    tag: 2.0.0-alpha-0.3 # managed version
+    tag: 2.0.0-alpha-0.3-accumulo-2.0.1 # managed version
   config:
     postInstallCommands:
       - users
