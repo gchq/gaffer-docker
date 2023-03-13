@@ -15,8 +15,8 @@
 # limitations under the License.
 
 KEYTAB_PATH=/gaffer/config/gaffer.keytab
-PRINCIPAL=$GAFFER_PRINCIPAL/$(hostname)
-FULL_PRINCIPAL=$GAFFER_PRINCIPAL/$(hostname)@GAFFER.DOCKER
+PRINCIPAL=gaffer/$(hostname)
+FULL_PRINCIPAL=gaffer/$(hostname)@GAFFER.DOCKER
 
 
 {

@@ -32,15 +32,10 @@ services:
     container_name: kdc-server
     hostname: kdc-server
     environment:
-      - HADOOP_PRINCIPAL=${HADOOP_PRINCIPAL}
       - HADOOP_KRB_PASSWORD=${HADOOP_KRB_PASSWORD}
-      - ZOOKEEPER_PRINCIPAL=${ZOOKEEPER_PRINCIPAL}
       - ZOOKEEPER_KRB_PASSWORD=${ZOOKEEPER_KRB_PASSWORD}
-      - ACCUMULO_PRINCIPAL=${ACCUMULO_PRINCIPAL}
       - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
-      - GAFFER_PRINCIPAL=${GAFFER_PRINCIPAL}
       - GAFFER_KRB_PASSWORD=${GAFFER_KRB_PASSWORD}
-      - REALM=${REALM}
     volumes:
       - ./kdc/conf/krb5.conf:/etc/krb5.conf:ro
       - ./kdc/conf/kdc.conf:/etc/kdc.conf:ro
@@ -64,7 +59,6 @@ services:
     container_name: zookeeper
     hostname: zookeeper
     environment:
-      - ZOOKEEPER_PRINCIPAL=${ZOOKEEPER_PRINCIPAL}
       - ZOOKEEPER_KRB_PASSWORD=${ZOOKEEPER_KRB_PASSWORD}
     volumes:
       - ./zookeeper-krb/conf/jaas.conf:/conf/jaas.conf:ro
@@ -95,9 +89,7 @@ services:
     hostname: hdfs-namenode.gaffer
     environment:
       - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
-      - HADOOP_PRINCIPAL=${HADOOP_PRINCIPAL}
       - HADOOP_KRB_PASSWORD=${HADOOP_KRB_PASSWORD}
-      - REALM=${REALM}
       - DEBUG=${DEBUG}
     ports:
       - "9870:9870"
@@ -123,9 +115,7 @@ services:
     hostname: hdfs-datanode.gaffer
     environment:
       - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
-      - HADOOP_PRINCIPAL=${HADOOP_PRINCIPAL}
       - HADOOP_KRB_PASSWORD=${HADOOP_KRB_PASSWORD}
-      - REALM=${REALM}
       - DEBUG=${DEBUG}
     volumes:
       - ./hdfs-krb/conf:${HADOOP_CONF_DIR}:ro
@@ -154,10 +144,8 @@ services:
     container_name: accumulo-master
     hostname: accumulo-master.gaffer
     environment:
-      - ACCUMULO_PRINCIPAL=${ACCUMULO_PRINCIPAL}
       - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
       - ACCUMULO_VERSION=${ACCUMULO_VERSION}
-      - GAFFER_PRINCIPAL=${GAFFER_PRINCIPAL}
       - GAFFER_HOSTNAME=gaffer-rest.gaffer
       - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
       - DEBUG=${DEBUG}
@@ -183,7 +171,6 @@ services:
     container_name: accumulo-tserver
     hostname: accumulo-tserver.gaffer
     environment:
-      - ACCUMULO_PRINCIPAL=${ACCUMULO_PRINCIPAL}
       - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
       - ACCUMULO_VERSION=${ACCUMULO_VERSION}
       - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
@@ -204,7 +191,6 @@ services:
     container_name: accumulo-monitor
     hostname: accumulo-monitor.gaffer
     environment:
-      - ACCUMULO_PRINCIPAL=${ACCUMULO_PRINCIPAL}
       - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
       - ACCUMULO_VERSION=${ACCUMULO_VERSION}
       - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
@@ -227,7 +213,6 @@ services:
     container_name: accumulo-gc
     hostname: accumulo-gc.gaffer
     environment:
-      - ACCUMULO_PRINCIPAL=${ACCUMULO_PRINCIPAL}
       - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
       - ACCUMULO_VERSION=${ACCUMULO_VERSION}
       - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
@@ -254,7 +239,6 @@ services:
     container_name: gaffer-rest
     hostname: gaffer-rest.gaffer
     environment:
-      - GAFFER_PRINCIPAL=${GAFFER_PRINCIPAL}
       - GAFFER_KRB_PASSWORD=${GAFFER_KRB_PASSWORD}
     volumes:
       - ./gaffer-rest-krb/conf/store.properties:/gaffer/store/store.properties:ro

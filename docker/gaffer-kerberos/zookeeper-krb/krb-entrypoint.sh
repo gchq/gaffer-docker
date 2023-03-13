@@ -15,7 +15,7 @@
 # limitations under the License.
 
 KEYTAB_PATH=/conf/zookeeper.keytab
-PRINCIPAL=$ZOOKEEPER_PRINCIPAL/$(hostname).gaffer
+PRINCIPAL=zookeeper/$(hostname).gaffer
 
 {
 echo "add_entry -password -p $PRINCIPAL -k 1 -e aes256-cts"; sleep 0.2

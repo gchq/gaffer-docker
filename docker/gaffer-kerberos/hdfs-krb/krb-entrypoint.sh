@@ -15,7 +15,7 @@
 # limitations under the License.
 
 KEYTAB_PATH=/opt/hadoop/etc/hadoop/hadoop.keytab
-PRINCIPAL=$HADOOP_PRINCIPAL/$(hostname)
+PRINCIPAL=hadoop/$(hostname)
 
 if [ "$DEBUG" -eq 1 ]; then
   export HADOOP_JAAS_DEBUG=true
