@@ -21,7 +21,7 @@ networks:
 services:
 
   kdc-server:
-    image: gchq/kdc:0.1
+    image: gchq/kerberos-kdc-server:0.1
     healthcheck:
       test: ps -aux | grep krb5kdc
       retries: 5
