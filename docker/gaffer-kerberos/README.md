@@ -14,16 +14,16 @@ Configuration has been simplified as much as possible and is not indicative of h
 To see more Kerberos information in the container logs, set `DEBUG`to `1` in the docker compose `.env` file.
 
 ## Building
-You can build the images using docker-compose:
+You can build the images using docker compose:
 
 ```bash
-docker-compose build
+docker compose build
 ```
 
 ## Running
 
 ```
-docker-compose up
+docker compose up
 ```
 
 ## Containers that are started:
