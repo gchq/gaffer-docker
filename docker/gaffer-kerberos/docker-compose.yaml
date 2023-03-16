@@ -128,7 +128,7 @@ services:
     depends_on:
       hdfs-namenode:
         condition: service_healthy
-    image: gchq/gaffer-krb:${GAFFER_VERSION}-${ACCUMULO_VERSION}
+    image: gchq/gaffer-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     healthcheck:
       test: ss -pltn | grep 9999
       interval: 30s
@@ -139,7 +139,7 @@ services:
       context: ./gaffer-krb
       args:
         BASE_IMAGE_NAME: gchq/gaffer
-        BASE_IMAGE_TAG: ${GAFFER_VERSION}-${ACCUMULO_VERSION}
+        BASE_IMAGE_TAG: ${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     command: master
     container_name: accumulo-master
     hostname: accumulo-master.gaffer
@@ -160,7 +160,7 @@ services:
     depends_on:
       accumulo-master:
         condition: service_healthy
-    image: gchq/gaffer-krb:${GAFFER_VERSION}-${ACCUMULO_VERSION}
+    image: gchq/gaffer-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     healthcheck:
       test: ss -pltn | grep 9997
       interval: 30s
@@ -186,7 +186,7 @@ services:
     depends_on:
       accumulo-master:
         condition: service_healthy
-    image: gchq/gaffer-krb:${GAFFER_VERSION}-${ACCUMULO_VERSION}
+    image: gchq/gaffer-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     command: monitor
     container_name: accumulo-monitor
     hostname: accumulo-monitor.gaffer
@@ -208,7 +208,7 @@ services:
     depends_on:
       accumulo-master:
         condition: service_healthy
-    image: gchq/gaffer-krb:${GAFFER_VERSION}-${ACCUMULO_VERSION}
+    image: gchq/gaffer-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     command: gc
     container_name: accumulo-gc
     hostname: accumulo-gc.gaffer
@@ -228,12 +228,12 @@ services:
     depends_on:
       accumulo-tserver:
         condition: service_healthy
-    image: gchq/gaffer-rest-krb:${GAFFER_VERSION}-${ACCUMULO_VERSION}
+    image: gchq/gaffer-rest-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     build:
       context: ./gaffer-rest-krb/
       args:
         BASE_IMAGE_NAME: gchq/gaffer-rest
-        BASE_IMAGE_TAG: ${GAFFER_VERSION}-${ACCUMULO_VERSION}
+        BASE_IMAGE_TAG: ${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     ports:
       - 8080:8080
     container_name: gaffer-rest
