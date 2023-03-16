@@ -30,8 +30,8 @@ docker compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/doc
 docker compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../docker/gaffer-road-traffic-loader/docker-compose.yaml build
 
 kind load docker-image gchq/hdfs:${HADOOP_VERSION}
-kind load docker-image gchq/gaffer:${GAFFER_VERSION}
-kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
 kind load docker-image gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
 kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
 ```

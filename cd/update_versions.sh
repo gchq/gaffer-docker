@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -46,8 +46,8 @@ yq eval ".image.tag = \"${ACCUMULO_VERSION}\"" -i ./kubernetes/accumulo/values.y
 yq eval ".appVersion = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/Chart.yaml
 [ ! -z "${APP_VERSION}" ] && yq eval ".dependencies[0].version = \"^${APP_VERSION}\"" -i ./kubernetes/gaffer/Chart.yaml
 
-yq eval ".accumulo.image.tag = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
-yq eval ".api.image.tag = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
+yq eval ".accumulo.image.tag = \"${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
+yq eval ".api.image.tag = \"${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
 yq eval ".ui.image.tag = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
 
 # gaffer-road-traffic

@@ -1,4 +1,4 @@
-# Copyright 2020-2022 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ services:
     - hdfs-namenode
     - hdfs-datanode
     - zookeeper
-    image: gchq/gaffer:${GAFFER_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     build:
       context: .
       args:
@@ -91,7 +91,7 @@ services:
   accumulo-tserver:
     depends_on:
     - accumulo-master
-    image: gchq/gaffer:${GAFFER_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     command: tserver
     restart: on-failure
     container_name: accumulo-tserver
@@ -110,7 +110,7 @@ services:
   accumulo-monitor:
     depends_on:
     - accumulo-master
-    image: gchq/gaffer:${GAFFER_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     command: monitor
     restart: on-failure
     container_name: accumulo-monitor
@@ -131,7 +131,7 @@ services:
   accumulo-gc:
     depends_on:
     - accumulo-master
-    image: gchq/gaffer:${GAFFER_VERSION}
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     command: gc
     restart: on-failure
     container_name: accumulo-gc
@@ -148,7 +148,7 @@ services:
     - /var/log/accumulo
 
   gaffer-rest:
-    image: gchq/gaffer-rest:${GAFFER_VERSION}
+    image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     restart: on-failure
     build:
       context: ../gaffer-rest/

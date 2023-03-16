@@ -17,7 +17,7 @@ version: "3.7"
 services:
 
   gaffer-rest:
-    image: gchq/gaffer-rest:${GAFFER_VERSION}
+    image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     build:
       context: ../gaffer-rest
       args:
