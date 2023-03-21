@@ -11,26 +11,26 @@ For information on how to run Gaffer using Docker containers, please see the REA
 For information on how to run Gaffer using Kubernetes, please see the README in the kubernetes directory: [Kubernetes README](kubernetes/README.md)
 
 # Versioning
-Each of our images will be tagged in DockerHub with the version of the software they represent. Every release,
-we update the image for that tag and add a new release which has the corresponding git tag.
+Each of our images which is released will be tagged with the version of the software they represent. Every release,
+we update the `latest` tag for each image and add a new release which has the corresponding version tag.
 
-So if we tag this code in git as 1.0.0 and publish the resulting Gaffer image at Gaffer version 1.11.0, the following
-images would be pushed to Docker Hub:
+If we release Gaffer version 2.1.2, the following images would be uploaded:
 
 * gchq/gaffer:latest
-* gchq/gaffer:1
-* gchq/gaffer:1.11
-* gchq/gaffer:1.11.0
-* gchq/gaffer:1.11.0_build.1.0.0
+* gchq/gaffer:2
+* gchq/gaffer:2.1
+* gchq/gaffer:2.1.2
+* gchq/gaffer:2.1.2-accumulo-2.0.1
 
-Note that we maintain mutable versions of latest, as well as the major, minor and bugfix versions of Gaffer. If you want to
-ensure that your image will never change when doing a pull from docker, make sure to use the version with the git tag in the
-build metadata.
+We maintain mutable versions of latest, as well as the major, minor and bugfix versions of Gaffer. For reproducibility
+make sure to use the full version in your build metadata. For `gaffer`/`gaffer-rest` images, we also create a tag including the
+accumulo version, this allows for compatibility with Accumulo 1.9.3 in our tests. The `-accumulo-1.9.3` tagged images
+are not published but can be build locally if required.
 
-This process is automated by GitHub actions.
+The release process is automated by GitHub actions.
 
 # Known Compatible Docker Versions
-* 20.10.5
+* 20.10.23
 
 # Contributing
 If you would like to make a Contribution, we have all the details for doing that [here](CONTRIBUTING.md)
