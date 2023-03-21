@@ -124,13 +124,12 @@ jobs:
     - name: Build images
       run: ./cd/build_images.sh
 
-    - name: Set version
-      run: echo "APP_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
-
     - name: Publish images
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        GHCR_USERNAME: ${{ github.actor }}
+        GHCR_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       run: ./cd/publish_images.sh
 
   create-release-notes:
