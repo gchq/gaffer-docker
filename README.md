@@ -23,7 +23,7 @@ If we release Gaffer version 2.1.2, the following images would be uploaded:
 * gchq/gaffer:2.1.2-accumulo-2.0.1
 
 We maintain mutable versions of latest, as well as the major, minor and bugfix versions of Gaffer. For reproducibility
-make sure to use the full version in your build metadata. For the `gaffer` image, we also create a tag including the
+make sure to use the full version in your build metadata. For `gaffer`/`gaffer-rest` images, we also create a tag including the
 accumulo version, this allows for compatibility with Accumulo 1.9.3 in our tests. The `-accumulo-1.9.3` tagged images
 are not published but can be build locally if required.
 
