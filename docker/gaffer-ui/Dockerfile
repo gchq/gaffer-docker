@@ -1,4 +1,4 @@
-# Copyright 2020-2022 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ ARG BASE_IMAGE_TAG=25.0.0.Final
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
-ARG GAFFER_TOOLS_VERSION=2.0.0-alpha-0.3
+ARG GAFFER_TOOLS_VERSION=2.0.0-alpha-0.3.1
 ARG GAFFER_TOOLS_GIT_REPO=https://github.com/gchq/gaffer-tools.git
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 
