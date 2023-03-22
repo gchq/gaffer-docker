@@ -90,6 +90,7 @@ RUN apt -qq update && \
 		dumb-init \
 		openjdk-8-jre-headless \
 		xmlstarlet \
+		iproute2 \
 	&& rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder --chown=root:root /accumulo-${ACCUMULO_VERSION} /opt/accumulo-${ACCUMULO_VERSION}/
