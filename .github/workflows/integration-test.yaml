@@ -1,4 +1,4 @@
-# Copyright 2022 Crown Copyright
+# Copyright 2022-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ jobs:
     - name: Build images
       run: |
         source ./docker/accumulo/.env
-        docker-compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
-        docker-compose --project-directory ./docker/gaffer/ -f ./docker/gaffer/docker-compose.yaml build
-        docker build -t gchq/gaffer-integration-tests:$GAFFER_VERSION ./docker/gaffer-integration-tests
+        docker compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
+        docker compose --project-directory ./docker/gaffer/ -f ./docker/gaffer/docker-compose.yaml build
+        docker compose --project-directory ./docker/gaffer-integration-tests/ -f ./docker/gaffer-integration-tests/docker-compose.yaml build
 
     - name: Install Helm charts
       run: ./cd/install_dependencies.sh
@@ -42,10 +42,10 @@ jobs:
         source ./docker/accumulo/.env
         kind create cluster --config ./cd/kind.yaml --image kindest/node:v1.24.4
         kind load docker-image gchq/hdfs:$HADOOP_VERSION
-        kind load docker-image gchq/gaffer:$GAFFER_VERSION
-        kind load docker-image gchq/gaffer-rest:$GAFFER_VERSION
+        kind load docker-image gchq/gaffer:$GAFFER_VERSION-accumulo-$ACCUMULO_VERSION
+        kind load docker-image gchq/gaffer-rest:$GAFFER_VERSION-accumulo-$ACCUMULO_VERSION
         kind load docker-image gchq/gaffer-ui:$GAFFER_TOOLS_VERSION
-        kind load docker-image gchq/gaffer-integration-tests:$GAFFER_VERSION
+        kind load docker-image gchq/gaffer-integration-tests:$GAFFER_VERSION-accumulo-$ACCUMULO_VERSION
 
     - name: Deploy Gaffer
       run: |
@@ -57,21 +57,24 @@ jobs:
 
     - name: Send success message to ms teams
       if: ${{ success()}}
-      uses: fjogeleit/http-request-action@master
+      uses: jdcargile/ms-teams-notification@v1.3
       with:
-          url: ${{ secrets.WORKFLOW_URL}}
-          method: 'POST'
-          data: '{"@context": "https://schema.org/extensions","@type": "MessageCard","title": "GitHub Actions Message","text": "Gaffer succesfully deployed and Integration Tests passing \n\n Click [here](https://github.com/gchq/gaffer-docker/actions) for workflow overview and logs"}'
+        github-token: ${{ github.token }}
+        ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+        notification-summary: Pass &#x2705 &#x1F920
+        notification-color: 70df3f
+        timezone: GB
 
     - name: Print logs from Integration tests
       if: ${{ failure() }}
       run: kubectl logs pods/gaffer-accumulo-integration-tests
-    
+
     - name: Send failure message to ms teams
       if: ${{ failure()}}
-      uses: fjogeleit/http-request-action@master
+      uses: jdcargile/ms-teams-notification@v1.3
       with:
-          url: ${{ secrets.WORKFLOW_URL}}
-          method: 'POST'
-          data: '{"@context": "https://schema.org/extensions","@type": "MessageCard","title": "GitHub Actions Message","text": "Gaffer Integration Tests Unsuccessful \n\n Click [here](https://github.com/gchq/gaffer-docker/actions) for workflow overview and logs"}'  
-       
+        github-token: ${{ github.token }}
+        ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+        notification-summary: Fail &#x274C &#x1F627
+        notification-color: dd1010
+        timezone: GB

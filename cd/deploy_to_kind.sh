@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020-2022 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,11 +29,10 @@ source ./docker/gaffer-jhub-options-server/get-version.sh
 
 # Deploy Images to Kind
 kind load docker-image gchq/hdfs:${HADOOP_VERSION}
-kind load docker-image gchq/gaffer:${GAFFER_VERSION}
-kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}
+kind load docker-image gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
 kind load docker-image gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
 kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
-kind load docker-image gchq/gaffer-operation-runner:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-pyspark-notebook:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-jhub-options-server:${JHUB_OPTIONS_SERVER_VERSION}
 kind load docker-image gchq/spark-py:${SPARK_VERSION}

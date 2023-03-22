@@ -1,17 +1,38 @@
 Gaffer Integration Tests
-==========================
+=========================
+In this folder you can find the required Dockerfile for running integration tests against an Accumulo cluster.
+This is used by the [Helm scripts](kubernetes/gaffer/templates/tests/integration/accumulo-tests.yaml), as well as the docker compose file provided.
 
-This image contains and runs the Accumulo integration tests against an Accumulo cluster.
-To run it you need to provide the store properties at /tests/conf/store.properties.
-
-Values from these will be copied accross to the src/tests/resources store properties and will be used by the tests
-
-To Build the Docker image, use:
+# Running Locally
+The easiest way to build and run these services is to use docker compose, by running the following from this directory:
 ```bash
-docker build -t gchq/gaffer-integration-tests:2.0.0-alpha-0.3 .
+docker compose up
 ```
 
-If you want to build a different branch or release version, you can provide a build arg:
-```bash
-docker build -t gchq/gaffer-integration-tests:develop . --build-arg GAFFER_VERSION=develop
-```
+## Customising the build
+You can customise the store properties that will get used by the tests by providing some at `/tests/conf/store.properties`.  
+If you are using the docker compose, these can be found in [conf/store.properties](conf/store.properties).
+
+Additionally, you can change the various versions with the following environment variables (found in [.env](.env)):
+- Hadoop: `HADOOP_VERSION`
+- Accumulo: `ACCUMULO_VERSION`
+- Gaffer iterators within Accumulo: `GAFFER_VERSION`
+- Gaffer graph that runs ITs: `GAFFER_TESTER_VERSION`
+
+## Containers that are started:
+* Zookeeper
+* HDFS
+    * Datanode
+    * Namenode
+* Accumulo
+    * Monitor
+    * GC
+    * tserver
+    * Master
+* Gaffer AccumuloStore ITs
+
+Access the HDFS NameNode web UI at: http://localhost:9870
+
+Access the Accumulo Monitor UI at: http://localhost:9995
+
+Check the integration test logs with: `docker logs gaffer-integration-tests_gaffer-integration-tests_1`

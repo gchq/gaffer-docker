@@ -1,5 +1,5 @@
 Deploying Gaffer using kind
-=================================
+============================
 
 All the scripts found here are designed to be run from the kubernetes/gaffer folder.
 
@@ -9,7 +9,7 @@ The standard Gaffer deployment will give you an in-memory store. To change this 
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.13.4}
+export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3.1}
 
 helm dependency update
 
@@ -24,7 +24,7 @@ helm test gaffer
 ```
 
 
-## Accessing Web UIs (via `kubectl port-forward`)
+# Accessing Web UIs (via `kubectl port-forward`)
 
 | Component   | Command                                                    | URL                         |
 | ----------- | ---------------------------------------------------------- | --------------------------- |
@@ -33,7 +33,7 @@ helm test gaffer
 Note that the Gaffer UI requires you to set up an ingress by default.
 
 
-## Accessing Web UIs (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
+# Accessing Web UIs (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
 
 Register the FQDNs for each component in DNS e.g.
 ```

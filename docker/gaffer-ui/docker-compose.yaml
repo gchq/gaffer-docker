@@ -1,4 +1,4 @@
-# Copyright 2020-2022 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ version: "3.7"
 services:
 
   gaffer-rest:
-    image: gchq/gaffer-rest:${GAFFER_VERSION}
+    image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     build:
       context: ../gaffer-rest
       args:
@@ -35,6 +35,6 @@ services:
         GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
     restart: always
     ports:
-    - 5000:8080
+    - 5000:5000
     volumes:
     - ./config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,13 +32,19 @@ sed -i'' -e "s/accumulo.user=.*/accumulo.user=$accumulo_user/" $store
 sed -i'' -e "s/accumulo.password=.*/accumulo.password=$accumulo_password/" $store
 done
 
+# Needed for AddElementsFromHdfs tests
 cp /opt/hadoop/conf/core-site.xml /tmp/gaffer/store-implementation/accumulo-store/src/test/resources
+
+# Set correct LEGACY var based on Accumulo version
+if echo "$ACCUMULO_VERSION" | grep -q "^1.*$"; then LEGACY=true; else LEGACY=false; fi
 
 # Run Integration Tests 
 cd /tmp/gaffer
 echo "Running Maven Install"
-mvn -q clean install -pl :accumulo-store -am -Pquick
+echo "mvn -q clean install -Dlegacy=$LEGACY -pl :accumulo-store -am -Pquick"
+mvn -q clean install -Dlegacy=$LEGACY -pl :accumulo-store -am -Pquick
 
 echo "Running Maven tests"
-mvn -q verify -Dskip.surefire.tests -pl :accumulo-store -ff
+echo "mvn -q verify -Dlegacy=$LEGACY -Dskip.surefire.tests -pl :accumulo-store -ff"
+mvn -q verify -Dlegacy=$LEGACY -Dskip.surefire.tests -pl :accumulo-store -ff
 
