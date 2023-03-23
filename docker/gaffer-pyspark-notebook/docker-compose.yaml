@@ -164,7 +164,6 @@ services:
     - ../gaffer/conf/store.properties:/gaffer/store/store.properties:ro
     - ../gaffer-road-traffic-loader/config/graph/graphConfig.json:/gaffer/graph/graphConfig.json:ro
     - ../gaffer-road-traffic-loader/config/schema:/gaffer/schema:ro
-    - ../gaffer-road-traffic-loader/config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro
 
   data-loader:
     depends_on:

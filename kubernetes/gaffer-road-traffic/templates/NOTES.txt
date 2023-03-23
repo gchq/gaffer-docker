@@ -23,7 +23,6 @@ Version: {{ .Values.gaffer.accumulo.image.repository }}:{{ .Values.gaffer.accumu
 {{ template "traffic.callSubChartTemplate" (list . "gaffer" "gaffer.storeProperties") }}
 
 REST API: http://{{ default "<default-ingress-host>" .Values.gaffer.ingress.host }}{{ .Values.gaffer.ingress.pathPrefix.api }}rest/
-UI: http://{{ default "<default-ingress-host>" .Values.gaffer.ingress.host }}{{ .Values.gaffer.ingress.pathPrefix.ui }}ui/
 
 {{- if or (eq (index .Values.gaffer.accumulo.config.accumuloSite "instance.secret") "DEFAULT") (eq .Values.gaffer.accumulo.config.userManagement.rootPassword "root") }}
 

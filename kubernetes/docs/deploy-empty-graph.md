@@ -46,7 +46,7 @@ helm install my-graph gaffer-docker/gaffer -f accumulo.yaml
 ```
 
 ## Deploy the Federated Store
-If you want to deploy the Federated Store, all that you really need to do is set the store.properties and set the UI config. 
+If you want to deploy the Federated Store, all that you really need to do is set the store.properties. 
 To do this add the following to a `federated.yaml` file:
 
 ```yaml
@@ -59,41 +59,10 @@ graph:
 
 The addition of the SketchesJsonModules is just to ensure that if the FederatedStore was connecting to a store which used sketches, they could be rendered nicely in json.
 
-Now to set the config.json, it is probably easier to use a separate `ui-config.json` file with the following contents:
-```json
-{
-  "gafferEndpoint": {
-    "path": "/rest"
-  },
-  "operationOptions": {
-    "visible": [
-      {
-        "key": "gaffer.federatedstore.operation.graphIds",
-        "label": "Graph Ids",
-        "multiple": true,
-        "autocomplete": {
-          "asyncOptions": {
-            "class": "GetAllGraphIds"
-          }
-        }
-      },
-      {
-        "key": "gaffer.federatedstore.operation.skipFailedFederatedStoreExecute",
-        "label": "Skip Failed Graphs",
-        "value": "false",
-        "autocomplete": {
-          "options": [ "true", "false" ]
-        }
-      }
-    ]
-  }
-}
-```
-
-Now that you have got the ability to set graph Ids from the UI, we can create the graph:
+We can create the graph with:
 
 ```
-helm install federated gaffer-docker/gaffer -f federated.yaml --set-file ui.config=./ui-config.json
+helm install federated gaffer-docker/gaffer -f federated.yaml
 ```
 
 # What next?

@@ -45,19 +45,6 @@ spec:
           serviceName: {{ include "gaffer.fullname" . }}-api
           servicePort: http
 {{- end }}
-      - path: {{ .Values.ingress.pathPrefix.ui }}
-{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ include "gaffer.fullname" . }}-ui
-            port:
-              name: http
-{{- else }}
-        backend:
-          serviceName: {{ include "gaffer.fullname" . }}-ui
-          servicePort: http
-{{- end }}
 {{- if ne .Values.ingress.host "" }}
     host: {{ .Values.ingress.host }}
 {{- end }}

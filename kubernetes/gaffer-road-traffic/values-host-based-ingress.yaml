@@ -32,4 +32,3 @@ ingress:
   host: gaffer.k8s.local
   pathPrefix:
     api: /rest
-    ui: /ui

@@ -6,10 +6,6 @@ api:
 test:
   runIntegrationTests: true
 
-ui:
-  image:
-    tag: develop
-
 
 accumulo:
   image:

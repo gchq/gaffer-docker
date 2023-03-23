@@ -12,7 +12,7 @@ By default, this chart deploys:
 * an Accumulo instance:
   * master, monitor, garbage collector
   * 3 x tablet servers
-* a web server running the Gaffer REST API and UI
+* a web server running the Gaffer REST API
 * a Gaffer graph configured with the [Road Traffic Counts Schema](https://github.com/gchq/Gaffer/tree/master/example/road-traffic/road-traffic-model/src/main/resources/schema)
 
 

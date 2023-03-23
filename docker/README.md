@@ -4,7 +4,6 @@ Docker
 In this directory you can find the Dockerfiles and docker compose files for building container images for:
 * [Gaffer](gaffer/)
 * Gaffer's [REST API](gaffer-rest/)
-* Gaffer's [Web UI](gaffer-ui/)
 * Gaffer's [Road Traffic Data Loader](gaffer-road-traffic-loader/) 
 * [HDFS](hdfs/)
 * [Accumulo](accumulo/)
