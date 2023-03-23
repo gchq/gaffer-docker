@@ -18,6 +18,11 @@ services:
 
   zookeeper:
     image: zookeeper:${ZOOKEEPER_VERSION}
+    healthcheck:
+      test: echo ruok | nc 127.0.0.1 2181 | grep imok
+      interval: 30s
+      timeout: 5s
+      retries: 3
     container_name: zookeeper
     hostname: zookeeper
     environment:
@@ -29,6 +34,14 @@ services:
 
   hdfs-namenode:
     image: gchq/hdfs:${HADOOP_VERSION}
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: curl -f http://localhost:9870 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
     build:
       context: ../hdfs/
       args:
@@ -47,9 +60,10 @@ services:
     - /data2
 
   hdfs-datanode:
-    depends_on:
-    - hdfs-namenode
     image: gchq/hdfs:${HADOOP_VERSION}
+    depends_on:
+      hdfs-namenode:
+        condition: service_healthy
     command: datanode
     container_name: hdfs-datanode
     hostname: hdfs-datanode
@@ -62,11 +76,16 @@ services:
     - /data2
 
   accumulo-master:
-    depends_on:
-    - hdfs-namenode
-    - hdfs-datanode
-    - zookeeper
     image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      hdfs-namenode:
+        condition: service_healthy
+    healthcheck:
+      test: ss -pltn | grep 9999
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     build:
       context: .
       args:
@@ -74,7 +93,6 @@ services:
         BASE_IMAGE_NAME: gchq/accumulo
         BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: master
-    restart: on-failure
     container_name: accumulo-master
     hostname: accumulo-master
     environment:
@@ -89,11 +107,16 @@ services:
     - /var/log/accumulo
 
   accumulo-tserver:
-    depends_on:
-    - accumulo-master
     image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      accumulo-master:
+        condition: service_healthy
+    healthcheck:
+      test: ss -pltn | grep 9997
+      interval: 30s
+      timeout: 5s
+      retries: 3
     command: tserver
-    restart: on-failure
     container_name: accumulo-tserver
     hostname: accumulo-tserver
     environment:
@@ -108,11 +131,11 @@ services:
     - /var/log/accumulo
 
   accumulo-monitor:
-    depends_on:
-    - accumulo-master
     image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      accumulo-master:
+        condition: service_healthy
     command: monitor
-    restart: on-failure
     container_name: accumulo-monitor
     hostname: accumulo-monitor
     environment:
@@ -129,11 +152,11 @@ services:
     - /var/log/accumulo
 
   accumulo-gc:
-    depends_on:
-    - accumulo-master
     image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      accumulo-master:
+        condition: service_healthy
     command: gc
-    restart: on-failure
     container_name: accumulo-gc
     hostname: accumulo-gc
     environment:
@@ -149,7 +172,9 @@ services:
 
   gaffer-rest:
     image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
-    restart: on-failure
+    depends_on:
+      accumulo-tserver:
+        condition: service_healthy
     build:
       context: ../gaffer-rest/
       args:
@@ -162,11 +187,12 @@ services:
 
   gaffer-ui:
     image: gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
+    depends_on:
+      - gaffer-rest
     build:
       context: ../gaffer-ui/
       args:
         GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
-    restart: always
     ports:
     - 5000:8080
     volumes:
