@@ -131,6 +131,8 @@ jobs:
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        GHCR_USERNAME: ${{ github.actor }}
+        GHCR_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       run: ./cd/publish_images.sh
 
   create-release-notes:
