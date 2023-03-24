@@ -9,7 +9,7 @@ By default this chart deploys:
 * an Accumulo instance:
   * master, monitor, garbage collector
   * 3 x tablet servers
-* a web server running the Gaffer REST API and UI
+* a web server running the Gaffer REST API
 
 # Deployment
 There are guides for deploying this chart on, they should be read in the following order:

@@ -48,7 +48,6 @@ yq eval ".appVersion = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/Chart.yaml
 
 yq eval ".accumulo.image.tag = \"${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
 yq eval ".api.image.tag = \"${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
-yq eval ".ui.image.tag = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
 
 # gaffer-road-traffic
 [ ! -z "${APP_VERSION}" ] && yq eval ".version = \"${APP_VERSION}\"" -i ./kubernetes/gaffer-road-traffic/Chart.yaml

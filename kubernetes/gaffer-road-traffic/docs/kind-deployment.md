@@ -32,7 +32,6 @@ helm test road-traffic
 | ----------- | ---------------------------------------------------------------- | --------------------------- |
 | HDFS        | `kubectl port-forward svc/road-traffic-hdfs-namenodes 9870:9870` | http://localhost:9870/      |
 | Accumulo    | `kubectl port-forward svc/road-traffic-gaffer-monitor 9995:80`   | http://localhost:9995/      |
-| Gaffer Web  | `kubectl port-forward svc/road-traffic-gaffer-api 8080:80`       | http://localhost:8080/ui/   |
 | Gaffer REST | `kubectl port-forward svc/road-traffic-gaffer-api 8080:80`       | http://localhost:8080/rest/ |
 
 
@@ -58,5 +57,4 @@ Access the web UIs using the following URLs:
 | ----------- | ----------------------------- |
 | HDFS        | http://hdfs.k8s.local/        |
 | Accumulo    | http://accumulo.k8s.local/    |
-| Gaffer Web  | http://gaffer.k8s.local/ui/   |
 | Gaffer REST | http://gaffer.k8s.local/rest/ |
