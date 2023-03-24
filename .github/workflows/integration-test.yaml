@@ -23,7 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GAFFER_VERSION: develop
-      GAFFER_TOOLS_VERSION: develop
     steps:    
     - uses: actions/checkout@v2
 

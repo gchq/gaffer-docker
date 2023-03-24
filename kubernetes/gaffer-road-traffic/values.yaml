@@ -17,7 +17,7 @@ labels: {}
 loader:
   image:
     repository: gchq/gaffer-road-traffic-loader
-    tag: 2.0.0-alpha-0.3.1 # managed version
+    tag: 2.0.0-alpha-0.4 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
