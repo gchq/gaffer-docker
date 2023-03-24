@@ -62,12 +62,14 @@ pushContainer() {
     # Upload to Docker Hub Container Image Library
     for tag in "${tagArray[@]}"; do
         docker tag "${name}:${version}" "${tag}"
-        docker push "${tag}"
+        echo "Uploading ${tag} to docker.io"
+        docker push --quiet "${tag}"
     done
     # Upload to GitHub Container Repository
     for tag in "${tagArray[@]}"; do
         docker tag "${name}:${version}" ghcr.io/"${tag}"
-        docker push ghcr.io/"${tag}"
+        echo "Uploading ${tag} to ghcr.io"
+        docker push --quiet ghcr.io/"${tag}"
     done
 }
 
