@@ -21,7 +21,6 @@ else
   EXTRA_HELM_ARGS+="--set gaffer.hdfs.shell.repository=${REPO_PREFIX}/hdfs "
   EXTRA_HELM_ARGS+="--set gaffer.accumulo.image.repository=${REPO_PREFIX}/gaffer "
   EXTRA_HELM_ARGS+="--set gaffer.api.image.repository=${REPO_PREFIX}/gaffer-rest "
-  EXTRA_HELM_ARGS+="--set gaffer.ui.image.repository=${REPO_PREFIX}/gaffer-ui "
   EXTRA_HELM_ARGS+="--set loader.image.repository=${REPO_PREFIX}/gaffer-road-traffic-loader "
 fi
 ```
@@ -33,8 +32,8 @@ By default the gaffer graph uses the in-memory MapStore. If you want to use an a
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
-export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3}
-export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-2.0.0-alpha-0.3}
+export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3.1}
+export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-2.0.0-alpha-0.3.1}
 
 helm dependency update ../accumulo/
 helm dependency update ../gaffer/
@@ -47,7 +46,6 @@ helm install gaffer . -f ./values-eks-alb.yaml \
   --set gaffer.accumulo.hdfs.shell.tag=${HADOOP_VERSION} \
   --set gaffer.accumulo.image.tag=${GAFFER_VERSION} \
   --set gaffer.api.image.tag=${GAFFER_VERSION} \
-  --set gaffer.ui.image.tag=${GAFFER_TOOLS_VERSION} \
   --set loader.image.tag=${GAFFER_VERSION}
 
 helm test road-traffic

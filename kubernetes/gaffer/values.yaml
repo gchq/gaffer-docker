@@ -26,31 +26,12 @@ graph:
     gaffer.store.job.tracker.enabled: true
   applicationProperties:
     server.context-path: /rest
-ui:
-  image:
-    repository: gchq/gaffer-ui
-    tag: 2.0.0-alpha-0.3 # managed version
-    pullPolicy: IfNotPresent
-    pullSecrets: []
-  # See: https://github.com/gchq/gaffer-tools/tree/master/ui#configuration
-  # You need to change the REST endpoint if you're using different path prefixes
-  config: |-
-    {
-      "gafferEndpoint": {
-        "path": "/rest"
-      }
-    }
-  replicaCount: 1
-  resources: {}
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
 api:
   user: gaffer # May be interpretted by stores depending on implementation
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 2.0.0-alpha-0.3-accumulo-2.0.1 # managed version
+    tag: 2.0.0-alpha-0.3.1-accumulo-2.0.1 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -63,7 +44,6 @@ ingress:
     traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
   host: ""
   pathPrefix:
-    ui: /ui/(.*)
     api: /rest/(.*)
 waitFor:
   graphStatusOk: true
@@ -81,7 +61,7 @@ accumulo:
   enabled: false
   image:
     repository: gchq/gaffer
-    tag: 2.0.0-alpha-0.3-accumulo-2.0.1 # managed version
+    tag: 2.0.0-alpha-0.3.1-accumulo-2.0.1 # managed version
   config:
     postInstallCommands:
       - users
