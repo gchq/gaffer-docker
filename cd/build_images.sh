@@ -22,7 +22,7 @@ cd $root_directory
 # The following command sets:
 # HADOOP_VERSION
 # GAFFER_VERSION
-# GAFFER_TOOLS_VERSION
+# GAFFERPY_VERSION
 # ACCUMULO_VERSION
 # SPARK_VERSION
 source ./docker/gaffer-pyspark-notebook/.env

@@ -21,7 +21,6 @@ kind create cluster --quiet --config ./cd/kind.yaml --image kindest/node:v1.24.4
 # This sets the values for:
 # HADOOP_VERSION
 # GAFFER_VERSION
-# GAFFER_TOOLS_VERSION
 # SPARK_VERSION
 source ./docker/gaffer-pyspark-notebook/.env
 # JHUB_OPTIONS_SERVER_VERSION
