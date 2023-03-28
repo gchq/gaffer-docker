@@ -70,5 +70,5 @@ jobs:
     - name: Push to release branch
       run: |
         git checkout -b $BRANCH_NAME
-        git commit -a -m "prepare release v${RELEASE_VERSION}"
+        git commit -a -m "prepare release v${RELEASE_VERSION}" --allow-empty
         git push --set-upstream origin $BRANCH_NAME
