@@ -18,22 +18,20 @@ The following instructions build all the container images and host them in AWS E
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
-export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3.1}
-export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-2.0.0-alpha-0.3.1}
+export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.4}
 
 docker compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
 docker compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../docker/gaffer-road-traffic-loader/docker-compose.yaml build
 
 HADOOP_IMAGES="hdfs"
 GAFFER_IMAGES="gaffer gaffer-rest gaffer-road-traffic-loader"
-GAFFER_TOOLS_IMAGES="gaffer-ui"
 
 ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 [ "${REGION}" = "" ] && REGION=$(aws configure get region)
 [ "${REGION}" = "" ] && REGION=$(curl --silent -m 5 http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | cut -d'"' -f 4)
 REPO_PREFIX="${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq"
 
-for repo in ${HADOOP_IMAGES} ${GAFFER_IMAGES} ${GAFFER_TOOLS_IMAGES}; do
+for repo in ${HADOOP_IMAGES} ${GAFFER_IMAGES}; do
   aws ecr create-repository --repository-name gchq/${repo}
 done
 
@@ -47,11 +45,6 @@ done
 for repo in ${GAFFER_IMAGES}; do
   docker image tag gchq/${repo}:${GAFFER_VERSION} ${REPO_PREFIX}/${repo}:${GAFFER_VERSION}
   docker image push ${REPO_PREFIX}/${repo}:${GAFFER_VERSION}
-done
-
-for repo in ${GAFFER_TOOLS_IMAGES}; do
-  docker image tag gchq/${repo}:${GAFFER_TOOLS_VERSION} ${REPO_PREFIX}/${repo}:${GAFFER_TOOLS_VERSION}
-  docker image push ${REPO_PREFIX}/${repo}:${GAFFER_TOOLS_VERSION}
 done
 ```
 

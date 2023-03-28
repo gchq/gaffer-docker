@@ -62,12 +62,14 @@ pushContainer() {
     # Upload to Docker Hub Container Image Library
     for tag in "${tagArray[@]}"; do
         docker tag "${name}:${version}" "${tag}"
-        docker push "${tag}"
+        echo "Uploading ${tag} to docker.io"
+        docker push --quiet "${tag}"
     done
     # Upload to GitHub Container Repository
     for tag in "${tagArray[@]}"; do
         docker tag "${name}:${version}" ghcr.io/"${tag}"
-        docker push ghcr.io/"${tag}"
+        echo "Uploading ${tag} to ghcr.io"
+        docker push --quiet ghcr.io/"${tag}"
     done
 }
 
@@ -76,7 +78,6 @@ ROOT_DIR="$(getRootDirectory)"
 # This sets the values for:
 # HADOOP_VERSION
 # GAFFER_VERSION
-# GAFFER_TOOLS_VERSION
 # ACCUMULO_VERSION
 # SPARK_VERSION
 source "${ROOT_DIR}"/docker/gaffer-pyspark-notebook/.env
@@ -93,7 +94,6 @@ pushContainer gchq/hdfs "${HADOOP_VERSION}"
 pushContainer gchq/accumulo "${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer-rest "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
-pushContainer gchq/gaffer-ui "${GAFFER_TOOLS_VERSION}"
 pushContainer gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}"
 pushContainer gchq/gaffer-pyspark-notebook "${GAFFER_VERSION}"
 pushContainer gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}"

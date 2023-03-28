@@ -23,7 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GAFFER_VERSION: develop
-      GAFFER_TOOLS_VERSION: develop
     steps:    
     - uses: actions/checkout@v2
 
@@ -44,7 +43,6 @@ jobs:
         kind load docker-image gchq/hdfs:$HADOOP_VERSION
         kind load docker-image gchq/gaffer:$GAFFER_VERSION-accumulo-$ACCUMULO_VERSION
         kind load docker-image gchq/gaffer-rest:$GAFFER_VERSION-accumulo-$ACCUMULO_VERSION
-        kind load docker-image gchq/gaffer-ui:$GAFFER_TOOLS_VERSION
         kind load docker-image gchq/gaffer-integration-tests:$GAFFER_VERSION-accumulo-$ACCUMULO_VERSION
 
     - name: Deploy Gaffer

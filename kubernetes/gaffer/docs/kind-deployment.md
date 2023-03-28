@@ -9,7 +9,7 @@ The standard Gaffer deployment will give you an in-memory store. To change this 
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
-export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.3.1}
+export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.4}
 
 helm dependency update
 
@@ -29,8 +29,6 @@ helm test gaffer
 | Component   | Command                                                    | URL                         |
 | ----------- | ---------------------------------------------------------- | --------------------------- |
 | Gaffer REST | `kubectl port-forward svc/gaffer-api 8080:80`              | http://localhost:8080/rest/ |
-
-Note that the Gaffer UI requires you to set up an ingress by default.
 
 
 # Accessing Web UIs (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
@@ -53,5 +51,4 @@ sudo KUBECONFIG=$HOME/.kube/config kubectl port-forward -n ingress-nginx svc/ing
 Access the web UIs using the following URLs:
 | Component   | URL                           |
 | ----------- | ----------------------------- |
-| Gaffer UI   | http://gaffer.k8s.local/ui/   |
 | Gaffer REST | http://gaffer.k8s.local/rest/ |

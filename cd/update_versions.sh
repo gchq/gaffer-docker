@@ -21,7 +21,7 @@ fi
 # This sets the values for:
 # HADOOP_VERSION
 # GAFFER_VERSION
-# GAFFER_TOOLS_VERSION
+# GAFFERPY_VERSION
 # SPARK_VERSION
 source ./docker/gaffer-pyspark-notebook/.env
 # JHUB_OPTIONS_SERVER_VERSION
@@ -48,7 +48,6 @@ yq eval ".appVersion = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/Chart.yaml
 
 yq eval ".accumulo.image.tag = \"${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
 yq eval ".api.image.tag = \"${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
-yq eval ".ui.image.tag = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer/values.yaml
 
 # gaffer-road-traffic
 [ ! -z "${APP_VERSION}" ] && yq eval ".version = \"${APP_VERSION}\"" -i ./kubernetes/gaffer-road-traffic/Chart.yaml
@@ -60,7 +59,7 @@ yq eval ".loader.image.tag = \"${GAFFER_VERSION}\"" -i ./kubernetes/gaffer-road-
 # gaffer-jhub
 [ ! -z "${APP_VERSION}" ] && yq eval ".version = \"${APP_VERSION}\"" -i ./kubernetes/gaffer-jhub/Chart.yaml
 
-yq eval ".jupyterhub.singleuser.profileList[1].description = \"Python 3, Hadoop ${HADOOP_VERSION}, Spark ${SPARK_VERSION}, AWS CLI 2, kubectl ${KUBECTL_VERSION}, gafferpy ${GAFFER_TOOLS_VERSION}\"" -i ./kubernetes/gaffer-jhub/values.yaml
+yq eval ".jupyterhub.singleuser.profileList[1].description = \"Python 3, Hadoop ${HADOOP_VERSION}, Spark ${SPARK_VERSION}, AWS CLI 2, kubectl ${KUBECTL_VERSION}, gafferpy ${GAFFERPY_VERSION}\"" -i ./kubernetes/gaffer-jhub/values.yaml
 yq eval ".jupyterhub.singleuser.profileList[1].spark_image = \"gchq/spark-py:${SPARK_VERSION}\"" -i ./kubernetes/gaffer-jhub/values.yaml
 yq eval ".jupyterhub.singleuser.profileList[1].kubespawner_override.image = \"gchq/gaffer-pyspark-notebook:${GAFFER_VERSION}\"" -i ./kubernetes/gaffer-jhub/values.yaml
 yq eval ".optionsServer.image.tag = \"${JHUB_OPTIONS_SERVER_VERSION}\"" -i ./kubernetes/gaffer-jhub/values.yaml
