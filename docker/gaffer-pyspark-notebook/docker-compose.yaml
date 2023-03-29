@@ -156,7 +156,6 @@ services:
       context: ../gaffer-rest/
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
-        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
         ACCUMULO_VERSION: ${ACCUMULO_VERSION}
     ports:
     - 8080:8080
@@ -197,7 +196,7 @@ services:
       args:
         HADOOP_VERSION: ${HADOOP_VERSION}
         SPARK_VERSION: ${SPARK_VERSION}
-        GAFFER_PYTHON_SHELL_VERSION: gaffer-tools-${GAFFER_TOOLS_VERSION}
+        GAFFERPY_VERSION: gaffer-tools-${GAFFERPY_VERSION}
         KUBECTL_VERSION: ${KUBECTL_VERSION}
     ports:
     - 8888:8888

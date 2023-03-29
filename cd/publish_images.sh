@@ -78,7 +78,6 @@ ROOT_DIR="$(getRootDirectory)"
 # This sets the values for:
 # HADOOP_VERSION
 # GAFFER_VERSION
-# GAFFER_TOOLS_VERSION
 # ACCUMULO_VERSION
 # SPARK_VERSION
 source "${ROOT_DIR}"/docker/gaffer-pyspark-notebook/.env
