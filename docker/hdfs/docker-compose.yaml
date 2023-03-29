@@ -18,6 +18,11 @@ services:
 
   hdfs-namenode:
     image: gchq/hdfs:${HADOOP_VERSION}
+    healthcheck:
+      test: curl -f http://localhost:9870 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
     build:
       context: .
       args:
@@ -36,9 +41,10 @@ services:
     - /data2
 
   hdfs-datanode:
-    depends_on:
-    - hdfs-namenode
     image: gchq/hdfs:${HADOOP_VERSION}
+    depends_on:
+      hdfs-namenode:
+        condition: service_healthy
     command: datanode
     container_name: hdfs-datanode
     hostname: hdfs-datanode
