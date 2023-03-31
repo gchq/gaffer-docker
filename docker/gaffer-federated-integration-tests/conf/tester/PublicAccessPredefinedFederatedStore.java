@@ -36,6 +36,23 @@ import static uk.gov.gchq.gaffer.federatedstore.FederatedStoreTestUtil.GRAPH_ID_
 import static uk.gov.gchq.gaffer.federatedstore.FederatedStoreTestUtil.resetForFederatedTests;
 import static uk.gov.gchq.gaffer.user.User.UNKNOWN_USER_ID;
 
+/*
+ * This is an altered PublicAccessPredefinedFederatedStore used for the docker compose
+ * federated ITs. It overwrites the copy of the file that is cloned in the tester container.
+ * This means this file will need to be kept in sync with any major changes to the actual file.
+ * 
+ * Rather than connecting to 2 MiniAccumuloStores, this will add a proxy to the gaffer-rest
+ * container. Then 2 FederatedOperations happen which add 2 real AccumuloStores to the proxied
+ * gaffer-rest FederatedStore. Then when we run the ITs from here, it looks like this:
+ * 
+ * PublicAccessPredefinedFederatedStore ----->ProxyStore-----> FederatedStore------
+ *      (gaffer-integration-tests)                             (gaffer-rest)      |
+ *                                                                                |
+ *                                   AccumuloStore: AccumuloStoreEntities   <-----|
+ *                                                                                |
+ *                                   AccumuloStore: AccumuloStoreEdges      <-----|
+ * 
+ */
 public class PublicAccessPredefinedFederatedStore extends FederatedStore {
 
     @Override
