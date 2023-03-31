@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
+set -ex
 
 # Update store properties files to point to the location of the Accumulo store to test against:
 cp conf/tester/store.properties /tmp/gaffer/store-implementation/federated-store/src/test/resources/properties/singleUseAccumuloStore.properties
@@ -27,13 +27,9 @@ cp conf/proxy/store.properties /tmp/gaffer/store-implementation/federated-store/
 
 # Run Integration Tests
 cd /tmp/gaffer
-echo "Running Maven Install"
-echo "mvn -q clean install -pl :federated-store -am -Pquick"
 mvn -q clean install -pl :federated-store -am -Pquick
 
 # Only run core ITs and skip FederatedStore specific ones, like FederatedAdminIT.
 # This is because they are not correctly setup to work through a proxy:
 # they expect all the Accumulo information to be directly available in the GraphStorage cache
-echo "Running Maven tests"
-echo "mvn -q integration-test -Dit.test=FederatedStoreITs -pl :federated-store -Dskip.surefire.tests=true -Dmaven.javadoc.skip=true -Dpmd.skip=true -Dspotbugs.skip=true -Dcheckstyle.skip=true -ff"
 mvn -q integration-test -Dit.test=FederatedStoreITs -pl :federated-store -Dskip.surefire.tests=true -Dmaven.javadoc.skip=true -Dpmd.skip=true -Dspotbugs.skip=true -Dcheckstyle.skip=true -ff
