@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
+set -ex
 
 # Update store properties files to point to the location of the Accumulo store to test against:
 accumulo_instance=$(cat conf/store.properties | grep accumulo.instance | sed -e 's/.*=\(.*\)/\1/')
@@ -40,11 +40,6 @@ if echo "$ACCUMULO_VERSION" | grep -q "^1.*$"; then LEGACY=true; else LEGACY=fal
 
 # Run Integration Tests 
 cd /tmp/gaffer
-echo "Running Maven Install"
-echo "mvn -q clean install -Dlegacy=$LEGACY -pl :accumulo-store -am -Pquick"
 mvn -q clean install -Dlegacy=$LEGACY -pl :accumulo-store -am -Pquick
 
-echo "Running Maven tests"
-echo "mvn -q verify -Dlegacy=$LEGACY -Dskip.surefire.tests -pl :accumulo-store -ff"
 mvn -q verify -Dlegacy=$LEGACY -Dskip.surefire.tests -pl :accumulo-store -ff
-
