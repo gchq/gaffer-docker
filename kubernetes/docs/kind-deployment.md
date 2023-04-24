@@ -22,8 +22,9 @@ If the versions of the container images you would like to deploy are not availab
 To import the images, run this from the kubernetes directory:
 
 ```bash
-export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
-export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.4}
+export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
+export GAFFER_VERSION=${GAFFER_VERSION:-1.23.0}
+export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-1.23.0}
 
 docker compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
 docker compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../docker/gaffer-road-traffic-loader/docker-compose.yaml build
