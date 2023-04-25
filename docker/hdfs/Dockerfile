@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BUILDER_IMAGE_NAME=debian
-ARG BUILDER_IMAGE_TAG=stretch-20220125-slim
+ARG BUILDER_IMAGE_NAME=ubuntu
+ARG BUILDER_IMAGE_TAG=focal-20230412
 
-ARG BASE_IMAGE_NAME=debian
-ARG BASE_IMAGE_TAG=stretch-20220125-slim
+ARG BASE_IMAGE_NAME=ubuntu
+ARG BASE_IMAGE_TAG=focal-20230412
 
 ARG HADOOP_VERSION=3.3.3
 
