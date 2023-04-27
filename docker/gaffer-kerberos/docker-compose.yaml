@@ -130,7 +130,7 @@ services:
         condition: service_healthy
     image: gchq/gaffer-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     healthcheck:
-      test: ss -pltn | grep 9999
+      test: cat /proc/net/tcp | grep 270F
       interval: 30s
       timeout: 5s
       retries: 3
@@ -162,7 +162,7 @@ services:
         condition: service_healthy
     image: gchq/gaffer-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     healthcheck:
-      test: ss -pltn | grep 9997
+      test: cat /proc/net/tcp | grep 270D
       interval: 30s
       timeout: 5s
       retries: 3
