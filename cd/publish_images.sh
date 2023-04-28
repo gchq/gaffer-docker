@@ -80,7 +80,7 @@ ROOT_DIR="$(getRootDirectory)"
 # GAFFER_VERSION
 # ACCUMULO_VERSION
 # SPARK_VERSION
-source "${ROOT_DIR}"/docker/gaffer-pyspark-notebook/.env
+source "${ROOT_DIR}"/docker/accumulo2.env
 # JHUB_OPTIONS_SERVER_VERSION
 source "${ROOT_DIR}"/docker/gaffer-jhub-options-server/get-version.sh
 
@@ -98,3 +98,10 @@ pushContainer gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}"
 pushContainer gchq/gaffer-pyspark-notebook "${GAFFER_VERSION}"
 pushContainer gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}"
 pushContainer gchq/spark-py "${SPARK_VERSION}"
+
+# Also push legacy versions
+source "${ROOT_DIR}"/docker/accumulo1.env
+pushContainer gchq/hdfs "${HADOOP_VERSION}"
+pushContainer gchq/accumulo "${ACCUMULO_VERSION}"
+pushContainer gchq/gaffer "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
+pushContainer gchq/gaffer-rest "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
