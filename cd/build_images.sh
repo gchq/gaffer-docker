@@ -21,6 +21,8 @@ cd $root_directory
 
 if [ ! -z "$1" ]; then
 	ENV_FILE=$1
+else
+	echo "Error - Environment file not set"; exit 1;
 fi
 
 # The following command sets:

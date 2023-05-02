@@ -27,18 +27,29 @@ getRootDirectory() {
 }
 
 # Generate tags based on version
+# Default is to tag version with full, major.minor, major, latest
 getTags() {
     if [[ $version =~ .*alpha.* ]];
     then
       tags="${name}:${version} ${name}:latest"
+    elif [[ $tagsetting = "nolatest" ]];
+    then
+      tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+).*|${name}:${version} ${name}:\1.\2 ${name}:\1|")"
+    elif [[ $tagsetting = "nomajor" ]];
+    then
+      tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+).*|${name}:${version} ${name}:\1.\2|")"
     else
       tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+).*|${name}:${version} ${name}:\1.\2 ${name}:\1 ${name}:latest|")"
     fi
 }
 
 # Generate tags for Gaffer image based on version
+# Default is to tag version with full, major.minor.patch, major.minor, major, latest
 getGafferTags() {
-    if [[ $version =~ .*alpha.* ]];
+    if [[ $tagsetting = "onlyfull" ]];
+    then
+      tags="${name}:${version}"
+    elif [[ $version =~ .*alpha.* ]];
     then
       tags="${name}:${version} ${name}:latest"
     else
@@ -50,6 +61,7 @@ getGafferTags() {
 pushContainer() {
     name=$1
     version=$2
+    tagsetting=$3
     if [[ $version =~ .*accumulo.* ]];
     then
       getGafferTags
@@ -99,9 +111,9 @@ pushContainer gchq/gaffer-pyspark-notebook "${GAFFER_VERSION}"
 pushContainer gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}"
 pushContainer gchq/spark-py "${SPARK_VERSION}"
 
-# Also push legacy versions
+# Push legacy versions to Container Repositories
 source "${ROOT_DIR}"/docker/accumulo1.env
-pushContainer gchq/hdfs "${HADOOP_VERSION}"
-pushContainer gchq/accumulo "${ACCUMULO_VERSION}"
-pushContainer gchq/gaffer "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
-pushContainer gchq/gaffer-rest "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
+pushContainer gchq/hdfs "${HADOOP_VERSION}" nomajor
+pushContainer gchq/accumulo "${ACCUMULO_VERSION}" nolatest
+pushContainer gchq/gaffer "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}" onlyfull
+pushContainer gchq/gaffer-rest "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}" onlyfull

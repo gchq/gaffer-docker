@@ -135,10 +135,10 @@ jobs:
       with:
         ref: ${{ needs.create-release-tag.outputs.develop_name }}
         
-    - name: Build Accumulo 2 images
+    - name: Build images with Accumulo 2 dependency
       run: ./cd/build_images.sh ./docker/accumulo2.env
 
-    - name: Build Accumulo 1 images
+    - name: Build images with Accumulo 1 dependency (Legacy)
       run: ./cd/build_images.sh ./docker/accumulo1.env
 
     - name: Publish images
