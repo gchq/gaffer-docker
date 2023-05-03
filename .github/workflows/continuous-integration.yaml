@@ -43,7 +43,7 @@ jobs:
       run: ./cd/check_copyright_headers.sh
 
     - name: Build Images
-      run: ./cd/build_images.sh
+      run: ./cd/build_images.sh ./docker/accumulo2.env
 
     - name: Update versions in charts
       run: ./cd/update_versions.sh

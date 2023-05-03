@@ -19,13 +19,19 @@ set -e
 root_directory="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 cd $root_directory
 
+if [ ! -z "$1" ]; then
+	ENV_FILE=$1
+else
+	echo "Error - Environment file not set"; exit 1;
+fi
+
 # The following command sets:
 # HADOOP_VERSION
 # GAFFER_VERSION
 # GAFFERPY_VERSION
 # ACCUMULO_VERSION
 # SPARK_VERSION
-source ./docker/gaffer-pyspark-notebook/.env
+source "${ENV_FILE}"
 
 # Builds all of the Gaffer and Accumulo related images:
 docker compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
