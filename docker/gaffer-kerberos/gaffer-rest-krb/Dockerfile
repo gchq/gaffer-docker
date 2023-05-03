@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BASE_IMAGE_NAME=gchq/gaffer-rest
-ARG BASE_IMAGE_TAG=2.0.0-alpha-0.4
+ARG BASE_IMAGE_TAG=2.0.0-alpha-0.5
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
