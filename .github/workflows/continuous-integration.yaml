@@ -22,7 +22,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build Images
-      run: ./cd/build_images.sh
+      run: ./cd/build_images.sh ./docker/accumulo2.env
 
     - name: Update versions in charts
       run: ./cd/update_versions.sh
