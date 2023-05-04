@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_IMAGE_NAME=debian
-ARG BASE_IMAGE_TAG=stretch-20220125-slim
+ARG BASE_IMAGE_NAME=ubuntu
+ARG BASE_IMAGE_TAG=focal-20230412
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 

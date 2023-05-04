@@ -56,7 +56,7 @@ services:
     volumes:
     - ../hdfs/conf:${HADOOP_CONF_DIR}:ro
     # Disable user permissions for tests
-    - ./conf/hdfs-site.xml:${HADOOP_CONF_DIR}/hdfs-site.xml:ro
+    - ../gaffer-integration-tests/conf/hdfs-site.xml:${HADOOP_CONF_DIR}/hdfs-site.xml:ro
     - /var/log/hadoop
     - /data1
     - /data2
@@ -74,7 +74,7 @@ services:
     volumes:
     - ../hdfs/conf:${HADOOP_CONF_DIR}:ro
     # Disable user permissions for tests
-    - ./conf/hdfs-site.xml:${HADOOP_CONF_DIR}/hdfs-site.xml:ro
+    - ../gaffer-integration-tests/conf/hdfs-site.xml:${HADOOP_CONF_DIR}/hdfs-site.xml:ro
     - /var/log/hadoop
     - /data1
     - /data2
@@ -156,13 +156,32 @@ services:
     - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
+  gaffer-rest:
+    image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      accumulo-tserver:
+        condition: service_healthy
+    build:
+      context: ../gaffer-rest/
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
+    ports:
+    - 8080:8080
+    volumes:
+    - ./conf/federated/store.properties:/gaffer/store/store.properties:ro
+    - ./conf/federated/schema:/gaffer/schema:ro
+    - ./conf/federated/integrationTestMergeFunctions.json:/gaffer/integrationTestMergeFunctions.json:ro
+
   gaffer-integration-tests:
     image: gchq/gaffer-integration-tests:${GAFFER_TESTER_VERSION}-accumulo-${ACCUMULO_VERSION}
     build:
-      context: .
+      context: ../gaffer-integration-tests/
       args:
         GAFFER_VERSION: ${GAFFER_TESTER_VERSION}
         ACCUMULO_VERSION: ${ACCUMULO_VERSION}
     volumes:
-    - ./conf/store.properties:/tests/conf/store.properties:ro
+    - ./conf/proxy/store.properties:/tests/conf/proxy/store.properties
+    - ./conf/tester/:/tests/conf/tester/
     - ../hdfs/conf:/opt/hadoop/conf:ro
+    - ./entrypoint.sh:/tests/entrypoint.sh

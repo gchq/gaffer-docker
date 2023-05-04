@@ -20,7 +20,8 @@ ARG BASE_IMAGE_TAG=8-jre-alpine
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
-ARG GAFFER_VERSION=1.23.0
+ARG ACCUMULO_VERSION=2.0.1
+ARG GAFFER_VERSION=2.0.0-alpha-0.5
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 

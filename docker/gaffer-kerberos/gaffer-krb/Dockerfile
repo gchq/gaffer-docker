@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BASE_IMAGE_NAME=gchq/gaffer
-ARG BASE_IMAGE_TAG=2.0.0-alpha-0.4
+ARG BASE_IMAGE_TAG=2.0.0-alpha-0.5
 
 ARG USER=accumulo
 ARG GROUP=accumulo
@@ -23,8 +23,7 @@ FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 USER root
 RUN apt -qq update && \
 	apt -qq install -y \
-		krb5-user \
-		iproute2 && \
+		krb5-user && \
 	apt -qq clean \
 	&& rm -rf /var/lib/apt/lists/*
 USER ${USER}
