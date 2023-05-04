@@ -121,8 +121,11 @@ jobs:
       with:
         ref: ${{ needs.create-release-tag.outputs.develop_name }}
         
-    - name: Build images
-      run: ./cd/build_images.sh
+    - name: Build images with Accumulo 2 dependency
+      run: ./cd/build_images.sh ./docker/accumulo2.env
+
+    - name: Build images with Accumulo 1 dependency (Legacy)
+      run: ./cd/build_images.sh ./docker/accumulo1.env
 
     - name: Set version
       run: echo "APP_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
