@@ -106,7 +106,7 @@
         {
             "class" : "uk.gov.gchq.gaffer.operation.impl.output.ToCsv",
             "includeHeader" : false,
-            "elementGenerator" : {
+            "csvGenerator" : {
                 "class" : "uk.gov.gchq.gaffer.data.generator.CsvGenerator",
                 "fields" : {
                     "VERTEX" : "Junction",

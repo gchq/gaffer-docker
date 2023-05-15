@@ -7,7 +7,7 @@ First follow the [instructions here](../../docs/kind-deployment.md) to provision
 
 ```bash
 export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
-export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.5}
+export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.6}
 
 helm dependency update
 
