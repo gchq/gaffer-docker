@@ -14,7 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
+# -a: Always export variables to subsequent commands.
+# Required for variables from sourced env file to automatically be visible to docker compose.
+set -e -a
 
 root_directory="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 cd $root_directory
