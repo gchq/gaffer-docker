@@ -25,11 +25,10 @@ jobs:
 
     outputs:
       branch_name: ${{ steps.branch.outputs.branch_name }}
-      develop_name: ${{ steps.develop_branch.outputs.develop_name }}
 
     steps:
     - name: Checkout master
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: master
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
@@ -37,8 +36,8 @@ jobs:
     
     - name: Set up Github credentials
       run: |
-        git config user.name Gaffer
-        git config user.email github-actions@github.com
+        git config user.name github-actions[bot]
+        git config user.email 41898282+github-actions[bot]@users.noreply.github.com
     
     - name: Set release version
       run: echo "RELEASE_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
@@ -46,45 +45,18 @@ jobs:
     - name: Set branch name
       run: echo "BRANCH_NAME=$(git branch -a | grep $RELEASE_VERSION | tail -n 1 | cut -c 18-)" >> $GITHUB_ENV
 
-    - name: Set develop branch
-      if: ${{ !startsWith( env.BRANCH_NAME , 'alpha') }}
-      run: echo "DEVELOP_BRANCH=develop" >> $GITHUB_ENV
-
-    - name: Set v2-alpha branch
-      if: ${{ startsWith( env.BRANCH_NAME , 'alpha') }}
-      run: echo "DEVELOP_BRANCH=v2-alpha" >> $GITHUB_ENV
-
     - name: Output branch name
       id: branch
       run: echo "::set-output name=branch_name::$BRANCH_NAME"
-
-    - name: Output develop branch name
-      id: develop_branch
-      run: echo "::set-output name=develop_name::$DEVELOP_BRANCH"
 
     - name: Fail if no branch found
       if: ${{ !env.BRANCH_NAME }}
       run: exit 1
 
-    - name: Set alpha master branch
-      if: ${{ startsWith( env.BRANCH_NAME , 'alpha') }}
-      run: echo "MASTER_BRANCH=v2-alpha" >> $GITHUB_ENV
-
-    - name: Set master branch
-      if: ${{ !startsWith( env.BRANCH_NAME , 'alpha') }}
-      run: echo "MASTER_BRANCH=master" >> $GITHUB_ENV
-
-    - name: Checkout master
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ env.MASTER_BRANCH }}
-        token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
-        fetch-depth: 0
-
     - name: Merge release into master
       run: |
         git checkout ${{ env.BRANCH_NAME }}
-        git checkout ${{ env.MASTER_BRANCH }}
+        git checkout master
         git merge ${{ env.BRANCH_NAME }}
 
     - name: Push changes
@@ -104,7 +76,7 @@ jobs:
     - create-release-tag
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: ${{ matrix.branch }}
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
@@ -112,12 +84,10 @@ jobs:
     
     - name: Set up Github credentials
       run: |
-        git config user.name Gaffer
-        git config user.email github-actions@github.com
+        git config user.name github-actions[bot]
+        git config user.email 41898282+github-actions[bot]@users.noreply.github.com
   
-    # Skip develop if alpha release
     - name: Merge release into branch
-      if: ${{ !((startsWith( needs.create-release-tag.outputs.branch_name , 'alpha')) && (matrix.branch == 'develop')) }}
       run: |
         git checkout ${{ needs.create-release-tag.outputs.branch_name }}
         git checkout ${{ matrix.branch }}
@@ -131,9 +101,9 @@ jobs:
     - update-branches
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        ref: ${{ needs.create-release-tag.outputs.develop_name }}
+        ref: develop
         
     - name: Build images with Accumulo 2 dependency
       run: ./cd/build_images.sh ./docker/accumulo2.env
@@ -159,9 +129,9 @@ jobs:
       release_upload_url: ${{ steps.upload_notes.outputs.upload_url }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        ref: ${{ needs.create-release-tag.outputs.develop_name }}
+        ref: develop
     
     - name: Create Release Notes
       id: create_release_notes
@@ -181,7 +151,6 @@ jobs:
         tag_name: v${{ env.RELEASE_VERSION }}
         name: Gaffer Docker ${{ env.RELEASE_VERSION }}
         body_path: release_file.md
-        prerelease: ${{ startsWith( needs.create-release-tag.outputs.branch_name , 'alpha') }}
 
   upload-release-artifacts:
     runs-on: ubuntu-latest
@@ -198,9 +167,9 @@ jobs:
         - gaffer-jhub
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        ref: ${{ needs.create-release-tag.outputs.develop_name }}
+        ref: develop
     
     - name: Install dependencies
       run: ./cd/install_dependencies.sh
@@ -237,15 +206,15 @@ jobs:
 
     steps:
     - name: Checkout gh-pages
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: gh-pages
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
     
     - name: Set up Github credentials
       run: |
-        git config user.name Gaffer
-        git config user.email github-actions@github.com
+        git config user.name github-actions[bot]
+        git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
     - name: Download packaged charts
       uses: actions/download-artifact@v2
