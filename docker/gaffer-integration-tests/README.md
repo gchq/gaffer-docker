@@ -6,7 +6,7 @@ This is used by the [Helm scripts](kubernetes/gaffer/templates/tests/integration
 # Running Locally
 The easiest way to build and run these services is to use docker compose, by running the following from this directory:
 ```bash
-docker build -t gchq/gaffer-integration-tests:1.23.0 .
+docker compose up
 ```
 
 ## Customising the build
