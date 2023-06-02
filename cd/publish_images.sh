@@ -29,10 +29,7 @@ getRootDirectory() {
 # Generate tags based on version
 # Default is to tag version with full, major.minor, major, latest
 getTags() {
-    if [[ $version =~ .*alpha.* ]];
-    then
-      tags="${name}:${version} ${name}:latest"
-    elif [[ $tagsetting = "nolatest" ]];
+    if [[ $tagsetting = "nolatest" ]];
     then
       tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+).*|${name}:${version} ${name}:\1.\2 ${name}:\1|")"
     elif [[ $tagsetting = "nomajor" ]];
@@ -49,9 +46,6 @@ getGafferTags() {
     if [[ $tagsetting = "onlyfull" ]];
     then
       tags="${name}:${version}"
-    elif [[ $version =~ .*alpha.* ]];
-    then
-      tags="${name}:${version} ${name}:latest"
     else
       tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+)\.([0-9]+)-accumulo-([0-9.]*)|${name}:${version} ${name}:\1.\2.\3 ${name}:\1.\2 ${name}:\1 ${name}:latest|")"
     fi

@@ -22,7 +22,7 @@ then
 fi
 
 currentYear=$(date +%Y)
-diff=`git diff origin/v2-alpha --name-only --cached`
+diff=`git diff origin/develop --name-only --cached`
 
 if [ -n "$diff" ]
 then
