@@ -36,8 +36,8 @@ jobs:
     
     - name: Set up Github credentials
       run: |
-        git config user.name Gaffer
-        git config user.email github-actions@github.com
+        git config user.name github-actions[bot]
+        git config user.email 41898282+github-actions[bot]@users.noreply.github.com
     
     - name: Set release version
       run: echo "RELEASE_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
@@ -84,8 +84,8 @@ jobs:
     
     - name: Set up Github credentials
       run: |
-        git config user.name Gaffer
-        git config user.email github-actions@github.com
+        git config user.name github-actions[bot]
+        git config user.email 41898282+github-actions[bot]@users.noreply.github.com
   
     - name: Merge release into branch
       run: |
@@ -213,8 +213,8 @@ jobs:
     
     - name: Set up Github credentials
       run: |
-        git config user.name Gaffer
-        git config user.email github-actions@github.com
+        git config user.name github-actions[bot]
+        git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
     - name: Download packaged charts
       uses: actions/download-artifact@v2
