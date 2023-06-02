@@ -1,14 +1,14 @@
 # Deploying Road Traffic Gaffer Graph using kind
-All scripts listed here are intended to be run from the kubernetes/gaffer-road-traffic folder
+All scripts listed here are intended to be run from the kubernetes/gaffer-road-traffic folder.
 
 First follow the [instructions here](../../docs/kind-deployment.md) to provision and configure a local Kubernetes cluster, using [kind](https://kind.sigs.k8s.io/) (Kubernetes IN Docker), that the Gaffer Road Traffic Helm Chart can be deployed on.
 
-After the cluster is provisioned, update the values.yaml with the passwords for the various accumulo users. These are found under `accumulo.config.userManagement`.
+After the cluster is provisioned, update the values.yaml with the passwords for the various Accumulo users. These are found under `accumulo.config.userManagement`.
 
 Once that's done, run this to deploy and test the Road Traffic Graph. 
 ```bash
-export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.23.0}
+export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
+export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.6}
 
 helm dependency update ../accumulo/
 helm dependency update ../gaffer/
@@ -32,7 +32,6 @@ helm test road-traffic
 | ----------- | ---------------------------------------------------------------- | --------------------------- |
 | HDFS        | `kubectl port-forward svc/road-traffic-hdfs-namenodes 9870:9870` | http://localhost:9870/      |
 | Accumulo    | `kubectl port-forward svc/road-traffic-gaffer-monitor 9995:80`   | http://localhost:9995/      |
-| Gaffer Web  | `kubectl port-forward svc/road-traffic-gaffer-api 8080:80`       | http://localhost:8080/ui/   |
 | Gaffer REST | `kubectl port-forward svc/road-traffic-gaffer-api 8080:80`       | http://localhost:8080/rest/ |
 
 
@@ -58,5 +57,4 @@ Access the web UIs using the following URLs:
 | ----------- | ----------------------------- |
 | HDFS        | http://hdfs.k8s.local/        |
 | Accumulo    | http://accumulo.k8s.local/    |
-| Gaffer Web  | http://gaffer.k8s.local/ui/   |
 | Gaffer REST | http://gaffer.k8s.local/rest/ |

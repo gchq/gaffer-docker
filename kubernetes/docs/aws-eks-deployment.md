@@ -1,42 +1,37 @@
-# Deploying Gaffer on AWS EKS
-
+Deploying Gaffer on AWS EKS
+===========================
 The following instructions will guide you through provisioning and configuring an [AWS EKS](https://aws.amazon.com/eks/) cluster that our Helm Charts can be deployed on.
 
-
-## Install CLI Tools
-
-* [docker-compose](https://github.com/docker/compose/releases/latest)
+# Install CLI Tools
+* [docker compose](https://github.com/docker/compose/releases/latest)
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [helm](https://github.com/helm/helm/releases)
 * [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 * [eksctl](https://github.com/weaveworks/eksctl/releases/latest)
 
 
-## Container Images
-
+# Container Images
 If the versions of the container images you would like to deploy are not available in [Docker Hub](https://hub.docker.com/u/gchq) then you will need to host them in a registry yourself.
 
 The following instructions build all the container images and host them in AWS ECR when run from the ./kubernetes folder:
 
 
 ```bash
-export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.23.0}
-export GAFFER_TOOLS_VERSION=${GAFFER_TOOLS_VERSION:-1.23.0}
+export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
+export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.6}
 
-docker-compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
-docker-compose --project-directory ../docker/gaffer-operation-runner/ -f ../docker/gaffer-operation-runner/docker-compose.yaml build 
+docker compose --project-directory ../docker/accumulo/ -f ../docker/accumulo/docker-compose.yaml build
+docker compose --project-directory ../docker/gaffer-road-traffic-loader/ -f ../docker/gaffer-road-traffic-loader/docker-compose.yaml build
 
 HADOOP_IMAGES="hdfs"
-GAFFER_IMAGES="gaffer gaffer-rest gaffer-road-traffic-loader gaffer-operation-runner"
-GAFFER_TOOLS_IMAGES="gaffer-ui"
+GAFFER_IMAGES="gaffer gaffer-rest gaffer-road-traffic-loader"
 
 ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 [ "${REGION}" = "" ] && REGION=$(aws configure get region)
 [ "${REGION}" = "" ] && REGION=$(curl --silent -m 5 http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | cut -d'"' -f 4)
 REPO_PREFIX="${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/gchq"
 
-for repo in ${HADOOP_IMAGES} ${GAFFER_IMAGES} ${GAFFER_TOOLS_IMAGES}; do
+for repo in ${HADOOP_IMAGES} ${GAFFER_IMAGES}; do
   aws ecr create-repository --repository-name gchq/${repo}
 done
 
@@ -51,15 +46,9 @@ for repo in ${GAFFER_IMAGES}; do
   docker image tag gchq/${repo}:${GAFFER_VERSION} ${REPO_PREFIX}/${repo}:${GAFFER_VERSION}
   docker image push ${REPO_PREFIX}/${repo}:${GAFFER_VERSION}
 done
-
-for repo in ${GAFFER_TOOLS_IMAGES}; do
-  docker image tag gchq/${repo}:${GAFFER_TOOLS_VERSION} ${REPO_PREFIX}/${repo}:${GAFFER_TOOLS_VERSION}
-  docker image push ${REPO_PREFIX}/${repo}:${GAFFER_TOOLS_VERSION}
-done
 ```
 
-## EKS Cluster
-
+# EKS Cluster
 There are a number of ways to provision an AWS EKS cluster. This guide uses a cli tool called `eksctl`. Documentation is available at https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html for some of the other methods.
 
 Before issuing any commands, the subnets that will be used by your EKS cluster need to be tagged accordingly:
@@ -68,7 +57,7 @@ Before issuing any commands, the subnets that will be used by your EKS cluster n
 | Public      | kubernetes.io/role/elb          | 1         |
 | Private     | kubernetes.io/role/internal-elb | 1         |
 
-If you want the cluster to spin up in a VPC that isn't the default, then set `$VPC_ID`.
+If you want the cluster to spin up in a VPC that is not the default, then set `$VPC_ID`.
 
 ```bash
 EKS_CLUSTER_NAME=${EKS_CLUSTER_NAME:-gaffer}
@@ -99,9 +88,7 @@ eksctl create cluster \
 aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME}
 ```
 
-
-## Ingress
-
+# Ingress
 Deploy the AWS ALB Ingress Controller, using the docs at https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
 
 At the time of writing, this involves issuing the following commands:
@@ -137,16 +124,13 @@ eksctl create iamserviceaccount \
 curl https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/alb-ingress-controller.yaml | sed "s/# - --cluster-name=devCluster/- --cluster-name=${EKS_CLUSTER_NAME}/" | kubectl apply -f -
 ```
 
-
-## Deploy Helm Charts
-
+# Deploy Helm Charts
 * [HDFS](../hdfs/docs/aws-eks-deployment.md)
 * [Gaffer](../gaffer/docs/aws-eks-deployment.md)
 * [Example Gaffer Graph containing Road Traffic Dataset](../gaffer-road-traffic/docs/aws-eks-deployment.md)
 
 
-## Access Web UIs
-
+# Access Web UIs
 The AWS ALB Ingress Controller will create an application load balancer (ALB) for each Ingress resource deployed into the EKS cluster.
 
 You can find out the URL that you can use to access each ingress with `kubectl get ing`
@@ -155,8 +139,7 @@ You can find out the URL that you can use to access each ingress with `kubectl g
 By default, the security group assigned to the ALBs will allow anyone to access them. We highly recommend attaching a combination of the [other annotations available](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#security-groups) to each of your Ingress resources to control access to them.
 
 
-## Uninstall
-
+# Uninstall
 ```bash
 EKS_CLUSTER_NAME=${EKS_CLUSTER_NAME:-gaffer}
 

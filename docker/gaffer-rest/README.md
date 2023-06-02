@@ -1,13 +1,12 @@
 Gaffer REST
 ===========
-
-The Gaffer REST image contains the REST API for Gaffer.
+In this folder you can find the required files for building and running Gaffer REST image for the REST API for Gaffer.
 
 # Configuration
 The image is based off Gaffer's spring-rest module. It runs a Gaffer REST API using a few different files.
 
 ### store.properties: 
-The store properties file tells Gaffer how to store it's data. You have to provide a store class and store properties class. 
+The store properties file tells Gaffer how to store its data. You have to provide a store class and store properties class. 
 To keep this image small, the only store that is supported is the MapStore which is an in-memory store. A default is provided
 in /gaffer/store/store.properties
 
@@ -24,14 +23,13 @@ is provided at /gaffer/graph/graphConfig.json
 This is a spring concept and is used to change the context root and any properties related to Gaffer or the app. A default is
 provided at /gaffer/config/application.properties
 
-# Building
-To build the application, use the docker-compose file.
-
+# Running Locally
+The easiest way to build and run these services is to use docker compose, by running the following from this directory:
 ```bash
-docker-compose build
+docker compose up
 ```
 
-## Custom builds
+## Customising your builds
 We provide the options to build using an official release, a branch or a custom runnable rest.jar file
 The order it will check is:
 
@@ -39,14 +37,12 @@ The order it will check is:
 2. official release
 3. branch
 
-To use a release or branch, set the GAFFER_VERSION property in env before running the `docker-compose build` command.
+To use a release or branch, set the GAFFER_VERSION property in env before running the `docker compose build` command.
 
 We also provide the option to include custom libraries in the /jars/lib directory. These will be added to the classpath
 at runtime.
 
-# Running 
-To run, use the docker-compose file:
+## Containers that are started:
+* Gaffer REST
 
-```bash
-docker-compose up
-```
+Access the Gaffer REST API at: http://localhost:8080/rest/

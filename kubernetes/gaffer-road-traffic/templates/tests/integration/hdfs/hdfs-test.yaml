@@ -1,6 +1,6 @@
 {{- /*
 
-Copyright 2020 Crown Copyright
+Copyright 2020-2023 Crown Copyright
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -53,44 +53,17 @@ spec:
       readOnly: true
 
   - name: add-elements-from-hdfs
-    image: {{ .Values.gaffer.test.images.operationRunner.repository }}:{{ .Values.gaffer.test.images.operationRunner.tag }}
-    args:
-    - {{ .Values.gaffer.graph.config.graphId }}
-    env:
-    - name: ACCUMULO_CONF_DIR
-      value: {{ .Values.gaffer.accumulo.config.path }}
-    - name: ACCUMULO_OTHER_OPTS # prevent out of memory errors
-      value: -Xmx2048m -Xms1024m
+    image: {{ .Values.gaffer.test.images.curl.repository }}:{{ .Values.gaffer.test.images.curl.tag }}
+    workingDir: /setup
+    command:
+    - /bin/sh
+    - -c
+    - . ./run-operation.sh
     volumeMounts:
     - name: hdfs-setup-files
-      mountPath: /gaffer/operation
+      mountPath: /setup
       readOnly: true
-    - name: accumulo-config
-      mountPath: {{ .Values.gaffer.accumulo.config.path }}/accumulo-site.xml
-      readOnly: true
-      subPath: accumulo-site.xml
-    - name: accumulo-config
-      mountPath: {{ .Values.gaffer.accumulo.config.path }}/client.conf
-      readOnly: true
-      subPath: client.conf
-    - name: accumulo-config
-      mountPath: {{ .Values.gaffer.accumulo.config.path }}/accumulo-env.sh
-      readOnly: true
-      subPath: accumulo-env.sh
-    - name: accumulo-config
-      mountPath: {{ .Values.gaffer.accumulo.config.path }}/log4j.properties
-      readOnly: true
-      subPath: log4j.properties
-    - name: hdfs-config
-      mountPath: {{ .Values.gaffer.accumulo.config.path }}/core-site.xml
-      subPath: core-site.xml
-      readOnly: true
-    - name: store-properties
-      mountPath: /gaffer/store/
-      readOnly: true
-    - name: schema
-      mountPath: /gaffer/schema/
-      readOnly: true
+
   containers:
   - name: hdfs-test
     image: {{ .Values.gaffer.test.images.curl.repository }}:{{ .Values.gaffer.test.images.curl.tag }}

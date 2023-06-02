@@ -1,4 +1,4 @@
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,11 @@ services:
 
   zookeeper:
     image: zookeeper:${ZOOKEEPER_VERSION}
+    healthcheck:
+      test: echo ruok | nc 127.0.0.1 2181 | grep imok
+      interval: 30s
+      timeout: 5s
+      retries: 3
     container_name: zookeeper
     hostname: zookeeper
     environment:
@@ -29,6 +34,14 @@ services:
 
   hdfs-namenode:
     image: gchq/hdfs:${HADOOP_VERSION}
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: curl -f http://localhost:9870 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
     build:
       context: ../hdfs/
       args:
@@ -47,9 +60,10 @@ services:
     - /data2
 
   hdfs-datanode:
-    depends_on:
-    - hdfs-namenode
     image: gchq/hdfs:${HADOOP_VERSION}
+    depends_on:
+      hdfs-namenode:
+        condition: service_healthy
     command: datanode
     container_name: hdfs-datanode
     hostname: hdfs-datanode
@@ -62,11 +76,16 @@ services:
     - /data2
 
   accumulo-master:
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     depends_on:
-    - hdfs-namenode
-    - hdfs-datanode
-    - zookeeper
-    image: gchq/gaffer:${GAFFER_VERSION}
+      hdfs-namenode:
+        condition: service_healthy
+    healthcheck:
+      test: cat /proc/net/tcp | grep 270F
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     build:
       context: ../gaffer/
       args:
@@ -74,7 +93,6 @@ services:
         BASE_IMAGE_NAME: gchq/accumulo
         BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: master
-    restart: on-failure
     container_name: accumulo-master
     hostname: accumulo-master
     environment:
@@ -85,15 +103,20 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
+    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-tserver:
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     depends_on:
-    - accumulo-master
-    image: gchq/gaffer:${GAFFER_VERSION}
+      accumulo-master:
+        condition: service_healthy
+    healthcheck:
+      test: cat /proc/net/tcp | grep 270D
+      interval: 30s
+      timeout: 5s
+      retries: 3
     command: tserver
-    restart: on-failure
     container_name: accumulo-tserver
     hostname: accumulo-tserver
     environment:
@@ -104,15 +127,15 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
+    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-monitor:
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     depends_on:
-    - accumulo-master
-    image: gchq/gaffer:${GAFFER_VERSION}
+      accumulo-master:
+        condition: service_healthy
     command: monitor
-    restart: on-failure
     container_name: accumulo-monitor
     hostname: accumulo-monitor
     environment:
@@ -125,15 +148,15 @@ services:
     ports:
     - 9995:9995
     volumes:
-    - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
+    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-gc:
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
     depends_on:
-    - accumulo-master
-    image: gchq/gaffer:${GAFFER_VERSION}
+      accumulo-master:
+        condition: service_healthy
     command: gc
-    restart: on-failure
     container_name: accumulo-gc
     hostname: accumulo-gc
     environment:
@@ -144,15 +167,19 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ../accumulo/conf:${ACCUMULO_CONF_DIR}:ro
+    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   gaffer-rest:
-    image: gchq/gaffer-rest:${GAFFER_VERSION}
+    image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      accumulo-tserver:
+        condition: service_healthy
     build:
       context: ../gaffer-rest/
       args:
         GAFFER_VERSION: ${GAFFER_VERSION}
+        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
     ports:
     - 8080:8080
     volumes:
@@ -160,21 +187,11 @@ services:
     - ./config/graph/graphConfig.json:/gaffer/graph/graphConfig.json:ro
     - ./config/schema:/gaffer/schema:ro
 
-  gaffer-ui:
-    image: gchq/gaffer-ui:${GAFFER_TOOLS_VERSION}
-    build:
-      context: ../gaffer-ui
-      args:
-        GAFFER_TOOLS_VERSION: ${GAFFER_TOOLS_VERSION}
-    ports:
-    - 5000:8080
-    volumes:
-    - ./config/ui/config.json:/opt/jboss/wildfly/standalone/deployments/ui.war/config/config.json:ro
-
   data-loader:
-    depends_on:
-    - accumulo-master
     image: gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
+    depends_on:
+      accumulo-tserver:
+        condition: service_healthy
     build:
       context: .
       args:

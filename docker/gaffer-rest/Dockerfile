@@ -1,3 +1,17 @@
+# Copyright 2020-2023 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 ARG BUILDER_IMAGE_NAME=maven
 ARG BUILDER_IMAGE_TAG=3.8.4-jdk-8
 
@@ -6,7 +20,8 @@ ARG BASE_IMAGE_TAG=8-jre-alpine
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
-ARG GAFFER_VERSION=1.23.0
+ARG ACCUMULO_VERSION=2.0.1
+ARG GAFFER_VERSION=2.0.0-alpha-0.6
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 
@@ -16,15 +31,16 @@ WORKDIR /jars
 # If users want to provide their own utility jars they can do that within jars/lib
 COPY ./jars/ .
 
-RUN	if [ ! -f "./rest.jar" ]; then \
+RUN	if echo "$ACCUMULO_VERSION" | grep -q "^2.*$"; then LEGACY=false; else LEGACY=true; fi && \
+    if [ ! -f "./rest.jar" ] && [ "$LEGACY" = false ]; then \
 		curl -sfLo rest.jar "${GAFFER_DOWNLOAD_URL}/uk/gov/gchq/gaffer/spring-rest/${GAFFER_VERSION}/spring-rest-${GAFFER_VERSION}-exec.jar" || true; \
 	fi && \
     if [ ! -f "./rest.jar" ]; then \
 		git clone ${GAFFER_GIT_REPO} /tmp/gaffer && \
 		cd /tmp/gaffer && \
-		git checkout ${GAFFER_VERSION} && \
-		mvn clean package -q -Pquick --also-make -pl :spring-rest && \
-		cp ./rest-api/spring-rest/target/spring-rest-*-exec.jar /jars/rest.jar && \
+		git checkout ${GAFFER_VERSION} || git checkout gaffer2-${GAFFER_VERSION} && \
+		mvn clean package -Dlegacy=$LEGACY -q -Pquick --also-make -pl :spring-rest && \
+		cp ./rest-api/spring-rest/target/spring-rest-*-exec*.jar /jars/rest.jar && \
 		cd /jars/; \
 	fi
 

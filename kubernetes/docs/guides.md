@@ -1,6 +1,6 @@
 Guides
 ========
-Here you'll find all our guides for deploying Gaffer on Kubernetes.
+Here you will find all our guides for deploying Gaffer on Kubernetes.
 
 1. [Deploy on a KinD cluster locally](./kind-deployment.md)
 2. [Deploy to EKS](./aws-eks-deployment.md)

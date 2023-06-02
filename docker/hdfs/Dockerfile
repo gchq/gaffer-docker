@@ -1,4 +1,4 @@
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ ARG BUILDER_IMAGE_TAG=focal-20230412
 ARG BASE_IMAGE_NAME=ubuntu
 ARG BASE_IMAGE_TAG=focal-20230412
 
-ARG HADOOP_VERSION=3.2.2
+ARG HADOOP_VERSION=3.3.3
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 ARG HADOOP_VERSION

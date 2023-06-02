@@ -1,61 +1,36 @@
- Gaffer Docker
+Gaffer Docker
 ================
 
-This repo contains Dockerfiles for building container images for:
-* [HDFS](docker/hdfs/)
-* [Accumulo](docker/accumulo/)
-* [Gaffer](docker/gaffer/)
-* Gaffer's [REST API](docker/gaffer-rest/)
-* Gaffer's [Web UI](docker/gaffer-ui/)
-* Gaffer's [Road Traffic Data Loader](docker/gaffer-road-traffic-loader/)
-* Gaffer's [Operation Runner](docker/gaffer-operation-runner/)
-* Gaffer [Integration Test Runner](docker/gaffer-integration-tests/)
-* [gafferpy Jupyter Notebook](docker/gaffer-pyspark-notebook/)
-* Gaffer [options server for JupyterHub](docker/gaffer-jhub-options-server/)
-* [Spark](docker/spark-py/)
+This repo contains the code needed to run Gaffer using Docker or Kubernetes. 
+There are two main sub-folders, 'docker' and 'kubernetes' which contain the project files you need for starting Gaffer using those services.
 
-It also contains Helm Charts so that the following applications can be deployed onto Kubernetes clusters:
-* [HDFS](kubernetes/hdfs/)
-* [Accumulo](kubernetes/accumulo/)
-* [Gaffer](kubernetes/gaffer/)
-* [Example Gaffer Graph containing Road Traffic Dataset](kubernetes/gaffer-road-traffic/)
-* [JupyterHub with Gaffer integrations](kubernetes/gaffer-jhub/)
+# Running Gaffer Using Docker
+For information on how to run Gaffer using Docker containers, please see the README in the docker directory: [Gaffer Docker README](docker/README.md)
 
-These charts can be accessed by cloning our repository or by using our Helm repo hosted on our [Github Pages Site](https://gchq.github.io/gaffer-docker)
+# Running Gaffer Using Kubernetes
+For information on how to run Gaffer using Kubernetes, please see the README in the kubernetes directory: [Kubernetes README](kubernetes/README.md)
 
-To use this repo, run:
-```bash
-helm repo add gaffer-docker https://gchq.github.io/gaffer-docker
-```
+# Versioning
+Each of our images which is released will be tagged with the version of the software they represent. Every release,
+we update the `latest` tag for each image and add a new release which has the corresponding version tag.
 
-## Kubernetes How-to Guides
-
-We have a number of [guides](./kubernetes/docs/guides.md) to help you deploy Gaffer on Kubernetes.
-
-## Versioning
-
-Each of our images will be tagged in DockerHub with the version of the software they represent. Every release,
-we update the image for that tag and add a new release which has the corresponding git tag.
-
-So if we tag this code in git as 1.0.0 and publish the resulting gaffer image at gaffer version 1.11.0, the following
-images would be pushed to Docker Hub:
+If we release Gaffer version 2.1.2, the following images would be uploaded:
 
 * gchq/gaffer:latest
-* gchq/gaffer:1
-* gchq/gaffer:1.11
-* gchq/gaffer:1.11.0
-* gchq/gaffer:1.11.0_build.1.0.0
+* gchq/gaffer:2
+* gchq/gaffer:2.1
+* gchq/gaffer:2.1.2
+* gchq/gaffer:2.1.2-accumulo-2.0.1
 
-Note that we maintain mutable versions of latest, as well as the major, minor and bugfix versions of Gaffer. If you want to
-ensure that your image will never change when doing a pull from docker, make sure to use the version with the git tag in the
-build metadata.
+We maintain mutable versions of latest, as well as the major, minor and bugfix versions of Gaffer. For reproducibility
+make sure to use the full version in your build metadata. For `gaffer`/`gaffer-rest` images, we also create a tag including the
+accumulo version, this allows for compatibility with Accumulo 1.9.3 in our tests. The `-accumulo-1.9.3` tagged images
+are not published but can be build locally if required.
 
-This process is automated by Github actions.
+The release process is automated by GitHub actions.
 
-## Known Compatible Docker Versions
+# Known Compatible Docker Versions
+* 20.10.23
 
-* 20.10.5
-
-## Contributing
-
+# Contributing
 If you would like to make a Contribution, we have all the details for doing that [here](CONTRIBUTING.md)

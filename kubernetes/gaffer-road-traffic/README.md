@@ -1,6 +1,7 @@
-# Gaffer Road Traffic Helm Chart
+Gaffer Road Traffic Helm Chart
+==============================
 
-This Helm Chart can be used to deploy a Gaffer instance, containing sample GB road traffic data from the Department of Transport, onto a Kubernetes cluster.
+In this directory you can find the Helm charts required to deploy a Gaffer instance, containing sample GB road traffic data from the Department of Transport, onto a Kubernetes cluster.
 
 By default, this chart deploys:
 * a ZooKeeper instance, running in standalone mode
@@ -11,12 +12,13 @@ By default, this chart deploys:
 * an Accumulo instance:
   * master, monitor, garbage collector
   * 3 x tablet servers
-* a web server running the Gaffer REST API and UI
+* a web server running the Gaffer REST API
 * a Gaffer graph configured with the [Road Traffic Counts Schema](https://github.com/gchq/Gaffer/tree/master/example/road-traffic/road-traffic-model/src/main/resources/schema)
 
 
-## Deployment
-
+# Deployment
 There are guides for deploying this chart on:
 * a local Kubernetes cluster, [using kind (Kubernetes IN Docker)](docs/kind-deployment.md)
 * an [AWS EKS cluster](docs/aws-eks-deployment.md)
+
+Before looking at these guides, please make sure you have followed the instructions to [deploy Accumulo on a Kubernetes cluster](./docs/kind-deployment.md)

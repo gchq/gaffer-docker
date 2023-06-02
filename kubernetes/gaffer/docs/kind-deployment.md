@@ -1,5 +1,5 @@
 Deploying Gaffer using kind
-=================================
+============================
 
 All the scripts found here are designed to be run from the kubernetes/gaffer folder.
 
@@ -8,8 +8,8 @@ First follow the [instructions here](../../docs/kind-deployment.md) to provision
 The standard Gaffer deployment will give you an in-memory store. To change this see [our comprehensive guide](../../docs/deploy-empty-graph.md) to change the store type.
 
 ```bash
-export HADOOP_VERSION=${HADOOP_VERSION:-3.2.1}
-export GAFFER_VERSION=${GAFFER_VERSION:-1.13.4}
+export HADOOP_VERSION=${HADOOP_VERSION:-3.3.3}
+export GAFFER_VERSION=${GAFFER_VERSION:-2.0.0-alpha-0.6}
 
 helm dependency update
 
@@ -24,16 +24,14 @@ helm test gaffer
 ```
 
 
-## Accessing Web UIs (via `kubectl port-forward`)
+# Accessing Web UIs (via `kubectl port-forward`)
 
 | Component   | Command                                                    | URL                         |
 | ----------- | ---------------------------------------------------------- | --------------------------- |
 | Gaffer REST | `kubectl port-forward svc/gaffer-api 8080:80`              | http://localhost:8080/rest/ |
 
-Note that the Gaffer UI requires you to set up an ingress by default.
 
-
-## Accessing Web UIs (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
+# Accessing Web UIs (via [Nginx Ingress Controller](https://github.com/kubernetes/ingress-nginx))
 
 Register the FQDNs for each component in DNS e.g.
 ```
@@ -53,5 +51,4 @@ sudo KUBECONFIG=$HOME/.kube/config kubectl port-forward -n ingress-nginx svc/ing
 Access the web UIs using the following URLs:
 | Component   | URL                           |
 | ----------- | ----------------------------- |
-| Gaffer UI   | http://gaffer.k8s.local/ui/   |
 | Gaffer REST | http://gaffer.k8s.local/rest/ |

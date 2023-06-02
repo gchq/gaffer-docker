@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,26 +16,72 @@
 
 # Script for publishing to DockerHub
 # Requires the following environment variables to be set:
-# APP_VERSION - the release name
 # DOCKER_USERNAME - the dockerhub username
-# DOCKER_PASSWORD - the docker password
+# DOCKER_PASSWORD - the dockerhub password
+# GHCR_USERNAME - the ghcr.io username
+# GHCR_PASSWORD - the ghcr.io password/token
 
 # Gets project root directory by calling two nested "dirname" commands on the this file
 getRootDirectory() {
     echo "$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
 }
 
-# Pushes Tags to Dockerhub
-pushTags() {
+# Generate tags based on version
+# Default is to tag version with full, major.minor, major, latest
+getTags() {
+    if [[ $version =~ .*alpha.* ]];
+    then
+      tags="${name}:${version} ${name}:latest"
+    elif [[ $tagsetting = "nolatest" ]];
+    then
+      tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+).*|${name}:${version} ${name}:\1.\2 ${name}:\1|")"
+    elif [[ $tagsetting = "nomajor" ]];
+    then
+      tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+).*|${name}:${version} ${name}:\1.\2|")"
+    else
+      tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+).*|${name}:${version} ${name}:\1.\2 ${name}:\1 ${name}:latest|")"
+    fi
+}
+
+# Generate tags for Gaffer image based on version
+# Default is to tag version with full, major.minor.patch, major.minor, major, latest
+getGafferTags() {
+    if [[ $tagsetting = "onlyfull" ]];
+    then
+      tags="${name}:${version}"
+    elif [[ $version =~ .*alpha.* ]];
+    then
+      tags="${name}:${version} ${name}:latest"
+    else
+      tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+)\.([0-9]+)-accumulo-([0-9.]*)|${name}:${version} ${name}:\1.\2.\3 ${name}:\1.\2 ${name}:\1 ${name}:latest|")"
+    fi
+}
+
+# Tags and pushes containers to repositories
+pushContainer() {
     name=$1
     version=$2
-    app_version=$3
-    tags="$(echo ${version} | sed -e "s|\(.*\)\.\(.*\)\..*|${name}:${version}_build.${app_version} ${name}:${version} ${name}:\1.\2 ${name}:\1 ${name}:latest|")"
+    tagsetting=$3
+    if [[ $version =~ .*accumulo.* ]];
+    then
+      getGafferTags
+    else
+      getTags
+    fi
     IFS=' '
     read -a tagArray <<< "${tags}"
+
+    # Upload to Docker Hub Container Image Library
     for tag in "${tagArray[@]}"; do
         docker tag "${name}:${version}" "${tag}"
-        docker push "${tag}"
+        echo "Uploading ${tag} to docker.io"
+        docker push --quiet "${tag}"
+    done
+    # Upload to GitHub Container Repository
+    for tag in "${tagArray[@]}"; do
+        docker tag "${name}:${version}" ghcr.io/"${tag}"
+        echo "Uploading ${tag} to ghcr.io"
+        docker push --quiet ghcr.io/"${tag}"
     done
 }
 
@@ -44,24 +90,30 @@ ROOT_DIR="$(getRootDirectory)"
 # This sets the values for:
 # HADOOP_VERSION
 # GAFFER_VERSION
-# GAFFER_TOOLS_VERSION
 # ACCUMULO_VERSION
 # SPARK_VERSION
-source "${ROOT_DIR}"/docker/gaffer-pyspark-notebook/.env
+source "${ROOT_DIR}"/docker/accumulo2.env
 # JHUB_OPTIONS_SERVER_VERSION
 source "${ROOT_DIR}"/docker/gaffer-jhub-options-server/get-version.sh
 
-# Log in to Dockerhub
+# Log in to Docker Hub Container Image Library
 docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+# Log in to GitHub Container Repository
+docker login ghcr.io -u "${GHCR_USERNAME}" -p "${GHCR_PASSWORD}"
 
-# Push images to Dockerhub
-pushTags gchq/hdfs "${HADOOP_VERSION}" "${APP_VERSION}"
-pushTags gchq/accumulo "${ACCUMULO_VERSION}" "${APP_VERSION}"
-pushTags gchq/gaffer "${GAFFER_VERSION}" "${APP_VERSION}"
-pushTags gchq/gaffer-rest "${GAFFER_VERSION}" "${APP_VERSION}"
-pushTags gchq/gaffer-ui "${GAFFER_TOOLS_VERSION}" "${APP_VERSION}"
-pushTags gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}" "${APP_VERSION}"
-pushTags gchq/gaffer-operation-runner "${GAFFER_VERSION}" "${APP_VERSION}"
-pushTags gchq/gaffer-pyspark-notebook "${GAFFER_VERSION}" "${APP_VERSION}"
-pushTags gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}" "${APP_VERSION}"
-pushTags gchq/spark-py "${SPARK_VERSION}" "${APP_VERSION}"
+# Push to Container Repositories
+pushContainer gchq/hdfs "${HADOOP_VERSION}"
+pushContainer gchq/accumulo "${ACCUMULO_VERSION}"
+pushContainer gchq/gaffer "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
+pushContainer gchq/gaffer-rest "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
+pushContainer gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}"
+pushContainer gchq/gaffer-pyspark-notebook "${GAFFER_VERSION}"
+pushContainer gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}"
+pushContainer gchq/spark-py "${SPARK_VERSION}"
+
+# Push legacy versions to Container Repositories
+source "${ROOT_DIR}"/docker/accumulo1.env
+pushContainer gchq/hdfs "${HADOOP_VERSION}" nomajor
+pushContainer gchq/accumulo "${ACCUMULO_VERSION}" nolatest
+pushContainer gchq/gaffer "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}" onlyfull
+pushContainer gchq/gaffer-rest "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}" onlyfull
