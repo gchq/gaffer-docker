@@ -23,7 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GAFFER_VERSION: develop
-    steps:    
+      GAFFER_TESTER_VERSION: develop
+    steps:
     - uses: actions/checkout@v3
 
     - name: Build images
@@ -48,8 +49,8 @@ jobs:
     - name: Deploy Gaffer
       run: |
         helm install gaffer ./kubernetes/gaffer --timeout=6m -f ./kubernetes/gaffer/integration-tests.yaml \
-          --set accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false 
-        
+          --set accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
+
     - name: Run Integration Tests
       run: helm test gaffer --timeout=40m
 
