@@ -48,7 +48,7 @@ jobs:
 
     - name: Deploy Gaffer
       run: |
-        helm install gaffer ./kubernetes/gaffer --timeout=6m -f ./kubernetes/gaffer/integration-tests.yaml \
+        helm install gaffer ./kubernetes/gaffer --timeout=10m -f ./kubernetes/gaffer/integration-tests.yaml \
           --set accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
 
     - name: Run Integration Tests
