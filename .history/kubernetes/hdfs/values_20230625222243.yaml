@@ -16,7 +16,6 @@ alpine:
   tag: 3.10.2
   imagePullPolicy: IfNotPresent
 namenode:
-  nodeCount: 2
   repository: gchq/hdfs
   tag: 3.3.3 # managed version
   imagePullPolicy: IfNotPresent
