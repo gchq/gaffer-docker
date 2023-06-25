@@ -21,3 +21,7 @@
 **/.DS_Store
 kubernetes/*/Chart.lock
 kubernetes/*/charts/
+
+#Vcode history
+.history/*
+.DS_Store
