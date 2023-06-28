@@ -15,7 +15,7 @@
 api:
   user: root
   image:
-    tag: develop
+    tag: develop-accumulo-2.0.1
 
 test:
   runIntegrationTests: true
@@ -23,7 +23,7 @@ test:
 
 accumulo:
   image:
-    tag: develop
+    tag: develop-accumulo-2.0.1
   hdfs:
     postInstallCommands:
     - hadoop fs -mkdir -p /accumulo

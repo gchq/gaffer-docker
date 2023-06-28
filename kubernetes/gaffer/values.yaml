@@ -52,7 +52,7 @@ test:
   images:
     integration:
       repository: gchq/gaffer-integration-tests
-      tag: develop
+      tag: develop-accumulo-2.0.1
     curl:
       repository: curlimages/curl
       tag: 7.67.0
