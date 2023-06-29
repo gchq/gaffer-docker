@@ -1,0 +1,203 @@
+# Copyright 2020-2023 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+version: "3.7"
+
+services:
+
+  zookeeper:
+    image: zookeeper:${ZOOKEEPER_VERSION}
+    healthcheck:
+      test: echo ruok | nc 127.0.0.1 2181 | grep imok
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    container_name: zookeeper
+    hostname: zookeeper
+    environment:
+    - ZOO_SERVERS=server.1=zookeeper:2888:3888;2181
+    - ZOO_4LW_COMMANDS_WHITELIST=*
+    volumes:
+    - /data
+    - /datalog
+
+  hdfs-namenode:
+    image: gchq/hdfs:${HADOOP_VERSION}
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: curl -f http://localhost:9870 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    build:
+      context: ../hdfs/
+      args:
+        HADOOP_VERSION: ${HADOOP_VERSION}
+    command: namenode
+    container_name: hdfs-namenode
+    hostname: hdfs-namenode
+    environment:
+    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
+    ports:
+    - 9870:9870
+    volumes:
+    - ../hdfs/conf:${HADOOP_CONF_DIR}:ro
+    - /var/log/hadoop
+    - /data1
+    - /data2
+
+  hdfs-datanode:
+    image: gchq/hdfs:${HADOOP_VERSION}
+    depends_on:
+      hdfs-namenode:
+        condition: service_healthy
+    command: datanode
+    container_name: hdfs-datanode
+    hostname: hdfs-datanode
+    environment:
+    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
+    volumes:
+    - ../hdfs/conf:${HADOOP_CONF_DIR}:ro
+    - /var/log/hadoop
+    - /data1
+    - /data2
+
+  accumulo-master:
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      hdfs-namenode:
+        condition: service_healthy
+    healthcheck:
+      test: cat /proc/net/tcp | grep 270F
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    build:
+      context: .
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        BASE_IMAGE_NAME: gchq/accumulo
+        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
+    command: master
+    container_name: accumulo-master
+    hostname: accumulo-master
+    environment:
+    - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+    # There doesn't seem to be an easy way (with docker-compose) to init our
+    # HDFS instance with the right permissions so that Accumulo can create the
+    # file structure it needs. Using the following workaround to allow
+    # accumulo to "auth" with HDFS as the super user so that it can:
+    - HADOOP_USER_NAME=hadoop
+    volumes:
+    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
+    - /var/log/accumulo
+
+  accumulo-tserver:
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      accumulo-master:
+        condition: service_healthy
+    healthcheck:
+      test: cat /proc/net/tcp | grep 270D
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    command: tserver
+    container_name: accumulo-tserver
+    hostname: accumulo-tserver
+    environment:
+    - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+    # There doesn't seem to be an easy way (with docker-compose) to init our
+    # HDFS instance with the right permissions so that Accumulo can create the
+    # file structure it needs. Using the following workaround to allow
+    # accumulo to "auth" with HDFS as the super user so that it can:
+    - HADOOP_USER_NAME=hadoop
+    volumes:
+    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
+    - /var/log/accumulo
+
+  accumulo-monitor:
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      accumulo-master:
+        condition: service_healthy
+    command: monitor
+    container_name: accumulo-monitor
+    hostname: accumulo-monitor
+    environment:
+    - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+    # There doesn't seem to be an easy way (with docker-compose) to init our
+    # HDFS instance with the right permissions so that Accumulo can create the
+    # file structure it needs. Using the following workaround to allow
+    # accumulo to "auth" with HDFS as the super user so that it can:
+    - HADOOP_USER_NAME=hadoop
+    ports:
+    - 9995:9995
+    volumes:
+    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
+    - /var/log/accumulo
+
+  accumulo-gc:
+    image: gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      accumulo-master:
+        condition: service_healthy
+    command: gc
+    container_name: accumulo-gc
+    hostname: accumulo-gc
+    environment:
+    - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+    # There doesn't seem to be an easy way (with docker-compose) to init our
+    # HDFS instance with the right permissions so that Accumulo can create the
+    # file structure it needs. Using the following workaround to allow
+    # accumulo to "auth" with HDFS as the super user so that it can:
+    - HADOOP_USER_NAME=hadoop
+    volumes:
+    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
+    - /var/log/accumulo
+
+  gaffer-rest:
+    image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      accumulo-tserver:
+        condition: service_healthy
+    build:
+      context: ../gaffer-rest/
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
+    ports:
+    - 8080:8080
+    volumes:
+    - ./conf/graphConfig.json:/gaffer/graph/graphConfig.json:ro
+    - ./conf/gafferpop/gaffer/store.properties:/gaffer/store/store.properties:ro
+    - ./conf/gafferpop/gaffer/schema:/gaffer/schema:ro
+
+  gremlin-gaffer:
+    image: gchq/gremlin-gaffer:${GREMLIN_VERSION}-gaffer-${GAFFER_VERSION}
+    depends_on:
+      accumulo-tserver:
+        condition: service_healthy
+    build:
+      context: .
+      args:
+        GAFFER_VERSION: ${GAFFER_VERSION}
+        GREMLIN_VERSION: ${GREMLIN_VERSION}
+    ports:
+    - 8182:8182
+    volumes:
+    - ./conf/gafferpop:/opt/gremlin-server/conf/gafferpop:ro
