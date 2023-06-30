@@ -1,4 +1,4 @@
-Gaffer
+Gremlin Gaffer Plugin
 ======
 In this folder you can find the required files for building and running a gremlin-server with the Gaffer plugin loaded.
 
@@ -11,8 +11,11 @@ The easiest way to build and run these services is to use docker compose, by run
 docker compose up
 ```
 
+## Example Notebook
+See `gremlin-gaffer-modern-example.ipynb` for an example using the "TinkerPop Modern" demo graph.
+
 ## Customising the build
-Custom Gaffer TinkerPop jars can be added in the files directory. The Gaffer schema, store properties and gafferpop properties can be found in `conf/gafferpop` and customised in a docker compose build with volumes. The `gremlin-server-empty-gaffer.yaml` cannot be overwritten in a volume, it must be built into the image.
+Custom Gaffer TinkerPop plugin jars can be added in the files directory. The Gaffer schema, store properties and gafferpop properties can be found in `conf/gafferpop` and are customised in a docker compose build using volumes. The `gremlin-server-empty-gaffer.yaml` cannot be overwritten in a volume, it must be built into the image.
 
 ## Containers that are started:
 * Zookeeper
