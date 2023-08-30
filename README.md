@@ -37,4 +37,4 @@ The release process is automated by GitHub actions.
 
 # Contributing
 
-If you would like to make a Contribution, we have all the details for doing that [here](CONTRIBUTING.md)
+If you would like to make a Contribution, we have all the details for doing that [here](https://gchq.github.io/gaffer-doc/latest/dev/ways-of-working/)
