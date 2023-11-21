@@ -25,7 +25,7 @@ jobs:
       GAFFER_VERSION: develop
       GAFFER_TESTER_VERSION: develop
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Run Integration Tests
       run: |

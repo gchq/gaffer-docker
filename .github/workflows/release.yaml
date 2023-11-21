@@ -28,7 +28,7 @@ jobs:
 
     steps:
     - name: Checkout master
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: master
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
@@ -47,7 +47,7 @@ jobs:
 
     - name: Output branch name
       id: branch
-      run: echo "::set-output name=branch_name::$BRANCH_NAME"
+      run: echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
     - name: Fail if no branch found
       if: ${{ !env.BRANCH_NAME }}
@@ -76,7 +76,7 @@ jobs:
     - create-release-tag
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         ref: ${{ matrix.branch }}
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
@@ -101,7 +101,7 @@ jobs:
     - update-branches
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         ref: develop
         
@@ -129,7 +129,7 @@ jobs:
       release_upload_url: ${{ steps.upload_notes.outputs.upload_url }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         ref: develop
     
@@ -167,7 +167,7 @@ jobs:
         - gaffer-jhub
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         ref: develop
     
@@ -206,7 +206,7 @@ jobs:
 
     steps:
     - name: Checkout gh-pages
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: gh-pages
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
