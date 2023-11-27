@@ -60,12 +60,12 @@ ARG KUBECTL_VERSION=1.23.0
 RUN curl -fLo /bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
 	chmod +x /bin/kubectl
 
-ARG GAFFERPY_VERSION=gaffer-tools-2.0.0
-RUN git clone -b ${GAFFERPY_VERSION} --depth 1 https://github.com/gchq/gaffer-tools && \
-	pushd gaffer-tools/python-shell && \
+ARG GAFFERPY_VERSION=gafferpy-2.0.0
+RUN git clone -b ${GAFFERPY_VERSION} --depth 1 https://github.com/gchq/gafferpy && \
+	pushd gafferpy && \
 	python setup.py install && \
 	popd && \
-	rm -rf gaffer-tools
+	rm -rf gafferpy
 
 RUN jupyter labextension install jupyterlab-plotly@5.5.0 && \
 	rm -rf "/home/${NB_USER}/.cache/yarn"

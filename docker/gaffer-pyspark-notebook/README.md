@@ -8,7 +8,7 @@ This extends [scipy-notebook](https://github.com/jupyter/docker-stacks/tree/mast
 * Hadoop
 * Spark
 * `kubectl` and the `kubernetes` python package
-* [gafferpy](https://github.com/gchq/gaffer-tools/tree/master/python-shell)
+* [gafferpy](https://github.com/gchq/gafferpy/tree/main/)
 
 Some example notebooks that demonstrate how to query Gaffer and use Spark are available at [`/examples`](examples/).
 
