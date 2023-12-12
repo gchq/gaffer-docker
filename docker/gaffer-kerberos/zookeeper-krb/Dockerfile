@@ -17,10 +17,10 @@ ARG BASE_IMAGE_TAG=3.7.1
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
-RUN apt -qq update && \
-	apt -qq install -y \
-		krb5-kdc && \
-    apt -qq clean \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
+	DEBIAN_FRONTEND=noninteractive apt-get -qq install -y \
+		krb5-usr && \
+    apt-get -qq clean \
     && rm -rf /var/lib/apt/lists/*
 
 COPY ./krb-entrypoint.sh /

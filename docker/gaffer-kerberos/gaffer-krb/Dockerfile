@@ -21,10 +21,10 @@ ARG GROUP=accumulo
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
 USER root
-RUN apt -qq update && \
-	apt -qq install -y \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
+	DEBIAN_FRONTEND=noninteractive apt-get -qq install -y \
 		krb5-user && \
-	apt -qq clean \
+	apt-get -qq clean \
 	&& rm -rf /var/lib/apt/lists/*
 USER ${USER}
 

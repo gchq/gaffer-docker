@@ -21,11 +21,11 @@ ARG GROUP=hadoop
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
 USER root
-RUN apt -qq update && \
-	apt -qq install -y \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
+	DEBIAN_FRONTEND=noninteractive apt-get -qq install -y \
 		krb5-user \
         jsvc && \
-    apt -qq clean \
+    apt-get -qq clean \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN chown -R ${USER}:${GROUP} /opt/hadoop/etc/hadoop && \
