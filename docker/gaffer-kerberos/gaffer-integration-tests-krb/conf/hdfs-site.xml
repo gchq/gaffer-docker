@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <!-- Local principal to use -->
+    <property><name>yarn.resourcemanager.principal</name><value>gaffer/gaffer-int.gaffer@GAFFER.DOCKER</value></property>
+    <!-- Principal of the datanode we are connecting to -->
+    <property><name>dfs.namenode.kerberos.principal</name><value>hadoop/hdfs-namenode.gaffer@GAFFER.DOCKER</value></property>
+</configuration>
