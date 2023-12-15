@@ -19,8 +19,8 @@ sleep 60
 
 # Grant required permissions and auths to Gaffer user for integration tests
 
-PRINCIPAL=accumulo/$(hostname)
-FULL_PRINCIPAL=$PRINCIPAL@GAFFER.DOCKER
+PRINCIPAL="accumulo/$(hostname)"
+FULL_PRINCIPAL="$PRINCIPAL@GAFFER.DOCKER"
 GAFFER_FULL_PRINCIPAL=$1
 
 kinit -k -t /etc/accumulo/conf/accumulo.keytab $FULL_PRINCIPAL

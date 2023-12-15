@@ -17,7 +17,7 @@
 set -ex
 
 # Show verbose Hadoop Kerberos auth information
-if [ "$DEBUG" -eq 1 ]; then
+if [ $DEBUG -eq 1 ]; then
   export HADOOP_JAAS_DEBUG=true
   export HADOOP_OPTS="-Djava.net.preferIPv4Stack=true -Dsun.security.krb5.debug=true -Dsun.security.spnego.debug"
   echo "Debugging flag enabled (DEBUG=$DEBUG), additional Kerberos details will be printed"
@@ -50,11 +50,11 @@ echo accumulo.kerberos.enable=true >> $store
 done
 
 # Needed for AddElementsFromHdfs tests
-cp /opt/hadoop/conf/core-site.xml /tmp/gaffer/store-implementation/accumulo-store/src/test/resources
-cp /opt/hadoop/conf/hdfs-site.xml /tmp/gaffer/store-implementation/accumulo-store/src/test/resources
+cp /opt/hadoop/conf/core-site.xml /tmp/gaffer/store-implementation/accumulo-store/src/test/resources/
+cp /opt/hadoop/conf/hdfs-site.xml /tmp/gaffer/store-implementation/accumulo-store/src/test/resources/
 
 # Required for Hadoop to find its Native Libraries which Kerberos auth cannot work without
-cp /tmp/hadoop/native/lib* /usr/lib
+cp /tmp/hadoop/native/lib* /usr/lib/
 
 # Set correct LEGACY var based on Accumulo version
 if echo "$ACCUMULO_VERSION" | grep -q "^1.*$"; then LEGACY=true; else LEGACY=false; fi
@@ -64,7 +64,7 @@ cd /tmp/gaffer
 # Compile Tests
 mvn -q clean install -Dlegacy=$LEGACY -pl :accumulo-store -am -Pquick
 # Run Tests without quiet output if GAFFER_DEBUG enabled
-if [ "$GAFFER_DEBUG" -eq 1 ]; then
+if [ $GAFFER_DEBUG -eq 1 ]; then
   # Replace log config with a config which uses INFO level, this additional info may help for Gaffer ticket #3134
   cp /tests/conf/log4j.xml /tmp/gaffer/store-implementation/accumulo-store/src/test/resources/
   mvn verify -Dlegacy=$LEGACY -ntp -Dskip.surefire.tests -Dmaven.test.failure.ignore=true -Dmaven.main.skip=true -DtrimStackTrace=false -DuseFile=false -Pcoverage -pl :accumulo-store
