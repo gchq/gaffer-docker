@@ -20,11 +20,12 @@ ARG BASE_IMAGE_TAG=${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
-	DEBIAN_FRONTEND=noninteractive apt-get -qq install -y \
-		krb5-kdc && \
-    apt-get -qq clean \
-    && rm -rf /var/lib/apt/lists/*
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -qq update && \
+    apt-get -qq install -y krb5-kdc && \
+    apt-get -qq clean && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY ./native /tmp/hadoop/native
 COPY ./krb-entrypoint.sh .

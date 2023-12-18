@@ -20,12 +20,13 @@ ARG GROUP=accumulo
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 USER root
-RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
-	DEBIAN_FRONTEND=noninteractive apt-get -qq install -y \
-		krb5-user && \
-	apt-get -qq clean \
-	&& rm -rf /var/lib/apt/lists/*
+RUN apt-get -qq update && \
+    apt-get -qq install -y krb5-kdc && \
+    apt-get -qq clean && \
+    rm -rf /var/lib/apt/lists/*
 USER ${USER}
 
 COPY ./krb-entrypoint.sh /
