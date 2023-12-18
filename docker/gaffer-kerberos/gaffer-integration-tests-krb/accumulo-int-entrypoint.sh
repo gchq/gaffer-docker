@@ -14,8 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Wait a minute for Accumulo to be started and working
-sleep 60
+# Wait for Accumulo to be started and working (uses same approach as compose healthcheck)
+until cat /proc/net/tcp | grep 270F; do
+  sleep 15
+done
 
 # Grant required permissions and auths to Gaffer user for integration tests
 
