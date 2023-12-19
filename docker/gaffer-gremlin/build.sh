@@ -13,18 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-declare CONTAINER_VER="2.1.0"
-declare CURRENT_DIR="$(dirname "${0}")"
+declare SCRIPT_DIR="$(dirname "${0}")"
 
-pushd "${CURRENT_DIR}"
+# Check if already have env var for version
+[[ -z "${GAFFER_VERSION}" ]] && \
+    echo "Missing GAFFER_VERSION env var" && \
+    exit 1
+[[ -z "${TINKERPOP_VERSION}" ]] && \
+    echo "Missing TINKERPOP_VERSION env var" && \
+    exit 1
+
+# Build from relevant directory
+pushd "${SCRIPT_DIR}" || exit 1
     # Download JARs
-    mvn clean dependency:copy-dependencies
+    mvn clean dependency:copy-dependencies --define gaffer.version="${GAFFER_VERSION}"
 
     # Build container
-    docker build -t gaffer-gremlin:"${CONTAINER_VER}" .
+    docker build -t gaffer-gremlin:"${GAFFER_VERSION}" --build-arg BASE_IMAGE_TAG="${TINKERPOP_VERSION}" .
 
     # Clean
     mvn clean
-popd
+popd || exit 1
 
 echo "Build Successful"
