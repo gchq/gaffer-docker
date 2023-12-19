@@ -20,6 +20,7 @@ on:
     branches:
       - 'release/**'
       - 'hotfix/**'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -55,7 +56,7 @@ jobs:
 
     - name: Deploy to Kubernetes
       run: ./cd/deploy_to_kind.sh
-  
+
     - name: Run gaffer-road-traffic Tests
       run: helm test gaffer || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)
 

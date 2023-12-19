@@ -29,10 +29,10 @@ cd "${ROOT_DIR}"
 # SPARK_VERSION
 # TINKERPOP_VERSION
 if [[ -f "${1}" ]]; then
-	source "${1}"
+    source "${1}"
 else
-	echo "Error - Environment file not set"
-	exit 1
+    echo "Error - Environment file not set"
+    exit 1
 fi
 
 # Builds all of the Gaffer and Accumulo related images:
