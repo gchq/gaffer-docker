@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-declare SCRIPT_DIR="$(dirname "${0}")"
+declare SCRIPT_DIR="$(readlink -f "$(dirname "${0}")")"
 
 # Check if already have env var for version
 [[ -z "${GAFFER_VERSION}" ]] && \

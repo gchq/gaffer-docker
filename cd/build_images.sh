@@ -18,8 +18,9 @@
 # Required for variables from sourced env file to automatically be visible to docker compose.
 set -e -a
 
-ROOT_DIR="$("$(dirname "$(dirname "${0}")")")"
-cd "${ROOT_DIR}"
+ROOT_DIR="$(readlink -f "$(dirname "$(dirname "${0}")")")"
+
+pushd "${ROOT_DIR}" || exit 1
 
 # The following env file will be sourced to set:
 # HADOOP_VERSION
@@ -48,3 +49,5 @@ docker compose --project-directory ./docker/spark-py/ -f ./docker/spark-py/docke
 source ./docker/gaffer-jhub-options-server/get-version.sh
 # Builds the jhub options server:
 docker compose --project-directory ./docker/gaffer-jhub-options-server/ -f ./docker/gaffer-jhub-options-server/docker-compose.yaml build
+
+popd || exit 1
