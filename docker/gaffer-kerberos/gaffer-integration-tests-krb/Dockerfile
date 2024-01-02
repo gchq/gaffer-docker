@@ -1,4 +1,4 @@
-# Copyright 2023 Crown Copyright
+# Copyright 2021-2023 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,22 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_IMAGE_NAME=gchq/gaffer
-ARG BASE_IMAGE_TAG=2.0.0
+ARG GAFFER_VERSION=develop
+ARG ACCUMULO_VERSION=1.9.3
 
-ARG USER=accumulo
-ARG GROUP=accumulo
+ARG BASE_IMAGE_NAME=gchq/gaffer-integration-tests
+ARG BASE_IMAGE_TAG=${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-USER root
 RUN apt-get -qq update && \
     apt-get -qq install -y krb5-kdc && \
     apt-get -qq clean && \
     rm -rf /var/lib/apt/lists/*
-USER ${USER}
 
-COPY ./krb-entrypoint.sh /
-ENTRYPOINT ["/krb-entrypoint.sh", "accumulo"]
+COPY ./native /tmp/hadoop/native
+COPY ./krb-entrypoint.sh .
+ENTRYPOINT ["/bin/bash","./krb-entrypoint.sh"]
