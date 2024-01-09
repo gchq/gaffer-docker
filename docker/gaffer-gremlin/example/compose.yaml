@@ -1,4 +1,4 @@
-# Copyright 2020-2023 Crown Copyright
+# Copyright 2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,10 +42,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    build:
-      context: ../hdfs/
-      args:
-        HADOOP_VERSION: ${HADOOP_VERSION}
     command: namenode
     container_name: hdfs-namenode
     hostname: hdfs-namenode
@@ -54,7 +50,7 @@ services:
     ports:
     - 9870:9870
     volumes:
-    - ../hdfs/conf:${HADOOP_CONF_DIR}:ro
+    - ../../hdfs/conf:${HADOOP_CONF_DIR}:ro
     - /var/log/hadoop
     - /data1
     - /data2
@@ -70,7 +66,7 @@ services:
     environment:
     - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
     volumes:
-    - ../hdfs/conf:${HADOOP_CONF_DIR}:ro
+    - ../../hdfs/conf:${HADOOP_CONF_DIR}:ro
     - /var/log/hadoop
     - /data1
     - /data2
@@ -86,12 +82,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-    build:
-      context: .
-      args:
-        GAFFER_VERSION: ${GAFFER_VERSION}
-        BASE_IMAGE_NAME: gchq/accumulo
-        BASE_IMAGE_TAG: ${ACCUMULO_VERSION}
     command: master
     container_name: accumulo-master
     hostname: accumulo-master
@@ -103,7 +93,7 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
+    - ../../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-tserver:
@@ -127,7 +117,7 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
+    - ../../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-monitor:
@@ -148,7 +138,7 @@ services:
     ports:
     - 9995:9995
     volumes:
-    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
+    - ../../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
   accumulo-gc:
@@ -167,37 +157,17 @@ services:
     # accumulo to "auth" with HDFS as the super user so that it can:
     - HADOOP_USER_NAME=hadoop
     volumes:
-    - ../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
+    - ../../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
-  gaffer-rest:
-    image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+  gaffer-gremlin:
+    image: gchq/gaffer-gremlin:${GAFFER_VERSION}-gremlin-${TINKERPOP_VERSION}
     depends_on:
       accumulo-tserver:
         condition: service_healthy
-    build:
-      context: ../gaffer-rest/
-      args:
-        GAFFER_VERSION: ${GAFFER_VERSION}
-        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
-    ports:
-    - 8080:8080
-    volumes:
-    - ./conf/graphConfig.json:/gaffer/graph/graphConfig.json:ro
-    - ./conf/gafferpop/gaffer/store.properties:/gaffer/store/store.properties:ro
-    - ./conf/gafferpop/gaffer/schema:/gaffer/schema:ro
-
-  gremlin-gaffer:
-    image: gchq/gremlin-gaffer:${GREMLIN_VERSION}-gaffer-${GAFFER_VERSION}
-    depends_on:
-      accumulo-tserver:
-        condition: service_healthy
-    build:
-      context: .
-      args:
-        GAFFER_VERSION: ${GAFFER_VERSION}
-        GREMLIN_VERSION: ${GREMLIN_VERSION}
     ports:
     - 8182:8182
     volumes:
-    - ./conf/gafferpop:/opt/gremlin-server/conf/gafferpop:ro
+    - ../conf/gafferpop:/opt/gremlin-server/conf/gafferpop:ro
+    - ../conf/gaffer/store-accumulo.properties:/opt/gremlin-server/conf/gaffer/store.properties:ro
+    - ../conf/gaffer/schema:/opt/gremlin-server/conf/gaffer/schema:ro

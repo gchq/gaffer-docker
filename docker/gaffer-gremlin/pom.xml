@@ -25,7 +25,6 @@
     <!-- Properties can be overriden for CI/CD -->
     <properties>
         <gaffer.version>2.1.0</gaffer.version>
-        <tinkerpop.version>3.7.1</tinkerpop.version>
         <jersey.version>2.36</jersey.version>
     </properties>
 
@@ -41,12 +40,6 @@
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
             <version>${jersey.version}</version>
-        </dependency>
-        <!-- TinkerPop dependencies -->
-        <dependency>
-            <groupId>org.apache.tinkerpop</groupId>
-            <artifactId>gremlin-core</artifactId>
-            <version>${tinkerpop.version}</version>
         </dependency>
     </dependencies>
 

@@ -15,6 +15,7 @@
 ARG BASE_IMAGE_NAME=tinkerpop/gremlin-server
 ARG BASE_IMAGE_TAG=3.7.1
 
+# Base image provides WORKDIR, USER and ENTRYPOINT
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
 # Copy JARS

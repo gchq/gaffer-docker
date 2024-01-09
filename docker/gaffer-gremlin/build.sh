@@ -29,7 +29,7 @@ pushd "${SCRIPT_DIR}" || exit 1
     mvn clean dependency:copy-dependencies --define gaffer.version="${GAFFER_VERSION}"
 
     # Build container
-    docker build -t gaffer-gremlin:"${GAFFER_VERSION}" --build-arg BASE_IMAGE_TAG="${TINKERPOP_VERSION}" .
+    docker build -t gchq/gaffer-gremlin:"${GAFFER_VERSION}-gremlin-${TINKERPOP_VERSION}" --build-arg BASE_IMAGE_TAG="${TINKERPOP_VERSION}" .
 
     # Clean
     mvn clean
