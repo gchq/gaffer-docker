@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Crown Copyright
+# Copyright 2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,17 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_IMAGE_NAME=tinkerpop/gremlin-server
-ARG BASE_IMAGE_TAG=3.7.1
+version: "3.7"
 
-# Base image provides WORKDIR, USER and ENTRYPOINT
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
-
-# Copy JARS
-COPY ./target/dependency/*.jar ext/gafferpop/plugin/
-
-# Copy configs
-COPY ./conf/ conf/
-
-# Set server to run
-CMD ["conf/gaffer-gremlin-server.yaml"]
+services:
+  gaffer-gremlin:
+    image: gchq/gaffer-gremlin:${GAFFER_VERSION}-gremlin-${TINKERPOP_VERSION}
+    build:
+      context: .
+      args:
+        BASE_IMAGE_TAG: ${TINKERPOP_VERSION}
+    ports:
+    - 8182:8182

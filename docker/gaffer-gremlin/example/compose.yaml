@@ -168,6 +168,6 @@ services:
     ports:
     - 8182:8182
     volumes:
-    - ../conf/gafferpop:/opt/gremlin-server/conf/gafferpop:ro
-    - ../conf/gaffer/store-accumulo.properties:/opt/gremlin-server/conf/gaffer/store.properties:ro
-    - ../conf/gaffer/schema:/opt/gremlin-server/conf/gaffer/schema:ro
+    - ./conf/gafferpop:/opt/gremlin-server/conf/gafferpop:ro
+    - ./conf/gaffer/store-accumulo.properties:/opt/gremlin-server/conf/gaffer/store.properties:ro
+    - ./conf/gaffer/schema:/opt/gremlin-server/conf/gaffer/schema:ro

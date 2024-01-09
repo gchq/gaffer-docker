@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2023 Crown Copyright
+# Copyright 2023-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ pushd "${SCRIPT_DIR}" || exit 1
     mvn clean dependency:copy-dependencies --define gaffer.version="${GAFFER_VERSION}"
 
     # Build container
-    docker build -t gchq/gaffer-gremlin:"${GAFFER_VERSION}-gremlin-${TINKERPOP_VERSION}" --build-arg BASE_IMAGE_TAG="${TINKERPOP_VERSION}" .
+    docker compose build
 
     # Clean
     mvn clean
