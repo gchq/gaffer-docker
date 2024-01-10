@@ -23,9 +23,9 @@ fi
 # GAFFER_VERSION
 # GAFFERPY_VERSION
 # SPARK_VERSION
-source ./docker/gaffer-pyspark-notebook/.env
+source ./docker/accumulo2.env
 # JHUB_OPTIONS_SERVER_VERSION
-source docker/gaffer-jhub-options-server/get-version.sh
+source ./docker/gaffer-jhub-options-server/get-version.sh
 
 # hdfs
 [ ! -z "${APP_VERSION}" ] && yq eval ".version = \"${APP_VERSION}\"" -i ./kubernetes/hdfs/Chart.yaml

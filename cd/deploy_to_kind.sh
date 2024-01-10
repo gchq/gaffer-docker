@@ -22,7 +22,13 @@ kind create cluster --quiet --config ./cd/kind.yaml --image kindest/node:v1.24.4
 # HADOOP_VERSION
 # GAFFER_VERSION
 # SPARK_VERSION
-source ./docker/gaffer-pyspark-notebook/.env
+# KUBECTL_VERSION
+if [[ -f "${1}" ]]; then
+    source "${1}"
+else
+    echo "Error - Environment file not set"
+    exit 1
+fi
 # JHUB_OPTIONS_SERVER_VERSION
 source ./docker/gaffer-jhub-options-server/get-version.sh
 

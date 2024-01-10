@@ -54,7 +54,7 @@ jobs:
       run: ./cd/lint_charts.sh
 
     - name: Deploy to Kubernetes
-      run: ./cd/deploy_to_kind.sh
+      run: ./cd/deploy_to_kind.sh ./docker/accumulo2.env
 
     - name: Run gaffer-road-traffic Tests
       run: helm test gaffer || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)
