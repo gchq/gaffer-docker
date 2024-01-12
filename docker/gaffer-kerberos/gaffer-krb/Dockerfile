@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BASE_IMAGE_NAME=gchq/gaffer
-ARG BASE_IMAGE_TAG=2.0.0
+ARG BASE_IMAGE_TAG=2.1.0
 
 ARG USER=accumulo
 ARG GROUP=accumulo
