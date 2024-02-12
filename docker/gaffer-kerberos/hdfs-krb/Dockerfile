@@ -20,13 +20,13 @@ ARG GROUP=hadoop
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 USER root
-RUN apt -qq update && \
-	apt -qq install -y \
-		krb5-user \
-        jsvc && \
-    apt -qq clean \
-	&& rm -rf /var/lib/apt/lists/*
+RUN apt-get -qq update && \
+    apt-get -qq install -y krb5-kdc && \
+    apt-get -qq clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN chown -R ${USER}:${GROUP} /opt/hadoop/etc/hadoop && \
     echo "export HDFS_DATANODE_SECURE_USER=hadoop" >> /opt/hadoop/etc/hadoop/hadoop-env.sh && \
