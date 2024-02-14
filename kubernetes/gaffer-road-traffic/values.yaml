@@ -1,4 +1,4 @@
-# Copyright 2020-2023 Crown Copyright
+# Copyright 2020-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ labels: {}
 loader:
   image:
     repository: gchq/gaffer-road-traffic-loader
-    tag: 2.0.0 # managed version
+    tag: 2.1.0 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -206,12 +206,12 @@ gaffer:
               }
             },
             "hllp": {
-              "class": "com.clearspring.analytics.stream.cardinality.HyperLogLogPlus",
+              "class": "org.apache.datasketches.hll.HllSketch",
               "aggregateFunction": {
-                "class": "uk.gov.gchq.gaffer.sketches.clearspring.cardinality.binaryoperator.HyperLogLogPlusAggregator"
+                "class": "uk.gov.gchq.gaffer.sketches.datasketches.cardinality.binaryoperator.HllSketchAggregator"
               },
               "serialiser": {
-                "class": "uk.gov.gchq.gaffer.sketches.clearspring.cardinality.serialisation.HyperLogLogPlusSerialiser"
+                "class": "uk.gov.gchq.gaffer.sketches.datasketches.cardinality.serialisation.HllSketchSerialiser"
               }
             },
             "counts.freqmap": {

@@ -1,4 +1,4 @@
-# Copyright 2020-2023 Crown Copyright
+# Copyright 2020-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ ARG KUBECTL_VERSION=1.23.0
 RUN curl -fLo /bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
 	chmod +x /bin/kubectl
 
-ARG GAFFERPY_VERSION=gafferpy-2.0.0
+ARG GAFFERPY_VERSION=gafferpy-2.1.0
 RUN git clone -b ${GAFFERPY_VERSION} --depth 1 https://github.com/gchq/gafferpy && \
 	pushd gafferpy && \
 	python setup.py install && \

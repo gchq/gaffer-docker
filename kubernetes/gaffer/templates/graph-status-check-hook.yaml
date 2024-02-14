@@ -1,6 +1,6 @@
 {{- /*
 
-Copyright 2020 Crown Copyright
+Copyright 2020-2024 Crown Copyright
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,6 +31,6 @@ spec:
   containers:
   - name: curl
     image: {{ .Values.test.images.curl.repository }}:{{ .Values.test.images.curl.tag}}
-    command: ["/bin/sh", "-c", "statusCode=-1 && until [ \"${statusCode}\" = \"200\" ] || [ $(( ATTEMPTS++ )) -gt 300 ]; do sleep 1; statusCode=$(curl -f -s -o /dev/null -w \"%{http_code}\" http://{{ include "gaffer.fullname" . }}-api:80/{{ pluck "server.context-path" .Values.graph.applicationProperties | first }}/graph/status); echo \"$(date) - http://{{ include "gaffer.fullname" . }}-api:80{{ pluck "server.context-path" .Values.graph.applicationProperties | first }}/graph/status : ${statusCode}\"; done; [ \"${statusCode}\" != \"200\" ] && exit 1; exit 0"]
+    command: ["/bin/sh", "-c", "statusCode=-1 && until [ \"${statusCode}\" = \"200\" ] || [ $(( ATTEMPTS++ )) -gt 300 ]; do sleep 1; statusCode=$(curl -f -s -o /dev/null -w \"%{http_code}\" http://{{ include "gaffer.fullname" . }}-api:80{{ pluck "server.context-path" .Values.graph.applicationProperties | first }}/graph/status); echo \"$(date) - http://{{ include "gaffer.fullname" . }}-api:80{{ pluck "server.context-path" .Values.graph.applicationProperties | first }}/graph/status : ${statusCode}\"; done; [ \"${statusCode}\" != \"200\" ] && exit 1; exit 0"]
   restartPolicy: Never
 {{- end }}
