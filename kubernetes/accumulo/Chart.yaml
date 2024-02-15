@@ -1,4 +1,4 @@
-# Copyright 2020-2023 Crown Copyright
+# Copyright 2020-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ apiVersion: v2
 name: accumulo
 description: A Key-Value Accumulo store
 type: application
-version: 2.0.0 # managed version
+version: 2.1.0 # managed version
 appVersion: 2.0.1
 home: https://github.com/gchq/Gaffer
 sources:
@@ -26,6 +26,6 @@ dependencies:
     repository: https://charts.helm.sh/incubator/
     condition: zookeeper.enabled
   - name: hdfs
-    version: ^2.0.0 # managed version
+    version: ^2.1.0 # managed version
     repository: file://../hdfs/
     condition: hdfs.enabled
