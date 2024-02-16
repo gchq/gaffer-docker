@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020-2023 Crown Copyright
+# Copyright 2020-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,22 +18,23 @@
 # Required for variables from sourced env file to automatically be visible to docker compose.
 set -e -a
 
-root_directory="$( cd $(dirname $(dirname $0)) > /dev/null 2>&1 && pwd )"
-cd $root_directory
+ROOT_DIR="$(readlink -f "$(dirname "$(dirname "${0}")")")"
 
-if [ ! -z "$1" ]; then
-	ENV_FILE=$1
-else
-	echo "Error - Environment file not set"; exit 1;
-fi
+pushd "${ROOT_DIR}" || exit 1
 
-# The following command sets:
+# The following env file will be sourced to set:
 # HADOOP_VERSION
 # GAFFER_VERSION
 # GAFFERPY_VERSION
 # ACCUMULO_VERSION
 # SPARK_VERSION
-source "${ENV_FILE}"
+# TINKERPOP_VERSION
+if [[ -f "${1}" ]]; then
+    source "${1}"
+else
+    echo "Error - Environment file not set"
+    exit 1
+fi
 
 # Builds all of the Gaffer and Accumulo related images:
 docker compose --project-directory ./docker/accumulo/ -f ./docker/accumulo/docker-compose.yaml build
@@ -41,8 +42,12 @@ docker compose --project-directory ./docker/gaffer-road-traffic-loader/ -f ./doc
 # Builds all of the notebook related images:
 docker compose --project-directory ./docker/gaffer-pyspark-notebook/ -f ./docker/gaffer-pyspark-notebook/docker-compose.yaml build notebook
 docker compose --project-directory ./docker/spark-py/ -f ./docker/spark-py/docker-compose.yaml build
+# Builds the Gaffer Gremlin server
+./docker/gaffer-gremlin/build.sh
 
 # Set $JHUB_OPTIONS_SERVER_VERSION
 source ./docker/gaffer-jhub-options-server/get-version.sh
 # Builds the jhub options server:
 docker compose --project-directory ./docker/gaffer-jhub-options-server/ -f ./docker/gaffer-jhub-options-server/docker-compose.yaml build
+
+popd || exit 1

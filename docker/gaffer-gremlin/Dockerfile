@@ -1,5 +1,4 @@
-#
-# Copyright 2016-2023 Crown Copyright
+# Copyright 2023-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-gaffer.store.class=uk.gov.gchq.gaffer.accumulostore.AccumuloStore
-gaffer.store.properties.class=uk.gov.gchq.gaffer.accumulostore.AccumuloProperties
-accumulo.instance=accumulo
-accumulo.zookeepers=zookeeper
-accumulo.user=root
-accumulo.password=secret
-# General store config
-gaffer.cache.service.class=uk.gov.gchq.gaffer.cache.impl.HashMapCacheService
-gaffer.store.job.tracker.enabled=true
+
+ARG BASE_IMAGE_NAME=tinkerpop/gremlin-server
+ARG BASE_IMAGE_TAG=3.7.1
+
+# Base image provides WORKDIR, USER and ENTRYPOINT
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+
+# Copy JARS
+COPY ./target/dependency/*.jar ext/gafferpop/plugin/
+
+# Copy configs
+COPY ./conf/ conf/
+
+# Set server to run
+CMD ["conf/gaffer-gremlin-server.yaml"]
