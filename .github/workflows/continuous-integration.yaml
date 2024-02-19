@@ -1,4 +1,4 @@
-# Copyright 2020-2023 Crown Copyright
+# Copyright 2020-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,13 +27,17 @@ jobs:
     steps:
 
     - name: Maximize build space
-      uses: easimon/maximize-build-space@v4
+      uses: easimon/maximize-build-space@v10
       with:
         remove-dotnet: 'true'
         remove-android: 'true'
+        remove-haskell: 'true'
+        remove-codeql: 'true'
+        remove-docker-images: 'true'
+        swap-size-mb: 1024
         overprovision-lvm: 'true'
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
@@ -54,8 +58,8 @@ jobs:
       run: ./cd/lint_charts.sh
 
     - name: Deploy to Kubernetes
-      run: ./cd/deploy_to_kind.sh
-  
+      run: ./cd/deploy_to_kind.sh ./docker/accumulo2.env
+
     - name: Run gaffer-road-traffic Tests
       run: helm test gaffer || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)
 

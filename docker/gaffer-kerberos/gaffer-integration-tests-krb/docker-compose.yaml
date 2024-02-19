@@ -1,0 +1,229 @@
+# Copyright 2023 Crown Copyright
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+version: "3.7"
+
+networks:
+  default:
+    name: gaffer
+
+services:
+
+  kdc-server:
+    image: gchq/kerberos-kdc-server:0.1
+    healthcheck:
+      test: ps -aux | grep krb5kdc
+      retries: 5
+      interval: 1s
+      timeout: 5s
+    container_name: kdc-server
+    hostname: kdc-server
+    environment:
+      - HADOOP_KRB_PASSWORD=${HADOOP_KRB_PASSWORD}
+      - ZOOKEEPER_KRB_PASSWORD=${ZOOKEEPER_KRB_PASSWORD}
+      - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
+      - GAFFER_KRB_PASSWORD=${GAFFER_KRB_PASSWORD}
+    volumes:
+      - ../kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - ../kdc/conf/kdc.conf:/etc/kdc.conf:ro
+
+  zookeeper:
+    depends_on:
+      kdc-server:
+        condition: service_healthy
+    healthcheck:
+      test: echo ruok | nc 127.0.0.1 2181 | grep imok
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    image: zookeeper:${ZOOKEEPER_VERSION}-krb
+    container_name: zookeeper
+    hostname: zookeeper
+    environment:
+      - ZOOKEEPER_KRB_PASSWORD=${ZOOKEEPER_KRB_PASSWORD}
+    volumes:
+      - ../zookeeper-krb/conf/jaas.conf:/conf/jaas.conf:ro
+      - ../zookeeper-krb/conf/java.env:/conf/java.env:ro
+      - ../zookeeper-krb/conf/zoo.cfg:/conf/zoo.cfg:ro
+      - ../kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /data
+      - /datalog
+
+  hdfs-namenode:
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    image: gchq/hdfs-krb:${HADOOP_VERSION}
+    healthcheck:
+      test: curl -f http://localhost:9870 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    command: namenode
+    container_name: hdfs-namenode
+    hostname: hdfs-namenode.gaffer
+    environment:
+      - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
+      - HADOOP_KRB_PASSWORD=${HADOOP_KRB_PASSWORD}
+      - DEBUG=${DEBUG}
+    ports:
+      - "9870:9870"
+    volumes:
+      - ../hdfs-krb/conf:${HADOOP_CONF_DIR}:ro
+      - ../kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /var/log/hadoop
+      - /data1
+      - /data2
+
+  hdfs-datanode:
+    depends_on:
+      hdfs-namenode:
+        condition: service_healthy
+    image: gchq/hdfs-krb:${HADOOP_VERSION}
+    command: datanode
+    container_name: hdfs-datanode
+    hostname: hdfs-datanode.gaffer
+    environment:
+      - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
+      - HADOOP_KRB_PASSWORD=${HADOOP_KRB_PASSWORD}
+      - DEBUG=${DEBUG}
+    volumes:
+      - ../hdfs-krb/conf:${HADOOP_CONF_DIR}:ro
+      - ../kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /var/log/hadoop
+      - /data1
+      - /data2
+
+  accumulo-master:
+    depends_on:
+      hdfs-namenode:
+        condition: service_healthy
+    image: gchq/gaffer-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    healthcheck:
+      test: cat /proc/net/tcp | grep 270F
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    # When calling entrypoint, also call a script to
+    # correctly setup auths so that tests can run
+    entrypoint: bash -c "/int-entrypoint.sh gaffer/gaffer-int.gaffer@GAFFER.DOCKER & /krb-entrypoint.sh accumulo master"
+    container_name: accumulo-master
+    hostname: accumulo-master.gaffer
+    environment:
+      - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
+      - ACCUMULO_VERSION=${ACCUMULO_VERSION}
+      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+      - ACCUMULO_AS_ROOT=1
+      - DEBUG=${DEBUG}
+    volumes:
+      - ../gaffer-krb/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}/krb:ro
+      - ../gaffer-krb/conf-common/core-site.xml:${ACCUMULO_CONF_DIR}/core-site.xml:ro
+      - ../../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}/non-krb:ro
+      - ../kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - ./accumulo-int-entrypoint.sh:/int-entrypoint.sh:ro
+      - ./conf/accumulo-shell-client.properties:/accumulo-shell-client.properties:ro
+      - /var/log/accumulo
+
+  accumulo-tserver:
+    depends_on:
+      accumulo-master:
+        condition: service_healthy
+    image: gchq/gaffer-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    healthcheck:
+      test: cat /proc/net/tcp | grep 270D
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    command: tserver
+    container_name: accumulo-tserver
+    hostname: accumulo-tserver.gaffer
+    environment:
+      - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
+      - ACCUMULO_VERSION=${ACCUMULO_VERSION}
+      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+      - DEBUG=${DEBUG}
+    volumes:
+      - ../gaffer-krb/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}/krb:ro
+      - ../gaffer-krb/conf-common/core-site.xml:${ACCUMULO_CONF_DIR}/core-site.xml:ro
+      - ../../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}/non-krb:ro
+      - ../kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /var/log/accumulo
+
+  accumulo-monitor:
+    depends_on:
+      accumulo-master:
+        condition: service_healthy
+    image: gchq/gaffer-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    command: monitor
+    container_name: accumulo-monitor
+    hostname: accumulo-monitor.gaffer
+    environment:
+      - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
+      - ACCUMULO_VERSION=${ACCUMULO_VERSION}
+      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+      - DEBUG=${DEBUG}
+    ports:
+      - "9995:9995"
+    volumes:
+      - ../gaffer-krb/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}/krb:ro
+      - ../gaffer-krb/conf-common/core-site.xml:${ACCUMULO_CONF_DIR}/core-site.xml:ro
+      - ../../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}/non-krb:ro
+      - ../kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /var/log/accumulo
+
+  accumulo-gc:
+    depends_on:
+      accumulo-master:
+        condition: service_healthy
+    image: gchq/gaffer-krb:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    command: gc
+    container_name: accumulo-gc
+    hostname: accumulo-gc.gaffer
+    environment:
+      - ACCUMULO_KRB_PASSWORD=${ACCUMULO_KRB_PASSWORD}
+      - ACCUMULO_VERSION=${ACCUMULO_VERSION}
+      - ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR}
+      - DEBUG=${DEBUG}
+    volumes:
+      - ../gaffer-krb/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}/krb:ro
+      - ../gaffer-krb/conf-common/core-site.xml:${ACCUMULO_CONF_DIR}/core-site.xml:ro
+      - ../../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}/non-krb:ro
+      - ../kdc/conf/krb5.conf:/etc/krb5.conf:ro
+      - /var/log/accumulo
+
+  gaffer-integration-tests:
+    image: gchq/gaffer-integration-tests-krb:${GAFFER_TESTER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    build:
+      context: .
+      args:
+        GAFFER_VERSION: ${GAFFER_TESTER_VERSION}
+        ACCUMULO_VERSION: ${ACCUMULO_VERSION}
+    container_name: gaffer-int
+    hostname: gaffer-int.gaffer
+    environment:
+      - GAFFER_KRB_PASSWORD=${GAFFER_KRB_PASSWORD}
+      - GAFFER_DEBUG=${GAFFER_DEBUG}
+      - DEBUG=${DEBUG}
+    volumes:
+    - ../gaffer-rest-krb/conf/store.properties:/tests/conf/store.properties:ro
+    - ./conf/log4j.xml:/tests/conf/log4j.xml:ro
+    - ./conf/core-site.xml:/opt/hadoop/conf/core-site.xml:ro
+    - ./conf/hdfs-site.xml:/opt/hadoop/conf/hdfs-site.xml:ro
+    - ../gaffer-krb/conf-1.9.3/client.conf:/etc/accumulo/client.conf:ro
+    - ../gaffer-krb/conf-2.0.1/accumulo-client.properties:/etc/accumulo/accumulo-client.properties:ro
+    - ../kdc/conf/krb5.conf:/etc/krb5.conf:ro

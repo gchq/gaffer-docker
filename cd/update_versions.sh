@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020-2023 Crown Copyright
+# Copyright 2020-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ fi
 # GAFFER_VERSION
 # GAFFERPY_VERSION
 # SPARK_VERSION
-source ./docker/gaffer-pyspark-notebook/.env
+source ./docker/accumulo2.env
 # JHUB_OPTIONS_SERVER_VERSION
-source docker/gaffer-jhub-options-server/get-version.sh
+source ./docker/gaffer-jhub-options-server/get-version.sh
 
 # hdfs
 [ ! -z "${APP_VERSION}" ] && yq eval ".version = \"${APP_VERSION}\"" -i ./kubernetes/hdfs/Chart.yaml

@@ -1,4 +1,4 @@
-# Copyright 2020-2023 Crown Copyright
+# Copyright 2020-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ api:
   replicaCount: 1
   image:
     repository: gchq/gaffer-rest
-    tag: 2.0.0-accumulo-2.0.1 # managed version
+    tag: 2.1.0-accumulo-2.0.1 # managed version
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -52,7 +52,7 @@ test:
   images:
     integration:
       repository: gchq/gaffer-integration-tests
-      tag: develop
+      tag: develop-accumulo-2.0.1
     curl:
       repository: curlimages/curl
       tag: 7.67.0
@@ -61,7 +61,7 @@ accumulo:
   enabled: false
   image:
     repository: gchq/gaffer
-    tag: 2.0.0-accumulo-2.0.1 # managed version
+    tag: 2.1.0-accumulo-2.0.1 # managed version
   config:
     postInstallCommands:
       - users

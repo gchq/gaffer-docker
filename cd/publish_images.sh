@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020-2023 Crown Copyright
+# Copyright 2020-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -101,6 +101,7 @@ pushContainer gchq/accumulo "${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer-rest "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}"
+pushContainer gchq/gaffer-gremlin "${GAFFER_VERSION}"
 pushContainer gchq/gaffer-pyspark-notebook "${GAFFER_VERSION}"
 pushContainer gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}"
 pushContainer gchq/spark-py "${SPARK_VERSION}"

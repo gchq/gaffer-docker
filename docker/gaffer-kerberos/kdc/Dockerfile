@@ -17,13 +17,14 @@ ARG BASE_IMAGE_TAG=focal-20230412
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
-RUN apt -qq update && \
-	apt -qq install -y \
-		krb5-kdc \
-		krb5-admin-server \
-		procps && \
-    apt -qq clean \
-    && rm -rf /var/lib/apt/lists/*
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -qq update && \
+    apt-get -qq install -y \
+        krb5-kdc krb5-admin-server \
+        procps && \
+    apt-get -qq clean && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
