@@ -44,13 +44,9 @@ kind load docker-image gchq/gaffer-jhub-options-server:${JHUB_OPTIONS_SERVER_VER
 # Hostname check is disabled for CI
 echo "Starting helm install for gaffer-road-traffic"
 pushd ./kubernetes/gaffer-road-traffic
-if ! helm install gaffer . \
+helm install gaffer . \
     --timeout=15m \
-    --debug \
     --set gaffer.accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
-then
-    kubectl logs "$(kubectl get pods -A | grep -o gaffer-gaffer-road-traffic-data-loader-[a-z0-9]*)"
-fi
 popd
 
 echo "Starting helm install for gaffer-jhub"
