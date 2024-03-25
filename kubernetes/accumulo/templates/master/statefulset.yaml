@@ -53,10 +53,19 @@ spec:
         resources:
           {{- toYaml .Values.master.resources | nindent 10 }}
         livenessProbe:
-          exec:
-            command:
-            - grep 270F /proc/net/tcp
-          initialDelaySeconds: 5
+          httpGet:
+            path: /
+            port: 9999
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 30
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9999
+          initialDelaySeconds: 30
           periodSeconds: 5
       volumes:
       - name: config

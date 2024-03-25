@@ -27,6 +27,10 @@ spec:
         {{- include "gaffer-road-traffic.labels" . | nindent 8 }}
         app.kubernetes.io/component: loader
     spec:
+      initContainers:
+        - name: check-accumulo-ready
+          image: busybox:1.28
+          command: [ "sh", "-c", "until nslookup gaffer-accumulo-masters; do echo Waiting on Accumulo master; sleep 2; done" ]
       restartPolicy: OnFailure
       containers:
       - name: data-loader
