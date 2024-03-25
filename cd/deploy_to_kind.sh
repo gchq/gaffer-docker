@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
+set -x
 
 kind create cluster --quiet --config ./cd/kind.yaml --image kindest/node:v1.24.4
 
@@ -38,15 +38,19 @@ kind load docker-image gchq/gaffer:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION
 kind load docker-image gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
 kind load docker-image gchq/gaffer-road-traffic-loader:${GAFFER_VERSION}
 kind load docker-image gchq/gaffer-jhub-options-server:${JHUB_OPTIONS_SERVER_VERSION}
-kind load docker-image gchq/spark-py:${SPARK_VERSION}
 
 
 # Deploy containers onto Kind
 # Hostname check is disabled for CI
 echo "Starting helm install for gaffer-road-traffic"
 pushd ./kubernetes/gaffer-road-traffic
-helm install gaffer . --timeout=10m \
---set gaffer.accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
+if ! helm install gaffer . \
+    --timeout=15m \
+    --debug \
+    --set gaffer.accumulo.hdfs.config.hdfsSite."dfs\.namenode\.datanode\.registration\.ip-hostname-check"=false
+then
+    kubectl logs "$(kubectl get pods -A | grep -o gaffer-gaffer-road-traffic-data-loader-[a-z0-9]*)"
+fi
 popd
 
 echo "Starting helm install for gaffer-jhub"
