@@ -40,14 +40,15 @@ getTags() {
     fi
 }
 
-# Generate tags for Gaffer image based on version
+# Generate tags based on Gaffer version and Dependency version
 # Default is to tag version with full, major.minor.patch, major.minor, major, latest
-getGafferTags() {
+getTagsWithDependency() {
+    dependencyname=$1
     if [[ $tagsetting = "onlyfull" ]];
     then
       tags="${name}:${version}"
     else
-      tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+)\.([0-9]+)-accumulo-([0-9.]*)|${name}:${version} ${name}:\1.\2.\3 ${name}:\1.\2 ${name}:\1 ${name}:latest|")"
+      tags="$(echo ${version} | sed -E "s|([0-9]+)\.([0-9]+)\.([0-9]+)-${dependencyname}-([0-9.]*)|${name}:${version} ${name}:\1.\2.\3 ${name}:\1.\2 ${name}:\1 ${name}:latest|")"
     fi
 }
 
@@ -56,9 +57,9 @@ pushContainer() {
     name=$1
     version=$2
     tagsetting=$3
-    if [[ $version =~ .*accumulo.* ]];
-    then
-      getGafferTags
+    regex='[0-9]+\.[0-9]+\.[0-9]+-([[:alpha:]]+)-[0-9.]*'
+    if [[ $version =~ $regex ]]; then
+      getTagsWithDependency ${BASH_REMATCH[1]}
     else
       getTags
     fi
@@ -101,7 +102,7 @@ pushContainer gchq/accumulo "${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer-rest "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}"
-pushContainer gchq/gaffer-gremlin "${GAFFER_VERSION}"
+pushContainer gchq/gaffer-gremlin "${GAFFER_VERSION}-gremlin-${TINKERPOP_VERSION}"
 pushContainer gchq/gaffer-pyspark-notebook "${GAFFER_VERSION}"
 pushContainer gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}"
 pushContainer gchq/spark-py "${SPARK_VERSION}"

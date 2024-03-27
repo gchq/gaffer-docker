@@ -21,7 +21,7 @@ ARG BASE_IMAGE_TAG=2.0.1
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
 ARG BASE_IMAGE_TAG
-ARG GAFFER_VERSION=2.1.0
+ARG GAFFER_VERSION=2.2.0
 ARG GAFFER_LIBS=bitmap-library,sketches-library,time-library
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
@@ -59,10 +59,6 @@ RUN	allFilesDownloaded="TRUE" && \
 			fi \
 		done \
 	fi
-
-# Hotfix for Gaffer 2.1.0, see Gaffer issue #3159
-RUN wget -nv "${GAFFER_DOWNLOAD_URL}/org/apache/datasketches/datasketches-memory/2.2.0/datasketches-memory-2.2.0.jar"
-RUN wget -nv "${GAFFER_DOWNLOAD_URL}/org/apache/datasketches/datasketches-java/4.0.0/datasketches-java-4.0.0.jar"
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 COPY --from=builder --chown=root:root /jars/*.jar /opt/accumulo/lib/ext/
