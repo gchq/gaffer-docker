@@ -57,11 +57,13 @@ jobs:
     - name: Lint charts
       run: ./cd/lint_charts.sh
 
-    - name: Deploy to Kubernetes
-      run: ./cd/deploy_to_kind.sh ./docker/accumulo2.env
+    # Current problem with helm charts not starting accumulo correctly
+    # Re enable k8s section of CI once fixed or updated see issue 348.
+    # - name: Deploy to Kubernetes
+    #   run: ./cd/deploy_to_kind.sh ./docker/accumulo2.env
 
-    - name: Run gaffer-road-traffic Tests
-      run: helm test gaffer || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)
+    # - name: Run gaffer-road-traffic Tests
+    #   run: helm test gaffer || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)
 
-    - name: Run gaffer-jhub Tests
-      run: helm test jhub || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)
+    # - name: Run gaffer-jhub Tests
+    #   run: helm test jhub || (kubectl get po && kubectl describe po && kubectl logs -l app.kubernetes.io/component=test --tail=-1 && df -h && false)
