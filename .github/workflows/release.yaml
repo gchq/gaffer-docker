@@ -98,9 +98,6 @@ jobs:
 
   publish-images-to-dockerhub:
     runs-on: ubuntu-latest
-    needs:
-    - create-release-tag
-    - update-branches
 
     steps:
     - uses: actions/checkout@v4
