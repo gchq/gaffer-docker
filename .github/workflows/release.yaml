@@ -18,11 +18,12 @@ on:
   milestone:
     types:
     - closed
+  workflow_dispatch:
 
 jobs:
   create-release-tag:
     runs-on: ubuntu-latest
-
+    if: github.event_name == 'milestone'
     outputs:
       branch_name: ${{ steps.branch.outputs.branch_name }}
 
@@ -67,6 +68,7 @@ jobs:
 
   update-branches:
     runs-on: ubuntu-latest
+    if: github.event_name == 'milestone'
     strategy:
       matrix:
         branch:
@@ -121,6 +123,7 @@ jobs:
 
   create-release-notes:
     runs-on: ubuntu-latest
+    if: github.event_name == 'milestone'
     needs:
     - create-release-tag
     - update-branches
@@ -154,6 +157,7 @@ jobs:
 
   upload-release-artifacts:
     runs-on: ubuntu-latest
+    if: github.event_name == 'milestone'
     needs:
     - create-release-tag
     - create-release-notes
@@ -201,6 +205,7 @@ jobs:
 
   update-helm-repo:
     runs-on: ubuntu-latest
+    if: github.event_name == 'milestone'
     needs:
     - upload-release-artifacts
 
