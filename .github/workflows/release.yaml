@@ -135,7 +135,7 @@ jobs:
     
     - name: Create Release Notes
       id: create_release_notes
-      uses: docker://decathlon/release-notes-generator-action:2.1.0
+      uses: docker://decathlon/release-notes-generator-action:3.1.6
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -144,7 +144,7 @@ jobs:
 
     - name: Upload notes
       id: upload_notes
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -184,21 +184,16 @@ jobs:
         echo "ASSET_FILENAME=${filename}" >> $GITHUB_ENV
     
     - name: Upload chart artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.chart }}
         path: ${{ env.ASSET_FILENAME }}
         retention-days: 1
     
     - name: Upload Asset
-      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.create-release-notes.outputs.release_upload_url }}
-        asset_path: ${{ env.ASSET_FILENAME }}
-        asset_name: ${{ env.ASSET_FILENAME }}
-        asset_content_type: application/zip
+      run: gh release upload ${{ github.event.milestone.title }} ${{ env.ASSET_FILENAME }}
 
   update-helm-repo:
     runs-on: ubuntu-latest
@@ -219,7 +214,7 @@ jobs:
         git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
     - name: Download packaged charts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         path: artifacts
 
