@@ -46,11 +46,20 @@ g = traversal().withRemote(
 
 A demo/example using the tinkerpop 'modern' dataset and accumulo backed Gaffer
 is available under the `example` directory. This can be ran using docker compose
-to deploy the containers then, the provided jupiter notebook demonstrates how to
-connect and some basic queries on the data using `gremlinpython`.
+to deploy the containers then, the provided jupiter notebooks demonstrate how to
+connect and some basic queries on the data using `gremlinpython` or via
+`graph-notebook` (note this requires the [graph-notebook extension](https://github.com/aws/graph-notebook)).
 
-Run the example with:
+To run the example first source the environment file for the image versions
+e.g. `accumulo2.env` then use docker compose to start up the containers:
 
 ```bash
-docker compose up
+source ../accumulo2.env
+docker compose up -d
 ```
+
+With the demo deployment both a standard Gaffer REST API and Gaffer Gremlin
+server will be started (available on port 8080 and 8182 respectively). The
+deployment uses a small scale Accumulo instance as the Gaffer store backing,
+see [the docs](https://gchq.github.io/gaffer-doc/latest/administration-guide/gaffer-stores/accumulo-store/)
+for more configuration options.

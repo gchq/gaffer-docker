@@ -160,6 +160,24 @@ services:
     - ../../accumulo/conf-${ACCUMULO_VERSION}:${ACCUMULO_CONF_DIR}:ro
     - /var/log/accumulo
 
+  # Rest API
+  gaffer-rest:
+    image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    depends_on:
+      accumulo-tserver:
+        condition: service_healthy
+    healthcheck:
+      test: grep 1F90 /proc/net/tcp
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./conf/gaffer/schema:/gaffer/schema:ro
+      - ./conf/gaffer/store-accumulo.properties:/gaffer/store/store.properties:ro
+
+  # Gremlin server
   gaffer-gremlin:
     image: gchq/gaffer-gremlin:${GAFFER_VERSION}-gremlin-${TINKERPOP_VERSION}
     depends_on:
