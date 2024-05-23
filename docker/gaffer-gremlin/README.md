@@ -50,12 +50,11 @@ to deploy the containers then, the provided jupiter notebooks demonstrate how to
 connect and some basic queries on the data using `gremlinpython` or via
 `graph-notebook` (note this requires the [graph-notebook extension](https://github.com/aws/graph-notebook)).
 
-To run the example first source the environment file for the image versions
-e.g. `accumulo2.env` then use docker compose to start up the containers:
+To run the example please use the provided start script with an environment file
+to specify the image versions e.g. `accumulo2.env`:
 
 ```bash
-source ../accumulo2.env
-docker compose up -d
+./example/create-deployment.sh ../accumulo2.env
 ```
 
 With the demo deployment both a standard Gaffer REST API and Gaffer Gremlin
