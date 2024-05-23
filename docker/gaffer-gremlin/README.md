@@ -46,8 +46,8 @@ g = traversal().withRemote(
 
 A demo/example using the tinkerpop 'modern' dataset and accumulo backed Gaffer
 is available under the `example` directory. This can be ran using docker compose
-to deploy the containers then, the provided jupiter notebooks demonstrate how to
-connect and some basic queries on the data using `gremlinpython` or via
+to deploy the containers. The provided jupyter notebooks demonstrate how to
+connect to your graph and some basic Gremlin queries on the data using `gremlinpython` or via
 `graph-notebook` (note this requires the [graph-notebook extension](https://github.com/aws/graph-notebook)).
 
 To run the example please use the provided start script with an environment file
