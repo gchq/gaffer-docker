@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BASE_IMAGE_NAME=python
-ARG BASE_IMAGE_TAG=3.9.7-slim
+ARG BASE_IMAGE_TAG=3.9-slim-bullseye
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
