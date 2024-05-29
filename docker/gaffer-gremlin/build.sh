@@ -26,7 +26,8 @@ declare SCRIPT_DIR="$(readlink -f "$(dirname "${0}")")"
 # Build from relevant directory
 pushd "${SCRIPT_DIR}" || exit 1
     # Download JARs
-    mvn clean dependency:copy-dependencies --define gaffer.version="${GAFFER_VERSION}"
+    mvn clean dependency:copy-dependencies \
+        --define gaffer.version="${GAFFER_VERSION}"
 
     # Build container
     docker compose build
