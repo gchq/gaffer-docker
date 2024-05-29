@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BASE_IMAGE_NAME=ubuntu
-ARG BASE_IMAGE_TAG=focal-20230412
+ARG BASE_IMAGE_TAG=noble-20240429
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
