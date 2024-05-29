@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=maven
-ARG BUILDER_IMAGE_TAG=3.8.4-jdk-8
+ARG BUILDER_IMAGE_TAG=3.9-eclipse-temurin-8
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG}
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
