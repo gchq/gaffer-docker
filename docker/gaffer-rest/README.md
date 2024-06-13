@@ -66,3 +66,23 @@ docker compose -f proxy-example/compose.yaml --env-file .env up
 
 With this deployment both a standard Gaffer REST API and a Gaffer REST API using the Proxy Store will be started.
 Only the port for the Proxy REST endpoint is exposed, this will forward operations to the standard Gaffer REST Endpoint.
+
+# Federated Example
+
+A demo/example of using Gaffer REST with a Federated Store is available under the `federated-example` directory.
+
+## Running
+To run it from the `federated-example` directory you'll need to specify the environment file path:
+
+```bash
+docker compose --env-file ../.env up
+```
+
+Or to run it from this directory, the compose file path and environment file path:
+
+```bash
+docker compose -f federated-example/compose.yaml --env-file .env up
+```
+
+This deploys a Gaffer REST API using the Federated Store. No graphs exist by default, they can be added using the API.
+The config doesn't specify a cache type, so a HashMap cache is used by default - changes do not persist with this cache.
