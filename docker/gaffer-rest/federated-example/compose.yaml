@@ -20,5 +20,7 @@ services:
     ports:
     - 8080:8080
     volumes:
-    - ./config/store.properties:/gaffer/store/store.properties:ro
-    - ./config/mergeFunctions.json:/gaffer/store/mergeFunctions.json:ro
+    - ./config/store/store.properties:/gaffer/store/store.properties:ro
+    - ./config/store/mergeFunctions.json:/gaffer/store/mergeFunctions.json:ro
+    - ./config/store/defaultGraphIds.json:/gaffer/store/defaultGraphIds.json:ro
+    - ./config/schema:/gaffer/schema:ro
