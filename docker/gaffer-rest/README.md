@@ -35,10 +35,16 @@ This is a spring concept and is used to change the context root and any
 properties related to Gaffer or the app. A default is provided at
 `/gaffer/config/application.properties`
 
-## Running Locally
+## Building/Running Locally
 
-The easiest way to build and run these services is to use docker compose, by
-running the following from this directory:
+The easiest way to build and/or run the REST API image is to use docker
+compose. You can use the following to just build the image:
+
+```bash
+docker compose build
+```
+
+Or to build and run the new image with default configuration run:
 
 ```bash
 docker compose up
