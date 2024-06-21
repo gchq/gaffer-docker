@@ -24,5 +24,5 @@ With the demo deployment a standard Gaffer REST API will be started (available
 on port 8080 by default). The deployment uses map stores to store two sub graphs
 that can be federated across. Basic configuration for federation has been added
 (under the `config` directory) but can be modified to test out different
-senarios, please see the [documentation](https://gchq.github.io/gaffer-doc/latest/administration-guide/gaffer-stores/federated-store.html)
+scenarios, please see the [documentation](https://gchq.github.io/gaffer-doc/latest/administration-guide/gaffer-stores/federated-store.html)
 for more information.

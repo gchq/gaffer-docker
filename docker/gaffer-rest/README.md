@@ -1,6 +1,6 @@
 # Gaffer REST
 
-In this folder you can find the required files for building and running Gaffer
+In this folder you can find the required files for building and running the Gaffer
 REST image for the REST API for Gaffer.
 
 ## Configuration
@@ -47,7 +47,7 @@ docker compose up
 ### Customising your builds
 
 We provide the options to build using an official release, a branch or a custom
-runnable `rest.jar` file The order it will check is:
+runnable `rest.jar` file. The order it will check is:
 
 1. Custom `rest.jar` file stored in `/jars`
 2. official release
@@ -56,7 +56,7 @@ runnable `rest.jar` file The order it will check is:
 To use a release or branch, set the `GAFFER_VERSION` property in env before
 running the `docker compose build` command.
 
-We also provide the option to include custom libraries in the /jars/lib
+We also provide the option to include custom libraries in the `/jars/lib`
 directory. These will be added to the classpath at runtime.
 
 ### Containers that are started
