@@ -1,0 +1,171 @@
+{
+    "class": "OperationChain",
+    "operations": [
+        {
+            "class": "AddGraph",
+            "graphId": "createdGraph",
+            "schema": {
+                "entities": {
+                    "person": {
+                        "vertex": "string.id",
+                        "properties": {
+                            "name": "property.string",
+                            "age": "property.integer"
+                        }
+                    },
+                    "software": {
+                        "vertex": "string.id",
+                        "properties": {
+                            "name": "property.string",
+                            "lang": "property.string"
+                        }
+                    }
+                },
+                "edges": {
+                    "created": {
+                        "source": "string.id",
+                        "destination": "string.id",
+                        "directed": "true",
+                        "properties": {
+                            "weight": "property.double"
+                        }
+                    }
+                },
+                "types": {
+                    "string.id": {
+                        "class": "java.lang.String"
+                    },
+                    "true": {
+                        "class": "java.lang.Boolean"
+                    },
+                    "property.string": {
+                        "class": "java.lang.String",
+                        "aggregateFunction": {
+                            "class": "uk.gov.gchq.koryphe.impl.binaryoperator.First"
+                        }
+                    },
+                    "property.integer": {
+                        "class": "java.lang.Integer",
+                        "aggregateFunction": {
+                            "class": "uk.gov.gchq.koryphe.impl.binaryoperator.First"
+                        }
+                    },
+                    "property.double": {
+                        "class": "java.lang.Double",
+                        "aggregateFunction": {
+                            "class": "uk.gov.gchq.koryphe.impl.binaryoperator.First"
+                        }
+                    }
+                }
+            },
+            "storeProperties": {
+                "gaffer.store.class": "uk.gov.gchq.gaffer.mapstore.MapStore"
+            }
+        },
+        {
+            "class": "AddElements",
+            "options": {
+                "gaffer.federatedstore.operation.graphIds": "createdGraph"
+            },
+            "input": [
+                {
+                    "class": "Entity",
+                    "group": "person",
+                    "vertex": "1",
+                    "properties": {
+                        "name": "marko",
+                        "age": 29
+                    }
+                },
+                {
+                    "class": "Entity",
+                    "group": "person",
+                    "vertex": "2",
+                    "properties": {
+                        "name": "vadas",
+                        "age": 27
+                    }
+                },
+                {
+                    "class": "Entity",
+                    "group": "person",
+                    "vertex": "4",
+                    "properties": {
+                        "name": "josh",
+                        "age": 32
+                    }
+                },
+                {
+                    "class": "Entity",
+                    "group": "person",
+                    "vertex": "6",
+                    "properties": {
+                        "name": "peter",
+                        "age": 35
+                    }
+                },
+                {
+                    "class": "Entity",
+                    "group": "software",
+                    "vertex": "3",
+                    "properties": {
+                        "name": "lop",
+                        "lang": "java"
+                    }
+                },
+                {
+                    "class": "Entity",
+                    "group": "software",
+                    "vertex": "5",
+                    "properties": {
+                        "name": "ripple",
+                        "lang": "java"
+                    }
+                },
+                {
+                    "class": "Edge",
+                    "group": "created",
+                    "source": "1",
+                    "destination": "3",
+                    "directed": true,
+                    "properties": {
+                        "weight": 0.4
+                    }
+                },
+                {
+                    "class": "Edge",
+                    "group": "created",
+                    "source": "4",
+                    "destination": "3",
+                    "directed": true,
+                    "properties": {
+                        "weight": 0.4
+                    }
+                },
+                {
+                    "class": "Edge",
+                    "group": "created",
+                    "source": "4",
+                    "destination": "5",
+                    "directed": true,
+                    "properties": {
+                        "weight": 1.0
+                    }
+                },
+                {
+                    "class": "Edge",
+                    "group": "created",
+                    "source": "6",
+                    "destination": "3",
+                    "directed": true,
+                    "properties": {
+                        "weight": 0.2
+                    }
+                }
+            ],
+            "skipInvalidElements": false,
+            "validate": true
+        }
+    ]
+}
+

@@ -1,0 +1,28 @@
+{
+    "types": {
+        "string.id": {
+            "class": "java.lang.String"
+        },
+        "true": {
+            "class": "java.lang.Boolean"
+        },
+        "property.string": {
+            "class": "java.lang.String",
+            "aggregateFunction": {
+                "class": "uk.gov.gchq.koryphe.impl.binaryoperator.First"
+            }
+        },
+        "property.integer": {
+            "class": "java.lang.Integer",
+            "aggregateFunction": {
+                "class": "uk.gov.gchq.koryphe.impl.binaryoperator.First"
+            }
+        },
+        "property.double": {
+            "class": "java.lang.Double",
+            "aggregateFunction": {
+                "class": "uk.gov.gchq.koryphe.impl.binaryoperator.First"
+            }
+        }
+    }
+}

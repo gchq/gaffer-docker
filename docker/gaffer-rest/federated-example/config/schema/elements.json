@@ -1,0 +1,36 @@
+{
+    "entities": {
+        "person": {
+            "vertex": "string.id",
+            "properties": {
+                "name": "property.string",
+                "age": "property.integer"
+            }
+        },
+        "software": {
+            "vertex": "string.id",
+            "properties": {
+                "name": "property.string",
+                "lang": "property.string"
+            }
+        }
+    },
+    "edges": {
+        "knows": {
+            "source": "string.id",
+            "destination": "string.id",
+            "directed": "true",
+            "properties": {
+                "weight": "property.double"
+            }
+        },
+        "created": {
+            "source": "string.id",
+            "destination": "string.id",
+            "directed": "true",
+            "properties": {
+                "weight": "property.double"
+            }
+        }
+    }
+}

@@ -1,0 +1,126 @@
+{
+    "class": "OperationChain",
+    "operations": [
+        {
+            "class": "AddGraph",
+            "graphId": "knowsGraph",
+            "schema": {
+                "entities": {
+                    "person": {
+                        "vertex": "string.id",
+                        "properties": {
+                            "name": "property.string",
+                            "age": "property.integer"
+                        }
+                    }
+                },
+                "edges": {
+                    "knows": {
+                        "source": "string.id",
+                        "destination": "string.id",
+                        "directed": "true",
+                        "properties": {
+                            "weight": "property.double"
+                        }
+                    }
+                },
+                "types": {
+                    "string.id": {
+                        "class": "java.lang.String"
+                    },
+                    "true": {
+                        "class": "java.lang.Boolean"
+                    },
+                    "property.string": {
+                        "class": "java.lang.String",
+                        "aggregateFunction": {
+                            "class": "uk.gov.gchq.koryphe.impl.binaryoperator.First"
+                        }
+                    },
+                    "property.integer": {
+                        "class": "java.lang.Integer",
+                        "aggregateFunction": {
+                            "class": "uk.gov.gchq.koryphe.impl.binaryoperator.First"
+                        }
+                    },
+                    "property.double": {
+                        "class": "java.lang.Double",
+                        "aggregateFunction": {
+                            "class": "uk.gov.gchq.koryphe.impl.binaryoperator.First"
+                        }
+                    }
+                }
+            },
+            "storeProperties": {
+                "gaffer.store.class": "uk.gov.gchq.gaffer.mapstore.MapStore"
+            }
+        },
+        {
+            "class": "AddElements",
+            "options": {
+                "gaffer.federatedstore.operation.graphIds": "knowsGraph"
+            },
+            "input": [
+                {
+                    "class": "Entity",
+                    "group": "person",
+                    "vertex": "1",
+                    "properties": {
+                        "name": "marko",
+                        "age": 29
+                    }
+                },
+                {
+                    "class": "Entity",
+                    "group": "person",
+                    "vertex": "2",
+                    "properties": {
+                        "name": "vadas",
+                        "age": 27
+                    }
+                },
+                {
+                    "class": "Entity",
+                    "group": "person",
+                    "vertex": "4",
+                    "properties": {
+                        "name": "josh",
+                        "age": 32
+                    }
+                },
+                {
+                    "class": "Entity",
+                    "group": "person",
+                    "vertex": "6",
+                    "properties": {
+                        "name": "peter",
+                        "age": 35
+                    }
+                },
+                {
+                    "class": "Edge",
+                    "group": "knows",
+                    "source": "1",
+                    "destination": "2",
+                    "directed": true,
+                    "properties": {
+                        "weight": 0.5
+                    }
+                },
+                {
+                    "class": "Edge",
+                    "group": "knows",
+                    "source": "1",
+                    "destination": "4",
+                    "directed": true,
+                    "properties": {
+                        "weight": 1.0
+                    }
+                }
+            ],
+            "skipInvalidElements": false,
+            "validate": true
+        }
+    ]
+}
+
