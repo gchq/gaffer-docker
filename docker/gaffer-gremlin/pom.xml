@@ -24,7 +24,7 @@
 
     <!-- Properties can be overriden for CI/CD -->
     <properties>
-        <gaffer.version>2.2.1</gaffer.version>
+        <gaffer.version>2.2.2</gaffer.version>
         <jersey.version>2.36</jersey.version>
     </properties>
 
