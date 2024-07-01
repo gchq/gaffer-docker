@@ -13,14 +13,14 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=maven
-ARG BUILDER_IMAGE_TAG=3.8.4-jdk-8
+ARG BUILDER_IMAGE_TAG=3.9-eclipse-temurin-8
 
-ARG BASE_IMAGE_NAME=openjdk
-ARG BASE_IMAGE_TAG=8u322-jre-slim-bullseye
+ARG BASE_IMAGE_NAME=azul/zulu-openjdk-debian
+ARG BASE_IMAGE_TAG=8-jre-headless-latest
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG} as builder
 
-ARG GAFFER_VERSION=2.2.1
+ARG GAFFER_VERSION=2.2.2
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git
 ARG GAFFER_DOWNLOAD_URL=https://repo1.maven.org/maven2
 

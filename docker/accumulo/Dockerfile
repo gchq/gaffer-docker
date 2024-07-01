@@ -1,4 +1,4 @@
-# Copyright 2020-2023 Crown Copyright
+# Copyright 2020-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=ubuntu
-ARG BUILDER_IMAGE_TAG=focal-20230412
+ARG BUILDER_IMAGE_TAG=noble-20240429
 
 ARG BASE_IMAGE_NAME=ubuntu
-ARG BASE_IMAGE_TAG=focal-20230412
+ARG BASE_IMAGE_TAG=noble-20240429
 
 ARG ACCUMULO_VERSION=2.0.1
 ARG HADOOP_VERSION=3.3.3

@@ -60,7 +60,7 @@ ARG KUBECTL_VERSION=1.23.0
 RUN curl -fLo /bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
 	chmod +x /bin/kubectl
 
-ARG GAFFERPY_VERSION=gafferpy-2.2.1
+ARG GAFFERPY_VERSION=gafferpy-2.2.2
 RUN git clone -b ${GAFFERPY_VERSION} --depth 1 https://github.com/gchq/gafferpy && \
 	pushd gafferpy && \
 	python setup.py install && \

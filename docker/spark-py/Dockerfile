@@ -1,4 +1,4 @@
-# Copyright 2020 Crown Copyright
+# Copyright 2020-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BASE_IMAGE_NAME=python
-ARG BASE_IMAGE_TAG=3.9.7-slim
+ARG BASE_IMAGE_TAG=3.9-slim-bullseye
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 

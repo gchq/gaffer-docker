@@ -1,4 +1,4 @@
-# Copyright 2021-2023 Crown Copyright
+# Copyright 2021-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BUILDER_IMAGE_NAME=maven
-ARG BUILDER_IMAGE_TAG=3.8.4-jdk-8
+ARG BUILDER_IMAGE_TAG=3.9-eclipse-temurin-8
 
 FROM ${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_TAG}
 ARG GAFFER_GIT_REPO=https://github.com/gchq/Gaffer.git

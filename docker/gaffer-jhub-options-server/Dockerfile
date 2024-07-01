@@ -1,4 +1,4 @@
-# Copyright 2022 Crown Copyright
+# Copyright 2022-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:16.16.0-alpine3.15
+FROM node:16.20.2-alpine3.17
 
 WORKDIR /srv/app
 COPY package.json ./
