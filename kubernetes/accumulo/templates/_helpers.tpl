@@ -67,7 +67,7 @@ Create the name of the service account to use
 
 {{- define "accumulo.zookeepers" -}}
   {{- if .Values.zookeeper.enabled -}}
-    {{ template "accumulo.callSubChartTemplate" (list . "zookeeper" "zookeeper.fullname") }}
+    {{ template "accumulo.callSubChartTemplate" (list . "zookeeper" "zookeeper.image") }}
   {{- else -}}
     {{- required ".Values.zookeeper.enabled = false, so .Values.zookeeper.externalHosts must be set" .Values.zookeeper.externalHosts }}
   {{- end -}}

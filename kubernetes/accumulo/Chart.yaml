@@ -22,8 +22,8 @@ sources:
   - https://github.com/gchq/gaffer-docker
 dependencies:
   - name: zookeeper
-    version: 2.1.5
-    repository: https://charts.helm.sh/incubator/
+    version: 11.4.11
+    repository: https://charts.bitnami.com/bitnami/
     condition: zookeeper.enabled
   - name: hdfs
     version: ^2.2.2 # managed version
