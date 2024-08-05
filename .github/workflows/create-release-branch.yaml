@@ -1,4 +1,4 @@
-# Copyright 2021-2023 Crown Copyright
+# Copyright 2021-2024 Crown Copyright
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,11 +15,9 @@
 name: Create Release Branch
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release Branch Version'
-        required: false
+  milestone:
+    types:
+    - closed
 
 jobs:
   create-release-branch:
@@ -30,28 +28,12 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: develop
-        token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
 
-    - name: Set version from input
-      if: ${{ github.event.inputs.version }}
-      run: echo "RELEASE_VERSION=$(echo ${{ github.event.inputs.version }} | sed 's/^v//')" >> $GITHUB_ENV
-
-    - name: Get latest tag
-      if: ${{ !github.event.inputs.version }}
-      uses: actions-ecosystem/action-get-latest-tag@v1
-      id: get-latest-tag
-
-    - name: Format latest tag
-      if: ${{ !github.event.inputs.version }}
-      run: echo "CURRENT_VERSION=$(echo ${{ steps.get-latest-tag.outputs.tag }} | sed 's/^v//')" >> $GITHUB_ENV
-
-    - name: Bump latest tag variable version
-      if: ${{ !github.event.inputs.version }}
-      run: echo "RELEASE_VERSION=$(echo ${{ env.CURRENT_VERSION }} | sed -r 's/([0-9]+)\.([0-9]+)\.([0-9]+)/echo \1.$((\2+1)).0/' | sh)" >> $GITHUB_ENV
-
-    - name: Verify version regex
-      run: echo ${{ env.RELEASE_VERSION }} | grep -E '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
+    - name: Set version from milestone
+      if: ${{ github.event.milestone.title }}
+      run: echo "RELEASE_VERSION=$(echo ${{ github.event.milestone.title }} | sed 's/^v//')" >> $GITHUB_ENV
 
     - name: Set release branch
       run: echo "BRANCH_NAME=$(echo release/${{ env.RELEASE_VERSION }} )" >> $GITHUB_ENV
@@ -62,10 +44,30 @@ jobs:
         git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
     - name: Update versions
-      run: ./cd/update_versions.sh ${RELEASE_VERSION}
+      run: |
+        ./cd/update_versions.sh ${RELEASE_VERSION}
+
+        find . -type f -exec sed -i "s/GAFFER_VERSION=[0-9]\.[0-9]\.[0-9]/GAFFER_VERSION=${{env.RELEASE_VERSION}}/g" {} +
+        find . -type f -exec sed -E -i "s/GAFFERPY_VERSION=(gafferpy-)?[0-9]\.[0-9]\.[0-9]/GAFFERPY_VERSION=\1${{env.RELEASE_VERSION}}/g" {} +
+        find . -type f -exec sed -i "s/GAFFER_TESTER_VERSION=[0-9]\.[0-9]\.[0-9]/GAFFER_TESTER_VERSION=${{env.RELEASE_VERSION}}/g" {} +
+        sed -i'' -e "s/<gaffer.version>[0-9]\.[0-9]\.[0-9]/<gaffer.version>${{env.RELEASE_VERSION}}/g" docker/gaffer-gremlin/pom.xml
+        sed -i'' -e "s/BASE_IMAGE_TAG=[0-9]\.[0-9]\.[0-9]/BASE_IMAGE_TAG=${{env.RELEASE_VERSION}}/g" docker/gaffer-kerberos/gaffer-krb/Dockerfile
+        sed -i'' -e "s/BASE_IMAGE_TAG=[0-9]\.[0-9]\.[0-9]/BASE_IMAGE_TAG=${{env.RELEASE_VERSION}}/g" docker/gaffer-kerberos/gaffer-rest-krb/Dockerfile
 
     - name: Push to release branch
       run: |
         git checkout -b $BRANCH_NAME
         git commit -a -m "prepare release v${RELEASE_VERSION}" --allow-empty
         git push --set-upstream origin $BRANCH_NAME
+
+    - name: Tag release branch
+      run: |
+        git tag v${RELEASE_VERSION}
+        git push origin v${RELEASE_VERSION}
+        git push
+
+    - name: Create PR to master
+      run: |
+        gh pr create -B master -H $BRANCH_NAME --title 'Merge release into master branch' --body 'Created by GH Action'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
