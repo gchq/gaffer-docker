@@ -27,6 +27,14 @@ source ./docker/accumulo2.env
 # JHUB_OPTIONS_SERVER_VERSION
 source ./docker/gaffer-jhub-options-server/get-version.sh
 
+# Update docker versions
+find . -type f -exec sed -i "s/GAFFER_VERSION=[0-9]\.[0-9]\.[0-9]/GAFFER_VERSION=${APP_VERSION}/g" {} +
+find . -type f -exec sed -E -i "s/GAFFERPY_VERSION=(gafferpy-)?[0-9]\.[0-9]\.[0-9]/GAFFERPY_VERSION=\1${APP_VERSION}/g" {} +
+find . -type f -exec sed -i "s/GAFFER_TESTER_VERSION=[0-9]\.[0-9]\.[0-9]/GAFFER_TESTER_VERSION=${APP_VERSION}/g" {} +
+sed -i'' -e "s/<gaffer.version>[0-9]\.[0-9]\.[0-9]/<gaffer.version>${APP_VERSION}/g" docker/gaffer-gremlin/pom.xml
+sed -i'' -e "s/BASE_IMAGE_TAG=[0-9]\.[0-9]\.[0-9]/BASE_IMAGE_TAG=${APP_VERSION}/g" docker/gaffer-kerberos/gaffer-krb/Dockerfile
+sed -i'' -e "s/BASE_IMAGE_TAG=[0-9]\.[0-9]\.[0-9]/BASE_IMAGE_TAG=${APP_VERSION}/g" docker/gaffer-kerberos/gaffer-rest-krb/Dockerfile
+
 # hdfs
 [ ! -z "${APP_VERSION}" ] && yq eval ".version = \"${APP_VERSION}\"" -i ./kubernetes/hdfs/Chart.yaml
 yq eval ".appVersion = \"${HADOOP_VERSION}\"" -i ./kubernetes/hdfs/Chart.yaml
