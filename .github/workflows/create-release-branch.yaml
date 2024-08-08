@@ -61,6 +61,6 @@ jobs:
 
     - name: Create PR to master
       run: |
-        gh pr create -B master -H $BRANCH_NAME --title 'Merge release into master branch' --body 'Created by GH Action'
+        gh pr create -B master -H $BRANCH_NAME --title 'Updated Gaffer version to ${{ github.event.milestone.title }}' --body 'Created by GH Action'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
