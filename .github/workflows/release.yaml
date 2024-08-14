@@ -12,20 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Release
+name: Full Release
 
 on:
-  milestone:
-    types:
-    - closed
-  workflow_dispatch:
+  pull_request:
+    branches:
+        - master
+    types: [closed]
 
 jobs:
-  create-release-tag:
+  get-release-version:
     runs-on: ubuntu-latest
-    if: github.event_name == 'milestone'
+    if: ${{ github.event.pull_request.merged }}
     outputs:
-      branch_name: ${{ steps.branch.outputs.branch_name }}
+      release_version: ${{ steps.release-version.outputs.release_version }}
 
     steps:
     - name: Checkout master
@@ -34,48 +34,32 @@ jobs:
         ref: master
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
         fetch-depth: 0
-    
+
     - name: Set up Github credentials
       run: |
         git config user.name github-actions[bot]
         git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-    
+
+    - name: Get latest tag
+      uses: actions-ecosystem/action-get-latest-tag@v1
+      id: get-latest-tag
+
+    - name: Format latest tag
+      run: echo "CURRENT_VERSION=$(echo ${{ steps.get-latest-tag.outputs.tag }} | sed 's/^v//')" >> $GITHUB_ENV
+
     - name: Set release version
-      run: echo "RELEASE_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
-
-    - name: Set branch name
-      run: echo "BRANCH_NAME=$(git branch -a | grep $RELEASE_VERSION | tail -n 1 | cut -c 18-)" >> $GITHUB_ENV
-
-    - name: Output branch name
-      id: branch
-      run: echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-
-    - name: Fail if no branch found
-      if: ${{ !env.BRANCH_NAME }}
-      run: exit 1
-
-    - name: Merge release into master
-      run: |
-        git checkout ${{ env.BRANCH_NAME }}
-        git checkout master
-        git merge ${{ env.BRANCH_NAME }}
-
-    - name: Push changes
-      run: |
-        git tag v${RELEASE_VERSION}
-        git push origin v${RELEASE_VERSION}
-        git push
+      id: release-version
+      run: echo "release_version=$(echo $CURRENT_VERSION)" >> $GITHUB_OUTPUT
 
   update-branches:
     runs-on: ubuntu-latest
-    if: github.event_name == 'milestone'
     strategy:
       matrix:
         branch:
         - develop
         - gh-pages
     needs:
-    - create-release-tag
+    - get-release-version
 
     steps:
     - uses: actions/checkout@v4
@@ -83,17 +67,15 @@ jobs:
         ref: ${{ matrix.branch }}
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
         fetch-depth: 0
-    
+
     - name: Set up Github credentials
       run: |
         git config user.name github-actions[bot]
         git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-  
-    - name: Merge release into branch
+
+    - name: Merge master into branches
       run: |
-        git checkout ${{ needs.create-release-tag.outputs.branch_name }}
-        git checkout ${{ matrix.branch }}
-        git merge ${{ needs.create-release-tag.outputs.branch_name }} --strategy-option theirs
+        git merge origin/master
         git push
 
   publish-images-to-dockerhub:
@@ -103,7 +85,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ref: develop
-        
+
     - name: Build images with Accumulo 2 dependency
       run: ./cd/build_images.sh ./docker/accumulo2.env
 
@@ -118,46 +100,31 @@ jobs:
         GHCR_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       run: ./cd/publish_images.sh
 
-  create-release-notes:
+  update-github-releases:
     runs-on: ubuntu-latest
-    if: github.event_name == 'milestone'
     needs:
-    - create-release-tag
-    - update-branches
-
-    outputs:
-      release_upload_url: ${{ steps.upload_notes.outputs.upload_url }}
+    - get-release-version
 
     steps:
     - uses: actions/checkout@v4
       with:
-        ref: develop
-    
-    - name: Create Release Notes
-      id: create_release_notes
-      uses: docker://decathlon/release-notes-generator-action:3.1.6
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ref: master
 
     - name: Set version
-      run: echo "RELEASE_VERSION=$(echo ${{ github.event.milestone.title }} | cut -c 2-)" >> $GITHUB_ENV
+      run: echo "RELEASE_VERSION=$(echo ${{ needs.get-release-version.outputs.release_version }})" >> $GITHUB_ENV
 
-    - name: Upload notes
-      id: upload_notes
+    - name: Create github release
       uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ env.RELEASE_VERSION }}
         name: Gaffer Docker ${{ env.RELEASE_VERSION }}
-        body_path: release_file.md
 
   upload-release-artifacts:
     runs-on: ubuntu-latest
-    if: github.event_name == 'milestone'
     needs:
-    - create-release-tag
-    - create-release-notes
+    - get-release-version
     strategy:
       matrix:
         chart:
@@ -171,10 +138,10 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ref: develop
-    
+
     - name: Install dependencies
       run: ./cd/install_dependencies.sh
-    
+
     - name: Create Asset
       env:
         chart: ${{ matrix.chart }}
@@ -182,22 +149,21 @@ jobs:
         helm package "kubernetes/${chart}"
         filename=$(ls | grep ${chart}-[0-9]*.[0-9]*.[0-9]*.tgz)
         echo "ASSET_FILENAME=${filename}" >> $GITHUB_ENV
-    
+
     - name: Upload chart artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.chart }}
         path: ${{ env.ASSET_FILENAME }}
         retention-days: 1
-    
+
     - name: Upload Asset
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release upload ${{ github.event.milestone.title }} ${{ env.ASSET_FILENAME }}
+      run: gh release upload ${{ steps.release-version.outputs.release_version }} ${{ env.ASSET_FILENAME }}
 
   update-helm-repo:
     runs-on: ubuntu-latest
-    if: github.event_name == 'milestone'
     needs:
     - upload-release-artifacts
 
@@ -207,7 +173,7 @@ jobs:
       with:
         ref: gh-pages
         token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
-    
+
     - name: Set up Github credentials
       run: |
         git config user.name github-actions[bot]
@@ -221,7 +187,7 @@ jobs:
     - name: Update repo
       run: |
         mv artifacts/*/*.tgz .
-        helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/download/${{ github.event.milestone.title }}" --merge index.yaml
+        helm repo index . --url "https://github.com/gchq/gaffer-docker/releases/download/${{ steps.release-version.outputs.release_version }}" --merge index.yaml
         sed -i'' -e 's|file://.*|https://gchq.github.io/gaffer-docker|g' index.yaml
         rm *.tgz
         rm -r artifacts
