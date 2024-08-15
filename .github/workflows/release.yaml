@@ -84,7 +84,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        ref: develop
+        ref: master
 
     - name: Build images with Accumulo 2 dependency
       run: ./cd/build_images.sh ./docker/accumulo2.env
@@ -137,7 +137,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        ref: develop
+        ref: master
 
     - name: Install dependencies
       run: ./cd/install_dependencies.sh
@@ -160,7 +160,7 @@ jobs:
     - name: Upload Asset
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release upload ${{ steps.release-version.outputs.release_version }} ${{ env.ASSET_FILENAME }}
+      run: gh release upload ${{ needs.release-version.outputs.release_version }} ${{ env.ASSET_FILENAME }}
 
   update-helm-repo:
     runs-on: ubuntu-latest
