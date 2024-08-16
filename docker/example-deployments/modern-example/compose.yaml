@@ -173,16 +173,5 @@ services:
     volumes:
       - ./conf/gaffer/schema:/gaffer/schema:ro
       - ./conf/gaffer/store-accumulo.properties:/gaffer/store/store.properties:ro
+      - ./conf/gaffer/gafferpop.properties:/gaffer/gafferpop.properties:ro
 
-  # Gremlin server
-  gaffer-gremlin:
-    image: gchq/gaffer-gremlin:${GAFFER_VERSION}-gremlin-${TINKERPOP_VERSION}
-    depends_on:
-      accumulo-tserver:
-        condition: service_healthy
-    ports:
-    - 8182:8182
-    volumes:
-    - ./conf/gafferpop:/opt/gremlin-server/conf/gafferpop:ro
-    - ./conf/gaffer/store-accumulo.properties:/opt/gremlin-server/conf/gaffer/store.properties:ro
-    - ./conf/gaffer/schema:/opt/gremlin-server/conf/gaffer/schema:ro

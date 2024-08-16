@@ -12,14 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version: "3.7"
-
 services:
-  gaffer-gremlin:
-    image: gchq/gaffer-gremlin:${GAFFER_VERSION}-gremlin-${TINKERPOP_VERSION}
-    build:
-      context: .
-      args:
-        BASE_IMAGE_TAG: ${TINKERPOP_VERSION}
+
+  gaffer-federated:
+    image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
+    restart: always
     ports:
-    - 8182:8182
+    - 8080:8080
+    volumes:
+    - ./conf/gaffer/schema:/gaffer/schema:ro
+    - ./conf/gaffer/store/store.properties:/gaffer/store/store.properties:ro
+    - ./conf/gaffer/store/mergeFunctions.json:/gaffer/store/mergeFunctions.json:ro
+    - ./conf/gaffer/store/defaultGraphIds.json:/gaffer/store/defaultGraphIds.json:ro
+    - ./conf/gaffer/gafferpop.properties:/gaffer/gafferpop.properties:ro
