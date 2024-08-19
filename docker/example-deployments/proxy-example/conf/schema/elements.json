@@ -1,6 +1,6 @@
 {
   "entities": {
-      "id": {
+      "vertex": {
           "vertex": "string.id"
       },
       "person": {

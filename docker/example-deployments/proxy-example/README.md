@@ -2,20 +2,21 @@
 
 ## Running
 
-To run it from the `proxy-example` directory you'll need to specify the
-environment file path:
+This is an example deployment of Gaffer using a Proxy store. This uses two REST
+APIs on a Map store with data in and another as a proxy pointing to the other.
+
+The example uses the
+[Tinkerpop Modern Graph](https://tinkerpop.apache.org/docs/current/tutorials/the-gremlin-console/#toy-graphs)
+as its data set to demonstrate basic querying of data.
+
+## Running the Example
+
+To run the example please use the provided start script with an environment file
+to specify the image versions e.g. `accumulo2.env`:
 
 ```bash
-docker compose --env-file ../.env up
+./create-deployment.sh ../../accumulo2.env
 ```
 
-Or to run it from this directory, the compose file path and environment file
-path:
-
-```bash
-docker compose -f proxy-example/compose.yaml --env-file .env up
-```
-
-With this deployment both a standard Gaffer REST API and a Gaffer REST API using
-the Proxy Store will be started. Only the port for the Proxy REST endpoint is
-exposed, this will forward operations to the standard Gaffer REST Endpoint.
+With the demo deployment the Proxy backed Gaffer REST API will be started on port 8080
+and the Map store backed instance on 8081.

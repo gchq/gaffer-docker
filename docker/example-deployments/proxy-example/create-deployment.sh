@@ -15,7 +15,7 @@
 
 CURRENT_DIR="$(dirname "$(readlink -f "${0}")")"
 TINKERPOP_MODERN_JSON="${CURRENT_DIR}/operations/add-tinkerpop-modern.json"
-GAFFER_REST_URL="http://localhost:8080"
+GAFFER_REST_URL="http://localhost:8081"
 
 # Make sure we have an evironment file for the image versions
 if [ ! -f "${1}" ]; then
@@ -56,4 +56,4 @@ then
 fi
 
 echo "-----------------------------------"
-echo "Deployment started! REST API: ${GAFFER_REST_URL}"
+echo "Deployment started!"

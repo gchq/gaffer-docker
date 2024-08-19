@@ -19,7 +19,12 @@ services:
     healthcheck:
       test: sleep 15
       timeout: 20s
+    ports:
+      - 8081:8080
     restart: always
+    volumes:
+      - ./conf/map/store.properties:/gaffer/store/store.properties:ro
+      - ./conf/schema:/gaffer/schema:ro
 
   gaffer-rest-proxy:
     image: gchq/gaffer-rest:${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}
@@ -27,8 +32,9 @@ services:
       gaffer-rest:
         condition: service_healthy
     restart: always
-    ports:
-    - 8080:8080
+    network_mode: "host"
     volumes:
-    - ./config/store.properties:/gaffer/store/store.properties:ro
-    - ./config/operationsDeclarations.json:/gaffer/store/operationsDeclarations.json:ro
+      - ./conf/proxy/store.properties:/gaffer/store/store.properties:ro
+      - ./conf/proxy/operationsDeclarations.json:/gaffer/store/operationsDeclarations.json:ro
+      - ./conf/proxy/gafferpop.properties:/gaffer/gafferpop.properties:ro
+      - ./conf/schema:/gaffer/schema:ro
