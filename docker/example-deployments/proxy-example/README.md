@@ -3,7 +3,8 @@
 ## Running
 
 This is an example deployment of Gaffer using a Proxy store. This uses two REST
-APIs on a Map store with data in and another as a proxy pointing to the other.
+APIs, one contains the data and is backed by a Map Store and the other is a
+Proxy Store configured to forward queries to the Map Store backed REST API.
 
 The example uses the
 [Tinkerpop Modern Graph](https://tinkerpop.apache.org/docs/current/tutorials/the-gremlin-console/#toy-graphs)

@@ -10,8 +10,9 @@ deployed graph.
 
 ## Modern Example (Accumulo)
 
-The modern example can be found under the `modern-example` directory which
-features an Accumulo store as its storage backing.
+The modern example, which uses the [Tinkerpop modern dataset](https://tinkerpop.apache.org/docs/current/tutorials/the-gremlin-console/#toy-graphs),
+can be found under the `modern-example` directory which features an Accumulo
+store as its storage backing.
 
 ## Federation Example
 
