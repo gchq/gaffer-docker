@@ -26,7 +26,6 @@ pushd "${ROOT_DIR}" || exit 1
 # HADOOP_VERSION
 # GAFFER_VERSION
 # ACCUMULO_VERSION
-# TINKERPOP_VERSION
 if [[ -f "${1}" ]]; then
     source "${1}"
 else

@@ -1,0 +1,121 @@
+{
+    "class": "AddElements",
+    "input": [
+        {
+            "class": "Entity",
+            "group": "person",
+            "vertex": "1",
+            "properties": {
+                "name": "marko",
+                "age": 29
+            }
+        },
+        {
+            "class": "Entity",
+            "group": "person",
+            "vertex": "2",
+            "properties": {
+                "name": "vadas",
+                "age": 27
+            }
+        },
+        {
+            "class": "Entity",
+            "group": "person",
+            "vertex": "4",
+            "properties": {
+                "name": "josh",
+                "age": 32
+            }
+        },
+        {
+            "class": "Entity",
+            "group": "person",
+            "vertex": "6",
+            "properties": {
+                "name": "peter",
+                "age": 35
+            }
+        },
+        {
+            "class": "Entity",
+            "group": "software",
+            "vertex": "3",
+            "properties": {
+                "name": "lop",
+                "lang": "java"
+            }
+        },
+        {
+            "class": "Entity",
+            "group": "software",
+            "vertex": "5",
+            "properties": {
+                "name": "ripple",
+                "lang": "java"
+            }
+        },
+        {
+            "class": "Edge",
+            "group": "knows",
+            "source": "1",
+            "destination": "2",
+            "directed": true,
+            "properties": {
+                "weight": 0.5
+            }
+        },
+        {
+            "class": "Edge",
+            "group": "created",
+            "source": "1",
+            "destination": "3",
+            "directed": true,
+            "properties": {
+                "weight": 0.4
+            }
+        },
+        {
+            "class": "Edge",
+            "group": "knows",
+            "source": "1",
+            "destination": "4",
+            "directed": true,
+            "properties": {
+                "weight": 1.0
+            }
+        },
+        {
+            "class": "Edge",
+            "group": "created",
+            "source": "4",
+            "destination": "3",
+            "directed": true,
+            "properties": {
+                "weight": 0.4
+            }
+        },
+        {
+            "class": "Edge",
+            "group": "created",
+            "source": "4",
+            "destination": "5",
+            "directed": true,
+            "properties": {
+                "weight": 1.0
+            }
+        },
+        {
+            "class": "Edge",
+            "group": "created",
+            "source": "6",
+            "destination": "3",
+            "directed": true,
+            "properties": {
+                "weight": 0.2
+            }
+        }
+    ],
+    "skipInvalidElements": false,
+    "validate": true
+}
