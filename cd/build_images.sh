@@ -42,9 +42,10 @@ docker compose --project-directory ./docker/gaffer-road-traffic-loader/ -f ./doc
 docker compose --project-directory ./docker/gaffer-pyspark-notebook/ -f ./docker/gaffer-pyspark-notebook/docker-compose.yaml build notebook
 docker compose --project-directory ./docker/spark-py/ -f ./docker/spark-py/docker-compose.yaml build
 
-# Set $JHUB_OPTIONS_SERVER_VERSION
-source ./docker/gaffer-jhub-options-server/get-version.sh
-# Builds the jhub options server:
-docker compose --project-directory ./docker/gaffer-jhub-options-server/ -f ./docker/gaffer-jhub-options-server/docker-compose.yaml build
+# Currently disabled due to npm depencency issue
+# # Set $JHUB_OPTIONS_SERVER_VERSION
+# source ./docker/gaffer-jhub-options-server/get-version.sh
+# # Builds the jhub options server:
+# docker compose --project-directory ./docker/gaffer-jhub-options-server/ -f ./docker/gaffer-jhub-options-server/docker-compose.yaml build
 
 popd || exit 1
