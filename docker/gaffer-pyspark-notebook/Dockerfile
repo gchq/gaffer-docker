@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BASE_IMAGE_NAME=jupyter/scipy-notebook
-ARG BASE_IMAGE_TAG=c26bf69c148d
+ARG BASE_IMAGE_TAG=x86_64-2023-10-20
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
@@ -67,7 +67,7 @@ RUN git clone -b ${GAFFERPY_VERSION} --depth 1 https://github.com/gchq/gafferpy 
 	popd && \
 	rm -rf gafferpy
 
-RUN jupyter labextension install jupyterlab-plotly@5.5.0 && \
+RUN jupyter labextension install jupyterlab-plotly@5.24.1 && \
 	rm -rf "/home/${NB_USER}/.cache/yarn"
 
 COPY ./examples /examples
