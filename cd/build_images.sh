@@ -28,7 +28,6 @@ pushd "${ROOT_DIR}" || exit 1
 # GAFFERPY_VERSION
 # ACCUMULO_VERSION
 # SPARK_VERSION
-# TINKERPOP_VERSION
 if [[ -f "${1}" ]]; then
     source "${1}"
 else
@@ -42,12 +41,11 @@ docker compose --project-directory ./docker/gaffer-road-traffic-loader/ -f ./doc
 # Builds all of the notebook related images:
 docker compose --project-directory ./docker/gaffer-pyspark-notebook/ -f ./docker/gaffer-pyspark-notebook/docker-compose.yaml build notebook
 docker compose --project-directory ./docker/spark-py/ -f ./docker/spark-py/docker-compose.yaml build
-# Builds the Gaffer Gremlin server
-./docker/gaffer-gremlin/build.sh
 
-# Set $JHUB_OPTIONS_SERVER_VERSION
-source ./docker/gaffer-jhub-options-server/get-version.sh
-# Builds the jhub options server:
-docker compose --project-directory ./docker/gaffer-jhub-options-server/ -f ./docker/gaffer-jhub-options-server/docker-compose.yaml build
+# Currently disabled due to npm depencency issue
+# # Set $JHUB_OPTIONS_SERVER_VERSION
+# source ./docker/gaffer-jhub-options-server/get-version.sh
+# # Builds the jhub options server:
+# docker compose --project-directory ./docker/gaffer-jhub-options-server/ -f ./docker/gaffer-jhub-options-server/docker-compose.yaml build
 
 popd || exit 1

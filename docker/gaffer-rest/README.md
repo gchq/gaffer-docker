@@ -70,15 +70,3 @@ directory. These will be added to the classpath at runtime.
 * Gaffer REST
 
 Access the Gaffer REST API at: `http://localhost:8080/rest/`
-
-## Examples
-
-### Proxy Example
-
-A demo/example of using Gaffer REST with a Proxy Store is available under the
-`proxy-example` directory.
-
-### Federation Example
-
-A demo/example of using Gaffer REST with a Federated Store is available under
-the `federated-example` directory.
