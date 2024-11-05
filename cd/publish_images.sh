@@ -102,9 +102,9 @@ pushContainer gchq/accumulo "${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer-rest "${GAFFER_VERSION}-accumulo-${ACCUMULO_VERSION}"
 pushContainer gchq/gaffer-road-traffic-loader "${GAFFER_VERSION}"
-pushContainer gchq/gaffer-gremlin "${GAFFER_VERSION}-gremlin-${TINKERPOP_VERSION}"
 pushContainer gchq/gaffer-pyspark-notebook "${GAFFER_VERSION}"
-pushContainer gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}"
+# Currently disabled due to npm depencency issue
+# pushContainer gchq/gaffer-jhub-options-server "${JHUB_OPTIONS_SERVER_VERSION}"
 pushContainer gchq/spark-py "${SPARK_VERSION}"
 
 # Push legacy versions to Container Repositories
