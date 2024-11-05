@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG BASE_IMAGE_NAME=jupyter/scipy-notebook
-ARG BASE_IMAGE_TAG=c26bf69c148d
+ARG BASE_IMAGE_TAG=x86_64-2023-10-20
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
@@ -54,7 +54,7 @@ RUN cd /opt && \
 
 ARG FINDSPARK_VERSION=2.0.0
 ARG KUBERNETES_PYTHON_VERSION=21.7.0
-RUN pip install findspark==${FINDSPARK_VERSION} kubernetes==${KUBERNETES_PYTHON_VERSION}
+RUN pip install findspark==${FINDSPARK_VERSION} kubernetes==${KUBERNETES_PYTHON_VERSION} plotly==5.24.1
 
 ARG KUBECTL_VERSION=1.23.0
 RUN curl -fLo /bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
@@ -65,9 +65,7 @@ RUN git clone -b ${GAFFERPY_VERSION} --depth 1 https://github.com/gchq/gafferpy 
 	pushd gafferpy && \
 	python setup.py install && \
 	popd && \
-	rm -rf gafferpy
-
-RUN jupyter labextension install jupyterlab-plotly@5.5.0 && \
+	rm -rf gafferpy && \
 	rm -rf "/home/${NB_USER}/.cache/yarn"
 
 COPY ./examples /examples

@@ -160,7 +160,7 @@ jobs:
     - name: Upload Asset
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release upload ${{ needs.release-version.outputs.release_version }} ${{ env.ASSET_FILENAME }}
+      run: gh release upload ${{ needs.get-release-version.outputs.release_version }} ${{ env.ASSET_FILENAME }}
 
   update-helm-repo:
     runs-on: ubuntu-latest
